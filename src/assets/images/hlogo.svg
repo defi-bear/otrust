@@ -1,0 +1,16 @@
+<svg id="logo_grad" data-name="logo grad" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="92.154" height="92.154" viewBox="0 0 92.154 92.154">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#4877c1"/>
+      <stop offset="1" stop-color="#074789"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="0.424" stop-color="#fcfcfd"/>
+      <stop offset="1" stop-color="#d0d0db"/>
+    </linearGradient>
+  </defs>
+  <path id="Path_8573" data-name="Path 8573" d="M176.2,189.154H109.95A12.968,12.968,0,0,1,97,176.2V109.95A12.968,12.968,0,0,1,109.95,97H176.2a12.968,12.968,0,0,1,12.95,12.95V176.2A12.968,12.968,0,0,1,176.2,189.154Z" transform="translate(-97 -97)" fill="url(#linear-gradient)"/>
+  <rect id="Rectangle_1612" data-name="Rectangle 1612" width="9.607" height="43.427" transform="translate(31.863 24.364)" fill="url(#linear-gradient-2)"/>
+  <path id="Path_8574" data-name="Path 8574" d="M263.4,225.4h-1.385v29.092h9.306V233.26A7.937,7.937,0,0,0,263.4,225.4Z" transform="translate(-211 -186.731)" fill="url(#linear-gradient-2)"/>
+</svg>

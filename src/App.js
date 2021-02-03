@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import { AutoLogin } from './context/AutoLogin'
+import { ThemeProvider } from 'styled-components'
+
+import { light } from 'theme/theme'
+import { GlobalStyle } from 'theme/GlobalStyle'
+import NOMTrust from 'pages/NOMTrust'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AutoLogin>
+      <ThemeProvider theme={light}>
+        <GlobalStyle/>
+        <NOMTrust />
+      </ThemeProvider>
+    </AutoLogin>
   );
 }
 
