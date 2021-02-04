@@ -5,10 +5,6 @@ import styled from 'styled-components'
 
 const a = 100000000
 
-const ChartContainer = styled.div`
-    width: 600px;
-`
-
 function SupplyToEth(supply) {
     return (supply/a)**2
 }
@@ -34,15 +30,13 @@ export default function D3Chart() {
     )
     
     return (
-        <ChartContainer>
-            <Panel>
-                <ZoomableLineChart data={data} />
-                <button
-                    onClick={() => setData(supplyToArray(0, 10000000))}
-                >
-                    Zoom
-                </button>
-            </Panel>
-        </ChartContainer>
+        <Panel>
+            <ZoomableLineChart data={data} />
+            <button
+                onClick={() => setData(supplyToArray(0, 10000000))}
+            >
+                Zoom
+            </button>
+        </Panel>
     )
 }

@@ -123,15 +123,16 @@ function Balance() {
   )
 }
 
-const DashContainer = styled.div`
-    width: 600px;
+const FlexWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 export default function AcctDash() {
   const { active, error } = useWeb3React()
 
   return (
-    <DashContainer>
+    <FlexWrapper>
       <Panel>
         <h1 style={{ margin: '1rem', textAlign: 'right' }}>{active ? '🟢' : error ? '🔴' : '🟠'}</h1>
         <h3
@@ -150,6 +151,6 @@ export default function AcctDash() {
           <Balance />
         </h3>
       </Panel>
-    </DashContainer>
+      </FlexWrapper>
   )
 }
