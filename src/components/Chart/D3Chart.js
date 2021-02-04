@@ -3,6 +3,13 @@ import ZoomableLineChart from "./D3LineChart";
 import { Panel } from "components/UI"
 import styled from 'styled-components'
 
+const ChartWrapper = styled.div`
+    min-width: 30rem;
+    max-width: 50rem;
+    flex-basis: auto; /* default value */
+    flex-grow: 1;
+`
+
 const a = 100000000
 
 function SupplyToEth(supply) {
@@ -30,13 +37,15 @@ export default function D3Chart() {
     )
     
     return (
-        <Panel>
-            <ZoomableLineChart data={data} />
-            <button
-                onClick={() => setData(supplyToArray(0, 10000000))}
-            >
-                Zoom
-            </button>
-        </Panel>
+        <ChartWrapper>
+            <Panel>
+                <ZoomableLineChart data={data} />
+                <button
+                    onClick={() => setData(supplyToArray(0, 10000000))}
+                >
+                    Zoom
+                </button>
+            </Panel>
+        </ChartWrapper>
     )
 }
