@@ -11,19 +11,25 @@ import D3Chart from 'components/Chart/D3Chart'
 import Swap from 'components/Swap'
 
 const ContentWrapper = styled.div`
-  display: fles;
-  flex-wrap: wrap;
-  gap: 2rem;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+`
+const LeftComponent = styled.div`
+    display: grid;
+    gap: 2rem;
 `
 
 export default function NOMTrust() {
     return (
         <ContentWrapper>
-            <AcctDash />
+            <LeftComponent>
+                <AcctDash />
+                <Swap />
+            </LeftComponent>
             <D3Chart />
-            <Swap />
         </ContentWrapper>
     )
 }
