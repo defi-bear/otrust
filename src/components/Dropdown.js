@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
 
 const DropDownContainer = styled("div")`
   width: 5em;
   margin: 0 auto;
+  
   &:hover {
     cursor: pointer;
   }
+  
 `;
 
 const DropDownHeader = styled("div")`
@@ -16,6 +19,7 @@ const DropDownHeader = styled("div")`
   font-weight: 500;
   font-size: 1.3rem;
   color: #3faffa;
+  border-radius: ${borderRadius};
 `;
 
 const DropDownListContainer = styled("div")`

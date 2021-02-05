@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Panel } from 'components'
 import Dropdown from 'components/Dropdown'
 import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
+import { AccentButton } from 'components/UI/Button'
 
 const FlexWrapper = styled.div`
     display: flex;
@@ -12,6 +13,8 @@ const FlexWrapper = styled.div`
 const RowWrapper = styled.div`
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     gap: 2rem;
     margin-top: 1rem;
 `
@@ -47,9 +50,6 @@ const StyledText = styled.text`
     width: ${p => p.width};
     height: ${p => p.height};
 
-    border: .1rem solid #b7c6de;
-    border-radius: ${borderRadius};
-
     font-size: 1rem;
     color: #fff;
 
@@ -79,7 +79,9 @@ const SwapHeader = styled.header`
   vertical-align: middle;
   border-radius: ${borderRadius};
 `
-
+const Button = styled(AccentButton)`
+    background-color: ${props => props.theme.colors.headerBackground}
+`
 
 export default function Swap() {
     return (
@@ -105,6 +107,11 @@ export default function Swap() {
                     <RightComponentWrapper>
                        NOM
                     </RightComponentWrapper>
+                </RowWrapper>
+                <RowWrapper>
+                    <Button>
+                        Execute
+                    </Button>
                 </RowWrapper>
             </Panel>
         </FlexWrapper>
