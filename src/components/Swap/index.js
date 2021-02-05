@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Panel } from 'components'
 import Dropdown from 'components/Dropdown'
+import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
 
 const FlexWrapper = styled.div`
     display: flex;
@@ -21,7 +22,7 @@ const StyledInput = styled.input`
     padding-left: ${p => p.paddingLeft};
 
     border: .1rem solid #b7c6de;
-    border-radius: 1.75rem;
+    border-radius: ${borderRadius};
 
     font-size: 1rem;
     color: #fff;
@@ -47,7 +48,7 @@ const StyledText = styled.text`
     height: ${p => p.height};
 
     border: .1rem solid #b7c6de;
-    border-radius: 1.75rem;
+    border-radius: ${borderRadius};
 
     font-size: 1rem;
     color: #fff;
@@ -67,13 +68,26 @@ const LeftComponentWrapper = styled.div`
     vertical-align: middle;
     line-height: 2rem;
 `
+const SwapHeader = styled.header`
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  height: 3rem;
+  line-height: 3rem;
+  background: ${props => props.theme.colors.headerBackground};
+  text-align: center;
+  vertical-align: middle;
+  border-radius: ${borderRadius};
+`
 
 
 export default function Swap() {
     return (
         <FlexWrapper>
             <Panel>
-                Swap
+                <SwapHeader>
+                    Swap
+                </SwapHeader>
                 <RowWrapper>
                     <LeftComponentWrapper>
                     From:

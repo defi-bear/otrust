@@ -7,7 +7,7 @@ const Wrapper = styled.div`
 `
 
 const StyledHeader = styled.header`
-  background-color: #463d52;
+  background-color: #5895a7;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

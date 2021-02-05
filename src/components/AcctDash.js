@@ -2,6 +2,7 @@ import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { formatEther } from '@ethersproject/units'
 import styled from 'styled-components'
+import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
 
 import { Panel } from 'components/UI'
 
@@ -11,9 +12,6 @@ function ChainId() {
     return (
       <>
         <span>Chain Id</span>
-        <span role="img" aria-label="chain">
-          ⛓
-        </span>
         <span>{chainId ?? ''}</span>
       </>
     )
@@ -56,9 +54,6 @@ function BlockNumber() {
   return (
     <>
       <span>Block Number</span>
-      <span role="img" aria-label="numbers">
-        🔢
-      </span>
       <span>{blockNumber === null ? 'Error' : blockNumber ?? ''}</span>
     </>
   )
@@ -70,9 +65,6 @@ function Account() {
   return (
     <>
       <span>Account</span>
-      <span role="img" aria-label="robot">
-        🤖
-      </span>
       <span>
         {account === null
           ? '-'
@@ -114,18 +106,37 @@ function Balance() {
 
   return (
     <>
-      <span>Balance</span>
-      <span role="img" aria-label="gold">
-        💰
-      </span>
-      <span>{balance === null ? 'Error' : balance ? `Ξ${formatEther(balance)}` : ''}</span>
+      <span>ETH Balance</span>
+      <span>{balance === null ? 'Error' : balance ? `${formatEther(balance)}` : ''}</span>
+      <span>NOM Balance</span>
+      <span>{balance === null ? 'Error' : balance ? `${formatEther(balance)}` : ''}</span>
     </>
   )
 }
 
+const AcctHeader = styled.header`
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  height: 3rem;
+  line-height: 3rem;
+  background: ${props => props.theme.colors.headerBackground};
+  text-align: center;
+  vertical-align: middle;
+  border-radius: ${borderRadius};
+`
+
 const FlexWrapper = styled.div`
   display: flex;
   flex-direction: column;
+`
+const ContentWrapper = styled.div`
+  display: 'grid',
+  gridGap: '1rem',
+  gridTemplateColumns: '1fr 1fr',
+  maxWidth: '20rem',
+  lineHeight: '2rem',
+  margin: 'auto'
 `
 
 export default function AcctDash() {
@@ -134,22 +145,26 @@ export default function AcctDash() {
   return (
     <FlexWrapper>
       <Panel>
-        <h1 style={{ margin: '1rem', textAlign: 'right' }}>{active ? '🟢' : error ? '🔴' : '🟠'}</h1>
-        <h3
+        <AcctHeader>
+          Account
+        </AcctHeader>
+        <div
           style={{
             display: 'grid',
             gridGap: '1rem',
-            gridTemplateColumns: '1fr min-content 1fr',
+            gridTemplateColumns: '1fr 1fr',
             maxWidth: '20rem',
             lineHeight: '2rem',
             margin: 'auto'
           }}
         >
+          <span>Connection</span> 
+          <span>{active ? '🟢' : error ? '🔴' : '🟠'}</span>    
           <ChainId />
           <BlockNumber />
           <Account />
           <Balance />
-        </h3>
+        </div>
       </Panel>
       </FlexWrapper>
   )

@@ -4,7 +4,7 @@ export const light = {
         bgLight: '#f0f2f5',
         border: '#555555',
         fontColor: '#050505',
-        headerBackground: '#436fb5',
+        headerBackground: '#5895a7',
         icon: '#a7b0c3',
         inputBackground: '#fff',
         inputFontColor: '#000000',

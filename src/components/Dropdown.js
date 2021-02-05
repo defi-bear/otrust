@@ -4,6 +4,9 @@ import styled from "styled-components";
 const DropDownContainer = styled("div")`
   width: 5em;
   margin: 0 auto;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const DropDownHeader = styled("div")`
