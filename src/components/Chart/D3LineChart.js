@@ -15,7 +15,6 @@ import {
 } from "d3";
 import { useResizeObserver } from "./utils";
 import styled from "styled-components";
-import { priceAtSupply } from 'utils/bonding'
 
 
 const StyledSVG = styled.svg`
@@ -24,9 +23,6 @@ const StyledSVG = styled.svg`
     height: 400px;
     overflow: visible;
 `
-
-const currentSupply = 1000000
-
 
 /**
  * Component that renders a ZoomableLineChart
@@ -100,19 +96,6 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
       .attr("stroke", "black")
       .attr("fill", "#0e4265")
       .attr("d", areaGenerator)
-
-    /**
-    svgContent
-      .selectAll(".currentSupply")
-      .join("line")
-      .attr("class", "currentSupply")
-      .style("stroke", "black")
-      .attr("y1", 0)
-      .attr("y2", height)
-      .attr("x1", xScale(currentSupply))
-      .attr("x2", xScale(currentSupply));
-
-     */
     
 
     // axes
