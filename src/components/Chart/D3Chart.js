@@ -37,7 +37,6 @@ function supplyToArray(supBegin, supEnd) {
 const ChartHeader = styled.header`
   font-size: 1.4rem;
   color: #fff;
-  margin-bottom: 1rem;
   height: 3rem;
   line-height: 3rem;
   background: ${props => props.theme.colors.headerBackground};

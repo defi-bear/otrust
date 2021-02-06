@@ -37,15 +37,13 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
   const [currentZoomState, setCurrentZoomState] = useState();
+  var margin = {top: 20, right: 20, bottom: 40, left: 80}
 
   // will be called initially and on every data change
   useEffect(() => {
+    
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
-
-    // X and Y data arrays
-    const xDataArray = data.map(item => item.x)
-    const yDataArray = data.map(item => item.y)
 
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
@@ -56,7 +54,7 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
     // scales + line generator
     const xScale = scaleLinear()
       .domain(extent(data, xValue))
-      .range([10, width - 10]);
+      .range([margin.left, width - margin.right]);
 
     if (currentZoomState) {
       const newXScale = currentZoomState.rescaleX(xScale);
@@ -65,7 +63,7 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
 
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
-      .range([height - 10, 10]);
+      .range([height - margin.top - margin.bottom, 10]);
 
     // Temporary
     if (currentZoomState) {
@@ -121,11 +119,30 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
     const xAxis = axisBottom(xScale);
     svg
       .select(".x-axis")
-      .attr("transform", `translate(0, ${height})`)
+      .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
       .call(xAxis);
 
+    // Add X axis label:
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height)
+      .text("NOM Issued");
+
     const yAxis = axisLeft(yScale);
-    svg.select(".y-axis").call(yAxis);
+    svg
+      .select(".y-axis")
+      .attr("transform", `translate(${margin.left}, 0)`)
+      .call(yAxis);
+    
+    // Y axis label:
+    svg.append("text")
+    .attr("text-anchor", "end")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0)
+    .attr("x", -margin.top)
+    .text("Price (ETH/NOM)")
+
 
     // zoom
     const zoomBehavior = zoom()
@@ -144,7 +161,7 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
 
   return (
     <React.Fragment>
-      <div ref={wrapperRef} style={{ marginBottom: "2rem" }}>
+      <div ref={wrapperRef} style={{ marginTop: "1rem" }}>
         <StyledSVG ref={svgRef}>
           <defs>
             <clipPath id={id}>
