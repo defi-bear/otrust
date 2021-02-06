@@ -11,30 +11,32 @@ const Sticker = styled.header`
     z-index: 10;
 `
 const HeaderWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center
+
+    height: ${p => p.height};
     width: 100%;
+    
     background-color: ${props => props.theme.colors.headerBackground};
     border-bottom: .1rem solid ${props => props.theme.colors.border};
+    
 `
 const Filler = styled.div`
     height: ${p => p.height};
     width: 100%;
     z-index: 10;
-    
 `
-const StyledHeader = styled.div`
-    height: ${p => p.height};
-    text-align: center;
+const StyledImg = styled.img`
+    display: block;
+    margin: auto;
 `
 
 export default function MainHeader() {
     return (
         <Sticker>
-            <HeaderWrapper>
-                <Container>
-                    <StyledHeader height={header}>
-                    <img src={logo} alt="logo" />
-                    </StyledHeader>
-                </Container>
+            <HeaderWrapper height={header}>
+                <StyledImg src={logo} alt="logo" />
             </HeaderWrapper>
             <Filler height={headerFill}/>
         </Sticker>

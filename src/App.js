@@ -5,16 +5,18 @@ import { light } from 'theme/theme'
 import { GlobalStyle } from 'theme/GlobalStyle'
 import NOMTrust from 'pages/NOMTrust'
 import MainHeader from 'components/MainHeader'
-import logo from 'assets/logo.png'
+import ChainProvider from 'context/ChainContext'
 
 function App() {
   return (
     <AutoLogin>
-      <ThemeProvider theme={light}>
-        <GlobalStyle/>
-        <MainHeader/>
-        <NOMTrust/>
-      </ThemeProvider>
+      <ChainProvider>
+        <ThemeProvider theme={light}>
+          <GlobalStyle/>
+          <MainHeader/>
+          <NOMTrust/>
+        </ThemeProvider>
+      </ChainProvider>
     </AutoLogin>
   );
 }

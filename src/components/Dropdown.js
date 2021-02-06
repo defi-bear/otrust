@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
+import { borderRadius } from 'context/responsive/cssSizes'
 
 const DropDownContainer = styled("div")`
   width: 5em;
@@ -9,16 +9,17 @@ const DropDownContainer = styled("div")`
   &:hover {
     cursor: pointer;
   }
-  
 `;
 
 const DropDownHeader = styled("div")`
-  margin-bottom: 0em;
-  padding: 0.4em 2em 0.4em 1em;
+  height: 2rem;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
   font-weight: 500;
   font-size: 1.3rem;
-  color: #3faffa;
+  color: ${props => props.theme.colors.background};
+  line-height: 2rem;
+  text-align: center;
+  vertical-align: middle;
   border-radius: ${borderRadius};
 `;
 
@@ -35,7 +36,7 @@ const DropDownList = styled("ul")`
   background: #ffffff;
   border: 2px solid #e5e5e5;
   box-sizing: border-box;
-  color: #3faffa;
+  color: ${props => props.theme.colors.background};
   font-size: 1.3rem;
   font-weight: 500;
   &:first-child {
@@ -47,28 +48,28 @@ const ListItem = styled("li")`
   list-style: none;
   margin-bottom: 0.8em;
   &:hover {
-    color: #fd9e46;
+    color: ${props => props.theme.colors.headerBackground};;
   }
 `;
 
 const options = ["ETH", "NOM"];
 
-export default function Dropdown() {
+export default function Dropdown({denom, setDenom}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  
 
   const toggling = () => setIsOpen(!isOpen);
 
   const onOptionClicked = value => () => {
-    setSelectedOption(value);
+    setDenom(value);
     setIsOpen(false);
-    console.log(selectedOption);
+    console.log(denom);
   };
 
   return (
     <DropDownContainer>
         <DropDownHeader onClick={toggling}>
-          {selectedOption || "ETH"}
+          {denom || "ETH"}
         </DropDownHeader>
         {isOpen && (
           <DropDownListContainer>

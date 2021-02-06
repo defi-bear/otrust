@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import SwapProvider from 'context/SwapContext'
 
 // Components
 import AcctDash from 'components/AcctDash'
@@ -21,11 +22,13 @@ const LeftComponent = styled.div`
 export default function NOMTrust() {
     return (
         <ContentWrapper>
-            <LeftComponent>
-                <AcctDash />
-                <Swap />
-            </LeftComponent>
-            <D3Chart />
+            <SwapProvider>
+                <LeftComponent>
+                    <AcctDash />
+                    <Swap />
+                </LeftComponent>
+                <D3Chart />
+            </SwapProvider>
         </ContentWrapper>
     )
 }

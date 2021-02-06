@@ -2,7 +2,7 @@ import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { formatEther } from '@ethersproject/units'
 import styled from 'styled-components'
-import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
+import { borderRadius } from 'context/responsive/cssSizes'
 
 import { Panel } from 'components/UI'
 
@@ -129,14 +129,6 @@ const AcctHeader = styled.header`
 const FlexWrapper = styled.div`
   display: flex;
   flex-direction: column;
-`
-const ContentWrapper = styled.div`
-  display: 'grid',
-  gridGap: '1rem',
-  gridTemplateColumns: '1fr 1fr',
-  maxWidth: '20rem',
-  lineHeight: '2rem',
-  margin: 'auto'
 `
 
 export default function AcctDash() {

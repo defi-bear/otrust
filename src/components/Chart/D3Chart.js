@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ZoomableLineChart from "./D3LineChart";
 import { Panel } from "components/UI"
 import styled from 'styled-components'
-import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
+import { borderRadius } from 'context/responsive/cssSizes'
+import { useSwap } from 'context/SwapContext'
 
 const ChartWrapper = styled.div`
     height: 100%;
@@ -46,9 +47,32 @@ const ChartHeader = styled.header`
 `
 
 export default function D3Chart() {
-    const [data, setData] = useState(
-        supplyToArray(0, 100000000)
-    )
+    const buffer = 1000000
+    
+    const { swapSupply } = useSwap()
+    var upperBound = 100000000
+    var lowerBound = 0
+    
+    const [data, setData] = useState(supplyToArray(lowerBound, upperBound))
+    const [areaData, setAreaData] = useState(supplyToArray(lowerBound, upperBound))
+
+    useEffect(() => {
+        if (swapSupply[1]) {
+            console.log(swapSupply)
+            console.log(swapSupply[0])
+            const lowerBoundExp = Math.round(swapSupply[0]/1000000)
+            if (lowerBoundExp == 0) {
+                lowerBound = 0
+            } else {
+                lowerBound = (Math.round(swapSupply[0]/1000000) - 1)*buffer
+            }
+            upperBound = (Math.round(swapSupply[1]/1000000) + 1)*buffer
+            setData(supplyToArray(lowerBound, upperBound))
+            setAreaData(supplyToArray(swapSupply[0], swapSupply[1]))
+        }
+    },[swapSupply])
+    
+    
     
     return (
         <ChartWrapper>
@@ -56,12 +80,7 @@ export default function D3Chart() {
                 <ChartHeader>
                     Bonding Curve
                 </ChartHeader>
-                <ZoomableLineChart data={data} />
-                <button
-                    onClick={() => setData(supplyToArray(0, 10000000))}
-                >
-                    Zoom
-                </button>
+                <ZoomableLineChart data={data} areaData={areaData} />
             </Panel>
         </ChartWrapper>
     )

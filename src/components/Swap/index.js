@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Panel } from 'components'
 import Dropdown from 'components/Dropdown'
-import {borderWidth, borderRadius} from 'context/responsive/cssSizes'
+import { borderRadius } from 'context/responsive/cssSizes'
 import { AccentButton } from 'components/UI/Button'
+import { useAsyncFn } from 'lib/use-async-fn'
+import { useSwap, useUpdateSwap } from 'context/SwapContext'
 
 const FlexWrapper = styled.div`
     display: flex;
     flex-direction: column;
+`
+
+const GridWrapper = styled.div`
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
 `
 
 const RowWrapper = styled.div`
@@ -33,7 +44,7 @@ const StyledInput = styled.input`
     box-sizing: border-box;
 
     ::placeholder {
-        color: #b7c6de;
+        color: ${props => props.theme.colors.background};;
     }
 
     &:focus {
@@ -41,33 +52,30 @@ const StyledInput = styled.input`
         color: #000;
 
         ::placeholder {
-            color: #b7c6de;
+            color: ${props => props.theme.colors.background};
         }
     }
 `
 
-const StyledText = styled.text`
-    width: ${p => p.width};
-    height: ${p => p.height};
-
-    font-size: 1rem;
-    color: #fff;
-
-    box-sizing: border-box;
-`
-
 const RightComponentWrapper = styled.div`
     width: 5em;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
     line-height: 2rem;
 `
 const LeftComponentWrapper = styled.div`
     width: 3em;
-    text-align: left;
+    text-align: right;
     vertical-align: middle;
     line-height: 2rem;
 `
+
+const MiddleComponentWrapper = styled.div`
+    text-align: center;
+    vertical-align: middle;
+    line-height: 2rem;
+`
+
 const SwapHeader = styled.header`
   font-size: 1.4rem;
   color: #fff;
@@ -82,32 +90,65 @@ const SwapHeader = styled.header`
 const Button = styled(AccentButton)`
     background-color: ${props => props.theme.colors.headerBackground}
 `
-
 export default function Swap() {
+    const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap()
+    const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap()
+    const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [])
+
+    const doSubmit = useCallback(
+        async evt => {
+          if (evt) evt.preventDefault()
+          if (!swapBuyAmount) return
+          try {
+            setSwapBuyAmount('')
+          } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e.stack || e)
+            setSwapBuyAmount(swapBuyAmount)
+          }
+        }
+    )
+
+    const [onAsyncSubmit, isWorking, error] = useAsyncFn(doSubmit)
+
+    const onTextAreaKeyDown = e => {
+        if (e.keyCode === 13 && e.shiftKey === false) {
+          e.preventDefault()
+          onAsyncSubmit()
+        }
+    }
+
     return (
         <FlexWrapper>
             <Panel>
                 <SwapHeader>
                     Swap
                 </SwapHeader>
-                <RowWrapper>
-                    <LeftComponentWrapper>
+                <GridWrapper>
+                <LeftComponentWrapper>
                     From:
                     </LeftComponentWrapper>
-                    <StyledInput width='10rem' height='2rem' paddingLeft='1.25rem' />
-                    <Dropdown />
-                </RowWrapper>
-                <RowWrapper>
+                    <StyledInput
+                        value={swapBuyAmount}
+                        onChange={onTextChange}
+                        onTextAreaKeyDown={onTextAreaKeyDown}
+                        placeholder={isWorking ? "Confirming":"Enter amount"}
+                        width='10rem' 
+                        height='2rem' 
+                        paddingLeft='1.25rem'
+                    />
+                    <Dropdown denom={swapDenom} setDenom={setSwapDenom}/>
                     <LeftComponentWrapper>
                     To: 
-                    </LeftComponentWrapper> 
-                    <StyledText width='10rem' height='2rem'>
-                        1.00004
-                    </StyledText>
+                    </LeftComponentWrapper>
+                    <MiddleComponentWrapper>
+                        { (swapSellAmount) ? swapSellAmount.toFixed(9) : null }
+                    </MiddleComponentWrapper>
                     <RightComponentWrapper>
-                       NOM
+                        { swapDenom == 'NOM' ? 'ETH' : 'NOM' }
                     </RightComponentWrapper>
-                </RowWrapper>
+                </GridWrapper>
+                    
                 <RowWrapper>
                     <Button>
                         Execute
