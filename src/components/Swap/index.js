@@ -35,11 +35,11 @@ const StyledInput = styled.input`
     height: ${p => p.height};
     padding-left: ${p => p.paddingLeft};
 
-    border: .1rem solid #b7c6de;
+    border: .1rem solid ${props => props.theme.colors.background};
     border-radius: ${borderRadius};
 
     font-size: 1rem;
-    color: #fff;
+    
 
     box-sizing: border-box;
 

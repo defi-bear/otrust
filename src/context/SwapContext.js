@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { ETHtoNOM, NOMtoETH } from 'utils/bonding'
-import { useChain } from './ChainContext'
+import { useChain } from 'context/chain/ChainContext'
 
 export const SwapContext = createContext()
 export const useSwap = () => useContext(SwapContext)
@@ -32,7 +32,7 @@ function SwapProvider ({children}) {
     useEffect(() => {
         if (swapBuyAmount === 0) {
             setSwapSellAmount(0)
-            setSwapSupply([])
+            setSwapSupply([currSupply, currSupply])
         } else {
             if (swapDenom === 'ETH') {
                 const { supplyBot, supplyTop, diff } = ETHtoNOM(swapBuyAmount, currSupply)
@@ -42,6 +42,7 @@ function SwapProvider ({children}) {
                 const { supplyBot, supplyTop, diff } = NOMtoETH(swapBuyAmount, currSupply)
                 setSwapSellAmount(diff)
                 setSwapSupply([supplyBot, supplyTop])
+                console.log("SupplyBot NOM", supplyBot)
             }
         }
         console.log("Gets here", swapSellAmount)

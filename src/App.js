@@ -5,7 +5,7 @@ import { light } from 'theme/theme'
 import { GlobalStyle } from 'theme/GlobalStyle'
 import NOMTrust from 'pages/NOMTrust'
 import MainHeader from 'components/MainHeader'
-import ChainProvider from 'context/ChainContext'
+import ChainProvider from 'context/chain/ChainContext'
 
 function App() {
   return (

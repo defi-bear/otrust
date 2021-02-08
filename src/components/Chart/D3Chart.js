@@ -46,8 +46,6 @@ const ChartHeader = styled.header`
 `
 
 export default function D3Chart() {
-    const buffer = 1000000
-    
     const { swapSupply } = useSwap()
     var upperBound = 100000000
     var lowerBound = 0
@@ -57,15 +55,9 @@ export default function D3Chart() {
 
     useEffect(() => {
         if (swapSupply[1]) {
-            console.log(swapSupply)
-            console.log(swapSupply[0])
-            const lowerBoundExp = Math.round(swapSupply[0]/1000000)
-            if (lowerBoundExp == 0) {
-                lowerBound = 0
-            } else {
-                lowerBound = (Math.round(swapSupply[0]/1000000) - 1)*buffer
-            }
-            upperBound = (Math.round(swapSupply[1]/1000000) + 1)*buffer
+            var digitsUpper = Math.floor(Math.log10(swapSupply[1]))
+            // upperBound = 10**(digitsUpper + 1)
+            upperBound = (Math.round(swapSupply[1]/10**digitsUpper) + 1)*10**digitsUpper
             setData(supplyToArray(lowerBound, upperBound))
             setAreaData(supplyToArray(swapSupply[0], swapSupply[1]))
         }
@@ -79,7 +71,7 @@ export default function D3Chart() {
                 <ChartHeader>
                     Bonding Curve
                 </ChartHeader>
-                <ZoomableLineChart data={data} areaData={areaData} />
+                <ZoomableLineChart data={data} areaData={areaData}/>
             </Panel>
         </ChartWrapper>
     )

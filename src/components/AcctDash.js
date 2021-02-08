@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { borderRadius } from 'context/responsive/cssSizes'
 
 import { Panel } from 'components/UI'
+import { useChain } from 'context/chain/ChainContext'
 
 function ChainId() {
     const { chainId } = useWeb3React()
@@ -18,38 +19,8 @@ function ChainId() {
   }
   
 function BlockNumber() {
-  const { chainId, library } = useWeb3React()
-
-  const [blockNumber, setBlockNumber] = React.useState()
-  React.useEffect(() => {
-    if (!!library) {
-      let stale = false
-
-      library
-        .getBlockNumber()
-        .then((blockNumber) => {
-          if (!stale) {
-            setBlockNumber(blockNumber)
-          }
-        })
-        .catch(() => {
-          if (!stale) {
-            setBlockNumber(null)
-          }
-        })
-
-      const updateBlockNumber = (blockNumber) => {
-        setBlockNumber(blockNumber)
-      }
-      library.on('block', updateBlockNumber)
-
-      return () => {
-        stale = true
-        library.removeListener('block', updateBlockNumber)
-        setBlockNumber(undefined)
-      }
-    }
-  }, [library, chainId]) // ensures refresh if referential identity of library doesn't change across chainIds
+  
+  const {blockNumber} = useChain()
 
   return (
     <>
@@ -86,10 +57,8 @@ function Balance() {
 
       library
         .getBalance(account)
-        .then((balance: any) => {
-          if (!stale) {
-            setBalance(balance)
-          }
+        .then((balance) => {
+          setBalance(balance)
         })
         .catch(() => {
           if (!stale) {
