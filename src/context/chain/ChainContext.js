@@ -15,7 +15,7 @@ function ChainProvider ({children}) {
     const [NOMbalance, setNOMBalance] = useState()
     const [supplyNOM, setSupplyNOM] = useState()
     const bondContract = BondingCont(library)
-    const NOMContract = NOMCont(library)
+    const NOMcontract = NOMCont(library)
     const [currSupply, setCurrSupply] = useState(1000)
 
     useEffect(() => {
@@ -27,7 +27,7 @@ function ChainProvider ({children}) {
                 .then((ETHbalance) => {
                     setETHBalance(ETHbalance)
                 })
-            NOMContract
+            NOMcontract
                 .balanceOf(account)
                 .then((NOMbalance) => {
                     setNOMBalance(NOMbalance)
@@ -47,9 +47,11 @@ function ChainProvider ({children}) {
 
     const contextValue = {
         blockNumber,
+        bondContract,
         currSupply,
         ETHbalance,
         NOMbalance,
+        NOMcontract,
         supplyNOM
     }
 

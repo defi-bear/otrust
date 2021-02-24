@@ -6,6 +6,8 @@ import { borderRadius } from 'context/responsive/cssSizes'
 import { AccentButton } from 'components/UI/Button'
 import { useAsyncFn } from 'lib/use-async-fn'
 import { useSwap, useUpdateSwap } from 'context/SwapContext'
+import { useChain } from 'context/chain/ChainContext'
+import { formatEther, parseEther } from '@ethersproject/units'
 
 const FlexWrapper = styled.div`
     display: flex;
@@ -94,13 +96,31 @@ export default function Swap() {
     const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap()
     const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap()
     const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [])
+    const { bondContract, NOMcontract } = useChain()
 
-    const doSubmit = useCallback(
+    const submitTrans = useCallback(
         async evt => {
           if (evt) evt.preventDefault()
           if (!swapBuyAmount) return
           try {
-            setSwapBuyAmount('')
+            if (swapDenom == 'ETH') {
+                console.log("Purchase amount ETH: ", swapBuyAmount)
+                try {
+                    const response = bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
+                    setSwapBuyAmount('')
+                } catch (e) {
+                    // eslint-disable-next-line no-console
+                    console.error(e.stack || e)
+                    setSwapBuyAmount(swapBuyAmount)
+                }
+            } else {
+                console.log("Sell amount NOM: ", swapBuyAmount)
+                const res1 = await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
+                const res2 = await bondContract.sellNOM(parseEther(swapBuyAmount.toString())).then((f) => {
+                    console.log("Transaction receipt: ", f)
+                })
+                setSwapBuyAmount('')
+            }
           } catch (e) {
             // eslint-disable-next-line no-console
             console.error(e.stack || e)
@@ -109,51 +129,55 @@ export default function Swap() {
         }
     )
 
-    const [onAsyncSubmit, isWorking, error] = useAsyncFn(doSubmit)
+    const [onSubmit, isWorking, error] = useAsyncFn(submitTrans)
 
     const onTextAreaKeyDown = e => {
         if (e.keyCode === 13 && e.shiftKey === false) {
           e.preventDefault()
-          onAsyncSubmit()
         }
+        setSwapBuyAmount(e)
     }
 
     return (
         <FlexWrapper>
             <Panel>
-                <SwapHeader>
-                    Swap
-                </SwapHeader>
-                <GridWrapper>
-                <LeftComponentWrapper>
-                    From:
-                    </LeftComponentWrapper>
-                    <StyledInput
-                        value={swapBuyAmount}
-                        onChange={onTextChange}
-                        onTextAreaKeyDown={onTextAreaKeyDown}
-                        placeholder={isWorking ? "Confirming":"Enter amount"}
-                        width='10rem' 
-                        height='2rem' 
-                        paddingLeft='1.25rem'
-                    />
-                    <Dropdown denom={swapDenom} setDenom={setSwapDenom}/>
+                <form onSubmit={ onSubmit }>
+                    <SwapHeader>
+                        Swap
+                    </SwapHeader>
+                    <GridWrapper>
                     <LeftComponentWrapper>
-                    To: 
-                    </LeftComponentWrapper>
-                    <MiddleComponentWrapper>
-                        { (swapSellAmount) ? swapSellAmount.toFixed(9) : null }
-                    </MiddleComponentWrapper>
-                    <RightComponentWrapper>
-                        { swapDenom == 'NOM' ? 'ETH' : 'NOM' }
-                    </RightComponentWrapper>
-                </GridWrapper>
-                    
-                <RowWrapper>
-                    <Button>
-                        Execute
-                    </Button>
-                </RowWrapper>
+                        From:
+                        </LeftComponentWrapper>
+                        <StyledInput
+                            type='text'
+                            value={swapBuyAmount}
+                            onChange={onTextChange}
+                            onTextAreaKeyDown={onTextAreaKeyDown}
+                            placeholder={isWorking ? "Confirming":"Enter amount"}
+                            width='10rem' 
+                            height='2rem' 
+                            paddingLeft='1.25rem'
+                        />
+                        <Dropdown denom={swapDenom} setDenom={setSwapDenom}/>
+                        <LeftComponentWrapper>
+                        To: 
+                        </LeftComponentWrapper>
+                        <MiddleComponentWrapper>
+                            { (swapSellAmount) ? swapSellAmount.toFixed(9) : null }
+                        </MiddleComponentWrapper>
+                        <RightComponentWrapper>
+                            { swapDenom == 'NOM' ? 'ETH' : 'NOM' }
+                        </RightComponentWrapper>
+                    </GridWrapper>
+                        
+                    <RowWrapper>
+                        <Button type='submit'>
+                            Execute
+                        </Button>
+                    </RowWrapper>
+                </form>
+                
             </Panel>
         </FlexWrapper>
     )
