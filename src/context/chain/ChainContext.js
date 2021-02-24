@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
+import { formatEther } from '@ethersproject/units'
 import { useWeb3React } from "@web3-react/core"
 import { NOMCont, BondingCont } from './contracts'
 
@@ -35,7 +36,8 @@ function ChainProvider ({children}) {
             bondContract
                 .getSupplyNOM()
                 .then((supNOM) => {
-                    setSupplyNOM(supNOM)
+                    console.log("Supply NOM: ", supNOM)
+                    setSupplyNOM(formatEther(supNOM))
                 })
         })
         // remove listener when the component is unmounted

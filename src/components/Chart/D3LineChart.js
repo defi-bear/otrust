@@ -147,7 +147,7 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
 
   return (
     <React.Fragment>
-      { !supplyNOM ? null : `Current Supply: ${formatEther(supplyNOM)}` }
+      { !supplyNOM ? null : `Current Supply: ${supplyNOM}` }
       <div ref={wrapperRef} style={{ marginTop: "1rem" }}>
         <StyledSVG ref={svgRef}>
           <defs>

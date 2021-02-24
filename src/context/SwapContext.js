@@ -9,7 +9,7 @@ export const UpdateSwapContext = createContext()
 export const useUpdateSwap = () => useContext(UpdateSwapContext)
 
 function SwapProvider ({children}) {
-    const { currSupply } = useChain()
+    const { supplyNOM } = useChain()
     const [swapBuyAmount, setSwapBuyAmount] = useState('')
     const [swapDenom, setSwapDenom] = useState('ETH')
     const [swapSellAmount, setSwapSellAmount] = useState(0)
@@ -32,21 +32,21 @@ function SwapProvider ({children}) {
     useEffect(() => {
         if (swapBuyAmount === 0) {
             setSwapSellAmount(0)
-            setSwapSupply([currSupply, currSupply])
+            setSwapSupply([supplyNOM, supplyNOM])
         } else {
             if (swapDenom === 'ETH') {
-                const { supplyBot, supplyTop, diff } = ETHtoNOM(swapBuyAmount, currSupply)
+                const { supplyBot, supplyTop, diff } = ETHtoNOM(swapBuyAmount, supplyNOM)
                 setSwapSellAmount(diff)
                 setSwapSupply([supplyBot, supplyTop])
             } else {
-                const { supplyBot, supplyTop, diff } = NOMtoETH(swapBuyAmount, currSupply)
+                const { supplyBot, supplyTop, diff } = NOMtoETH(swapBuyAmount, supplyNOM)
                 setSwapSellAmount(diff)
                 setSwapSupply([supplyBot, supplyTop])
                 console.log("SupplyBot NOM", supplyBot)
             }
         }
         console.log("Gets here", swapSellAmount)
-    },[swapDenom, swapBuyAmount, currSupply])
+    },[swapDenom, swapBuyAmount, supplyNOM])
 
     return (
         <UpdateSwapContext.Provider value = { updateValue }>
