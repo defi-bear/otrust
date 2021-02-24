@@ -20,7 +20,7 @@ function ChainId() {
   
 function BlockNumber() {
   
-  const {blockNumber} = useChain()
+  const { blockNumber } = useChain()
 
   return (
     <>
@@ -48,37 +48,14 @@ function Account() {
 }
 
 function Balance() {
-  const { account, library, chainId } = useWeb3React()
-
-  const [balance, setBalance] = React.useState()
-  React.useEffect(() => {
-    if (!!account && !!library) {
-      let stale = false
-
-      library
-        .getBalance(account)
-        .then((balance) => {
-          setBalance(balance)
-        })
-        .catch(() => {
-          if (!stale) {
-            setBalance(null)
-          }
-        })
-
-      return () => {
-        stale = true
-        setBalance(undefined)
-      }
-    }
-  }, [account, library, chainId]) // ensures refresh if referential identity of library doesn't change across chainIds
+  const { ETHbalance, NOMbalance } = useChain()
 
   return (
     <>
       <span>ETH Balance</span>
-      <span>{balance === null ? 'Error' : balance ? `${formatEther(balance)}` : ''}</span>
+      <span>{ETHbalance === null ? 'Error' : ETHbalance ? `${formatEther(ETHbalance)}` : ''}</span>
       <span>NOM Balance</span>
-      <span>{balance === null ? 'Error' : balance ? `${formatEther(balance)}` : ''}</span>
+      <span>{NOMbalance === null ? 'Error' : NOMbalance ? `${formatEther(NOMbalance)}` : ''}</span>
     </>
   )
 }

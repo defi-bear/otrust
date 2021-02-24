@@ -13,6 +13,7 @@ export const injectedConnector = new InjectedConnector({
       Networks.Rinkeby, // Rinkeby
       Networks.Goerli, // Goerli
       Networks.Kovan, // Kovan
+      Networks.Ganache // Ganache Testnet
     ],
 })
 

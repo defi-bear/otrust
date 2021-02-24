@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
+import { formatEther } from '@ethersproject/units'
+import { useChain } from 'context/chain/ChainContext'
 import {
   area,
   curve,
@@ -34,6 +36,7 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
   const dimensions = useResizeObserver(wrapperRef);
   const [currentZoomState, setCurrentZoomState] = useState();
   var margin = {top: 20, right: 20, bottom: 40, left: 80}
+  const { supplyNOM } = useChain()
 
   // will be called initially and on every data change
   useEffect(() => {
@@ -144,6 +147,7 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
 
   return (
     <React.Fragment>
+      { !supplyNOM ? null : `Current Supply: ${formatEther(supplyNOM)}` }
       <div ref={wrapperRef} style={{ marginTop: "1rem" }}>
         <StyledSVG ref={svgRef}>
           <defs>

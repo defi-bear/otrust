@@ -5,6 +5,7 @@ export const Networks = {
   Rinkeby: 4,
   Goerli: 5,
   Kovan: 42,
+  Ganache: 1337
 }
 
 export const TOKENS_BY_NETWORK = {

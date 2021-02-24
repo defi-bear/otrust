@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { useWeb3React } from "@web3-react/core"
+import { NOMCont, BondingCont } from './contracts'
 
 export const ChainContext = createContext()
 export const useChain = () => useContext(ChainContext)
@@ -7,16 +8,14 @@ export const useChain = () => useContext(ChainContext)
 export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
-const fetcher = (library) => (...args) => {
-    const [method, ...params] = args
-    return library[method](...params)
-}
-
 function ChainProvider ({children}) {
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
     const [ETHbalance, setETHBalance] = useState()
-
+    const [NOMbalance, setNOMBalance] = useState()
+    const [supplyNOM, setSupplyNOM] = useState()
+    const bondContract = BondingCont(library)
+    const NOMContract = NOMCont(library)
     const [currSupply, setCurrSupply] = useState(1000)
 
     useEffect(() => {
@@ -25,8 +24,18 @@ function ChainProvider ({children}) {
             setBlockNumber(number)
             library
                 .getBalance(account)
-                .then((balance) => {
-                    setETHBalance(balance)
+                .then((ETHbalance) => {
+                    setETHBalance(ETHbalance)
+                })
+            NOMContract
+                .balanceOf(account)
+                .then((NOMbalance) => {
+                    setNOMBalance(NOMbalance)
+                })
+            bondContract
+                .getSupplyNOM()
+                .then((supNOM) => {
+                    setSupplyNOM(supNOM)
                 })
         })
         // remove listener when the component is unmounted
@@ -38,7 +47,10 @@ function ChainProvider ({children}) {
 
     const contextValue = {
         blockNumber,
-        currSupply
+        currSupply,
+        ETHbalance,
+        NOMbalance,
+        supplyNOM
     }
 
     const updateValue = {
