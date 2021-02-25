@@ -30,7 +30,7 @@ const StyledSVG = styled.svg`
  * Component that renders a ZoomableLineChart
  */
 
-function LineChart({ data, areaData, id = "bondingChart" }) {
+function LineChart({ data, areaData, labelData: { paymentETH, supAvg, priceAvg }, id = "bondingChart" }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
@@ -39,9 +39,9 @@ function LineChart({ data, areaData, id = "bondingChart" }) {
 
   // will be called initially and on every data change
   useEffect(() => {
-    
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
+   
 
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
@@ -90,10 +90,26 @@ function LineChart({ data, areaData, id = "bondingChart" }) {
       .attr("stroke", "black")
       .attr("fill", "#0e4265")
       .attr("d", areaGenerator)
+    /**
+    svgContent
+      .selectAll(".myLine2")
+      .data([labelData])
+      .join("path")
+      .attr("class", "myLine")
+      .attr("stroke", "black")
+      .attr("fill", "none")
+      .attr("d", lineGenerator);
+  
+     */
     
-
     // axes
     const xAxis = axisBottom(xScale);
+
+    svg
+      .selectAll("text")
+      .exit()
+      .remove()
+
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
@@ -113,16 +129,30 @@ function LineChart({ data, areaData, id = "bondingChart" }) {
       .call(yAxis);
     
     // Y axis label:
-    svg.append("text")
+    svg
+    .append("text")
     .attr("text-anchor", "end")
     .attr("transform", "rotate(-90)")
     .attr("y", 0)
     .attr("x", -margin.top)
     .text("Price (ETH/NOM)")
+    
+    /*
+    if (priceAvg) {
+      svg.select(".areaLabel").exit().remove()
 
+      svg
+        .select(".areaLabel")
+        .append("text")
+        .attr("text-anchor", "end")
+        .attr("y", yScale(priceAvg))
+        .attr("x", xScale(supAvg))
+        .text(`${priceAvg.toString()}`)
+    }
+    */
 
     
-  }, [data, dimensions]);
+  }, [priceAvg, areaData, data, dimensions]);
 
   return (
     <React.Fragment>
@@ -134,11 +164,10 @@ function LineChart({ data, areaData, id = "bondingChart" }) {
               <rect x="0" y="0" width="100%" height="100%" />
             </clipPath>
           </defs>
-          <g className="content" clipPath={`url(#${id})`}>
-            
-          </g>
+          <g className="content" clipPath={`url(#${id})`} />
           <g className="x-axis" />
           <g className="y-axis" />
+          <g className="areaLabel" />
         </StyledSVG>
       </div>
     </React.Fragment>

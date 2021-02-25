@@ -4,6 +4,7 @@ import { Panel } from "components/UI"
 import styled from 'styled-components'
 import { borderRadius } from 'context/responsive/cssSizes'
 import { useSwap } from 'context/SwapContext'
+import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding'
 
 const ChartWrapper = styled.div`
     height: 100%;
@@ -15,10 +16,6 @@ const ChartWrapper = styled.div`
 
 const a = 100000000
 
-function SupplyToEth(supply) {
-    return (supply/a)**2
-}
-
 function supplyToArray(supBegin, supEnd) {
     var dataArray = []
     const dif = supEnd - supBegin
@@ -27,11 +24,21 @@ function supplyToArray(supBegin, supEnd) {
         dataArray.push(
             { 
                 x: supBegin + dif*i/n,
-                y: SupplyToEth(supBegin + dif*i/n)
+                y: priceAtSupply(supBegin + dif*i/n)
             }
         );
     }
+
     return dataArray
+}
+
+function labelArray(supBegin, supEnd) {
+    const paymentETH = NOMsupplyETH(supEnd, supBegin)
+    const priceAvg = paymentETH/(supEnd - supBegin)
+    const supAvg = supplyAtPrice(priceAvg)
+    console.log("price average: ", priceAvg)
+
+    return { paymentETH, supAvg, priceAvg }
 }
 
 const ChartHeader = styled.header`
@@ -52,6 +59,7 @@ export default function D3Chart() {
     
     const [data, setData] = useState(supplyToArray(lowerBound, upperBound))
     const [areaData, setAreaData] = useState(supplyToArray(lowerBound, upperBound))
+    const [labelData, setLabelData] = useState('')
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -60,6 +68,7 @@ export default function D3Chart() {
             upperBound = (Math.round(swapSupply[1]/10**digitsUpper) + 1)*10**digitsUpper
             setData(supplyToArray(lowerBound, upperBound))
             setAreaData(supplyToArray(swapSupply[0], swapSupply[1]))
+            setLabelData(labelArray(swapSupply[0], swapSupply[1]))
         }
     },[swapSupply])
     
@@ -71,7 +80,7 @@ export default function D3Chart() {
                 <ChartHeader>
                     Bonding Curve
                 </ChartHeader>
-                <LineChart data={data} areaData={areaData}/>
+                <LineChart data={data} areaData={areaData} labelData={labelData}/>
             </Panel>
         </ChartWrapper>
     )
