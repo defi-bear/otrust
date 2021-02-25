@@ -30,11 +30,10 @@ const StyledSVG = styled.svg`
  * Component that renders a ZoomableLineChart
  */
 
-function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
+function LineChart({ data, areaData, id = "bondingChart" }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-  const [currentZoomState, setCurrentZoomState] = useState();
   var margin = {top: 20, right: 20, bottom: 40, left: 80}
   const { supplyNOM } = useChain()
 
@@ -55,20 +54,12 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
       .domain(extent(data, xValue))
       .range([margin.left, width - margin.right]);
 
-    if (currentZoomState) {
-      const newXScale = currentZoomState.rescaleX(xScale);
-      xScale.domain(newXScale.domain());
-    }
 
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
       .range([height - margin.top - margin.bottom, 10]);
 
-    // Temporary
-    if (currentZoomState) {
-        const newYScale = currentZoomState.rescaleY(yScale);
-        yScale.domain(newYScale.domain());
-    }
+
     
     var lineGenerator = line()
       .x(d => xScale(d.x))
@@ -130,20 +121,8 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
     .text("Price (ETH/NOM)")
 
 
-    // zoom
-    const zoomBehavior = zoom()
-      .scaleExtent([0.5, 5])
-      .translateExtent([
-        [0, 0],
-        [width, height]
-      ])
-      .on("zoom", () => {
-        const zoomState = zoomTransform(svg.node());
-        setCurrentZoomState(zoomState);
-      });
-
-    svg.call(zoomBehavior);
-  }, [currentZoomState, data, dimensions]);
+    
+  }, [data, dimensions]);
 
   return (
     <React.Fragment>
@@ -166,4 +145,4 @@ function ZoomableLineChart({ data, areaData, id = "myZoomableLineChart" }) {
   );
 }
 
-export default ZoomableLineChart;
+export default LineChart;

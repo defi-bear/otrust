@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ZoomableLineChart from "./D3LineChart";
+import LineChart from "./D3LineChart";
 import { Panel } from "components/UI"
 import styled from 'styled-components'
 import { borderRadius } from 'context/responsive/cssSizes'
@@ -71,7 +71,7 @@ export default function D3Chart() {
                 <ChartHeader>
                     Bonding Curve
                 </ChartHeader>
-                <ZoomableLineChart data={data} areaData={areaData}/>
+                <LineChart data={data} areaData={areaData}/>
             </Panel>
         </ChartWrapper>
     )
