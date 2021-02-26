@@ -156,7 +156,7 @@ function LineChart({ data, areaData, labelData: { paymentETH, supAvg, priceAvg }
 
   return (
     <React.Fragment>
-      { !supplyNOM ? null : `Current Supply: ${supplyNOM}` }
+      { !supplyNOM ? null : `Current Supply: ${parseFloat(supplyNOM).toPrecision(8)}` }
       <div ref={wrapperRef} style={{ marginTop: "1rem" }}>
         <StyledSVG ref={svgRef}>
           <defs>

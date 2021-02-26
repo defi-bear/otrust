@@ -164,7 +164,7 @@ export default function Swap() {
                         To: 
                         </LeftComponentWrapper>
                         <MiddleComponentWrapper>
-                            { (swapSellAmount) ? swapSellAmount.toFixed(9) : null }
+                            { (swapSellAmount) ? parseFloat(swapSellAmount).toPrecision(10) : null }
                         </MiddleComponentWrapper>
                         <RightComponentWrapper>
                             { swapDenom == 'NOM' ? 'ETH' : 'NOM' }

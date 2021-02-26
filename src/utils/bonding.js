@@ -47,16 +47,8 @@ export function ETHtoNOM(amount, supply) {
 // uint256 amountNOM: amount of NOM to be sold (18 decimal)
 // Output
 // uint256: amount of ETH paid in Wei or ETH (18 decimal)
-export function NOMtoETH(amount, supply) {
-    const price = priceAtSupply(supply)
-    // 1. Determine supply top: priceBondCurve - 1% = Top Sale Price
-    const priceTop = price*(.99)
-    const supplyTop = supplyAtPrice(priceTop);
+export function NOMtoETH(amount, supplyTop) {
     const supplyBot = supplyTop - amount;
-    // 2. Integrate over curve to find ETH
-    // ETH = a/3((supplyNOM_Top/a)^3 - (supplyNOM_Bot/a)^3)
-    console.log("Supply Top: ", supplyTop)
-    console.log("Supply Bot: ", supplyBot)
-    const diff = NOMsupplyETH(supplyTop, supplyBot)
+    const diff = .99 * NOMsupplyETH(supplyTop, supplyBot)
     return { supplyBot, supplyTop, diff}
 }

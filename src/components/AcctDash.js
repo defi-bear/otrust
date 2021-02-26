@@ -53,9 +53,9 @@ function Balance() {
   return (
     <>
       <span>ETH Balance</span>
-      <span>{ETHbalance === null ? 'Error' : ETHbalance ? `${formatEther(ETHbalance)}` : ''}</span>
+      <span>{ETHbalance === null ? 'Error' : ETHbalance ? `${parseFloat(formatEther(ETHbalance)).toPrecision(8)}` : ''}</span>
       <span>NOM Balance</span>
-      <span>{NOMbalance === null ? 'Error' : NOMbalance ? `${formatEther(NOMbalance)}` : ''}</span>
+      <span>{NOMbalance === null ? 'Error' : NOMbalance ? `${parseFloat(formatEther(NOMbalance)).toPrecision(8)}` : ''}</span>
     </>
   )
 }
