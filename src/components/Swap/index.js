@@ -104,7 +104,6 @@ export default function Swap() {
           if (!swapBuyAmount) return
           try {
             if (swapDenom == 'ETH') {
-                console.log("Purchase amount ETH: ", swapBuyAmount)
                 try {
                     const response = bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
                     setSwapBuyAmount('')
@@ -114,11 +113,8 @@ export default function Swap() {
                     setSwapBuyAmount(swapBuyAmount)
                 }
             } else {
-                console.log("Sell amount NOM: ", swapBuyAmount)
                 const res1 = await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
-                const res2 = await bondContract.sellNOM(parseEther(swapBuyAmount.toString())).then((f) => {
-                    console.log("Transaction receipt: ", f)
-                })
+                const res2 = await bondContract.sellNOM(parseEther(swapBuyAmount.toString()))
                 setSwapBuyAmount('')
             }
           } catch (e) {

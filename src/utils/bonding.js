@@ -1,15 +1,13 @@
-
 const a = 100000000
-const priceBondCurve = .001
+
+export function priceAtSupply(supply) {
+    return (supply/a)**2
+}
 
 // Bonding curve price at specified supply
 export function supplyAtPrice(price) {
     //#NOM Sold = sqrt(ETH/NOM) * a
     return Math.sqrt(price) * a
-}
-
-export function priceAtSupply(supply) {
-    return (supply/a)**2
 }
 
 // NOM supply range to ETH
@@ -34,10 +32,8 @@ export function ETHtoNOM(amount, supply) {
     // 2. Integrate over curve, and solve for supply top
     // (3*ETH/a + (supplyNOM_Bot/a)^3)^(1/3)
     const supplyTop = a*(3*amount/a + supplyBot**3/a**3)**(1/3)
-    console.log("supply top: ", supplyTop)
     // 3. Subtract supply bottom from top to get amount NOM for amount ETH
     const diff = supplyTop - supplyBot
-    console.log("diff", diff)
     return { supplyBot, supplyTop, diff }
 }
 

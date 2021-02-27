@@ -41,7 +41,6 @@ export function HavenTheme({ children }) {
     let themeStorage = localStorage.getItem('theme')
     
     if(themeStorage) {
-      console.log(`Theme set to ${themeStorage} from local storage`)
       if(themeStorage == 'dark') { updateTheme(dark) } else { updateTheme(light) }
     } else updateTrigger(true)
   },[]

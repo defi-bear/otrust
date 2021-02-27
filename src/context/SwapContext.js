@@ -42,10 +42,8 @@ function SwapProvider ({children}) {
                 const { supplyBot, supplyTop, diff } = NOMtoETH(swapBuyAmount, supplyNOM)
                 setSwapSellAmount(diff)
                 setSwapSupply([supplyBot, supplyTop])
-                console.log("SupplyBot NOM", supplyBot)
             }
         }
-        console.log("Gets here", swapSellAmount)
     },[swapDenom, swapBuyAmount, supplyNOM])
 
     return (

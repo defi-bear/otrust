@@ -36,7 +36,6 @@ function ChainProvider ({children}) {
             bondContract
                 .getSupplyNOM()
                 .then((supNOM) => {
-                    console.log("Supply NOM: ", supNOM)
                     setSupplyNOM(formatEther(supNOM))
                 })
         })

@@ -33,7 +33,6 @@ export function AutoLogin({children}) {
     const [activatingConnector, setActivatingConnector] = React.useState()
     
     useEffect(() => {
-        console.log('Wallet running')
         if (activatingConnector && activatingConnector === connector) {
             setActivatingConnector(undefined)
         }

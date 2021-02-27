@@ -63,7 +63,6 @@ export default function Dropdown({denom, setDenom}) {
   const onOptionClicked = value => () => {
     setDenom(value);
     setIsOpen(false);
-    console.log(denom);
   };
 
   return (

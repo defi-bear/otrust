@@ -36,8 +36,6 @@ function labelArray(supBegin, supEnd) {
     const paymentETH = NOMsupplyETH(supEnd, supBegin)
     const priceAvg = paymentETH/(supEnd - supBegin)
     const supAvg = supplyAtPrice(priceAvg)
-    console.log("price average: ", priceAvg)
-
     return { paymentETH, supAvg, priceAvg }
 }
 
