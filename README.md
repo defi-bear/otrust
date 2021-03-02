@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# Onomy Trust (OTRUST) Bonding Curve Front-End
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+wNOM will be continuously distributed through a bonding curve until all 100,000,000 wNOM ERC20 have been bridged. 
+
+## Prerequisites
+1) Ganache https://www.trufflesuite.com/docs/ganache/quickstart
+2) Truffle https://www.trufflesuite.com/docs/truffle/getting-started/installation
 
 ## Available Scripts
 
