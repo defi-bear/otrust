@@ -7,7 +7,7 @@ import { AccentButton } from 'components/UI/Button'
 import { useAsyncFn } from 'lib/use-async-fn'
 import { useSwap, useUpdateSwap } from 'context/SwapContext'
 import { useChain } from 'context/chain/ChainContext'
-import { formatEther, parseEther } from '@ethersproject/units'
+import { parseEther } from '@ethersproject/units'
 
 const FlexWrapper = styled.div`
     display: flex;
@@ -95,7 +95,7 @@ const Button = styled(AccentButton)`
 export default function Swap() {
     const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap()
     const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap()
-    const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [])
+    const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [setSwapBuyAmount])
     const { bondContract, NOMcontract } = useChain()
 
     const submitTrans = useCallback(
@@ -103,9 +103,9 @@ export default function Swap() {
           if (evt) evt.preventDefault()
           if (!swapBuyAmount) return
           try {
-            if (swapDenom == 'ETH') {
+            if (swapDenom === 'ETH') {
                 try {
-                    const response = bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
+                    await bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
                     setSwapBuyAmount('')
                 } catch (e) {
                     // eslint-disable-next-line no-console
@@ -113,8 +113,8 @@ export default function Swap() {
                     setSwapBuyAmount(swapBuyAmount)
                 }
             } else {
-                const res1 = await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
-                const res2 = await bondContract.sellNOM(parseEther(swapBuyAmount.toString()))
+                await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
+                await bondContract.sellNOM(parseEther(swapBuyAmount.toString()))
                 setSwapBuyAmount('')
             }
           } catch (e) {
@@ -122,7 +122,7 @@ export default function Swap() {
             console.error(e.stack || e)
             setSwapBuyAmount(swapBuyAmount)
           }
-        }
+        },[swapBuyAmount, swapDenom, bondContract, NOMcontract, setSwapBuyAmount]
     )
 
     const [onSubmit, isWorking, error] = useAsyncFn(submitTrans)
@@ -145,6 +145,7 @@ export default function Swap() {
                     <LeftComponentWrapper>
                         From:
                         </LeftComponentWrapper>
+                        { error ? error : null }
                         <StyledInput
                             type='text'
                             value={swapBuyAmount}
@@ -163,7 +164,7 @@ export default function Swap() {
                             { (swapSellAmount) ? parseFloat(swapSellAmount).toPrecision(10) : null }
                         </MiddleComponentWrapper>
                         <RightComponentWrapper>
-                            { swapDenom == 'NOM' ? 'ETH' : 'NOM' }
+                            { swapDenom === 'NOM' ? 'ETH' : 'NOM' }
                         </RightComponentWrapper>
                     </GridWrapper>
                         

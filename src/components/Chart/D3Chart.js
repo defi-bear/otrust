@@ -14,8 +14,6 @@ const ChartWrapper = styled.div`
     flex-grow: 1;
 `
 
-const a = 100000000
-
 function supplyToArray(supBegin, supEnd) {
     var dataArray = []
     const dif = supEnd - supBegin
@@ -52,19 +50,23 @@ const ChartHeader = styled.header`
 
 export default function D3Chart() {
     const { swapSupply } = useSwap()
-    var upperBound = 100000000
-    var lowerBound = 0
     
-    const [data, setData] = useState(supplyToArray(lowerBound, upperBound))
-    const [areaData, setAreaData] = useState(supplyToArray(lowerBound, upperBound))
+    const [data, setData] = useState(supplyToArray(0, 100000000))
+    const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
     const [labelData, setLabelData] = useState('')
 
     useEffect(() => {
         if (swapSupply[1]) {
             var digitsUpper = Math.floor(Math.log10(swapSupply[1]))
             // upperBound = 10**(digitsUpper + 1)
-            upperBound = (Math.round(swapSupply[1]/10**digitsUpper) + 1)*10**digitsUpper
-            setData(supplyToArray(lowerBound, upperBound))
+            const upperBound = (Math.round(swapSupply[1]/10**digitsUpper) + 1)*10**digitsUpper
+            const lowerBound = 0
+            setData(
+                supplyToArray(
+                    lowerBound, 
+                    upperBound
+                )
+            )
             setAreaData(supplyToArray(swapSupply[0], swapSupply[1]))
             setLabelData(labelArray(swapSupply[0], swapSupply[1]))
         }

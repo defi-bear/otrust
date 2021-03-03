@@ -1,19 +1,14 @@
-import React, { useRef, useEffect, useState } from "react";
-import { formatEther } from '@ethersproject/units'
+import React, { useRef, useEffect } from "react";
 import { useChain } from 'context/chain/ChainContext'
 import {
   area,
-  curve,
   extent,
   select,
   scaleLinear,
   line,
-  max,
   curveCardinal,
   axisBottom,
-  axisLeft,
-  zoom,
-  zoomTransform
+  axisLeft
 } from "d3";
 import { useResizeObserver } from "./utils";
 import styled from "styled-components";
@@ -30,18 +25,17 @@ const StyledSVG = styled.svg`
  * Component that renders a ZoomableLineChart
  */
 
-function LineChart({ data, areaData, labelData: { paymentETH, supAvg, priceAvg }, id = "bondingChart" }) {
+function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart" }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-  var margin = {top: 20, right: 20, bottom: 40, left: 80}
   const { supplyNOM } = useChain()
 
   // will be called initially and on every data change
   useEffect(() => {
+    var margin = {top: 20, right: 20, bottom: 40, left: 80}
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
-   
 
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();

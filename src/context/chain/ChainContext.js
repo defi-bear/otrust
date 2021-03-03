@@ -44,7 +44,7 @@ function ChainProvider ({children}) {
           library.removeAllListeners('block')
         }
         // trigger the effect only on component mount
-    }, [])
+    }, [NOMcontract, account, bondContract, library])
 
     const contextValue = {
         blockNumber,

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Container } from 'components/UI'
 import { headerFill, header } from 'context/responsive/cssSizes'
 import logo from 'assets/logo.png'
 

@@ -9,7 +9,7 @@ export const contAddrs = require('./NOMAddrs.json')
  */
 export function NOMCont(library) {
   const ABI = NomContractJSON.abi
-  return new Contract(contAddrs.NOMERC20, NomContractJSON.abi, library.getSigner())
+  return new Contract(contAddrs.NOMERC20, ABI, library.getSigner())
 }
 
 /**
