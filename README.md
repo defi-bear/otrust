@@ -5,6 +5,7 @@ wNOM will be continuously distributed through a bonding curve until all 100,000,
 ## Prerequisites
 1) Ganache https://www.trufflesuite.com/docs/ganache/quickstart
 2) Truffle https://www.trufflesuite.com/docs/truffle/getting-started/installation
+3) Metamask https://metamask.io/
 
 ## Available Scripts
 
