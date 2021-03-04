@@ -27,17 +27,17 @@ function ChainProvider ({children}) {
                 .getBalance(account)
                 .then((ETHbalance) => {
                     setETHBalance(ETHbalance)
-                })
+                }).catch((err) => {})
             NOMcontract
                 .balanceOf(account)
                 .then((NOMbalance) => {
                     setNOMBalance(NOMbalance)
-                })
+                }).catch((err) => {})
             bondContract
                 .getSupplyNOM()
                 .then((supNOM) => {
                     setSupplyNOM(formatEther(supNOM))
-                })
+                }).catch((err) => {})
         })
         // remove listener when the component is unmounted
         return () => {
