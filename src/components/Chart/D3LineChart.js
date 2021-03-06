@@ -30,13 +30,13 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
   const { supplyNOM } = useChain()
-  const margin = {top: 20, right: 20, bottom: 40, left: 80}
-  const svg = select(svgRef.current);
-  const svgContent = svg.select(".content");
+ 
 
 
   // xAxis and yAxis titles only called when dimensions changes
   useEffect(() => {   
+    const margin = {top: 20, right: 20, bottom: 40, left: 80}
+    const svg = select(svgRef.current);
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
@@ -64,6 +64,9 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
   // charts and xAxis and yAxis
   useEffect(() => { 
+    const margin = {top: 20, right: 20, bottom: 40, left: 80}
+    const svg = select(svgRef.current);
+    const svgContent = svg.select(".content");
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
