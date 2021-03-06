@@ -30,13 +30,40 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
   const { supplyNOM } = useChain()
+  const margin = {top: 20, right: 20, bottom: 40, left: 80}
+  const svg = select(svgRef.current);
+  const svgContent = svg.select(".content");
 
-  // will be called initially and on every data change
-  useEffect(() => {
-    var margin = {top: 20, right: 20, bottom: 40, left: 80}
-    const svg = select(svgRef.current);
-    const svgContent = svg.select(".content");
 
+  // xAxis and yAxis titles only called when dimensions changes
+  useEffect(() => {   
+    const { width, height } =
+      dimensions || wrapperRef.current.getBoundingClientRect();
+
+    // Add X axis title:
+    const xTitle=svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height)
+      .text("NOM Issued");
+    
+    // Y axis title:
+    const yTitle=svg
+    .append("text")
+    .attr("text-anchor", "end")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0)
+    .attr("x", -margin.top)
+    .text("Price (ETH/NOM)")
+
+    return () =>{
+      xTitle.remove()
+      yTitle.remove()
+    }
+  }, [dimensions]);
+
+  // charts and xAxis and yAxis
+  useEffect(() => { 
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
@@ -48,19 +75,16 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .domain(extent(data, xValue))
       .range([margin.left, width - margin.right]);
 
-
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
       .range([height - margin.top - margin.bottom, 10]);
-
-
-    
-    var lineGenerator = line()
+  
+    const lineGenerator = line()
       .x(d => xScale(d.x))
       .y(d => yScale(d.y)) // apply the y scale to the y data
       .curve(curveCardinal);
 
-    var areaGenerator = area()
+    const areaGenerator = area()
       .x(d => xScale(d.x))
       .y0(yScale(0))
       .y1(d => yScale(d.y))
@@ -98,39 +122,17 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     
     // axes
     const xAxis = axisBottom(xScale);
-
-    svg
-      .selectAll("text")
-      .exit()
-      .remove()
-
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
       .call(xAxis);
-
-    // Add X axis label:
-    svg.append("text")
-      .attr("text-anchor", "end")
-      .attr("x", width)
-      .attr("y", height)
-      .text("NOM Issued");
 
     const yAxis = axisLeft(yScale);
     svg
       .select(".y-axis")
       .attr("transform", `translate(${margin.left}, 0)`)
       .call(yAxis);
-    
-    // Y axis label:
-    svg
-    .append("text")
-    .attr("text-anchor", "end")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 0)
-    .attr("x", -margin.top)
-    .text("Price (ETH/NOM)")
-    
+
     /*
     if (priceAvg) {
       svg.select(".areaLabel").exit().remove()
@@ -144,7 +146,6 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
         .text(`${priceAvg.toString()}`)
     }
     */
-
     
   }, [priceAvg, areaData, data, dimensions]);
 
@@ -161,7 +162,6 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
           <g className="content" clipPath={`url(#${id})`} />
           <g className="x-axis" />
           <g className="y-axis" />
-          <g className="areaLabel" />
         </StyledSVG>
       </div>
     </React.Fragment>
