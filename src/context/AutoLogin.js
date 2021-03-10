@@ -28,7 +28,7 @@ export const injectedConnector = new InjectedConnector({
 export function AutoLogin({children}) {
 
     const {
-        activate,
+        // activate,
         active,
         connector,
     } = useWeb3React()
