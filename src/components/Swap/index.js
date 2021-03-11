@@ -6,7 +6,7 @@ import { borderRadius } from 'context/responsive/cssSizes'
 import { AccentButton } from 'components/UI/Button'
 import { useAsyncFn } from 'lib/use-async-fn'
 import { useSwap, useUpdateSwap } from 'context/SwapContext'
-import { useChain } from 'context/chain/ChainContext'
+import { useChain, useUpdateChain } from 'context/chain/ChainContext'
 import { parseEther } from '@ethersproject/units'
 
 const FlexWrapper = styled.div`
@@ -97,6 +97,7 @@ export default function Swap() {
     const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap()
     const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [setSwapBuyAmount])
     const { bondContract, NOMcontract } = useChain()
+    const { setPendingTx } = useUpdateChain()
 
     const submitTrans = useCallback(
         async evt => {
@@ -105,7 +106,8 @@ export default function Swap() {
           try {
             if (swapDenom === 'ETH') {
                 try {
-                    await bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
+                    const tx = await bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
+                    setPendingTx(tx)
                     setSwapBuyAmount('')
                 } catch (e) {
                     // eslint-disable-next-line no-console
@@ -113,8 +115,10 @@ export default function Swap() {
                     setSwapBuyAmount(swapBuyAmount)
                 }
             } else {
-                await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
-                await bondContract.sellNOM(parseEther(swapBuyAmount.toString()))
+                let tx = await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
+                setPendingTx(tx)
+                tx = await bondContract.sellNOM(parseEther(swapBuyAmount.toString()))
+                setPendingTx(tx)
                 setSwapBuyAmount('')
             }
           } catch (e) {
@@ -122,7 +126,7 @@ export default function Swap() {
             console.error(e.stack || e)
             setSwapBuyAmount(swapBuyAmount)
           }
-        },[swapBuyAmount, swapDenom, bondContract, NOMcontract, setSwapBuyAmount]
+        },[swapBuyAmount, swapDenom, bondContract, NOMcontract, setSwapBuyAmount, setPendingTx]
     )
 
     const [onSubmit, isWorking, error] = useAsyncFn(submitTrans)
