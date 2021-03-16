@@ -14,18 +14,17 @@ export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
 const customStyles = {
-    content : {
-      top                   : '50%',
-      left                  : '50%',
-      right                 : 'auto',
-      bottom                : 'auto',
-      marginRight           : '-50%',
-      transform             : 'translate(-50%, -50%)'
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
     }
 };
 
-function ChainProvider ({theme, children}) {
-    console.log('theme1', theme)
+function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
     const [ETHbalance, setETHBalance] = useState()
@@ -39,8 +38,8 @@ function ChainProvider ({theme, children}) {
 
     if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
         throw new Error('REACT_APP_GRAPHQL_ENDPOINT environment variable not defined')
-      }
-      
+    }
+
     const client = new ApolloClient({
         uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
         cache: new InMemoryCache(),
@@ -54,21 +53,21 @@ function ChainProvider ({theme, children}) {
                 .getBalance(account)
                 .then((ETHbalance) => {
                     setETHBalance(ETHbalance)
-                }).catch((err) => {})
+                }).catch((err) => { })
             NOMcontract
                 .balanceOf(account)
                 .then((NOMbalance) => {
                     setNOMBalance(NOMbalance)
-                }).catch((err) => {})
+                }).catch((err) => { })
             bondContract
                 .getSupplyNOM()
                 .then((supNOM) => {
                     setSupplyNOM(formatEther(supNOM))
-                }).catch((err) => {})
+                }).catch((err) => { })
         })
         // remove listener when the component is unmounted
         return () => {
-          library.removeAllListeners('block')
+            library.removeAllListeners('block')
         }
         // trigger the effect only on component mount
     }, [NOMcontract, account, bondContract, library])
@@ -100,8 +99,8 @@ function ChainProvider ({theme, children}) {
 
     return (
         <ApolloProvider client={client}>
-            <UpdateChainContext.Provider value = { updateValue }>
-                <ChainContext.Provider value = { contextValue } >
+            <UpdateChainContext.Provider value={updateValue}>
+                <ChainContext.Provider value={contextValue} >
                     {children}
                     <Modal
                         isOpen={waitModal}
