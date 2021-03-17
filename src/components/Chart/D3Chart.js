@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LineChart from "./D3LineChart";
-import { Panel } from "components/UI"
+import { ChartPanel } from "./Style"
 import styled from 'styled-components'
 import { borderRadius } from 'context/responsive/cssSizes'
 import { useSwap } from 'context/SwapContext'
@@ -76,12 +76,12 @@ export default function D3Chart() {
     
     return (
         <ChartWrapper>
-            <Panel>
+            <ChartPanel>
                 <ChartHeader>
                     Bonding Curve
                 </ChartHeader>
                 <LineChart data={data} areaData={areaData} labelData={labelData}/>
-            </Panel>
+            </ChartPanel>
         </ChartWrapper>
     )
 }

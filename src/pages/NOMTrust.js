@@ -20,14 +20,15 @@ const LeftComponent = styled.div`
 `
 
 export default function NOMTrust() {
+    
     return (
         <ContentWrapper>
             <SwapProvider>
+                <D3Chart />
                 <LeftComponent>
                     <AcctDash />
                     <Swap />
-                </LeftComponent>
-                <D3Chart />
+                </LeftComponent>            
             </SwapProvider>
         </ContentWrapper>
     )

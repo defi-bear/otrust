@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import { useChain } from 'context/chain/ChainContext'
+import React, { useRef, useEffect, useContext } from "react";
+import { useChain, ChainContext } from 'context/chain/ChainContext'
 import {
   area,
   extent,
@@ -24,14 +24,15 @@ const StyledSVG = styled.svg`
 /**
  * Component that renders a ZoomableLineChart
  */
-
 function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart" }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
   const { supplyNOM } = useChain()
- 
+// console.log('props', props)
 
+   const {theme} = useContext(ChainContext);
+   console.log('theme', theme)   
 
   // xAxis and yAxis titles only called when dimensions changes
   useEffect(() => {   
@@ -111,17 +112,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .attr("stroke", "black")
       .attr("fill", "#0e4265")
       .attr("d", areaGenerator)
-    /**
-    svgContent
-      .selectAll(".myLine2")
-      .data([labelData])
-      .join("path")
-      .attr("class", "myLine")
-      .attr("stroke", "black")
-      .attr("fill", "none")
-      .attr("d", lineGenerator);
-  
-     */
+
     
     // axes
     const xAxis = axisBottom(xScale);
