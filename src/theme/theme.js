@@ -53,6 +53,13 @@ export const dark = {
         textBody: '#E9EAEC',
         textLight: '#333333',
         textPrimary: '#4877C1',
-        white: '#ffffff'
+        white: '#ffffff',
+        bgDarken: '#1A1723',
+        bgNormal: '#1F1D29',
+        bgHighlight: '#302E3D',
+        lnHighlight: '#88D1FF',
+        textPrimary: '#E1DFEB',
+        textSecondary: '#9895A6',
+        textThirdly: '656273',
     }
 };
