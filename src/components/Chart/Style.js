@@ -6,6 +6,7 @@ export const ChartPanel = styled.div`
 
   border: ${borderWidth} solid ${props => props.theme.colors.panelBorder};
   background-color: ${props => props.theme.colors.bgDarken};
+  opacity: 1;
   
   border-radius: ${borderRadius};
 

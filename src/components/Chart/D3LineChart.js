@@ -28,40 +28,9 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-  const { supplyNOM } = useChain()
-// console.log('props', props)
 
-   const {theme} = useContext(ChainContext);
-   console.log('theme', theme)   
+   const {theme} = useContext(ChainContext); 
 
-  // xAxis and yAxis titles only called when dimensions changes
-  useEffect(() => {   
-    const margin = {top: 20, right: 20, bottom: 40, left: 80}
-    const svg = select(svgRef.current);
-    const { width, height } =
-      dimensions || wrapperRef.current.getBoundingClientRect();
-
-    // Add X axis title:
-    const xTitle=svg.append("text")
-      .attr("text-anchor", "end")
-      .attr("x", width)
-      .attr("y", height)
-      .text("NOM Issued");
-    
-    // Y axis title:
-    const yTitle=svg
-    .append("text")
-    .attr("text-anchor", "end")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 0)
-    .attr("x", -margin.top)
-    .text("Price (ETH/NOM)")
-
-    return () =>{
-      xTitle.remove()
-      yTitle.remove()
-    }
-  }, [dimensions]);
 
   // charts and xAxis and yAxis
   useEffect(() => { 
@@ -93,24 +62,55 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .y0(yScale(0))
       .y1(d => yScale(d.y))
       .curve(curveCardinal)
+      console.log('12',theme.colors.lnHighlight)
 
-    // render the line
+    // render the base line
     svgContent
       .selectAll(".myLine")
       .data([data])
       .join("path")
       .attr("class", "myLine")
-      .attr("stroke", "black")
+      .attr("stroke", `${theme.colors.lnNormal}`)
+      .attr("stroke-width", "0.13rem")
       .attr("fill", "none")
       .attr("d", lineGenerator);
     
+    //linearGradient
+    const linearGradient = svgContent
+      .append("linearGradient")
+      .attr("id", "linear-gradient")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", "0%")
+      .attr("y1", "100%")
+      .attr("x2", "0%")
+      .attr("y2", "0%");
+
+    linearGradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", `${theme.colors.areaBottom}`); //
+
+    linearGradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", `${theme.colors.areaTop}`);  
+
+    // highlited line and area
+    svgContent
+      .selectAll(".mySelectedLine")
+      .data([areaData])
+      .join("path")
+      .attr("class", "mySelectedLine")
+      .attr("stroke", `${theme.colors.lnHighlight}`)
+      .attr("stroke-width", "0.22rem")
+      .attr("fill", "none")
+      .attr("d", lineGenerator);
+
     svgContent
       .selectAll(".mySelection")
       .data([areaData])
       .join("path")
       .attr("class", "mySelection")
-      .attr("stroke", "black")
-      .attr("fill", "#0e4265")
+      .attr("stroke", `${theme.colors.areaTop}`) 
+      .attr("fill", "url(#linear-gradient")
       .attr("d", areaGenerator)
 
     
@@ -119,33 +119,21 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
-      .call(xAxis);
+      .attr("class", "xAxis")
+      .call(xAxis)
+      .style('color', `${theme.colors.textThirdly}`);
 
     const yAxis = axisLeft(yScale);
     svg
       .select(".y-axis")
       .attr("transform", `translate(${margin.left}, 0)`)
-      .call(yAxis);
-
-    /*
-    if (priceAvg) {
-      svg.select(".areaLabel").exit().remove()
-
-      svg
-        .select(".areaLabel")
-        .append("text")
-        .attr("text-anchor", "end")
-        .attr("y", yScale(priceAvg))
-        .attr("x", xScale(supAvg))
-        .text(`${priceAvg.toString()}`)
-    }
-    */
+      .call(yAxis)
+      .style("color", `${theme.colors.textThirdly}`);
     
   }, [priceAvg, areaData, data, dimensions]);
 
   return (
     <React.Fragment>
-      { !supplyNOM ? null : `Current Supply: ${parseFloat(supplyNOM).toPrecision(8)}` }
       <div ref={wrapperRef} style={{ marginTop: "1rem" }}>
         <StyledSVG ref={svgRef}>
           <defs>
