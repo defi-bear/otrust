@@ -62,7 +62,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .y0(yScale(0))
       .y1(d => yScale(d.y))
       .curve(curveCardinal)
-      console.log('12',theme.colors.lnHighlight)
+ 
 
     // render the base line
     svgContent
@@ -70,7 +70,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .data([data])
       .join("path")
       .attr("class", "myLine")
-      .attr("stroke", `${theme.colors.lnNormal}`)
+      .attr("stroke", `${theme.colors.bgHighlight}`)
       .attr("stroke-width", "0.13rem")
       .attr("fill", "none")
       .attr("d", lineGenerator);

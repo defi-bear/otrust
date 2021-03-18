@@ -37,15 +37,28 @@ function labelArray(supBegin, supEnd) {
     return { paymentETH, supAvg, priceAvg }
 }
 
+//according each box's size on design 194/1167 = 17%
+
+const HeaderWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.01rem;
+    align-items: center;
+    justify-content: left;
+`
+
+const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))/3}rem`;
+console.log("1", adjustedRadius )
 const ChartHeader = styled.header`
-  font-size: 1.4rem;
-  color: #fff;
-  height: 3rem;
-  line-height: 3rem;
-  background: ${props => props.theme.colors.headerBackground};
+  font-size: 0.55rem;
+  color: ${props => props.isClicked ? props.theme.colors.textPrimary : props.theme.colors.textSecondary} ;
+  height: 1.7rem;
+  line-height: 1.7rem;
+  background: ${props => props.isClicked? props.theme.colors.bgHighlight : props.theme.colors.bgDarken};
   text-align: center;
   vertical-align: middle;
-  border-radius: ${borderRadius};
+  border-radius: ${adjustedRadius};
+  width: 17%
 `
 
 export default function D3Chart() {
@@ -77,9 +90,14 @@ export default function D3Chart() {
     return (
         <ChartWrapper>
             <ChartPanel>
-                <ChartHeader>
-                    Bonding Curve
-                </ChartHeader>
+                <HeaderWrapper>
+                    <ChartHeader isClicked={true}>
+                        Bonding Curve Chart
+                    </ChartHeader>
+                    <ChartHeader isClicked={false}>
+                        Historical Chart
+                    </ChartHeader>
+                </HeaderWrapper>               
                 <LineChart data={data} areaData={areaData} labelData={labelData}/>
             </ChartPanel>
         </ChartWrapper>
