@@ -1,7 +1,11 @@
 import { createGlobalStyle } from 'styled-components'
-import BebasNeueBold from 'assets/fonts/BebasNeueBold.ttf'
-import BebasNeueBook from 'assets/fonts/BebasNeueBook.ttf'
-import BebasNeueRegular from 'assets/fonts/BebasNeueRegular.ttf'
+
+import GilroyRegularWoff from 'assets/fonts/Gilroy-Regular.woff'
+import GilroyRegularTtf from 'assets/fonts/Gilroy-Regular.woff'
+import GilroyMedium from 'assets/fonts/Gilroy-Medium.ttf'
+import GilroyBold from 'assets/fonts/Gilroy-Bold.ttf'
+import BebasNeueRegular from 'assets/fonts/BebasNeue-Regular.ttf'
+import PoppinsRegular from 'assets/fonts/Poppins-Regular.ttf'
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -23,18 +27,12 @@ export const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: 'Bebas Neue';
-    font-weight: 300;
-    src: url('${BebasNeueBook}') format("truetype");
+    src: url('${BebasNeueRegular}') format("truetype");
   }
+
   @font-face {
-    font-family: 'Bebas Neue';
-    font-weight: 400;
-    src: url('${BebasNeueRegular}') format('truetype');
-  }
-  @font-face {
-    font-family: 'Bebas Neue';
-    font-weight: 600;
-    src: url('${BebasNeueBold}') format("truetype");
+    font-family: 'Poppins';
+    src: url('${PoppinsRegular}') format("truetype");
   }
 
   body {

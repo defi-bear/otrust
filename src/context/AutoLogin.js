@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Landing from '../pages/Landing'
-import { useWeb3React } from '@web3-react/core'
+import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
 // import { SigningCosmosClient } from "@cosmjs/launchpad";
 
@@ -85,9 +85,23 @@ export function AutoLogin({children}) {
     const triedEager = useEagerConnect()
     useInactiveListener(!triedEager || !!activatingConnector)
 
+    const connectWallet = (con) => {
+      try {
+        activate(con, undefined, true).catch(error => {
+            if (error instanceof UnsupportedChainIdError) {
+                activate(connector) // a little janky...can't use setError because the connector isn't set
+            } else {
+                // setPendingError(true)
+            }
+        })
+      } catch (error) {
+          alert('Failed to connect.');
+          console.log(error);
+      }
+    }
     return (
         <>
-            { active ? children : <Landing initWeb3={initWeb3} connectKeplr={connectKeplr} /> }
+            { active ? children : <Landing initWeb3={initWeb3} connectKeplr={connectKeplr} connectWallet={connectWallet} /> }
         </>
     )
 }
