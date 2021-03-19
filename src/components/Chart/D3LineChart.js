@@ -34,7 +34,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
   // charts and xAxis and yAxis
   useEffect(() => { 
-    const margin = {top: 20, right: 20, bottom: 40, left: 80}
+    const margin = {top: 20, right: 20, bottom: 40, left: 40}
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
     const { width, height } =
@@ -100,7 +100,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .join("path")
       .attr("class", "mySelectedLine")
       .attr("stroke", `${theme.colors.lnHighlight}`)
-      .attr("stroke-width", "0.22rem")
+      .attr("stroke-width", "0.23rem")
       .attr("fill", "none")
       .attr("d", lineGenerator);
 
@@ -115,21 +115,44 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     
     // axes
-    const xAxis = axisBottom(xScale);
-    svg
+    const xAxis 
+      = axisBottom(xScale)
+      .tickSize("12")
+      .tickFormat(d => d/1000000 + "m");
+    const xComplex = svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
       .attr("class", "xAxis")
-      .call(xAxis)
-      .style('color', `${theme.colors.textThirdly}`);
+      .style('color', `${theme.colors.bgDarken}`)
+      .attr("stroke-width", "0.1rem")
+      .call(xAxis);
 
-    const yAxis = axisLeft(yScale);
-    svg
+    xComplex.selectAll(".tick text")
+      .attr("transform", `translate(0, 10)`)
+      .style("color", `${theme.colors.textThirdly}`)
+      .style("font-size", "0.7rem");
+
+    xComplex.selectAll(".tick line")
+      .style("color", `${theme.colors.bgHighlight}`)
+
+    // y Axis and gridlines
+    const gridlinesSize = width - margin.right - margin.left;
+    const yAxis = axisLeft(yScale).tickSizeInner(-gridlinesSize);
+    const yComplex = svg
       .select(".y-axis")
       .attr("transform", `translate(${margin.left}, 0)`)
-      .call(yAxis)
-      .style("color", `${theme.colors.textThirdly}`);
+      .style('color', `${theme.colors.bgDarken}`)
+      .call(yAxis);
+
+    yComplex.selectAll(".tick text")
+      .style("color", `${theme.colors.textThirdly}`)
+      
+    yComplex.selectAll(".tick line")
+      .style("color", `${theme.colors.bgHighlight}`)
+      ;
     
+
+
   }, [priceAvg, areaData, data, dimensions]);
 
   return (
@@ -141,9 +164,9 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
               <rect x="0" y="0" width="100%" height="100%" />
             </clipPath>
           </defs>
+          <g className="y-axis" />
           <g className="content" clipPath={`url(#${id})`} />
           <g className="x-axis" />
-          <g className="y-axis" />
         </StyledSVG>
       </div>
     </React.Fragment>
