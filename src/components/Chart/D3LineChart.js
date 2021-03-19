@@ -8,7 +8,7 @@ import {
   line,
   curveCardinal,
   axisBottom,
-  axisLeft
+  axisLeft,
 } from "d3";
 import { useResizeObserver } from "./utils";
 import styled from "styled-components";
@@ -84,7 +84,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .attr("gradientUnits", "userSpaceOnUse")
       .attr("x1", "0%")
       .attr("y1", "81%")
-      .attr("x2", "0.5%")
+      .attr("x2", "1%")
       .attr("y2", "0%");
 
     linearGradient
@@ -127,7 +127,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     const xComplex = svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
-      .style('color', `${theme.colors.bgDarken}`)
+      .style('color', `${theme.colors.bgHighlight}`)
       .attr("stroke-width", "0.10rem")
       .call(xAxis);
 
@@ -145,18 +145,31 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     //x Axis minor
     const xAxis1 = axisBottom(xScale)
       .tickSize("10")
-      .ticks(25);
+      .ticks(25)
+      .tickFormat([]);
 
     const xComplex1 = svg
       .select(".x-axis2")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
-      .style('color', `${theme.colors.bgDarken}`)
+      .style('color', `${theme.colors.bgHighlight}`)
       .call(xAxis1);  
 
     xComplex1
       .selectAll(".tick line")
       .style('stroke-width', '0.1rem')
       .style("color", `${theme.colors.bgHighlight}`)
+ 
+      
+    // the end tick of x-axis comes from the x-axis, not the ticks
+    // To hide the x-axis horizontal line, but still make the end tick show up, we cannot just remove or hide the x-axis
+    // Here,  we use a base line with same color as the background to cover the x-axis horizontal line, but leave the end tick visible
+    svgContent.append("line")
+      .attr("stroke", `${theme.colors.bgDarken}`)
+      .attr("stroke-width", "0.12rem")
+      .attr("x1", margin.left)
+      .attr("y1", yScale(0)+ 0.5)
+      .attr("x2", width - margin.right)
+       .attr("y2",yScale(0)+ 0.5);  
 
 
     // y Axis and gridlines
@@ -187,10 +200,11 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
             </clipPath>
           </defs>
           <g className="y-axis" />
-          <g className="content" clipPath={`url(#${id})`} />
-          
           <g className="x-axis2" />
           <g className="x-axis" />
+          <g className="content" clipPath={`url(#${id})`} />
+          
+         
         </StyledSVG>
       </div>
     </React.Fragment>
