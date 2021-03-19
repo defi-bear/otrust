@@ -5,13 +5,15 @@ import styled from 'styled-components'
 import { borderRadius } from 'context/responsive/cssSizes'
 import { useSwap } from 'context/SwapContext'
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding'
+import Swap from 'components/Swap'
 
 const ChartWrapper = styled.div`
     height: 100%;
     min-width: 30rem;
-    max-width: 50rem;
+    max-width: 63%;
     flex-basis: auto; /* default value */
     flex-grow: 1;
+    background-color: ${props => props.theme.colors.bgNormal};
 `
 
 function supplyToArray(supBegin, supEnd) {
@@ -46,14 +48,20 @@ const HeaderWrapper = styled.div`
     align-items: center;
     justify-content: left;
 `
+const BuySellWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+`
+const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))/2}rem`;
 
-const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))/3}rem`;
-console.log("1", adjustedRadius )
 const ChartHeader = styled.header`
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   color: ${props => props.isClicked ? props.theme.colors.textPrimary : props.theme.colors.textSecondary} ;
-  height: 1.7rem;
-  line-height: 1.7rem;
+  height: 2.2rem;
+  line-height: 2.2rem;
   background: ${props => props.isClicked? props.theme.colors.bgHighlight : props.theme.colors.bgDarken};
   text-align: center;
   vertical-align: middle;
@@ -100,6 +108,11 @@ export default function D3Chart() {
                 </HeaderWrapper>               
                 <LineChart data={data} areaData={areaData} labelData={labelData}/>
             </ChartPanel>
+            <BuySellWrapper>
+                <Swap />  
+                <Swap />
+            </BuySellWrapper>
+            
         </ChartWrapper>
     )
 }

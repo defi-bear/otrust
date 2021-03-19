@@ -108,7 +108,7 @@ export default function Swap() {
                 try {
                     const tx = await bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
                     setPendingTx(tx)
-                    setSwapBuyAmount('')
+                    setSwapBuyAmount('50')
                 } catch (e) {
                     // eslint-disable-next-line no-console
                     console.error(e.stack || e)

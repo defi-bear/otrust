@@ -60,7 +60,7 @@ export const dark = {
         bgNormal: '#1F1D29',
         bgHighlight: '#302E3D', 
         lnHighlight: '#88D1FF',            
-        areaTop: '#9dd7fc',
+        areaTop: '#4e82a3',
         areaBottom: '#1b1d1f',
         textPrimary: '#E1DFEB',
         textSecondary: '#9895A6',

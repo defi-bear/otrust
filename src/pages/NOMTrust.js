@@ -27,7 +27,6 @@ export default function NOMTrust() {
                 <D3Chart />
                 <LeftComponent>
                     <AcctDash />
-                    <Swap />
                 </LeftComponent>            
             </SwapProvider>
         </ContentWrapper>
