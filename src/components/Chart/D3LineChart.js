@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useContext } from "react";
-import { useChain, ChainContext } from 'context/chain/ChainContext'
+import { ChainContext } from 'context/chain/ChainContext'
 import {
   area,
   extent,
@@ -34,7 +34,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
   // charts and xAxis and yAxis
   useEffect(() => { 
-    const margin = {top: 20, right: 20, bottom: 40, left: 40}
+    const margin = {top: 20, right: 20, bottom: 40, left: 60}
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
     const { width, height } =
@@ -43,7 +43,8 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     function xValue(d) { return d.x; }      // accessors
     function yValue(d) { return d.y; }
 
-    // scales + line generator
+
+    // scales + line/area generators
     const xScale = scaleLinear()
       .domain(extent(data, xValue))
       .range([margin.left, width - margin.right]);
@@ -64,76 +65,99 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .curve(curveCardinal)
  
 
-    // render the base line
+    // base line
     svgContent
-      .selectAll(".myLine")
+      .selectAll(".baseLine")
       .data([data])
       .join("path")
-      .attr("class", "myLine")
+      .attr("class", "baseLine")
       .attr("stroke", `${theme.colors.bgHighlight}`)
-      .attr("stroke-width", "0.13rem")
+      .attr("stroke-width", "0.16rem")
       .attr("fill", "none")
       .attr("d", lineGenerator);
-    
-    //linearGradient
+
+      
+    //highlited line and highlited area with linearGradient
     const linearGradient = svgContent
       .append("linearGradient")
       .attr("id", "linear-gradient")
       .attr("gradientUnits", "userSpaceOnUse")
       .attr("x1", "0%")
-      .attr("y1", "100%")
-      .attr("x2", "0%")
+      .attr("y1", "81%")
+      .attr("x2", "0.5%")
       .attr("y2", "0%");
 
-    linearGradient.append("stop")
+    linearGradient
+      .append("stop")
       .attr("offset", "0%")
-      .attr("stop-color", `${theme.colors.areaBottom}`); //
+      .attr("stop-color", `${theme.colors.bgDarken}`); //
 
-    linearGradient.append("stop")
+    linearGradient
+      .append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", `${theme.colors.areaTop}`);  
-
-    // highlited line and area
-    svgContent
-      .selectAll(".mySelectedLine")
-      .data([areaData])
-      .join("path")
-      .attr("class", "mySelectedLine")
-      .attr("stroke", `${theme.colors.lnHighlight}`)
-      .attr("stroke-width", "0.23rem")
-      .attr("fill", "none")
-      .attr("d", lineGenerator);
+      .attr("stop-color", `${theme.colors.lnHighlight}`);  
 
     svgContent
-      .selectAll(".mySelection")
+      .selectAll(".selectedArea")
       .data([areaData])
       .join("path")
-      .attr("class", "mySelection")
+      .attr("class", "selectedArea")
       .attr("stroke", `${theme.colors.areaTop}`) 
+      .attr("stroke-width", "0.03rem")
       .attr("fill", "url(#linear-gradient")
       .attr("d", areaGenerator)
 
-    
-    // axes
-    const xAxis 
-      = axisBottom(xScale)
-      .tickSize("12")
+    svgContent
+      .selectAll(".selectedLine")
+      .data([areaData])
+      .join("path")
+      .attr("class", "selectedLine")
+      .attr("stroke", `${theme.colors.lnHighlight}`)
+      .attr("stroke-width", "0.15rem")
+      .attr("fill", "none")
+      .attr("d", lineGenerator);
+
+
+    // X Axis main
+    const xAxis = axisBottom(xScale)
+      .tickSize("15")
+      .ticks(5)
       .tickFormat(d => d/1000000 + "m");
+
     const xComplex = svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
-      .attr("class", "xAxis")
       .style('color', `${theme.colors.bgDarken}`)
-      .attr("stroke-width", "0.1rem")
+      .attr("stroke-width", "0.10rem")
       .call(xAxis);
 
-    xComplex.selectAll(".tick text")
+    xComplex
+      .selectAll(".tick text")
       .attr("transform", `translate(0, 10)`)
       .style("color", `${theme.colors.textThirdly}`)
       .style("font-size", "0.7rem");
 
-    xComplex.selectAll(".tick line")
+    xComplex
+      .selectAll(".tick line")
       .style("color", `${theme.colors.bgHighlight}`)
+
+
+    //x Axis minor
+    const xAxis1 = axisBottom(xScale)
+      .tickSize("10")
+      .ticks(25);
+
+    const xComplex1 = svg
+      .select(".x-axis2")
+      .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
+      .style('color', `${theme.colors.bgDarken}`)
+      .call(xAxis1);  
+
+    xComplex1
+      .selectAll(".tick line")
+      .style('stroke-width', '0.1rem')
+      .style("color", `${theme.colors.bgHighlight}`)
+
 
     // y Axis and gridlines
     const gridlinesSize = width - margin.right - margin.left;
@@ -148,11 +172,9 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .style("color", `${theme.colors.textThirdly}`)
       
     yComplex.selectAll(".tick line")
-      .style("color", `${theme.colors.bgHighlight}`)
+      .style("color", `${theme.colors.bgNormal}`)
       ;
     
-
-
   }, [priceAvg, areaData, data, dimensions]);
 
   return (
@@ -166,6 +188,8 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
           </defs>
           <g className="y-axis" />
           <g className="content" clipPath={`url(#${id})`} />
+          
+          <g className="x-axis2" />
           <g className="x-axis" />
         </StyledSVG>
       </div>
