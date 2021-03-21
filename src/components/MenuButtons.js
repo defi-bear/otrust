@@ -39,7 +39,7 @@ const MenuHeader = styled.header`
   text-align: center;
   vertical-align: middle;
   border-radius: ${adjustedRadius};
-  padding: 0.7rem 0.3rem
+  padding: 0.7rem 0.9rem
 `
 
 export default function MenuButtons({onButtonChange, menuButtons}) {

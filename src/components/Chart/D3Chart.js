@@ -62,17 +62,69 @@ export default function D3Chart() {
        {
             id: 'BondingCurve',
             text: 'Bonding Curve Chart',
-            status: true,
+            status: true
         },{
             id: 'HistoricalChart',
             text: 'Historical Chart',
-            status: false,
+            status: false
         },{
             id: 'CandelView',
             text:'Candel View',
             status: false
         }
-    ] 
+    ]
+    
+    const historicalHeaderDefault = [
+        {
+             id: 'Day',
+             text: 'Day',
+             status: true
+         },{
+             id: 'Week',
+             text: 'Week',
+             status: false
+         },{
+             id: 'Month',
+             text:'Month',
+             status: false
+         }, {
+             id: 'Quarter',
+             text: 'Year',
+             status: false
+         }, {
+             id: 'AllTime',
+             text: 'All Time',
+             status: false
+         }
+     ] 
+     
+    const candelHeaderDefault = [
+        {
+            id: '15m',
+            text: '15m',
+            status: true,         
+        }, {
+            id: '1H',
+            text: '1H',
+            status: false
+        }, {
+            id: '4H',
+            text: '4H',
+            status: false
+        }, {
+            id: '1D',
+            text: '1D',
+            status: false
+        }, {
+            id: '3D',
+            text: '3D',
+            status: false
+        }, {
+            id: '1W',
+            text: '1W',
+            status: false
+        }
+     ]
 
  
     const { swapSupply } = useSwap()
@@ -80,9 +132,15 @@ export default function D3Chart() {
     const [data, setData] = useState(supplyToArray(0, 100000000))
     const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
     const [labelData, setLabelData] = useState('') 
+
     const [leftHeaderId, setLeftHeaderId] = useState('1')
     const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
 
+    const [historicalHeaderId, setHistoricalHeaderId] = useState('1')
+    const [historicalHeader, setHistoricalHeader] =useState(historicalHeaderDefault)
+
+    const [candelHeaderId, setCandelHeaderId] = useState('1')
+    const [candelHeader, setCandelHeader] =useState(candelHeaderDefault)
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -106,21 +164,36 @@ export default function D3Chart() {
         setLeftHeader(leftHeader)
     }
 
-  
+    const handleHistoricalHeaderChange = (headerbuttons, clickedId) => {
+        console.log('historical', clickedId, headerbuttons)
+        setHistoricalHeaderId(clickedId)
+        setHistoricalHeader(headerbuttons)
+    }  
+
+    const handleCandelHeaderChange = (headerbuttons, clickedId) => {
+        console.log('candel', clickedId, headerbuttons)
+        setCandelHeaderId(clickedId)
+        setCandelHeader(headerbuttons)
+    }  
+
     return (
         <ChartWrapper>
             <ChartPanel>
                 <HeaderWrapper>
-                    <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} />  
+                    <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} /> 
+
+                    {leftHeader[1] && leftHeader[1].status &&  <MenuButtons onButtonChange= {handleHistoricalHeaderChange} menuButtons={historicalHeader} /> }
+
+                    {leftHeader[2] && leftHeader[2].status &&<MenuButtons onButtonChange= {handleCandelHeaderChange} menuButtons={candelHeader} />}  
                 </HeaderWrapper>
                
-                {leftHeader &&leftHeader[0]&& leftHeader[0].status && 
+                {leftHeader[0] && leftHeader[0].status && 
                 <LineChart data={data} areaData={areaData} labelData={labelData}/>}
 
-                {leftHeader && leftHeader[1]&& leftHeader[1].status && <HistoricalChart />}
+                {leftHeader[1] && leftHeader[1].status && <HistoricalChart historicalHeader={historicalHeader} historicalHeaderId={historicalHeaderId}/>}
 
-                {leftHeader && leftHeader[1]&& leftHeader[2].status && 
-                <CandelChart />}
+                {leftHeader[2] && leftHeader[2].status && 
+                <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
             </ChartPanel>
             <BuySellWrapper>
                 <Swap />  
