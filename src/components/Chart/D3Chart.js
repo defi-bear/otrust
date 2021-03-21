@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from "react";
+import styled from 'styled-components';
+
 import LineChart from "./D3LineChart";
-import { ChartPanel } from "./Style"
-import styled from 'styled-components'
-import { borderRadius } from 'context/responsive/cssSizes'
-import { useSwap } from 'context/SwapContext'
-import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding'
-import Swap from 'components/Swap'
+import HistoricalChart from "./D3HistoricalChart";
+import CandelChart from "./D3CandelChart";
+import MenuButtons from '../MenuButtons';
+import { ChartPanel } from "./Style";
+import { useSwap } from 'context/SwapContext';
+import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding';
+import Swap from 'components/Swap';
 
 const ChartWrapper = styled.div`
     height: 100%;
     min-width: 30rem;
-    max-width: 63%;
+    max-width: 60%;
     flex-basis: auto; /* default value */
     flex-grow: 1;
     background-color: ${props => props.theme.colors.bgNormal};
+`
+const HeaderWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+`
+
+const BuySellWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
 `
 
 function supplyToArray(supBegin, supEnd) {
@@ -39,42 +55,34 @@ function labelArray(supBegin, supEnd) {
     return { paymentETH, supAvg, priceAvg }
 }
 
-//according each box's size on design 194/1167 = 17%
-
-const HeaderWrapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.01rem;
-    align-items: center;
-    justify-content: left;
-`
-const BuySellWrapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
-`
-const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))/2}rem`;
-
-const ChartHeader = styled.header`
-  font-size: 0.75rem;
-  color: ${props => props.isClicked ? props.theme.colors.textPrimary : props.theme.colors.textSecondary} ;
-  height: 2.2rem;
-  line-height: 2.2rem;
-  background: ${props => props.isClicked? props.theme.colors.bgHighlight : props.theme.colors.bgDarken};
-  text-align: center;
-  vertical-align: middle;
-  border-radius: ${adjustedRadius};
-  width: 17%
-`
 
 export default function D3Chart() {
+    //buttons on the topLeft header
+   const leftHeaderDefault = [
+       {
+            id: 'BondingCurve',
+            text: 'Bonding Curve Chart',
+            status: true,
+        },{
+            id: 'HistoricalChart',
+            text: 'Historical Chart',
+            status: false,
+        },{
+            id: 'CandelView',
+            text:'Candel View',
+            status: false
+        }
+    ] 
+
+ 
     const { swapSupply } = useSwap()
     
     const [data, setData] = useState(supplyToArray(0, 100000000))
     const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
-    const [labelData, setLabelData] = useState('')
+    const [labelData, setLabelData] = useState('') 
+    const [leftHeaderId, setLeftHeaderId] = useState('1')
+    const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
+
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -93,20 +101,26 @@ export default function D3Chart() {
         }
     },[swapSupply])
     
-    
-    
+   const handleLeftHeaderChange = (leftHeader, clickedLeftId) => {
+        setLeftHeaderId(clickedLeftId)    
+        setLeftHeader(leftHeader)
+    }
+
+  
     return (
         <ChartWrapper>
             <ChartPanel>
                 <HeaderWrapper>
-                    <ChartHeader isClicked={true}>
-                        Bonding Curve Chart
-                    </ChartHeader>
-                    <ChartHeader isClicked={false}>
-                        Historical Chart
-                    </ChartHeader>
-                </HeaderWrapper>               
-                <LineChart data={data} areaData={areaData} labelData={labelData}/>
+                    <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} />  
+                </HeaderWrapper>
+               
+                {leftHeader &&leftHeader[0]&& leftHeader[0].status && 
+                <LineChart data={data} areaData={areaData} labelData={labelData}/>}
+
+                {leftHeader && leftHeader[1]&& leftHeader[1].status && <HistoricalChart />}
+
+                {leftHeader && leftHeader[1]&& leftHeader[2].status && 
+                <CandelChart />}
             </ChartPanel>
             <BuySellWrapper>
                 <Swap />  

@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useContext } from "react";
+import styled from "styled-components";
+
 import { ChainContext } from 'context/chain/ChainContext'
 import {
   area,
@@ -11,7 +13,6 @@ import {
   axisLeft,
 } from "d3";
 import { useResizeObserver } from "./utils";
-import styled from "styled-components";
 
 
 const StyledSVG = styled.svg`
@@ -149,7 +150,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .tickFormat([]);
 
     const xComplex1 = svg
-      .select(".x-axis2")
+      .select(".x-axis1")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
       .style('color', `${theme.colors.bgHighlight}`)
       .call(xAxis1);  
@@ -190,9 +191,8 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     
   }, [priceAvg, areaData, data, dimensions]);
 
-  return (
-    <React.Fragment>
-      <div ref={wrapperRef} style={{ marginTop: "1rem" }}>
+  return (  
+      <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>
         <StyledSVG ref={svgRef}>
           <defs>
             <clipPath id={id}>
@@ -200,14 +200,11 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
             </clipPath>
           </defs>
           <g className="y-axis" />
-          <g className="x-axis2" />
+          <g className="x-axis1" />
           <g className="x-axis" />
-          <g className="content" clipPath={`url(#${id})`} />
-          
-         
+          <g className="content" clipPath={`url(#${id})`} />        
         </StyledSVG>
       </div>
-    </React.Fragment>
   );
 }
 
