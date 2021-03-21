@@ -6,6 +6,9 @@ import { borderRadius } from 'context/responsive/cssSizes'
 import { useSwap } from 'context/SwapContext'
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding'
 
+import { Query } from 'react-apollo'
+import { gql } from 'apollo-boost'
+
 const ChartWrapper = styled.div`
     height: 100%;
     min-width: 30rem;
@@ -47,6 +50,20 @@ const ChartHeader = styled.header`
   vertical-align: middle;
   border-radius: ${borderRadius};
 `
+const TRANSACTIONS_QUERY = gql`
+    query transactions($orderBy: Transactions_orderBy!) {
+        transactions(first: 10, orderBy: $orderBy, orderDirection: asc) {
+            id
+            senderAddress
+            amountNOM
+            amountETH
+            price
+            supply
+            buyOrSell
+            timestamp
+        }
+    }
+`
 
 export default function D3Chart() {
     const { swapSupply } = useSwap()
@@ -54,6 +71,7 @@ export default function D3Chart() {
     const [data, setData] = useState(supplyToArray(0, 100000000))
     const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
     const [labelData, setLabelData] = useState('')
+    const [orderBy, setOrderBy] = useState('timeStamp')
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -82,6 +100,12 @@ export default function D3Chart() {
                 </ChartHeader>
                 <LineChart data={data} areaData={areaData} labelData={labelData}/>
             </Panel>
+            <Query
+                  query={TRANSACTIONS_QUERY}
+                  variables={{
+                    orderBy: orderBy,
+                  }}
+            />
         </ChartWrapper>
     )
 }
