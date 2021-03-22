@@ -12,6 +12,9 @@ import Swap from 'components/Swap';
 import {ChainContext} from 'context/chain/ChainContext';
 
 
+import { useQuery } from '@apollo/client'
+import { gql } from 'apollo-boost'
+
 const ChartWrapper = styled.div`
     height: 100%;
     min-width: 30rem;
@@ -57,6 +60,20 @@ function labelArray(supBegin, supEnd) {
     return { paymentETH, supAvg, priceAvg }
 }
 
+const TRANSACTIONS_QUERY = gql`
+    query transactions {
+        transactionRecords {
+            id
+            senderAddress
+            amountNOM
+            amountETH
+            price
+            supply
+            buyOrSell
+            timestamp
+        }
+    }
+`
 
 export default function D3Chart(onButtonChange) {
 
@@ -131,11 +148,16 @@ export default function D3Chart(onButtonChange) {
         }
      ]
 
- 
     const { swapSupply } = useSwap()
-    
+
+
+    // useQuery Apollo Client Hook to get data from TheGraph
+    const txQuery = useQuery(TRANSACTIONS_QUERY)
+
+
     const [data, setData] = useState(supplyToArray(0, 100000000))
     const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
+
     const [labelData, setLabelData] = useState('') 
 
     const [leftHeaderId, setLeftHeaderId] = useState('1')
@@ -148,8 +170,7 @@ export default function D3Chart(onButtonChange) {
     const [candelHeader, setCandelHeader] = useState(candelHeaderDefault)
 
     const [denom, setDenom] = useState('ETH');
- //let [denom, setDenom] =useState('ETH')
- let [isBuyButton, setIsBuyButton] = useState(true)
+    const [isBuyButton, setIsBuyButton] = useState(true)
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -167,7 +188,15 @@ export default function D3Chart(onButtonChange) {
             setLabelData(labelArray(swapSupply[0], swapSupply[1]))
         }
     },[swapSupply])
+
+
+    // Here is console.log of the historical tx data
+    useEffect(() => {
+        console.log("Data: ", txQuery.data)
+    }, [txQuery.data])
     
+
+    //When clicking Header buttons
    const handleLeftHeaderChange = (leftHeader, clickedLeftId) => {
         setLeftHeaderId(clickedLeftId)    
         setLeftHeader(leftHeader)
@@ -184,22 +213,19 @@ export default function D3Chart(onButtonChange) {
         setCandelHeaderId(clickedId)
         setCandelHeader(headerbuttons)
     } 
-   
+ 
+    
+    //BuySellButtons 
     const btnBuyGradient = `linear-gradient(to right, #${theme.colors.btnBuyLight}, #${theme.colors.btnBuyNormal})`
 
     const btnSellGradient = `linear-gradient(to right, #${theme.colors.btnSellLight}, #${theme.colors.btnSellNormal})`
 
     const handleBtnClick = (value) =>{
-        console.log('cli', value)
         setDenom(value)
-        if(value==='ETH'){
-            console.log("value ETH")
-            setIsBuyButton(true)
-        } else {
-            console.log("value isBuyButton", isBuyButton)
-            setIsBuyButton(false)
-        }
+        value==='ETH'?setIsBuyButton(true):setIsBuyButton(false)
     }
+
+
     return (
         <ChartWrapper>
             <ChartPanel>
