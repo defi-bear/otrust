@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.12",
+    "@cosmjs/launchpad": "^0.24.1",
     "@ethersproject/address": "^5.0.10",
     "@ethersproject/contracts": "^5.0.11",
     "@ethersproject/providers": "^5.0.21",
