@@ -159,7 +159,8 @@ export default function D3Chart(onButtonChange) {
     const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
 
     const [labelData, setLabelData] = useState('') 
-
+    
+    // eslint-disable-next-line
     const [leftHeaderId, setLeftHeaderId] = useState('1')
     const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
 
