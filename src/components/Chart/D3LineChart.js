@@ -183,7 +183,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .call(yAxis);
 
     yComplex.selectAll(".tick text")
-      .style("color", `${theme.colors.textThirdly}`)
+      .style("color", `${theme.colors.txtThirdly}`)
       
     yComplex.selectAll(".tick line")
       .style("color", `${theme.colors.bgNormal}`)

@@ -46,7 +46,7 @@ const StyledInput = styled.input`
     background-color: ${p => p.theme.colors.bgHighlight};
     text-align: center;
     ::placeholder {
-        color: ${props => props.theme.colors.txtPrimary};
+        color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
     }
     &:focus {
         outline: none;
@@ -82,7 +82,7 @@ const MiddleComponentWrapper = styled.div`
     width: 10rem;
     text-align: right;
     align-items: center;
-    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary}
+    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
 `
 
 const TextLabel = styled.div`
@@ -92,7 +92,7 @@ const TextLabel = styled.div`
 `
 
 const MaxLabel = styled.span`
-    color: ${props => props.isBuyButton? props.theme.colors.txtHighlight: props.theme.colors.txtSecondary}; 
+    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
     text-align: right;
 `
 
@@ -116,7 +116,7 @@ const SendingWrapper = styled.div`
     border-radius: ${adjustedRadius};
     border-style: solid;
     border-width: 0.1rem;
-    border-color: ${props => props.theme.colors.bgHighlight}
+    border-color: ${props => props.theme.colors.bgHighlight};
 `
 const ReceivingWrapper = styled.div`
     display: flex;
@@ -144,7 +144,7 @@ const AccentButton = styled.button`
   transition: 0.2s ease;
 
   &:hover {
-    background-color: ${props => props.theme.colors.bgDarken}
+    background-color: ${props => props.theme.colors.bgDarken};
     color: #fff;
   }
 `
@@ -159,7 +159,7 @@ const Button = styled(AccentButton)`
     text-align: center;
     vertical-align: middle;
     border-radius: ${adjustedRadius};   
-    background-image: ${props => props.isBuyButton?props.colorGradient : props.theme.colors.bgHighlight}
+    background-image: ${props => props.isBuyButton?props.colorGradient : props.theme.colors.bgHighlight};
 `
 export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
 
