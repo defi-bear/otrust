@@ -2,13 +2,6 @@ import React, { useEffect } from 'react'
 import Landing from '../pages/Landing'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import Web3Modal from "web3modal";
-import Web3 from "web3";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import Fortmatic from "fortmatic";
-import Torus from "@toruslabs/torus-embed";
-import Authereum from "authereum";
-import { PortisConnector } from '@web3-react/portis-connector'
 import { SigningCosmosClient } from "@cosmjs/launchpad";
 
 import { useEagerConnect } from '../hooks/useEagerConnect'
