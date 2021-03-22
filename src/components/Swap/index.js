@@ -219,7 +219,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
         clicked==="Sell NOM"? onInputChange('NOM'):onInputChange('ETH')              
     }
 
-    
+    console.log('2', text, isBuyButton, swapSellAmount )
     return (
         <FlexWrapper>
             <Panel  name={text} >
@@ -264,7 +264,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                                 
                             </MiddleComponentWrapper>
                             <RightComponentWrapper isBuyButton={isBuyButton}>
-                                { `${(swapSellAmount) ? parseFloat(swapSellAmount).toPrecision(4) : null} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
+                                { `${!isBuyButton?'': (swapSellAmount ? parseFloat(swapSellAmount).toPrecision(6) : '')} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
                             </RightComponentWrapper>
                         </ReceivingWrapper>                   
                                             
