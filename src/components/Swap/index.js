@@ -211,12 +211,18 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
         setSwapBuyAmount(e)
     }
 
-    //When input number on Buy or Sell component
+    //When input number on the Buy or Sell component input area
     const  onButtonChange= (e) =>{
         if(clicked !== e.target.name)setSwapBuyAmount('')
 
         clicked = e.target.name
-        clicked==="Sell NOM"? onInputChange('NOM'):onInputChange('ETH')              
+        if(clicked==="Sell NOM") {
+            onInputChange('NOM')
+            setSwapDenom('NOM')
+        } else{
+            onInputChange('ETH')  
+            setSwapDenom('ETH') 
+        }           
     }
 
     console.log('2', text, isBuyButton, swapSellAmount )
