@@ -52,18 +52,22 @@ export const dark = {
         surface: '#fafafc',
         textBody: '#E9EAEC',
         textLight: '#333333',
-        textPrimary: '#E1DFEB',
-        textSecondary: '#9895A6',
-        textThirdly: '656273',
+        textPrimary: '##4877C1',
         white: '#ffffff',
-        bgDarken: '#1A1723',
+        bgDarken: '#1A1723',//from here below, color for new design
         bgNormal: '#1F1D29',
         bgHighlight: '#302E3D', 
         lnHighlight: '#88D1FF',            
         areaTop: '#4e82a3',
         areaBottom: '#1b1d1f',
-        textPrimary: '#E1DFEB',
-        textSecondary: '#9895A6',
-        textThirdly: '656273',
+        txtPrimary: '#E1DFEB',
+        txtSecondary: '#9895A6',
+        txtThirdly: '656273',
+        txtHighlight: 'FFDDA1',
+        btnBuyLight: '5AC790',
+        btnBuyNormal: '1C7E4C',
+        btnSellLight: 'C75A5A',
+        btnSellNormal: '7E1C1C'    
     }
 };
+

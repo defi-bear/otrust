@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from 'styled-components';
 
 import LineChart from "./D3LineChart";
@@ -9,6 +9,8 @@ import { ChartPanel } from "./Style";
 import { useSwap } from 'context/SwapContext';
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding';
 import Swap from 'components/Swap';
+import {ChainContext} from 'context/chain/ChainContext';
+
 
 const ChartWrapper = styled.div`
     height: 100%;
@@ -57,8 +59,11 @@ function labelArray(supBegin, supEnd) {
 
 
 export default function D3Chart() {
+
+    const  {theme} = useContext(ChainContext);
+
     //buttons on the topLeft header
-   const leftHeaderDefault = [
+    const leftHeaderDefault = [
        {
             id: 'BondingCurve',
             text: 'Bonding Curve Chart',
@@ -174,7 +179,12 @@ export default function D3Chart() {
         console.log('candel', clickedId, headerbuttons)
         setCandelHeaderId(clickedId)
         setCandelHeader(headerbuttons)
-    }  
+    } 
+   
+    const btnBuyGradient = `linear-gradient(to right, #${theme.colors.btnBuyLight}, #${theme.colors.btnBuyNormal})`
+
+    const btnSellGradient = `linear-gradient(to right, #${theme.colors.btnSellLight}, #${theme.colors.btnSellNormal})`
+
 
     return (
         <ChartWrapper>
@@ -196,8 +206,8 @@ export default function D3Chart() {
                 <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
             </ChartPanel>
             <BuySellWrapper>
-                <Swap />  
-                <Swap />
+                <Swap colorGradient={btnBuyGradient} text='Buy NOM' />  
+                <Swap colorGradient={btnSellGradient} text='Sell NOM' />
             </BuySellWrapper>
             
         </ChartWrapper>

@@ -189,7 +189,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .style("color", `${theme.colors.bgNormal}`)
       ;
     
-  }, [priceAvg, areaData, data, dimensions]);
+  }, [priceAvg, areaData, data, dimensions, theme]);
 
   return (  
       <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>
