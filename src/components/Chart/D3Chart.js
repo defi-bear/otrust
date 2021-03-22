@@ -58,7 +58,7 @@ function labelArray(supBegin, supEnd) {
 }
 
 
-export default function D3Chart() {
+export default function D3Chart(onButtonChange) {
 
     const  {theme} = useContext(ChainContext);
 
@@ -145,7 +145,11 @@ export default function D3Chart() {
     const [historicalHeader, setHistoricalHeader] =useState(historicalHeaderDefault)
 
     const [candelHeaderId, setCandelHeaderId] = useState('1')
-    const [candelHeader, setCandelHeader] =useState(candelHeaderDefault)
+    const [candelHeader, setCandelHeader] = useState(candelHeaderDefault)
+
+    const [denom, setDenom] = useState('ETH');
+ //let [denom, setDenom] =useState('ETH')
+ let [isBuyButton, setIsBuyButton] = useState(true)
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -185,7 +189,17 @@ export default function D3Chart() {
 
     const btnSellGradient = `linear-gradient(to right, #${theme.colors.btnSellLight}, #${theme.colors.btnSellNormal})`
 
-
+    const handleBtnClick = (value) =>{
+        console.log('cli', value)
+        setDenom(value)
+        if(value==='ETH'){
+            console.log("value ETH")
+            setIsBuyButton(true)
+        } else {
+            console.log("value isBuyButton", isBuyButton)
+            setIsBuyButton(false)
+        }
+    }
     return (
         <ChartWrapper>
             <ChartPanel>
@@ -205,9 +219,9 @@ export default function D3Chart() {
                 {leftHeader[2] && leftHeader[2].status && 
                 <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
             </ChartPanel>
-            <BuySellWrapper>
-                <Swap colorGradient={btnBuyGradient} text='Buy NOM' />  
-                <Swap colorGradient={btnSellGradient} text='Sell NOM' />
+            <BuySellWrapper >
+                <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick}/>  
+                <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
             </BuySellWrapper>
             
         </ChartWrapper>
