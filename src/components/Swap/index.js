@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Panel } from 'components'
 //import Dropdown from 'components/Dropdown'
@@ -43,7 +43,7 @@ const StyledInput = styled.input`
     color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
     font-size: 0.8rem;
     box-sizing: border-box;
-    background-color: ${p => p.theme.colors.bgHighlight};
+    background-color: ${props => props.theme.colors.bgHighlight};
     text-align: center;
     ::placeholder {
         color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
@@ -92,7 +92,8 @@ const TextLabel = styled.div`
 `
 
 const MaxLabel = styled.span`
-    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
+    color: ${props => props.isBuyButton?props.theme.colors.txtHighlight: props.theme.colors.txtSecondary};
+    font-weight: ${props => props.isBuyButton?'bold':'normal'};
     text-align: right;
 `
 
@@ -209,12 +210,16 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
         }
         setSwapBuyAmount(e)
     }
+
+    //When input number on Buy or Sell component
     const  onButtonChange= (e) =>{
-        if(clicked != e.target.name)setSwapBuyAmount('')
+        if(clicked !== e.target.name)setSwapBuyAmount('')
+
         clicked = e.target.name
         clicked==="Sell NOM"? onInputChange('NOM'):onInputChange('ETH')              
     }
 
+    
     return (
         <FlexWrapper>
             <Panel  name={text} >
@@ -228,7 +233,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                                 I'm sending
                             </LeftComponentWrapper>
                             { error ? error : null }
-                            <MiddleComponentWrapper>
+                            <MiddleComponentWrapper isBuyButton={isBuyButton}>
                                 <StyledInput
                                     type='text'
                                     value={isBuyButton?swapBuyAmount:''}
@@ -240,6 +245,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                                     width='10rem' 
                                     height='2rem' 
                                     paddingLeft='1.25rem'
+                                    isBuyButton={isBuyButton}
                                 />
                                 <TextLabel >
                                    {text==='Buy NOM'? 'ETH' : 'NOM'} 
@@ -247,7 +253,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                             </MiddleComponentWrapper>
                            
                             <RightComponentWrapper>
-                                <MaxLabel>Max</MaxLabel>
+                                <MaxLabel isBuyButton={isBuyButton}>Max</MaxLabel>
                             </RightComponentWrapper>
                         </SendingWrapper>
                         <ReceivingWrapper>
@@ -257,7 +263,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                             <MiddleComponentWrapper>
                                 
                             </MiddleComponentWrapper>
-                            <RightComponentWrapper>
+                            <RightComponentWrapper isBuyButton={isBuyButton}>
                                 { `${(swapSellAmount) ? parseFloat(swapSellAmount).toPrecision(4) : null} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
                             </RightComponentWrapper>
                         </ReceivingWrapper>                   

@@ -169,7 +169,6 @@ export default function D3Chart(onButtonChange) {
     const [candelHeaderId, setCandelHeaderId] = useState('1')
     const [candelHeader, setCandelHeader] = useState(candelHeaderDefault)
 
-    const [denom, setDenom] = useState('ETH');
     const [isBuyButton, setIsBuyButton] = useState(true)
 
     useEffect(() => {
@@ -221,7 +220,6 @@ export default function D3Chart(onButtonChange) {
     const btnSellGradient = `linear-gradient(to right, #${theme.colors.btnSellLight}, #${theme.colors.btnSellNormal})`
 
     const handleBtnClick = (value) =>{
-        setDenom(value)
         value==='ETH'?setIsBuyButton(true):setIsBuyButton(false)
     }
 

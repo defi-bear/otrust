@@ -5,7 +5,6 @@ import SwapProvider from 'context/SwapContext'
 import AcctDash from 'components/AcctDash'
 import D3Chart from 'components/Chart/D3Chart'
 
-import Swap from 'components/Swap'
 
 const ContentWrapper = styled.div`
     display: flex;
