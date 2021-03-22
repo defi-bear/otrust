@@ -3,7 +3,7 @@ import { formatEther } from '@ethersproject/units'
 import { useWeb3React } from "@web3-react/core"
 import Modal from 'react-modal';
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
-import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider } from '@apollo/client'
 
 import { NOMCont, BondingCont } from './contracts'
 

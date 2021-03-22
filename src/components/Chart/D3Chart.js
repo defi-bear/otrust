@@ -6,7 +6,7 @@ import { borderRadius } from 'context/responsive/cssSizes'
 import { useSwap } from 'context/SwapContext'
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from 'utils/bonding'
 
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/client'
 import { gql } from 'apollo-boost'
 
 const ChartWrapper = styled.div`
@@ -50,9 +50,11 @@ const ChartHeader = styled.header`
   vertical-align: middle;
   border-radius: ${borderRadius};
 `
+
+// 
 const TRANSACTIONS_QUERY = gql`
-    query transactions($orderBy: Transactions_orderBy!) {
-        transactions(first: 10, orderBy: $orderBy, orderDirection: asc) {
+    query transactions {
+        transactionRecords {
             id
             senderAddress
             amountNOM
@@ -67,11 +69,12 @@ const TRANSACTIONS_QUERY = gql`
 
 export default function D3Chart() {
     const { swapSupply } = useSwap()
-    
+    // useQuery Apollo Client Hook to get data from TheGraph
+    const txQuery = useQuery(TRANSACTIONS_QUERY)
     const [data, setData] = useState(supplyToArray(0, 100000000))
     const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
     const [labelData, setLabelData] = useState('')
-    const [orderBy, setOrderBy] = useState('timeStamp')
+    
 
     useEffect(() => {
         if (swapSupply[1]) {
@@ -89,6 +92,11 @@ export default function D3Chart() {
             setLabelData(labelArray(swapSupply[0], swapSupply[1]))
         }
     },[swapSupply])
+
+    // Here is console.log of the historical tx data
+    useEffect(() => {
+        console.log("Data: ", txQuery.data)
+    }, [txQuery.data])
     
     
     
@@ -100,12 +108,6 @@ export default function D3Chart() {
                 </ChartHeader>
                 <LineChart data={data} areaData={areaData} labelData={labelData}/>
             </Panel>
-            <Query
-                  query={TRANSACTIONS_QUERY}
-                  variables={{
-                    orderBy: orderBy,
-                  }}
-            />
         </ChartWrapper>
     )
 }
