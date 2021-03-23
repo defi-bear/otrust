@@ -24,7 +24,8 @@ const customStyles = {
     }
 };
 
-function ChainProvider ({children}) {
+function ChainProvider ({theme, children}) {
+    console.log('theme1', theme)
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
     const [ETHbalance, setETHBalance] = useState()
@@ -88,7 +89,8 @@ function ChainProvider ({children}) {
         ETHbalance,
         NOMbalance,
         NOMcontract,
-        supplyNOM
+        supplyNOM,
+        theme
     }
 
     const updateValue = {

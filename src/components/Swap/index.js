@@ -1,13 +1,15 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Panel } from 'components'
-import Dropdown from 'components/Dropdown'
+//import Dropdown from 'components/Dropdown'
 import { borderRadius } from 'context/responsive/cssSizes'
-import { AccentButton } from 'components/UI/Button'
+//import { AccentButton } from 'components/UI/Button'
 import { useAsyncFn } from 'lib/use-async-fn'
 import { useSwap, useUpdateSwap } from 'context/SwapContext'
 import { useChain, useUpdateChain } from 'context/chain/ChainContext'
 import { parseEther } from '@ethersproject/units'
+
+const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))*2/3}rem`;
 
 const FlexWrapper = styled.div`
     display: flex;
@@ -15,11 +17,12 @@ const FlexWrapper = styled.div`
 `
 
 const GridWrapper = styled.div`
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    flex-direction: column;
+    width: 100%
     align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    justify-content: space-between;
+    gap: 0.7rem;
     margin-top: 1rem;
 `
 
@@ -32,72 +35,142 @@ const RowWrapper = styled.div`
     margin-top: 1rem;
 `
 const StyledInput = styled.input`
-
-    width: ${p => p.width};
+    width: 10rem;
     height: ${p => p.height};
-    padding-left: ${p => p.paddingLeft};
-
-    border: .1rem solid ${props => props.theme.colors.background};
-    border-radius: ${borderRadius};
-
-    font-size: 1rem;
-    
-
+    padding: 0rem 0.5rem;
+    border: .1rem solid ${props => props.theme.colors.bgNormal};
+    border-radis: ${adjustedRadius};
+    color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
+    font-size: 0.8rem;
     box-sizing: border-box;
-
+    background-color: ${props => props.theme.colors.bgHighlight};
+    text-align: center;
     ::placeholder {
-        color: ${props => props.theme.colors.background};;
+        color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
     }
-
     &:focus {
         outline: none;
         color: #000;
 
         ::placeholder {
-            color: ${props => props.theme.colors.background};
+            color: ${props => props.theme.colors.txtPrimary};
         }
     }
 `
 
 const RightComponentWrapper = styled.div`
-    width: 5em;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 2rem;
-`
-const LeftComponentWrapper = styled.div`
-    width: 3em;
     text-align: right;
+    padding: 0rem 0.6rem;
     vertical-align: middle;
     line-height: 2rem;
+    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
+`
+
+const LeftComponentWrapper = styled.div`
+    width: 5.5rem;
+    text-align: left;
+    padding: 0rem 0.5rem 0rem 1rem;
+    vertical-align: middle;
+    line-height: 2rem;  
+    color: ${props => props.theme.colors.txtSecondary};
 `
 
 const MiddleComponentWrapper = styled.div`
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 10rem;
+    text-align: right;
+    align-items: center;
+    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
+`
+
+const TextLabel = styled.div`
+    padding: 0rem 0.2rem;
     vertical-align: middle;
-    line-height: 2rem;
+    height: '2.2rem';
+`
+
+const MaxLabel = styled.span`
+    color: ${props => props.isBuyButton?props.theme.colors.txtHighlight: props.theme.colors.txtSecondary};
+    font-weight: ${props => props.isBuyButton?'bold':'normal'};
+    text-align: right;
 `
 
 const SwapHeader = styled.header`
-  font-size: 1.4rem;
-  color: #fff;
+  font-size: 0.7rem;
+  color: ${props => props.theme.colors.txtPrimary}};
   margin-bottom: 1rem;
-  height: 3rem;
-  line-height: 3rem;
-  background: ${props => props.theme.colors.headerBackground};
-  text-align: center;
+  height: 2rem;
+  line-height: 2rem;
+  background: ${props => props.theme.colors.bgNormal};
+  text-align: left;
   vertical-align: middle;
-  border-radius: ${borderRadius};
 `
+const SendingWrapper = styled.div` 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.8rem;
+    font-size: 0.7rem;
+    border-radius: ${adjustedRadius};
+    border-style: solid;
+    border-width: 0.1rem;
+    border-color: ${props => props.theme.colors.bgHighlight};
+`
+const ReceivingWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.8rem;
+    font-size: 0.7rem;
+    border-radis: ${adjustedRadius};
+    background-color: ${props => props.theme.colors.bgDarken};
+    border-radius : 0.3rem;
+`
+
+const AccentButton = styled.button`
+  height: 2.25rem;
+  width: ${p => (p.width ? p.width + 'px' : 'auto')};
+  padding: 0 1.25rem;
+  background-color: ${props => props.theme.colors.bgHighlight};
+  border: none;
+  border-radius: 1.25rem;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background-color: ${props => props.theme.colors.bgDarken};
+    color: #fff;
+  }
+`
+
 const Button = styled(AccentButton)`
-    background-color: ${props => props.theme.colors.headerBackground}
+    font-size: 0.7rem;
+    color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
+    margin-bottom: 1rem;
+    width: 100%;
+    height: 2.8rem;
+    line-height: 2.8rem;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: ${adjustedRadius};   
+    background-image: ${props => props.isBuyButton?props.colorGradient : props.theme.colors.bgHighlight};
 `
-export default function Swap() {
+export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
+
     const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap()
     const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap()
     const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [setSwapBuyAmount])
     const { bondContract, NOMcontract } = useChain()
     const { setPendingTx } = useUpdateChain()
+    let clicked = 'Buy Now'
+ 
 
     const submitTrans = useCallback(
         async evt => {
@@ -138,45 +211,75 @@ export default function Swap() {
         setSwapBuyAmount(e)
     }
 
+    //When input number on the Buy or Sell component input area
+    const  onButtonChange= (e) =>{
+        if(clicked !== e.target.name)setSwapBuyAmount('')
+
+        clicked = e.target.name
+        if(clicked==="Sell NOM") {
+            onInputChange('NOM')
+            setSwapDenom('NOM')
+        } else{
+            onInputChange('ETH')  
+            setSwapDenom('ETH') 
+        }           
+    }
+
+    console.log('2', text, isBuyButton, swapSellAmount )
     return (
         <FlexWrapper>
-            <Panel>
-                <form onSubmit={ onSubmit }>
+            <Panel  name={text} >
+                <form onSubmit={ onSubmit } >
                     <SwapHeader>
-                        Swap
+                       {text}
                     </SwapHeader>
                     <GridWrapper>
-                    <LeftComponentWrapper>
-                        From:
-                        </LeftComponentWrapper>
-                        { error ? error : null }
-                        <StyledInput
-                            type='text'
-                            value={swapBuyAmount}
-                            onChange={onTextChange}
-                            onTextAreaKeyDown={onTextAreaKeyDown}
-                            placeholder={isWorking ? "Confirming":"Enter amount"}
-                            width='10rem' 
-                            height='2rem' 
-                            paddingLeft='1.25rem'
-                        />
-                        <Dropdown denom={swapDenom} setDenom={setSwapDenom}/>
-                        <LeftComponentWrapper>
-                        To: 
-                        </LeftComponentWrapper>
-                        <MiddleComponentWrapper>
-                            { (swapSellAmount) ? parseFloat(swapSellAmount).toPrecision(10) : null }
-                        </MiddleComponentWrapper>
-                        <RightComponentWrapper>
-                            { swapDenom === 'NOM' ? 'ETH' : 'NOM' }
-                        </RightComponentWrapper>
+                        <SendingWrapper>
+                            <LeftComponentWrapper>
+                                I'm sending
+                            </LeftComponentWrapper>
+                            { error ? error : null }
+                            <MiddleComponentWrapper isBuyButton={isBuyButton}>
+                                <StyledInput
+                                    type='text'
+                                    value={isBuyButton?swapBuyAmount:''}
+                                    name={text}
+                                    onChange={onTextChange}
+                                    onClick={onButtonChange}
+                                    onTextAreaKeyDown={onTextAreaKeyDown}
+                                    placeholder={isWorking ? "Confirming":(isBuyButton?'':"Enter amount to switch")}
+                                    width='10rem' 
+                                    height='2rem' 
+                                    paddingLeft='1.25rem'
+                                    isBuyButton={isBuyButton}
+                                />
+                                <TextLabel >
+                                   {text==='Buy NOM'? 'ETH' : 'NOM'} 
+                                </TextLabel> 
+                            </MiddleComponentWrapper>
+                           
+                            <RightComponentWrapper>
+                                <MaxLabel isBuyButton={isBuyButton}>Max</MaxLabel>
+                            </RightComponentWrapper>
+                        </SendingWrapper>
+                        <ReceivingWrapper>
+                            <LeftComponentWrapper>
+                                I'm receiving
+                            </LeftComponentWrapper>
+                            <MiddleComponentWrapper>
+                                
+                            </MiddleComponentWrapper>
+                            <RightComponentWrapper isBuyButton={isBuyButton}>
+                                { `${!isBuyButton?'': (swapSellAmount ? parseFloat(swapSellAmount).toPrecision(6) : '')} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
+                            </RightComponentWrapper>
+                        </ReceivingWrapper>                   
+                                            
+                        <RowWrapper>
+                            <Button colorGradient={colorGradient} type='submit' isBuyButton={isBuyButton} disabled={isBuyButton?false:true}>
+                                {text}
+                            </Button>
+                        </RowWrapper>
                     </GridWrapper>
-                        
-                    <RowWrapper>
-                        <Button type='submit'>
-                            Execute
-                        </Button>
-                    </RowWrapper>
                 </form>
                 
             </Panel>

@@ -5,7 +5,6 @@ import SwapProvider from 'context/SwapContext'
 import AcctDash from 'components/AcctDash'
 import D3Chart from 'components/Chart/D3Chart'
 
-import Swap from 'components/Swap'
 
 const ContentWrapper = styled.div`
     display: flex;
@@ -20,14 +19,14 @@ const LeftComponent = styled.div`
 `
 
 export default function NOMTrust() {
+    
     return (
         <ContentWrapper>
             <SwapProvider>
+                <D3Chart />
                 <LeftComponent>
                     <AcctDash />
-                    <Swap />
-                </LeftComponent>
-                <D3Chart />
+                </LeftComponent>            
             </SwapProvider>
         </ContentWrapper>
     )
