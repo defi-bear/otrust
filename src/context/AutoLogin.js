@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Landing from '../pages/Landing'
 import { useWeb3React } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { SigningCosmosClient } from "@cosmjs/launchpad";
+// import { SigningCosmosClient } from "@cosmjs/launchpad";
 
 import { useEagerConnect } from '../hooks/useEagerConnect'
 import { useInactiveListener } from '../hooks/useInactiveListener'
@@ -51,35 +51,35 @@ export function AutoLogin({children}) {
       }
     }
 
-    const sendInKeplr = async (recipient, amount) => {
-      // See above.
-      const chainId = "cosmoshub-3";
-      await window.keplr.enable(chainId);
-      const offlineSigner = window.getOfflineSigner(chainId);
+    // const sendInKeplr = async (recipient, amount) => {
+    //   // See above.
+    //   const chainId = "cosmoshub-3";
+    //   await window.keplr.enable(chainId);
+    //   const offlineSigner = window.getOfflineSigner(chainId);
 
-      const accounts = await offlineSigner.getAccounts();
+    //   const accounts = await offlineSigner.getAccounts();
 
-      // Initialize the gaia api with the offline signer that is injected by Keplr extension.
-      const cosmJS = new SigningCosmosClient(
-          "https://node-cosmoshub-3.keplr.app/rest",
-          accounts[0].address,
-          offlineSigner
-      );
+    //   // Initialize the gaia api with the offline signer that is injected by Keplr extension.
+    //   const cosmJS = new SigningCosmosClient(
+    //       "https://node-cosmoshub-3.keplr.app/rest",
+    //       accounts[0].address,
+    //       offlineSigner
+    //   );
 
-      const result = await cosmJS.sendTokens(recipient, [{
-          denom: "uatom",
-          amount: amount.toString(),
-      }]);
+    //   const result = await cosmJS.sendTokens(recipient, [{
+    //       denom: "uatom",
+    //       amount: amount.toString(),
+    //   }]);
 
-      console.log(result);
+    //   console.log(result);
 
-      if (result.code !== undefined &&
-          result.code !== 0) {
-          alert("Failed to send tx: " + result.log || result.rawLog);
-      } else {
-          alert("Succeed to send tx");
-      }
-    }
+    //   if (result.code !== undefined &&
+    //       result.code !== 0) {
+    //       alert("Failed to send tx: " + result.log || result.rawLog);
+    //   } else {
+    //       alert("Succeed to send tx");
+    //   }
+    // }
 
     // mount only once or face issues :P
     const triedEager = useEagerConnect()
