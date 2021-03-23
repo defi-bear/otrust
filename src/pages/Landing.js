@@ -16,7 +16,7 @@ const StyledHeader = styled.header`
   font-size: calc(10px + 2vmin);
   color: white;
 `
-export default function Landing({initWeb3}) {
+export default function Landing({initWeb3, connectKeplr}) {
     return (
       <Wrapper>
         <StyledHeader>
@@ -26,6 +26,7 @@ export default function Landing({initWeb3}) {
             Please connect your wallet.
           </p>
           <button onClick={initWeb3}>Connect</button>
+          <button onClick={connectKeplr}>Connect to Keplr</button>
         </StyledHeader>
       </Wrapper>
     )
