@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery } from "@apollo/client";
-import { gql } from "apollo-boost";
+// import { useQuery } from "@apollo/client";
+// import { gql } from "apollo-boost";
 
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 import { useSwap } from "context/SwapContext";
 import {
-  leftHeaderDefault,
   historicalHeaderDefault,
   candelHeaderDefault,
 } from "./defaultChartData";
@@ -89,13 +88,18 @@ export default function D3Chart() {
     }
   }, [swapSupply]);
 
-  const [historicalHeaderId, setHistoricalHeaderId] = useState("1");
-  const [historicalHeader, setHistoricalHeader] = useState(
-    historicalHeaderDefault
-  );
+  const [historicalHeaderId] = useState("1");
+  const [historicalHeader] = useState(historicalHeaderDefault);
 
-  const [candelHeaderId, setCandelHeaderId] = useState("1");
-  const [candelHeader, setCandelHeader] = useState(candelHeaderDefault);
+  const [candelHeaderId] = useState("1");
+  const [candelHeader] = useState(candelHeaderDefault);
+  // const [historicalHeaderId, setHistoricalHeaderId] = useState("1");
+  // const [historicalHeader, setHistoricalHeader] = useState(
+  //   historicalHeaderDefault
+  // );
+
+  // const [candelHeaderId, setCandelHeaderId] = useState("1");
+  // const [candelHeader, setCandelHeader] = useState(candelHeaderDefault);
 
   const renderChart = (type) => {
     switch (type) {
