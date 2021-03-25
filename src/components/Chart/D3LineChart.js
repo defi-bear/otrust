@@ -30,12 +30,12 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-   const {theme} = useContext(ChainContext); 
+  const { theme } = useContext(ChainContext);
 
 
   // charts and xAxis and yAxis
-  useEffect(() => { 
-    const margin = {top: 20, right: 20, bottom: 40, left: 60}
+  useEffect(() => {
+    const margin = { top: 20, right: 20, bottom: 40, left: 60 }
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
     const { width, height } =
@@ -53,7 +53,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
       .range([height - margin.top - margin.bottom, 10]);
-  
+
     const lineGenerator = line()
       .x(d => xScale(d.x))
       .y(d => yScale(d.y)) // apply the y scale to the y data
@@ -64,7 +64,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .y0(yScale(0))
       .y1(d => yScale(d.y))
       .curve(curveCardinal)
- 
+
 
     // base line
     svgContent
@@ -77,7 +77,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .attr("fill", "none")
       .attr("d", lineGenerator);
 
-      
+
     //highlited line and highlited area with linearGradient
     const linearGradient = svgContent
       .append("linearGradient")
@@ -96,14 +96,14 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     linearGradient
       .append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", `${theme.colors.lnHighlight}`);  
+      .attr("stop-color", `${theme.colors.lnHighlight}`);
 
     svgContent
       .selectAll(".selectedArea")
       .data([areaData])
       .join("path")
       .attr("class", "selectedArea")
-      .attr("stroke", `${theme.colors.areaTop}`) 
+      .attr("stroke", `${theme.colors.areaTop}`)
       .attr("stroke-width", "0.03rem")
       .attr("fill", "url(#linear-gradient")
       .attr("d", areaGenerator)
@@ -123,7 +123,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     const xAxis = axisBottom(xScale)
       .tickSize("15")
       .ticks(5)
-      .tickFormat(d => d/1000000 + "m");
+      .tickFormat(d => d / 1000000 + "m");
 
     const xComplex = svg
       .select(".x-axis")
@@ -153,14 +153,14 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .select(".x-axis1")
       .attr("transform", `translate(0, ${height - margin.bottom - margin.top})`)
       .style('color', `${theme.colors.bgHighlight}`)
-      .call(xAxis1);  
+      .call(xAxis1);
 
     xComplex1
       .selectAll(".tick line")
       .style('stroke-width', '0.1rem')
       .style("color", `${theme.colors.bgHighlight}`)
- 
-      
+
+
     // the end tick of x-axis comes from the x-axis, not the ticks
     // To hide the x-axis horizontal line, but still make the end tick show up, we cannot just remove or hide the x-axis
     // Here,  we use a base line with same color as the background to cover the x-axis horizontal line, but leave the end tick visible
@@ -168,9 +168,9 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .attr("stroke", `${theme.colors.bgDarken}`)
       .attr("stroke-width", "0.12rem")
       .attr("x1", margin.left)
-      .attr("y1", yScale(0)+ 0.5)
+      .attr("y1", yScale(0) + 0.5)
       .attr("x2", width - margin.right)
-       .attr("y2",yScale(0)+ 0.5);  
+      .attr("y2", yScale(0) + 0.5);
 
 
     // y Axis and gridlines
@@ -184,27 +184,27 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     yComplex.selectAll(".tick text")
       .style("color", `${theme.colors.txtThirdly}`)
-      
+
     yComplex.selectAll(".tick line")
       .style("color", `${theme.colors.bgNormal}`)
       ;
-    
+
   }, [priceAvg, areaData, data, dimensions, theme]);
 
-  return (  
-      <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>
-        <StyledSVG ref={svgRef}>
-          <defs>
-            <clipPath id={id}>
-              <rect x="0" y="0" width="100%" height="100%" />
-            </clipPath>
-          </defs>
-          <g className="y-axis" />
-          <g className="x-axis1" />
-          <g className="x-axis" />
-          <g className="content" clipPath={`url(#${id})`} />        
-        </StyledSVG>
-      </div>
+  return (
+    <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>
+      <StyledSVG ref={svgRef}>
+        <defs>
+          <clipPath id={id}>
+            <rect x="0" y="0" width="100%" height="100%" />
+          </clipPath>
+        </defs>
+        <g className="y-axis" />
+        <g className="x-axis1" />
+        <g className="x-axis" />
+        <g className="content" clipPath={`url(#${id})`} />
+      </StyledSVG>
+    </div>
   );
 }
 

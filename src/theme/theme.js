@@ -26,7 +26,7 @@ export const light = {
         white: '#ffffff'
     }
 };
-  
+
 export const dark = {
     colors: {
         background: '#050505',
@@ -56,8 +56,8 @@ export const dark = {
         white: '#ffffff',
         bgDarken: '#1A1723',//from here below, color for new design
         bgNormal: '#1F1D29',
-        bgHighlight: '#302E3D', 
-        lnHighlight: '#88D1FF',            
+        bgHighlight: '#302E3D',
+        lnHighlight: '#88D1FF',
         areaTop: '#4e82a3',
         areaBottom: '#1b1d1f',
         txtPrimary: '#E1DFEB',
@@ -67,7 +67,41 @@ export const dark = {
         btnBuyLight: '5AC790',
         btnBuyNormal: '1C7E4C',
         btnSellLight: 'C75A5A',
-        btnSellNormal: '7E1C1C'    
+        btnSellNormal: '7E1C1C'
     }
 };
 
+
+// I don't know yet what the difference between theme.js and colors.js, so I just duplicate the colors object here
+export const darkNew = {
+    colors: {
+
+        // linghong variables 
+        bgHighlight: '#302E3D',
+        lnHighlight: '#88D1FF',
+        areaTop: '#4e82a3',
+        areaBottom: '#1b1d1f',
+        txtPrimary: '#E1DFEB',
+        txtSecondary: '#9895A6',
+        txtThirdly: '656273',
+        txtHighlight: 'FFDDA1',
+        btnBuyLight: '5AC790',
+        btnBuyNormal: '1C7E4C',
+        btnSellLight: 'C75A5A',
+        btnSellNormal: '7E1C1C',
+
+        highlightBlue: '#88d1ff',
+        highlightYellow: '#ffdda1',
+        highlightGreen: '#7cf9ba',
+        highlightRed: '#c75a5a',
+        textPrimary: '#e1dfeb',
+        textSecondary: '#9895a6',
+        textThirdly: '#656273',
+        iconsNormal: '#8d89a3',
+        iconsSecondary: '#5d5b70',
+        bgHighlightBorder: '#302E3D',
+        bgNormal: '#201d2a',
+        bgDarken: '#1a1823',
+        bgDarkest: '#06060f'
+    }
+}

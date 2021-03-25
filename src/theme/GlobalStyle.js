@@ -1,8 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
-import GilroyRegularWoff from 'assets/fonts/Gilroy-Regular.woff'
-import GilroyRegularTtf from 'assets/fonts/Gilroy-Regular.woff'
-import GilroyMedium from 'assets/fonts/Gilroy-Medium.ttf'
-import GilroyBold from 'assets/fonts/Gilroy-Bold.ttf'
+import BebasNeueBold from 'assets/fonts/BebasNeueBold.ttf'
+import BebasNeueBook from 'assets/fonts/BebasNeueBook.ttf'
+import BebasNeueRegular from 'assets/fonts/BebasNeueRegular.ttf'
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -11,46 +10,36 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   :root {
-    color: ${props => props.theme.colors.fontColor};
-    background-color: ${props => props.theme.colors.background};
+    color: ${props => props.theme.colors.textPrimary};
+    background: linear-gradient(135deg, #16161f, #06060f);
 
-    font-size: 100%;
-    font-family: 'Gilroy';
+    font-size: 14px;
+    font-family: 'Poppins';
+  }
+  
+  html, body {
+    min-height: 100%;
+  }
 
-    @media (min-width: 768px) {
-      font-size: 112.5%;
-    }
-
-    @media (min-width: 1920px) {
-      font-size: 125%;
-    }
-
-    @media (min-width: 2560px) {
-      font-size: 150%;
-    }
+  @font-face {
+    font-family: 'Bebas Neue';
+    font-weight: 300;
+    src: url('${BebasNeueBook}') format("truetype");
   }
   @font-face {
-    font-family: 'Gilroy';
+    font-family: 'Bebas Neue';
     font-weight: 400;
-    src: 
-      url('${GilroyRegularWoff}') format("woff"),
-      url('${GilroyRegularTtf}') format("true-type");
+    src: url('${BebasNeueRegular}') format('truetype');
   }
-
   @font-face {
-    font-family: 'Gilroy';
-    font-weight: 500;
-    src: url('${GilroyMedium}') format("truetype");
-  }
-
-  @font-face {
-    font-family: 'Gilroy';
+    font-family: 'Bebas Neue';
     font-weight: 600;
-    src: url('${GilroyBold}') format("truetype");
+    src: url('${BebasNeueBold}') format("truetype");
   }
 
   body {
-    font-family: 'Gilroy';
+    font-family: 'Poppins', sans-serif;
     -webkit-font-smooth: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 `
