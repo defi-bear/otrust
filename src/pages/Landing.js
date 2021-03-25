@@ -110,7 +110,7 @@ const RightIcon = styled.img`
 
 export default function Landing({initWeb3, connectWallet, connectKeplr}) {
     const onWalletClick = (wallet) => {
-        Object.values(SUPPORTED_WALLETS).map(sWallet => {
+        Object.values(SUPPORTED_WALLETS).forEach(sWallet => {
             if (sWallet.name === wallet.title) {
                 console.log(sWallet.connector)
                 connectWallet(sWallet.connector)
