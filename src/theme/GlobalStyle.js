@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
 
-import GilroyRegularWoff from 'assets/fonts/Gilroy-Regular.woff'
-import GilroyRegularTtf from 'assets/fonts/Gilroy-Regular.woff'
-import GilroyMedium from 'assets/fonts/Gilroy-Medium.ttf'
-import GilroyBold from 'assets/fonts/Gilroy-Bold.ttf'
+// import GilroyRegularWoff from 'assets/fonts/Gilroy-Regular.woff'
+// import GilroyRegularTtf from 'assets/fonts/Gilroy-Regular.woff'
+// import GilroyMedium from 'assets/fonts/Gilroy-Medium.ttf'
+// import GilroyBold from 'assets/fonts/Gilroy-Bold.ttf'
 import BebasNeueRegular from 'assets/fonts/BebasNeue-Regular.ttf'
 import PoppinsRegular from 'assets/fonts/Poppins-Regular.ttf'
 
