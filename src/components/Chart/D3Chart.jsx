@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { useQuery } from "@apollo/client";
-// import { gql } from "apollo-boost";
+import { useQuery } from "@apollo/client";
+import { gql } from "apollo-boost";
 
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 import { useSwap } from "context/SwapContext";
@@ -15,6 +15,8 @@ import Swap from "components/Swap";
 import LineChart from "./D3LineChart";
 import HistoricalChart from "./D3HistoricalChart";
 import CandelChart from "./D3CandelChart";
+
+
 
 const ContentLayout = styled.div`
   display: grid;
@@ -67,13 +69,35 @@ function labelArray(supBegin, supEnd) {
   return { paymentETH, supAvg, priceAvg };
 }
 
+
+const TRANSACTIONS_QUERY = gql`
+    query transactions {
+        transactionRecords {
+            id
+            senderAddress
+            amountNOM
+            amountETH
+            price
+            supply
+            buyOrSell
+            timestamp
+        }
+    }
+`
+
+
 export default function D3Chart() {
   const [chartType, setChartType] = useState("bondingCurve");
+  
   const { swapSupply } = useSwap();
 
   const [data, setData] = useState(supplyToArray(0, 100000000));
   const [areaData, setAreaData] = useState(supplyToArray(0, 100000000));
   const [labelData, setLabelData] = useState("");
+
+
+   // useQuery Apollo Client Hook to get data from TheGraph
+   const txQuery = useQuery(TRANSACTIONS_QUERY)
 
   useEffect(() => {
     if (swapSupply[1]) {
@@ -87,6 +111,13 @@ export default function D3Chart() {
       setLabelData(labelArray(swapSupply[0], swapSupply[1]));
     }
   }, [swapSupply]);
+
+
+  // Here is console.log of the historical tx data
+  useEffect(() => {
+    console.log("Data: ", txQuery.data)
+  }, [txQuery.data])
+
 
   const [historicalHeaderId] = useState("1");
   const [historicalHeader] = useState(historicalHeaderDefault);
