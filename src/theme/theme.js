@@ -22,8 +22,11 @@ export const light = {
         surface: '#fafafc',
         textBody: '#36364b',
         textLight: '#5c8ddb',
-        textPrimary: '#4877C1',
-        white: '#ffffff'
+        textPrimary: '#E1DFEB',
+        textSecondary: '##9895A6',
+        white: '#ffffff',
+        bgNormal: '#1F1D29',
+        bgDarken: '#1A1723',
     }
 };
 
