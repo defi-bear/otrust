@@ -9,6 +9,7 @@ import {
   historicalHeaderDefault,
   candelHeaderDefault,
 } from "./defaultChartData";
+import { responsive } from "theme/constants";
 
 import { Panel } from "components/UI";
 import Swap from "components/Swap";
@@ -40,6 +41,11 @@ const ChartTypeBtn = styled.button`
   font-size: 14px;
 
   cursor: pointer;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 44px;
+    padding: 12px 20px;
+  }
 
   & + & {
     margin-left: 1em;

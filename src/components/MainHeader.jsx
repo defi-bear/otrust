@@ -13,7 +13,7 @@ const HeaderWrapper = styled.header`
   height: 160px;
   width: 100%;
 
-  @media screen and (max-width: ${responsive.laptop}px) {
+  @media screen and (max-width: ${responsive.laptop}) {
     height: 90px;
   }
 `;
@@ -24,7 +24,7 @@ const Logo = styled.div`
 `;
 
 const LogoImg = styled.img`
-  @media screen and (max-width: ${responsive.laptop}px) {
+  @media screen and (max-width: ${responsive.laptop}) {
     height: 50px;
     width: 40px;
   }
@@ -45,7 +45,7 @@ const LogoText = styled.div`
     line-height: 1;
     text-transform: uppercase;
 
-    @media screen and (max-width: ${responsive.laptop}px) {
+    @media screen and (max-width: ${responsive.laptop}) {
       font-size: 20px;
     }
   }
@@ -53,10 +53,6 @@ const LogoText = styled.div`
   > span {
     color: ${(props) => props.theme.colors.textThirdly};
     line-height: 1;
-
-    @media screen and (max-width: ${responsive.laptop}px) {
-      font-size: 12px;
-    }
   }
 `;
 
@@ -69,14 +65,14 @@ const HeaderInfoItem = styled.div`
   flex-direction: column;
   gap: 10px;
 
-  @media screen and (max-width: ${responsive.laptop}px) {
+  @media screen and (max-width: ${responsive.laptop}) {
     gap: 5px;
   }
 
   & + & {
     margin-left: 56px;
 
-    @media screen and (max-width: ${responsive.laptop}px) {
+    @media screen and (max-width: ${responsive.laptop}) {
       margin-left: 32px;
     }
   }
@@ -84,10 +80,6 @@ const HeaderInfoItem = styled.div`
   > strong {
     color: ${(props) => props.theme.colors.textThirdly};
     font-weight: 400;
-
-    @media screen and (max-width: ${responsive.laptop}px) {
-      font-size: 12px;
-    }
   }
 `;
 
@@ -95,7 +87,7 @@ const ExchangeRate = styled.div`
   display: flex;
   margin-right: 56px;
 
-  @media screen and (max-width: ${responsive.laptop}px) {
+  @media screen and (max-width: ${responsive.laptop}) {
     margin-right: 32px;
   }
 `;
@@ -104,7 +96,7 @@ const Issued = styled.div`
   padding-left: 56px;
   border-left: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
 
-  @media screen and (max-width: ${responsive.laptop}px) {
+  @media screen and (max-width: ${responsive.laptop}) {
     padding-left: 32px;
   }
 `;
@@ -117,7 +109,7 @@ const HeaderInfoItemValue = styled.div`
     font-family: "Bebas Neue", sans-serif;
     font-size: 24px;
 
-    @media screen and (max-width: ${responsive.laptop}px) {
+    @media screen and (max-width: ${responsive.laptop}) {
       font-size: 20px;
     }
   }
@@ -134,10 +126,6 @@ const Details = styled.span`
         return props.theme?.colors.textPrimary;
     }
   }};
-
-  @media screen and (max-width: ${responsive.laptop}px) {
-    font-size: 12px;
-  }
 `;
 
 export default function MainHeader(props) {

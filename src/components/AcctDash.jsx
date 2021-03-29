@@ -8,6 +8,7 @@ import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { Panel } from "components/UI";
 import { useChain } from "context/chain/ChainContext";
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { responsive } from "theme/constants";
 
 const SidebarLayout = styled.div`
   display: flex;
@@ -27,6 +28,11 @@ const Header = styled.header`
 
   background-color: ${(props) => props.theme.colors.bgDarken};
   border-radius: 4px;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 180px;
+    padding: 24px 48px;
+  }
 `;
 
 const HeaderControls = styled.div`
@@ -38,8 +44,16 @@ const HeaderControls = styled.div`
 `;
 
 const Avatar = styled.img`
+  height: 72px;
+  width: 72px;
+
   border-radius: 12px;
   border: 3px solid ${(props) => props.theme.colors.bgHighlightBorder};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 56px;
+    width: 56px;
+  }
 `;
 
 const AccountNumber = styled.div`
@@ -52,6 +66,10 @@ const AccountNumber = styled.div`
     font-size: 16px;
     font-weight: 500;
     color: ${(props) => props.theme.colors.textSecondary};
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 14px;
+    }
   }
 `;
 
@@ -63,11 +81,14 @@ const Balances = styled.div`
 
   border-bottom: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
 
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 24px;
+  }
+
   strong {
     display: block;
     margin-bottom: 12px;
 
-    font-size: 12px;
     font-weight: 400;
     color: ${(props) => props.theme.colors.textSecondary};
   }
@@ -75,6 +96,10 @@ const Balances = styled.div`
   span {
     font-family: "Bebas Neue", sans-serif;
     font-size: 28px;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -84,6 +109,10 @@ const Connection = styled.div`
   gap: 20px;
 
   padding: 40px;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 24px;
+  }
 `;
 
 const ConnectionRow = styled.div`
@@ -127,6 +156,10 @@ const Info = styled.footer`
 
   padding: 50px 40px;
   margin-top: auto;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 40px 24px;
+  }
 `;
 
 const Link = styled.a`
