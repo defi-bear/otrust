@@ -38,6 +38,10 @@ const ExchangeItem = styled.div`
     margin-bottom: 12px;
 
     font-size: 16px;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 14px;
+    }
   }
 
   & + & {

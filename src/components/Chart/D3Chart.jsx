@@ -20,6 +20,10 @@ import CandelChart from "./D3CandelChart";
 const ContentLayout = styled.div`
   display: grid;
   grid-template-rows: 550px auto;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    grid-template-rows: 400px auto;
+  }
 `;
 
 const ChartWrapper = styled.div`
