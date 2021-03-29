@@ -27,19 +27,19 @@ const ContentLayout = styled.div`
   grid-template-rows: 550px auto;
 `;
 
-const ChartWrapper = styled.div`
-  padding: 20px;
-
-  background-color: ${(props) => props.theme.colors.bgDarken};
-  border-radius: 4px;
-`;
-
 const BuySellWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 5%;
     align-items: center;
     justify-content: center;
+`
+const VerticalLine = styled.div`
+  border-left: 0.15rem solid ${(props) => props.theme.colors.bgHighlightBorder};
+  height: 90%;
+  left: 50%;
+  margin-left: -3px;
+  top: 0;
 `
 
 const HeaderWrapper = styled.div`
@@ -48,24 +48,6 @@ const HeaderWrapper = styled.div`
     justify-content: space-between;
 `
 
-
-const ChartTypeBtn = styled.button`
-  height: 50px;
-  padding: 16px 24px;
-
-  background-color: ${(props) => props.theme.colors.bgHighlightBorder};
-  border-radius: 6px;
-  border: none;
-
-  color: ${(props) => props.theme.colors.textPrimary};
-  font-size: 14px;
-
-  cursor: pointer;
-
-  & + & {
-    margin-left: 1em;
-  }
-`;
 
 function supplyToArray(supBegin, supEnd) {
   var dataArray = [];
@@ -211,27 +193,28 @@ export default function D3Chart(onButtonChange) {
   return (
     <Panel>
       <ContentLayout>
-      <ChartPanel>
-        <HeaderWrapper>
-          <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} />
+        <ChartPanel>
+          <HeaderWrapper>
+            <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} />
 
-          {leftHeader[1] && leftHeader[1].status && <MenuButtons onButtonChange={handleHistoricalHeaderChange} menuButtons={historicalHeader} />}
+            {leftHeader[1] && leftHeader[1].status && <MenuButtons onButtonChange={handleHistoricalHeaderChange} menuButtons={historicalHeader} />}
 
-          {leftHeader[2] && leftHeader[2].status && <MenuButtons onButtonChange={handleCandelHeaderChange} menuButtons={candelHeader} />}
-        </HeaderWrapper>
+            {leftHeader[2] && leftHeader[2].status && <MenuButtons onButtonChange={handleCandelHeaderChange} menuButtons={candelHeader} />}
+          </HeaderWrapper>
 
-        {leftHeader[0] && leftHeader[0].status &&
-          <LineChart data={data} areaData={areaData} labelData={labelData} />}
+          {leftHeader[0] && leftHeader[0].status &&
+            <LineChart data={data} areaData={areaData} labelData={labelData} />}
 
-        {leftHeader[1] && leftHeader[1].status && <HistoricalChart historicalHeader={historicalHeader} historicalHeaderId={historicalHeaderId} />}
+          {leftHeader[1] && leftHeader[1].status && <HistoricalChart historicalHeader={historicalHeader} historicalHeaderId={historicalHeaderId} />}
 
-        {leftHeader[2] && leftHeader[2].status &&
-          <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
-      </ChartPanel>
+          {leftHeader[2] && leftHeader[2].status &&
+            <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
+        </ChartPanel>
         <BuySellWrapper >
-          <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
-          <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
-      </BuySellWrapper>
+            <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
+            <VerticalLine />
+            <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
+        </BuySellWrapper>
       </ContentLayout>
     </Panel>
   );

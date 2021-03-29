@@ -35,11 +35,12 @@ const MenuWrapper = styled.div`
 const MenuHeader = styled.header`
   font-size: 0.7rem;
   color: ${props => props.isClicked ? props.theme.colors.textPrimary : props.theme.colors.textSecondary};
-  background: ${props => props.isClicked? props.theme.colors.bgHighlight : props.theme.colors.bgDarken};
+  background-color: ${props => props.isClicked? props.theme.colors.bgHighlight : props.theme.colors.bgDarken};
   text-align: center;
   vertical-align: middle;
   border-radius: ${adjustedRadius};
-  padding: 0.7rem 0.9rem
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
 `
 
 export default function MenuButtons({onButtonChange, menuButtons}) {
