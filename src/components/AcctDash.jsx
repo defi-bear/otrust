@@ -184,6 +184,15 @@ const ControlsBtn = styled.a`
 
   font-size: 16px;
   color: ${(props) => props.theme.colors.iconsNormal};
+
+  cursor: pointer;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    width: 32px;
+    height: 32px;
+
+    font-size: 12px;
+  }
 `;
 
 const SocialBtn = styled.a`
@@ -199,6 +208,15 @@ const SocialBtn = styled.a`
 
   font-size: 20px;
   color: ${(props) => props.theme.colors.iconsSecondary};
+
+  cursor: pointer;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    width: 32px;
+    height: 32px;
+
+    font-size: 14px;
+  }
 `;
 
 export default function AcctDash() {
