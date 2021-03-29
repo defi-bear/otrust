@@ -8,6 +8,7 @@ import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 import { useSwap } from "context/SwapContext";
 import { ChainContext } from 'context/chain/ChainContext';
 import {
+  leftHeaderDefault,
   historicalHeaderDefault,
   candelHeaderDefault,
 } from "./defaultChartData";
@@ -40,6 +41,13 @@ const BuySellWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `
+
+const HeaderWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+`
+
 
 const ChartTypeBtn = styled.button`
   height: 50px;
@@ -97,7 +105,7 @@ const TRANSACTIONS_QUERY = gql`
 `
 
 
-export default function D3Chart() {
+export default function D3Chart(onButtonChange) {
  
   const [chartType, setChartType] = useState("bondingCurve");
   
@@ -106,6 +114,38 @@ export default function D3Chart() {
   const [data, setData] = useState(supplyToArray(0, 100000000));
   const [areaData, setAreaData] = useState(supplyToArray(0, 100000000));
   const [labelData, setLabelData] = useState("");
+
+
+  //menu header buttons
+   // eslint-disable-next-line
+   const [leftHeaderId, setLeftHeaderId] = useState('1')
+   const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
+ 
+   const [historicalHeaderId, setHistoricalHeaderId] = useState('1')
+   const [historicalHeader, setHistoricalHeader] = useState(historicalHeaderDefault)
+ 
+   const [candelHeaderId, setCandelHeaderId] = useState('1')
+   const [candelHeader, setCandelHeader] = useState(candelHeaderDefault)
+
+   //When clicking Header buttons
+   const handleLeftHeaderChange = (leftHeader, clickedLeftId) => {
+    setLeftHeaderId(clickedLeftId)
+    setLeftHeader(leftHeader)
+  }
+
+  const handleHistoricalHeaderChange = (headerbuttons, clickedId) => {
+    console.log('historical', clickedId, headerbuttons)
+    setHistoricalHeaderId(clickedId)
+    setHistoricalHeader(headerbuttons)
+  }
+
+  const handleCandelHeaderChange = (headerbuttons, clickedId) => {
+    console.log('candel', clickedId, headerbuttons)
+    setCandelHeaderId(clickedId)
+    setCandelHeader(headerbuttons)
+  }
+
+
 
   //BuySellComponents
   const [isBuyButton, setIsBuyButton] = useState(true)
@@ -133,18 +173,7 @@ export default function D3Chart() {
   }, [txQuery.data])
 
 
-  const [historicalHeaderId] = useState("1");
-  const [historicalHeader] = useState(historicalHeaderDefault);
 
-  const [candelHeaderId] = useState("1");
-  const [candelHeader] = useState(candelHeaderDefault);
-  // const [historicalHeaderId, setHistoricalHeaderId] = useState("1");
-  // const [historicalHeader, setHistoricalHeader] = useState(
-  //   historicalHeaderDefault
-  // );
-
-  // const [candelHeaderId, setCandelHeaderId] = useState("1");
-  // const [candelHeader, setCandelHeader] = useState(candelHeaderDefault);
 
   const renderChart = (type) => {
     switch (type) {
@@ -182,20 +211,23 @@ export default function D3Chart() {
   return (
     <Panel>
       <ContentLayout>
-        <ChartWrapper>
-          <header>
-            <ChartTypeBtn onClick={() => setChartType("bondingCurve")}>
-              Bonding Curve Chart
-            </ChartTypeBtn>
-            <ChartTypeBtn onClick={() => setChartType("historicalChart")}>
-              Historical Chart
-            </ChartTypeBtn>
-            <ChartTypeBtn onClick={() => setChartType("candleView")}>
-              Candle View
-            </ChartTypeBtn>
-          </header>
-          {renderChart(chartType)}
-        </ChartWrapper>
+      <ChartPanel>
+        <HeaderWrapper>
+          <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} />
+
+          {leftHeader[1] && leftHeader[1].status && <MenuButtons onButtonChange={handleHistoricalHeaderChange} menuButtons={historicalHeader} />}
+
+          {leftHeader[2] && leftHeader[2].status && <MenuButtons onButtonChange={handleCandelHeaderChange} menuButtons={candelHeader} />}
+        </HeaderWrapper>
+
+        {leftHeader[0] && leftHeader[0].status &&
+          <LineChart data={data} areaData={areaData} labelData={labelData} />}
+
+        {leftHeader[1] && leftHeader[1].status && <HistoricalChart historicalHeader={historicalHeader} historicalHeaderId={historicalHeaderId} />}
+
+        {leftHeader[2] && leftHeader[2].status &&
+          <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
+      </ChartPanel>
         <BuySellWrapper >
           <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
           <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
