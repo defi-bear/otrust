@@ -171,9 +171,9 @@ export default function D3Chart() {
   };
   const { theme } = useContext(ChainContext);
   //BuySellButtons 
-  const btnBuyGradient = `linear-gradient(to right, #${theme.colors.btnBuyLight}, #${theme.colors.btnBuyNormal})`
+  const btnBuyGradient = `linear-gradient(to right, ${theme.colors.btnBuyLight}, ${theme.colors.btnBuyNormal})`
 
-  const btnSellGradient = `linear-gradient(to right, #${theme.colors.btnSellLight}, #${theme.colors.btnSellNormal})`
+  const btnSellGradient = `linear-gradient(to right, ${theme.colors.btnSellLight}, ${theme.colors.btnSellNormal})`
 
   const handleBtnClick = (value) => {
     value === 'ETH' ? setIsBuyButton(true) : setIsBuyButton(false)

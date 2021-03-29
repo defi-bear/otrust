@@ -66,7 +66,7 @@ const RightComponentWrapper = styled.div`
 `
 
 const LeftComponentWrapper = styled.div`
-    width: 5.5rem;
+    width: 100%;
     text-align: left;
     padding: 0rem 0.5rem 0rem 1rem;
     vertical-align: middle;
@@ -78,7 +78,7 @@ const MiddleComponentWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    width: 10rem;
+    width: 100%;
     text-align: right;
     align-items: center;
     color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
@@ -264,9 +264,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                             <LeftComponentWrapper>
                                 I'm receiving
                             </LeftComponentWrapper>
-                            <MiddleComponentWrapper>
-                                
-                            </MiddleComponentWrapper>
+                          
                             <RightComponentWrapper isBuyButton={isBuyButton}>
                                 { `${!isBuyButton?'': (swapSellAmount ? parseFloat(swapSellAmount).toPrecision(6) : '')} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
                             </RightComponentWrapper>
