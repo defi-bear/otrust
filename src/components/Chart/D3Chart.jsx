@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+
 import { useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
 
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 import { useSwap } from "context/SwapContext";
+import { ChainContext } from 'context/chain/ChainContext';
 import {
   historicalHeaderDefault,
   candelHeaderDefault,
@@ -15,7 +17,8 @@ import Swap from "components/Swap";
 import LineChart from "./D3LineChart";
 import HistoricalChart from "./D3HistoricalChart";
 import CandelChart from "./D3CandelChart";
-
+import MenuButtons from '../MenuButtons';
+import { ChartPanel } from "./Style";
 
 
 const ContentLayout = styled.div`
@@ -29,6 +32,14 @@ const ChartWrapper = styled.div`
   background-color: ${(props) => props.theme.colors.bgDarken};
   border-radius: 4px;
 `;
+
+const BuySellWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+`
 
 const ChartTypeBtn = styled.button`
   height: 50px;
@@ -87,6 +98,7 @@ const TRANSACTIONS_QUERY = gql`
 
 
 export default function D3Chart() {
+ 
   const [chartType, setChartType] = useState("bondingCurve");
   
   const { swapSupply } = useSwap();
@@ -95,6 +107,8 @@ export default function D3Chart() {
   const [areaData, setAreaData] = useState(supplyToArray(0, 100000000));
   const [labelData, setLabelData] = useState("");
 
+  //BuySellComponents
+  const [isBuyButton, setIsBuyButton] = useState(true)
 
    // useQuery Apollo Client Hook to get data from TheGraph
    const txQuery = useQuery(TRANSACTIONS_QUERY)
@@ -155,6 +169,15 @@ export default function D3Chart() {
         );
     }
   };
+  const { theme } = useContext(ChainContext);
+  //BuySellButtons 
+  const btnBuyGradient = `linear-gradient(to right, #${theme.colors.btnBuyLight}, #${theme.colors.btnBuyNormal})`
+
+  const btnSellGradient = `linear-gradient(to right, #${theme.colors.btnSellLight}, #${theme.colors.btnSellNormal})`
+
+  const handleBtnClick = (value) => {
+    value === 'ETH' ? setIsBuyButton(true) : setIsBuyButton(false)
+  }
 
   return (
     <Panel>
@@ -173,7 +196,10 @@ export default function D3Chart() {
           </header>
           {renderChart(chartType)}
         </ChartWrapper>
-        <Swap />
+        <BuySellWrapper >
+          <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
+          <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
+      </BuySellWrapper>
       </ContentLayout>
     </Panel>
   );
