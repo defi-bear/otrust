@@ -18,7 +18,7 @@ import { useResizeObserver } from "./utils";
 const StyledSVG = styled.svg`
     display: block;
     width: 100%;
-    height: 400px;
+    height: 90%;
     overflow: visible;
 `
 
@@ -84,19 +84,21 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .attr("id", "linear-gradient")
       .attr("gradientUnits", "userSpaceOnUse")
       .attr("x1", "0%")
-      .attr("y1", "81%")
-      .attr("x2", "1%")
+      .attr("y1", "100%")
+      .attr("x2", "0%")
       .attr("y2", "0%");
 
     linearGradient
       .append("stop")
       .attr("offset", "0%")
-      .attr("stop-color", `${theme.colors.bgDarken}`); //
+      .attr("stop-color", `${theme.colors.lnHighlight}`)
+      .attr("stop-opacity", 0)
 
     linearGradient
       .append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", `${theme.colors.lnHighlight}`);
+      .attr("stop-color", `${theme.colors.lnHighlight}`)
+      .attr("stop-opacity", 1);
 
     svgContent
       .selectAll(".selectedArea")
@@ -192,7 +194,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
   }, [priceAvg, areaData, data, dimensions, theme]);
 
   return (
-    <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>
+    <div ref={wrapperRef} style={{ marginTop: "1rem", height: "90%" }}>
       <StyledSVG ref={svgRef}>
         <defs>
           <clipPath id={id}>
