@@ -1,6 +1,7 @@
 // import React, { useCallback } from "react";
 import React from "react";
 import styled from "styled-components";
+import { responsive } from "theme/constants";
 // import { parseEther } from "@ethersproject/units";
 
 // import { useAsyncFn } from "lib/use-async-fn";
@@ -16,7 +17,9 @@ const ExchangeWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
 
   height: 100%;
-  padding: 32px 0;
+  padding: 24px 0;
+
+  font-size: 14px;
 `;
 
 const ExchangeItem = styled.div`
@@ -27,10 +30,18 @@ const ExchangeItem = styled.div`
   height: 100%;
   padding: 0 40px;
 
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 0 24px;
+  }
+
   > strong {
     margin-bottom: 12px;
 
     font-size: 16px;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 14px;
+    }
   }
 
   & + & {

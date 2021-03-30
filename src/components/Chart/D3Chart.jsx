@@ -9,6 +9,7 @@ import {
   historicalHeaderDefault,
   candelHeaderDefault,
 } from "./defaultChartData";
+import { responsive } from "theme/constants";
 
 import { Panel } from "components/UI";
 import Swap from "components/Swap";
@@ -19,6 +20,10 @@ import CandelChart from "./D3CandelChart";
 const ContentLayout = styled.div`
   display: grid;
   grid-template-rows: 550px auto;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    grid-template-rows: 400px auto;
+  }
 `;
 
 const ChartWrapper = styled.div`
@@ -40,6 +45,11 @@ const ChartTypeBtn = styled.button`
   font-size: 14px;
 
   cursor: pointer;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 44px;
+    padding: 12px 20px;
+  }
 
   & + & {
     margin-left: 1em;
