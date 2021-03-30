@@ -30,17 +30,18 @@ const ContentLayout = styled.div`
 const BuySellWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 5%;
+    gap: 4%;
     align-items: center;
     justify-content: center;
 `
 
 const VerticalLine = styled.div`
-  border-left: 0.15rem solid ${(props) => props.theme.colors.bgHighlightBorder};
-  height: 90%;
-  left: 50%;
-  margin-left: -3px;
-  top: 0;
+  width: 0.15rem;
+  background-color: ${(props) => props.theme.colors.bgHighlightBorder};
+  height: 12rem;
+  @media (max-width: 1230px) {                  
+    display: none;
+  }
 `
 
 const HeaderWrapper = styled.div`

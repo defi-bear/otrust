@@ -59,7 +59,7 @@ const RightComponentWrapper = styled.div`
 `
 
 const LeftComponentWrapper = styled.div`
-  width: 25%;
+  width: 24%;
   text-align: left;
   padding: 0rem 0.5rem 0rem 1rem;
   vertical-align: middle;
@@ -71,7 +71,7 @@ const MiddleComponentWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  width: 50%;
+  width: 52%;
   text-align: right;
   align-items: center;
   color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
@@ -90,11 +90,11 @@ const MaxLabel = styled.span`
 `
 
 const SwapHeader = styled.header`
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: ${props => props.theme.colors.txtPrimary}};
-  margin-bottom: 1rem;
-  height: 2rem;
-  line-height: 2rem;
+  margin: 1rem 0rem;
+  height: 3rem;
+  line-height: 3rem;
   background: ${props => props.theme.colors.bgNormal};
   text-align: left;
   vertical-align: middle;
@@ -146,7 +146,7 @@ const AccentButton = styled.button`
 const Button = styled(AccentButton)`
   font-size: 0.7rem;
   color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   width: 100%;
   height: 3rem;
   text-align: center;
