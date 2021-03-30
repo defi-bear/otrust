@@ -25,7 +25,7 @@ import { ChartPanel } from "./Style";
 const ContentLayout = styled.div`
   display: grid;
   grid-template-rows: 550px auto;
-`;
+`
 
 const BuySellWrapper = styled.div`
     display: flex;
@@ -34,6 +34,7 @@ const BuySellWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `
+
 const VerticalLine = styled.div`
   border-left: 0.15rem solid ${(props) => props.theme.colors.bgHighlightBorder};
   height: 90%;
@@ -47,7 +48,6 @@ const HeaderWrapper = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
 `
-
 
 function supplyToArray(supBegin, supEnd) {
   var dataArray = [];
@@ -70,7 +70,6 @@ function labelArray(supBegin, supEnd) {
   return { paymentETH, supAvg, priceAvg };
 }
 
-
 const TRANSACTIONS_QUERY = gql`
     query transactions {
         transactionRecords {
@@ -89,51 +88,10 @@ const TRANSACTIONS_QUERY = gql`
 
 export default function D3Chart(onButtonChange) {
  
-  const [chartType, setChartType] = useState("bondingCurve");
-  
   const { swapSupply } = useSwap();
-
   const [data, setData] = useState(supplyToArray(0, 100000000));
   const [areaData, setAreaData] = useState(supplyToArray(0, 100000000));
   const [labelData, setLabelData] = useState("");
-
-
-  //menu header buttons
-   // eslint-disable-next-line
-   const [leftHeaderId, setLeftHeaderId] = useState('1')
-   const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
- 
-   const [historicalHeaderId, setHistoricalHeaderId] = useState('1')
-   const [historicalHeader, setHistoricalHeader] = useState(historicalHeaderDefault)
- 
-   const [candelHeaderId, setCandelHeaderId] = useState('1')
-   const [candelHeader, setCandelHeader] = useState(candelHeaderDefault)
-
-   //When clicking Header buttons
-   const handleLeftHeaderChange = (leftHeader, clickedLeftId) => {
-    setLeftHeaderId(clickedLeftId)
-    setLeftHeader(leftHeader)
-  }
-
-  const handleHistoricalHeaderChange = (headerbuttons, clickedId) => {
-    console.log('historical', clickedId, headerbuttons)
-    setHistoricalHeaderId(clickedId)
-    setHistoricalHeader(headerbuttons)
-  }
-
-  const handleCandelHeaderChange = (headerbuttons, clickedId) => {
-    console.log('candel', clickedId, headerbuttons)
-    setCandelHeaderId(clickedId)
-    setCandelHeader(headerbuttons)
-  }
-
-
-
-  //BuySellComponents
-  const [isBuyButton, setIsBuyButton] = useState(true)
-
-   // useQuery Apollo Client Hook to get data from TheGraph
-   const txQuery = useQuery(TRANSACTIONS_QUERY)
 
   useEffect(() => {
     if (swapSupply[1]) {
@@ -149,71 +107,71 @@ export default function D3Chart(onButtonChange) {
   }, [swapSupply]);
 
 
+  // useQuery Apollo Client Hook to get data 
+  const txQuery = useQuery(TRANSACTIONS_QUERY)
   // Here is console.log of the historical tx data
   useEffect(() => {
     console.log("Data: ", txQuery.data)
   }, [txQuery.data])
 
 
+  //Menu Header Buttons
+  // eslint-disable-next-line
+  const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
+ 
+  const [historicalHeader, setHistoricalHeader] = useState(historicalHeaderDefault)
+
+  const [candelHeader, setCandelHeader] = useState(candelHeaderDefault)
+
+  const handleLeftHeader = (leftHeader) => {
+    setLeftHeader(leftHeader)
+  }
+
+  const handleHistoricalHeader = (headerbuttons) => {
+    console.log('historical', headerbuttons)
+    setHistoricalHeader(headerbuttons)
+  }
+  const handleCandelHeader = (headerbuttons) => {
+    console.log('candel', headerbuttons)
+    setCandelHeader(headerbuttons)
+  }
 
 
-  const renderChart = (type) => {
-    switch (type) {
-      case "historicalChart":
-        return (
-          <HistoricalChart
-            historicalHeader={historicalHeader}
-            historicalHeaderId={historicalHeaderId}
-          />
-        );
-      case "candleView":
-        return (
-          <CandelChart
-            candelHeader={candelHeader}
-            candelHeaderId={candelHeaderId}
-          />
-        );
-      case "bondingCurve":
-      default:
-        return (
-          <LineChart data={data} areaData={areaData} labelData={labelData} />
-        );
-    }
-  };
+  //BuySellComponents
+  const [isBuyButton, setIsBuyButton] = useState(true)
   const { theme } = useContext(ChainContext);
-  //BuySellButtons 
+ 
   const btnBuyGradient = `linear-gradient(to right, ${theme.colors.btnBuyLight}, ${theme.colors.btnBuyNormal})`
-
   const btnSellGradient = `linear-gradient(to right, ${theme.colors.btnSellLight}, ${theme.colors.btnSellNormal})`
 
   const handleBtnClick = (value) => {
     value === 'ETH' ? setIsBuyButton(true) : setIsBuyButton(false)
   }
 
+
   return (
     <Panel>
       <ContentLayout>
         <ChartPanel>
           <HeaderWrapper>
-            <MenuButtons onButtonChange={handleLeftHeaderChange} menuButtons={leftHeader} />
+            <MenuButtons onButtonChange={handleLeftHeader} menuButtons={leftHeader} />
 
-            {leftHeader[1] && leftHeader[1].status && <MenuButtons onButtonChange={handleHistoricalHeaderChange} menuButtons={historicalHeader} />}
+            {leftHeader.data[1] && leftHeader.data[1].status && <MenuButtons onButtonChange={handleHistoricalHeader} menuButtons={historicalHeader} />}
 
-            {leftHeader[2] && leftHeader[2].status && <MenuButtons onButtonChange={handleCandelHeaderChange} menuButtons={candelHeader} />}
+            {leftHeader.data[2] && leftHeader.data[2].status && <MenuButtons onButtonChange={handleCandelHeader} menuButtons={candelHeader} />}
           </HeaderWrapper>
 
-          {leftHeader[0] && leftHeader[0].status &&
-            <LineChart data={data} areaData={areaData} labelData={labelData} />}
+          {leftHeader.data[0] && leftHeader.data[0].status && <LineChart data={data} areaData={areaData} labelData={labelData} />}
 
-          {leftHeader[1] && leftHeader[1].status && <HistoricalChart historicalHeader={historicalHeader} historicalHeaderId={historicalHeaderId} />}
+          {leftHeader.data[1] && leftHeader.data[1].status && <HistoricalChart historicalHeader={historicalHeader} />}
 
-          {leftHeader[2] && leftHeader[2].status &&
-            <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />}
+          {leftHeader.data[2] && leftHeader.data[2].status && <CandelChart candelHeader={candelHeader} />}
         </ChartPanel>
+
         <BuySellWrapper >
-            <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
-            <VerticalLine />
-            <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
+          <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
+          <VerticalLine />
+          <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
         </BuySellWrapper>
       </ContentLayout>
     </Panel>
