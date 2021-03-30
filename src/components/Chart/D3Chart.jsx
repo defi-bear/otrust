@@ -116,8 +116,7 @@ export default function D3Chart(onButtonChange) {
   }, [txQuery.data])
 
 
-  //Menu Header Buttons
-  // eslint-disable-next-line
+  //Menu Header Buttons (Left Header and right Header)
   const [leftHeader, setLeftHeader] = useState(leftHeaderDefault)
  
   const [historicalHeader, setHistoricalHeader] = useState(historicalHeaderDefault)
@@ -132,9 +131,22 @@ export default function D3Chart(onButtonChange) {
     console.log('historical', headerbuttons)
     setHistoricalHeader(headerbuttons)
   }
+
   const handleCandelHeader = (headerbuttons) => {
     console.log('candel', headerbuttons)
     setCandelHeader(headerbuttons)
+  }
+
+  const MenuHeader = () => {
+    return (
+      <HeaderWrapper>
+        <MenuButtons onButtonChange={handleLeftHeader} menuButtons={leftHeader} />
+
+        {leftHeader.data[1] && leftHeader.data[1].status && <MenuButtons onButtonChange={handleHistoricalHeader} menuButtons={historicalHeader} />}
+
+        {leftHeader.data[2] && leftHeader.data[2].status && <MenuButtons onButtonChange={handleCandelHeader} menuButtons={candelHeader} />}
+      </HeaderWrapper>
+    )    
   }
 
 
@@ -150,18 +162,12 @@ export default function D3Chart(onButtonChange) {
   }
 
 
+
   return (
     <Panel>
       <ContentLayout>
         <ChartPanel>
-          <HeaderWrapper>
-            <MenuButtons onButtonChange={handleLeftHeader} menuButtons={leftHeader} />
-
-            {leftHeader.data[1] && leftHeader.data[1].status && <MenuButtons onButtonChange={handleHistoricalHeader} menuButtons={historicalHeader} />}
-
-            {leftHeader.data[2] && leftHeader.data[2].status && <MenuButtons onButtonChange={handleCandelHeader} menuButtons={candelHeader} />}
-          </HeaderWrapper>
-
+          <MenuHeader />
           {leftHeader.data[0] && leftHeader.data[0].status && <LineChart data={data} areaData={areaData} labelData={labelData} />}
 
           {leftHeader.data[1] && leftHeader.data[1].status && <HistoricalChart historicalHeader={historicalHeader} />}
