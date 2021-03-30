@@ -10,15 +10,15 @@ import BondingCurve from 'pages/BondingCurve'
 
 function App() {
   return (
-    <AutoLogin>
-      <ChainProvider theme={darkNew}>
-        <ThemeProvider theme={darkNew}>
-          <GlobalStyle />
-          <MainHeader />
-          <BondingCurve />
-        </ThemeProvider>
-      </ChainProvider>
-    </AutoLogin>
+    <ThemeProvider theme={darkNew}>
+      <AutoLogin>
+        <ChainProvider theme={darkNew}>
+            <GlobalStyle/>
+            <MainHeader/>
+            <BondingCurve />
+        </ChainProvider>
+      </AutoLogin>
+    </ThemeProvider>
   );
 }
 
