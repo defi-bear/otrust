@@ -198,12 +198,6 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
 
   const [onSubmit, isWorking, error] = useAsyncFn(submitTrans)
 
-  const onTextAreaKeyDown = e => {
-    if (e.keyCode === 13 && e.shiftKey === false) {
-      e.preventDefault()
-    }
-    setSwapBuyAmount(e)
-  }
 
   //When input number on the Buy or Sell component input area
   const  onButtonChange= (e) =>{
@@ -238,7 +232,6 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
                 name={text}
                 onChange={onTextChange}
                 onClick={onButtonChange}
-                onTextAreaKeyDown={onTextAreaKeyDown}
                 placeholder={isWorking ? "Confirming":(isBuyButton?'':"Enter amount to switch")}
                 width='10rem' 
                 height='2rem' 
