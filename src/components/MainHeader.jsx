@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import logo from "assets/logo.svg";
 import { Container } from "./UI";
+import { responsive } from "theme/constants";
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -11,11 +12,22 @@ const HeaderWrapper = styled.header`
 
   height: 160px;
   width: 100%;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 90px;
+  }
 `;
 
 const Logo = styled.div`
   display: flex;
   gap: 20px;
+`;
+
+const LogoImg = styled.img`
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 50px;
+    width: 40px;
+  }
 `;
 
 const LogoText = styled.div`
@@ -32,6 +44,10 @@ const LogoText = styled.div`
     font-weight: 600;
     line-height: 1;
     text-transform: uppercase;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 20px;
+    }
   }
 
   > span {
@@ -43,13 +59,22 @@ const LogoText = styled.div`
 const HeaderInfo = styled.div`
   display: flex;
 `;
+
 const HeaderInfoItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
 
+  @media screen and (max-width: ${responsive.laptop}) {
+    gap: 5px;
+  }
+
   & + & {
     margin-left: 56px;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      margin-left: 32px;
+    }
   }
 
   > strong {
@@ -57,14 +82,25 @@ const HeaderInfoItem = styled.div`
     font-weight: 400;
   }
 `;
+
 const ExchangeRate = styled.div`
   display: flex;
   margin-right: 56px;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    margin-right: 32px;
+  }
 `;
+
 const Issued = styled.div`
   padding-left: 56px;
   border-left: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding-left: 32px;
+  }
 `;
+
 const HeaderInfoItemValue = styled.div`
   > strong {
     margin-right: 12px;
@@ -72,8 +108,13 @@ const HeaderInfoItemValue = styled.div`
     color: ${(props) => props.theme.colors.textPrimary};
     font-family: "Bebas Neue", sans-serif;
     font-size: 24px;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 20px;
+    }
   }
 `;
+
 const Details = styled.span`
   color: ${(props) => {
     switch (props.type) {
@@ -93,7 +134,7 @@ export default function MainHeader(props) {
       <Container>
         <HeaderWrapper>
           <Logo>
-            <img src={logo} alt="Onomy" />
+            <LogoImg src={logo} alt="Onomy" />
             <LogoText>
               <strong>Onomy</strong>
               <span>Bonding curve</span>

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
+import { responsive } from "theme/constants"
 
 import { useAsyncFn } from 'lib/use-async-fn'
 import { borderRadius } from 'context/responsive/cssSizes'
@@ -14,6 +15,18 @@ const FlexWrapper = styled.div`
   min-width: 22rem;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding: 0 40px;
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 0 24px;
+  }
+  > strong {
+    margin-bottom: 12px;
+    font-size: 16px;
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 14px;
+    }
+  }
 `
 
 const GridWrapper = styled.div`

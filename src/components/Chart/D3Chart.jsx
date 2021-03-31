@@ -12,6 +12,7 @@ import {
   historicalHeaderDefault,
   candelHeaderDefault,
 } from "./defaultChartData";
+import { responsive } from "theme/constants";
 
 import { Panel } from "components/UI";
 import Swap from "components/Swap";
@@ -25,6 +26,9 @@ import { ChartPanel } from "./Style";
 const ContentLayout = styled.div`
   display: grid;
   grid-template-rows: 550px auto;
+  @media screen and (max-width: ${responsive.laptop}) {
+    grid-template-rows: 400px auto;
+  }
 `
 
 const BuySellWrapper = styled.div`
@@ -160,7 +164,6 @@ export default function D3Chart(onButtonChange) {
   const handleBtnClick = (value) => {
     value === 'ETH' ? setIsBuyButton(true) : setIsBuyButton(false)
   }
-
 
 
   return (
