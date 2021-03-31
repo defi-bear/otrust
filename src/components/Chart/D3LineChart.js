@@ -10,7 +10,7 @@ import {
   line,
   curveCardinal,
   axisBottom,
-  axisLeft,
+  axisRight,
 } from "d3";
 import { useResizeObserver } from "./utils";
 
@@ -35,7 +35,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
   // charts and xAxis and yAxis
   useEffect(() => {
-    const margin = { top: 20, right: 20, bottom: 40, left: 60 }
+    const margin = { top: 20, right: 60, bottom: 40, left: 20 }
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
     const { width, height } =
@@ -177,10 +177,10 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     // y Axis and gridlines
     const gridlinesSize = width - margin.right - margin.left;
-    const yAxis = axisLeft(yScale).tickSizeInner(-gridlinesSize);
+    const yAxis = axisRight(yScale).tickSizeInner(-gridlinesSize);
     const yComplex = svg
       .select(".y-axis")
-      .attr("transform", `translate(${margin.left}, 0)`)
+      .attr("transform", `translate(${width-margin.right}, 0)`)
       .style('color', `${theme.colors.bgDarken}`)
       .call(yAxis);
 
@@ -188,8 +188,8 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .style("color", `${theme.colors.txtThirdly}`)
 
     yComplex.selectAll(".tick line")
+      .attr("transform", `translate(${margin.right})`)
       .style("color", `${theme.colors.bgNormal}`)
-      ;
 
   }, [priceAvg, areaData, data, dimensions, theme]);
 
