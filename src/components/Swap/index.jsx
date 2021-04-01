@@ -11,10 +11,9 @@ import { parseEther } from '@ethersproject/units'
 const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))*2/3}rem`;
 
 const FlexWrapper = styled.div`
-  width: 40%;
-  min-width: 22rem;
   display: flex;
   flex-direction: column;
+  width: 49.5%;
   height: 100%;
   padding: 0 40px;
   @media screen and (max-width: ${responsive.laptop}) {
@@ -35,7 +34,7 @@ const GridWrapper = styled.div`
   width: 100%
   align-items: center;
   justify-content: space-between;
-  gap: 0.8rem;
+  gap: 0.8rem 0rem;
   margin-top: 1rem;
 `
 
@@ -114,6 +113,7 @@ const SwapHeader = styled.header`
 `
 
 const SendingWrapper = styled.div` 
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -140,8 +140,6 @@ const ReceivingWrapper = styled.div`
 
 const AccentButton = styled.button`
   height: 2.25rem;
-  width: ${p => (p.width ? p.width + 'px' : 'auto')};
-  padding: 0 1.25rem;
   background-color: ${props => props.theme.colors.bgHighlight};
   border: none;
   border-radius: 1.25rem;
@@ -180,6 +178,7 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
  
 
   const submitTrans = useCallback(
+   
     async evt => {
       if (evt) evt.preventDefault()
       if (!swapBuyAmount) return
@@ -213,7 +212,8 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
 
 
   //When input number on the Buy or Sell component input area
-  const  onButtonChange= (e) =>{
+  const  onButtonChange= (e) => {
+
     if(clicked !== e.target.name)setSwapBuyAmount('')
 
     clicked = e.target.name

@@ -31,21 +31,24 @@ const ContentLayout = styled.div`
   }
 `
 
-const BuySellWrapper = styled.div`
+const ChartWrapper = styled.div`
+  padding: 20px;
+  background-color: ${(props) => props.theme.colors.bgDarken};
+  border-radius: 4px;
+`
+
+const ExchangeWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 4%;
     align-items: center;
     justify-content: center;
+    padding: 24px 0;
 `
 
 const VerticalLine = styled.div`
   width: 0.15rem;
   background-color: ${(props) => props.theme.colors.bgHighlightBorder};
   height: 12rem;
-  @media (max-width: 1230px) {                  
-    display: none;
-  }
 `
 
 const HeaderWrapper = styled.div`
@@ -169,20 +172,20 @@ export default function D3Chart(onButtonChange) {
   return (
     <Panel>
       <ContentLayout>
-        <ChartPanel>
+        <ChartWrapper>
           <MenuHeader />
           {leftHeader.data[0] && leftHeader.data[0].status && <LineChart data={data} areaData={areaData} labelData={labelData} />}
 
           {leftHeader.data[1] && leftHeader.data[1].status && <HistoricalChart historicalHeader={historicalHeader} />}
 
           {leftHeader.data[2] && leftHeader.data[2].status && <CandelChart candelHeader={candelHeader} />}
-        </ChartPanel>
+        </ChartWrapper>
 
-        <BuySellWrapper >
+        <ExchangeWrapper >
           <Swap colorGradient={btnBuyGradient} text='Buy NOM' isBuyButton={isBuyButton} onInputChange={handleBtnClick} />
           <VerticalLine />
           <Swap colorGradient={btnSellGradient} text='Sell NOM' isBuyButton={!isBuyButton} onInputChange={handleBtnClick} />
-        </BuySellWrapper>
+        </ExchangeWrapper>
       </ContentLayout>
     </Panel>
   );
