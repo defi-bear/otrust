@@ -98,7 +98,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .append("stop")
       .attr("offset", "100%")
       .attr("stop-color", `${theme.colors.lnHighlight}`)
-      .attr("stop-opacity", 1);
+      .attr("stop-opacity", 0.5);
 
     svgContent
       .selectAll(".selectedArea")
