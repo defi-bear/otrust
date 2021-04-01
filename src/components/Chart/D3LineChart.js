@@ -52,7 +52,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
-      .range([height - margin.top - margin.bottom, 10]);
+      .range([height - margin.top - margin.bottom, 0]);
 
     const lineGenerator = line()
       .x(d => xScale(d.x))
@@ -180,7 +180,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
     const yAxis = axisRight(yScale).tickSizeInner(-gridlinesSize);
     const yComplex = svg
       .select(".y-axis")
-      .attr("transform", `translate(${width-margin.right}, 0)`)
+      .attr("transform",  `translate(${width - margin.right}, 0)`)
       .style('color', `${theme.colors.bgDarken}`)
       .call(yAxis);
 
@@ -188,8 +188,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .style("color", `${theme.colors.txtThirdly}`)
 
     yComplex.selectAll(".tick line")
-      .attr("transform", `translate(${margin.right})`)
-      .style("color", `${theme.colors.bgNormal}`)
+    .style("color", `${theme.colors.bgNormal}`)
 
   }, [priceAvg, areaData, data, dimensions, theme]);
 

@@ -20,7 +20,6 @@ import LineChart from "./D3LineChart";
 import HistoricalChart from "./D3HistoricalChart";
 import CandelChart from "./D3CandelChart";
 import MenuButtons from '../MenuButtons';
-import { ChartPanel } from "./Style";
 
 
 const ContentLayout = styled.div`
