@@ -47,7 +47,7 @@ const ExchangeWrapper = styled.div`
 const VerticalLine = styled.div`
   width: 0.15rem;
   background-color: ${(props) => props.theme.colors.bgHighlightBorder};
-  height: 12rem;
+  height: 90%;
 `
 
 const HeaderWrapper = styled.div`

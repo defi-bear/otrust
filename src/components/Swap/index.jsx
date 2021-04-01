@@ -10,7 +10,7 @@ import { parseEther } from '@ethersproject/units'
 
 const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))*2/3}rem`;
 
-const FlexWrapper = styled.div`
+const ExchangeItem = styled.div`
   display: flex;
   flex-direction: column;
   width: 49.5%;
@@ -40,10 +40,8 @@ const GridWrapper = styled.div`
 
 const ExchangeInput = styled.input`
   width: 100%;
-  height: 2rem;
-  paddingLeft: 1.25rem;
-  text-align: ${p => p.isBuyButton?'right':'center'};
-  height: ${p => p.height};
+  height: 2.5rem;
+  text-align: ${props => props.isBuyButton?'right':'center'};
   padding: 0rem .2rem;
   border: .1rem solid ${props => props.theme.colors.bgNormal};
   border-radis: ${adjustedRadius};
@@ -64,24 +62,20 @@ const ExchangeInput = styled.input`
   }
 `
 
-const RightComponentWrapper = styled.div`
+const RightComponent = styled.div`
   text-align: right;
   padding: 0rem 0.6rem;
-  vertical-align: middle;
-  line-height: 2rem;
   color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
 `
 
-const LeftComponentWrapper = styled.div`
+const LeftComponent = styled.div`
   width: 24%;
   text-align: left;
   padding: 0rem 0.5rem 0rem 1rem;
-  vertical-align: middle;
-  line-height: 2rem;  
   color: ${props => props.theme.colors.txtSecondary};
 `
 
-const MiddleComponentWrapper = styled.div`
+const MiddleComponent = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -93,7 +87,6 @@ const MiddleComponentWrapper = styled.div`
 
 const TextLabel = styled.div`
   padding: 0rem 0.2rem;
-  vertical-align: middle;
   height: '2.2rem';
 `
 
@@ -104,67 +97,61 @@ const MaxLabel = styled.span`
 `
 
 const SwapHeader = styled.header`
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: ${props => props.theme.colors.txtPrimary}};
   margin: 1rem 0rem;
   height: 3rem;
   line-height: 3rem;
   background: ${props => props.theme.colors.bgNormal};
   text-align: left;
-  vertical-align: middle;
 `
 
-const SendingWrapper = styled.div` 
+const Sending = styled.div` 
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 3rem;
+
+  height: 3.3rem;
   font-size: 0.65rem;
   border-radius: ${adjustedRadius};
-  border-style: solid;
-  border-width: 0.1rem;
-  border-color: ${props => props.theme.colors.bgHighlight};
+  border: 0.1rem solid ${props => props.theme.colors.bgHighlight};
 `
 
-const ReceivingWrapper = styled.div`
+const Receiving = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 3rem;
+
+  height: 3.3rem;
   font-size: 0.65rem;
-  border-radis: ${adjustedRadius};
   background-color: ${props => props.theme.colors.bgDarken};
   border-radius : 0.3rem;
 `
 
-const AccentButton = styled.button`
-  height: 2.25rem;
-  background-color: ${props => props.theme.colors.bgHighlight};
+const ExchangeButton = styled.button`
+  width: 100%;
+  height: 3.3rem;
+  margin-bottom: 2rem;
   border: none;
-  border-radius: 1.25rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s ease;
+  border-radius: ${adjustedRadius};  
+
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-shadow: 0 6px 3px rgba(0, 0, 0, 0.03);
+  color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
+
+  background-color: ${props => props.theme.colors.bgHighlight}; 
+  background-image: ${props => props.isBuyButton?props.colorGradient : props.theme.colors.bgHighlight};
+  
+  cursor: pointer;
+
   &:hover {
     background-color: ${props => props.theme.colors.bgDarken};
     color: ${props => props.theme.colors.bgHighlight};
   }
-`
-
-const Button = styled(AccentButton)`
-  font-size: 0.7rem;
-  color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
-  margin-bottom: 2rem;
-  width: 100%;
-  height: 3rem;
-  text-align: center;
-  vertical-align: middle;
-  border-radius: ${adjustedRadius};   
-  background-image: ${props => props.isBuyButton?props.colorGradient : props.theme.colors.bgHighlight};
 `
 
 
@@ -228,18 +215,18 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
   }
 
   return (
-    <FlexWrapper name={text} >
+    <ExchangeItem name={text} >
       <form onSubmit={ onSubmit } >
         <SwapHeader>
           {text}
         </SwapHeader>
         <GridWrapper>
-          <SendingWrapper>
-            <LeftComponentWrapper>
+          <Sending>
+            <LeftComponent>
                 I'm sending
-            </LeftComponentWrapper>
+            </LeftComponent>
             { error ? error : null }
-            <MiddleComponentWrapper isBuyButton={isBuyButton}>
+            <MiddleComponent isBuyButton={isBuyButton}>
               <ExchangeInput
                 type='text'
                 value={isBuyButton?swapBuyAmount:''}
@@ -252,26 +239,26 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
               <TextLabel >
                 {text==='Buy NOM'? 'ETH' : 'NOM'} 
               </TextLabel> 
-            </MiddleComponentWrapper>
+            </MiddleComponent>
               
-              <RightComponentWrapper>
+              <RightComponent>
                 <MaxLabel isBuyButton={isBuyButton}>Max</MaxLabel>
-              </RightComponentWrapper>
-          </SendingWrapper>
+              </RightComponent>
+          </Sending>
 
-          <ReceivingWrapper>
-            <LeftComponentWrapper>
+          <Receiving>
+            <LeftComponent>
                 I'm receiving
-            </LeftComponentWrapper>           
-            <RightComponentWrapper isBuyButton={isBuyButton}>
+            </LeftComponent>           
+            <RightComponent isBuyButton={isBuyButton}>
                 { `${!isBuyButton?'': (swapSellAmount ? parseFloat(swapSellAmount).toPrecision(6) : '')} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
-            </RightComponentWrapper>
-          </ReceivingWrapper>                                           
-          <Button colorGradient={colorGradient} type='submit' isBuyButton={isBuyButton} disabled={isBuyButton?false:true}>
+            </RightComponent>
+          </Receiving>                                           
+          <ExchangeButton colorGradient={colorGradient} type='submit' isBuyButton={isBuyButton} disabled={isBuyButton?false:true}>
               {text}
-          </Button>             
+          </ExchangeButton>             
         </GridWrapper>
       </form>
-    </FlexWrapper>
+    </ExchangeItem>
   )
 }
