@@ -38,24 +38,26 @@ const GridWrapper = styled.div`
   margin-top: 1rem;
 `
 
-const StyledInput = styled.input`
+const ExchangeInput = styled.input`
   width: 100%;
+  height: 2rem;
+  paddingLeft: 1.25rem;
   text-align: ${p => p.isBuyButton?'right':'center'};
   height: ${p => p.height};
-  padding: 0rem 0.2rem;
+  padding: 0rem .2rem;
   border: .1rem solid ${props => props.theme.colors.bgNormal};
   border-radis: ${adjustedRadius};
   color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
-  font-size: 0.8rem;
+  font-size: .8rem;
   box-sizing: border-box;
   background-color: ${props => props.theme.colors.bgHighlight};
 
   ::placeholder {
     color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
   }
+
   &:focus {
     outline: none;
-    color: #000;
     ::placeholder {
       color: ${props => props.theme.colors.txtPrimary};
     }
@@ -113,7 +115,6 @@ const SwapHeader = styled.header`
 `
 
 const SendingWrapper = styled.div` 
-  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -150,7 +151,7 @@ const AccentButton = styled.button`
   text-shadow: 0 6px 3px rgba(0, 0, 0, 0.03);
   &:hover {
     background-color: ${props => props.theme.colors.bgDarken};
-    color: #fff;
+    color: ${props => props.theme.colors.bgHighlight};
   }
 `
 
@@ -239,16 +240,13 @@ export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
             </LeftComponentWrapper>
             { error ? error : null }
             <MiddleComponentWrapper isBuyButton={isBuyButton}>
-              <StyledInput
+              <ExchangeInput
                 type='text'
                 value={isBuyButton?swapBuyAmount:''}
                 name={text}
                 onChange={onTextChange}
                 onClick={onButtonChange}
                 placeholder={isWorking ? "Confirming":(isBuyButton?'':"Enter amount to switch")}
-                width='10rem' 
-                height='2rem' 
-                paddingLeft='1.25rem'
                 isBuyButton={isBuyButton}
               />
               <TextLabel >
