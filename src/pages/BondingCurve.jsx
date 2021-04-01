@@ -17,6 +17,10 @@ const BondingCurveLayout = styled.div`
   @media screen and (max-width: ${responsive.laptop}) {
     grid-template-columns: 1fr 290px;
   }
+
+  @media screen and (max-width: ${responsive.laptopSmall}) {
+    grid-template-columns: 1fr 250px;
+  }
 `;
 
 export default function BondingCurve() {

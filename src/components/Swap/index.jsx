@@ -62,9 +62,10 @@ const Sending = styled.div`
   border-radius: 6px;
 
   strong {
-    color: 1px solid ${(props) => props.theme.colors.textSecondary};
+    color: ${(props) => props.theme.colors.textSecondary};
     margin-right: auto;
     font-weight: 500;
+    white-space: nowrap;
   }
 `;
 
@@ -82,7 +83,7 @@ const Receiving = styled.div`
   border-radius: 6px;
 
   strong {
-    color: 1px solid ${(props) => props.theme.colors.textSecondary};
+    color: ${(props) => props.theme.colors.textSecondary};
     margin-right: auto;
     font-weight: 500;
   }
@@ -100,13 +101,19 @@ const MaxBtn = styled.button`
   cursor: pointer;
 `;
 
-const SendingInput = styled.input`
+const ExchangeInput = styled.input`
+  width: 120px;
+
   background: none;
   border: none;
 
   color: ${(props) => props.theme.colors.textPrimary};
   font-weight: 500;
   text-align: right;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const ReceivingValue = styled.span`
@@ -205,7 +212,7 @@ export default function Swap() {
         <strong>Buy NOM</strong>
         <Sending>
           <strong>I'm sending</strong>
-          <SendingInput type="text" value="0.15 ETH" />
+          <ExchangeInput type="text" value="0.15 ETH" />
           <MaxBtn>Max</MaxBtn>
         </Sending>
         <Receiving>
@@ -221,7 +228,7 @@ export default function Swap() {
         <strong>Sell NOM</strong>
         <Sending>
           <strong>I'm sending</strong>
-          <SendingInput type="text" value="2529 NOM" />
+          <ExchangeInput type="text" value="2529 NOM" />
           <MaxBtn>Max</MaxBtn>
         </Sending>
         <Receiving>
