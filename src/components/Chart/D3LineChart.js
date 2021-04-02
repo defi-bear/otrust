@@ -10,7 +10,7 @@ import {
   line,
   curveCardinal,
   axisBottom,
-  axisRight,
+  axisLeft,
 } from "d3";
 import { useResizeObserver } from "./utils";
 
@@ -18,7 +18,7 @@ import { useResizeObserver } from "./utils";
 const StyledSVG = styled.svg`
     display: block;
     width: 100%;
-    height: 90%;
+    height: 400px;
     overflow: visible;
 `
 
@@ -35,7 +35,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
   // charts and xAxis and yAxis
   useEffect(() => {
-    const margin = { top: 20, right: 60, bottom: 40, left: 20 }
+    const margin = { top: 20, right: 20, bottom: 40, left: 60 }
     const svg = select(svgRef.current);
     const svgContent = svg.select(".content");
     const { width, height } =
@@ -52,7 +52,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
-      .range([height - margin.top - margin.bottom, 0]);
+      .range([height - margin.top - margin.bottom, 10]);
 
     const lineGenerator = line()
       .x(d => xScale(d.x))
@@ -84,21 +84,19 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .attr("id", "linear-gradient")
       .attr("gradientUnits", "userSpaceOnUse")
       .attr("x1", "0%")
-      .attr("y1", "100%")
-      .attr("x2", "0%")
+      .attr("y1", "81%")
+      .attr("x2", "1%")
       .attr("y2", "0%");
 
     linearGradient
       .append("stop")
       .attr("offset", "0%")
-      .attr("stop-color", `${theme.colors.lnHighlight}`)
-      .attr("stop-opacity", 0)
+      .attr("stop-color", `${theme.colors.bgDarken}`); //
 
     linearGradient
       .append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", `${theme.colors.lnHighlight}`)
-      .attr("stop-opacity", 0.5);
+      .attr("stop-color", `${theme.colors.lnHighlight}`);
 
     svgContent
       .selectAll(".selectedArea")
@@ -177,10 +175,10 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     // y Axis and gridlines
     const gridlinesSize = width - margin.right - margin.left;
-    const yAxis = axisRight(yScale).tickSizeInner(-gridlinesSize);
+    const yAxis = axisLeft(yScale).tickSizeInner(-gridlinesSize);
     const yComplex = svg
       .select(".y-axis")
-      .attr("transform",  `translate(${width - margin.right}, 0)`)
+      .attr("transform", `translate(${margin.left}, 0)`)
       .style('color', `${theme.colors.bgDarken}`)
       .call(yAxis);
 
@@ -188,12 +186,13 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
       .style("color", `${theme.colors.txtThirdly}`)
 
     yComplex.selectAll(".tick line")
-    .style("color", `${theme.colors.bgNormal}`)
+      .style("color", `${theme.colors.bgNormal}`)
+      ;
 
   }, [priceAvg, areaData, data, dimensions, theme]);
 
   return (
-    <div ref={wrapperRef} style={{ marginTop: "1rem", height: "90%" }}>
+    <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>
       <StyledSVG ref={svgRef}>
         <defs>
           <clipPath id={id}>
