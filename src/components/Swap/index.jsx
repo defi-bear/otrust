@@ -1,264 +1,273 @@
-import React, { useCallback } from 'react'
-import styled from 'styled-components'
-import { responsive } from "theme/constants"
+// import React, { useCallback } from "react";
+import React from "react";
+import styled from "styled-components";
+import { responsive } from "theme/constants";
+// import { parseEther } from "@ethersproject/units";
 
-import { useAsyncFn } from 'lib/use-async-fn'
-import { borderRadius } from 'context/responsive/cssSizes'
-import { useSwap, useUpdateSwap } from 'context/SwapContext'
-import { useChain, useUpdateChain } from 'context/chain/ChainContext'
-import { parseEther } from '@ethersproject/units'
+// import { useAsyncFn } from "lib/use-async-fn";
+// import { useSwap, useUpdateSwap } from "context/SwapContext";
+// import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
-const adjustedRadius = `${parseFloat(borderRadius.slice(0,-3))*2/3}rem`;
+// import { Panel } from "components";
+// import Dropdown from "components/Dropdown";
+// import { AccentButton } from "components/UI/Button";
+
+const ExchangeWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  height: 100%;
+  padding: 24px 0;
+
+  font-size: 14px;
+`;
 
 const ExchangeItem = styled.div`
   display: flex;
   flex-direction: column;
-  width: 49.5%;
+  gap: 12px;
+
   height: 100%;
   padding: 0 40px;
+
   @media screen and (max-width: ${responsive.laptop}) {
     padding: 0 24px;
   }
+
   > strong {
     margin-bottom: 12px;
+
     font-size: 16px;
+
     @media screen and (max-width: ${responsive.laptop}) {
       font-size: 14px;
     }
   }
-`
 
-const GridWrapper = styled.div`
+  & + & {
+    border-left: 2px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  }
+`;
+
+const Sending = styled.div`
   display: flex;
-  flex-direction: column;
-  width: 100%
   align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem 0rem;
-  margin-top: 1rem;
-`
+  gap: 16px;
 
-const ExchangeInput = styled.input`
   width: 100%;
-  height: 2.5rem;
-  text-align: ${props => props.isBuyButton?'right':'center'};
-  padding: 0rem .2rem;
-  border: .1rem solid ${props => props.theme.colors.bgNormal};
-  border-radis: ${adjustedRadius};
-  color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
-  font-size: .8rem;
-  box-sizing: border-box;
-  background-color: ${props => props.theme.colors.bgHighlight};
+  height: 50px;
+  padding: 16px;
 
-  ::placeholder {
-    color: ${props => props.isBuyButton? props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
+  border: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  border-radius: 6px;
+
+  strong {
+    color: ${(props) => props.theme.colors.textSecondary};
+    margin-right: auto;
+    font-weight: 500;
+    white-space: nowrap;
   }
-
-  &:focus {
-    outline: none;
-    ::placeholder {
-      color: ${props => props.theme.colors.txtPrimary};
-    }
-  }
-`
-
-const RightComponent = styled.div`
-  text-align: right;
-  padding: 0rem 0.6rem;
-  color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
-`
-
-const LeftComponent = styled.div`
-  width: 24%;
-  text-align: left;
-  padding: 0rem 0.5rem 0rem 1rem;
-  color: ${props => props.theme.colors.txtSecondary};
-`
-
-const MiddleComponent = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  width: 52%;
-  text-align: right;
-  align-items: center;
-  color: ${props => props.isBuyButton?props.theme.colors.txtPrimary:props.theme.colors.txtSecondary};
-`
-
-const TextLabel = styled.div`
-  padding: 0rem 0.2rem;
-  height: '2.2rem';
-`
-
-const MaxLabel = styled.span`
-  color: ${props => props.isBuyButton?props.theme.colors.txtHighlight: props.theme.colors.txtSecondary};
-  font-weight: ${props => props.isBuyButton?'bold':'normal'};
-  text-align: right;
-`
-
-const SwapHeader = styled.header`
-  font-size: 0.8rem;
-  color: ${props => props.theme.colors.txtPrimary}};
-  margin: 1rem 0rem;
-  height: 3rem;
-  line-height: 3rem;
-  background: ${props => props.theme.colors.bgNormal};
-  text-align: left;
-`
-
-const Sending = styled.div` 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  height: 3.3rem;
-  font-size: 0.65rem;
-  border-radius: ${adjustedRadius};
-  border: 0.1rem solid ${props => props.theme.colors.bgHighlight};
-`
+`;
 
 const Receiving = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
 
-  height: 3.3rem;
-  font-size: 0.65rem;
-  background-color: ${props => props.theme.colors.bgDarken};
-  border-radius : 0.3rem;
-`
+  width: 100%;
+  height: 50px;
+  padding: 16px;
+
+  background-color: ${(props) => props.theme.colors.bgDarken};
+  border: 1px solid ${(props) => props.theme.colors.bgDarken};
+  border-radius: 6px;
+
+  strong {
+    color: ${(props) => props.theme.colors.textSecondary};
+    margin-right: auto;
+    font-weight: 500;
+  }
+`;
+
+const MaxBtn = styled.button`
+  padding: 5px;
+
+  border: none;
+  background: none;
+
+  color: ${(props) => props.theme.colors.highlightYellow};
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+`;
+
+const ExchangeInput = styled.input`
+  width: 120px;
+
+  background: none;
+  border: none;
+
+  color: ${(props) => props.theme.colors.textPrimary};
+  font-weight: 500;
+  text-align: right;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const ReceivingValue = styled.span`
+  margin-left: auto;
+
+  font-weight: 500;
+  color: ${(props) => props.theme.colors.textPrimary};
+`;
 
 const ExchangeButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 50px;
   width: 100%;
-  height: 3.3rem;
-  margin-bottom: 2rem;
+
+  background: linear-gradient(90deg, #5ac790, #1c7e4c);
   border: none;
-  border-radius: ${adjustedRadius};  
+  border-radius: 6px;
 
-  text-align: center;
-  font-size: 0.7rem;
-  font-weight: 600;
+  color: ${(props) => props.theme.colors.textPrimary};
   text-shadow: 0 6px 3px rgba(0, 0, 0, 0.03);
-  color: ${props => props.isBuyButton?props.theme.colors.txtPrimary: props.theme.colors.txtSecondary};
+  font-weight: 600;
+`;
 
-  background-color: ${props => props.theme.colors.bgHighlight}; 
-  background-image: ${props => props.isBuyButton?props.colorGradient : props.theme.colors.bgHighlight};
-  
-  cursor: pointer;
+const SellBtn = styled(ExchangeButton)`
+  background: linear-gradient(90deg, #c75a5a, #7e1c1c);
+`;
 
-  &:hover {
-    background-color: ${props => props.theme.colors.bgDarken};
-    color: ${props => props.theme.colors.bgHighlight};
-  }
-`
+export default function Swap() {
+  // const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap();
+  // const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap();
+  // const onTextChange = useCallback(
+  //   (evt) => setSwapBuyAmount(evt.target.value),
+  //   [setSwapBuyAmount]
+  // );
+  // const { bondContract, NOMcontract } = useChain();
+  // const { setPendingTx } = useUpdateChain();
 
+  // const submitTrans = useCallback(
+  //   async (evt) => {
+  //     if (evt) evt.preventDefault();
+  //     if (!swapBuyAmount) return;
+  //     try {
+  //       if (swapDenom === "ETH") {
+  //         try {
+  //           const tx = await bondContract.buyNOM({
+  //             value: parseEther(swapBuyAmount.toString()).toString(),
+  //           });
+  //           setPendingTx(tx);
+  //           setSwapBuyAmount("");
+  //         } catch (e) {
+  //           // eslint-disable-next-line no-console
+  //           console.error(e.stack || e);
+  //           setSwapBuyAmount(swapBuyAmount);
+  //         }
+  //       } else {
+  //         let tx = await NOMcontract.increaseAllowance(
+  //           bondContract.address,
+  //           parseEther(swapBuyAmount.toString())
+  //         );
+  //         setPendingTx(tx);
+  //         tx = await bondContract.sellNOM(parseEther(swapBuyAmount.toString()));
+  //         setPendingTx(tx);
+  //         setSwapBuyAmount("");
+  //       }
+  //     } catch (e) {
+  //       // eslint-disable-next-line no-console
+  //       console.error(e.stack || e);
+  //       setSwapBuyAmount(swapBuyAmount);
+  //     }
+  //   },
+  //   [
+  //     swapBuyAmount,
+  //     swapDenom,
+  //     bondContract,
+  //     NOMcontract,
+  //     setSwapBuyAmount,
+  //     setPendingTx,
+  //   ]
+  // );
 
-export default function Swap({text, colorGradient,onInputChange, isBuyButton}) {
+  // const [onSubmit, isWorking, error] = useAsyncFn(submitTrans);
 
-  const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap()
-  const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap()
-  const onTextChange = useCallback(evt => setSwapBuyAmount(evt.target.value), [setSwapBuyAmount])
-  const { bondContract, NOMcontract } = useChain()
-  const { setPendingTx } = useUpdateChain()
-  let clicked = 'Buy Now'
- 
-
-  const submitTrans = useCallback(
-   
-    async evt => {
-      if (evt) evt.preventDefault()
-      if (!swapBuyAmount) return
-      try {
-        if (swapDenom === 'ETH') {
-          try {
-            const tx = await bondContract.buyNOM({value: parseEther(swapBuyAmount.toString()).toString()})
-            setPendingTx(tx)
-            setSwapBuyAmount('')
-          } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e.stack || e)
-            setSwapBuyAmount(swapBuyAmount)
-          }
-        } else {
-          let tx = await NOMcontract.increaseAllowance(bondContract.address, parseEther(swapBuyAmount.toString()))
-          setPendingTx(tx)
-          tx = await bondContract.sellNOM(parseEther(swapBuyAmount.toString()))
-          setPendingTx(tx)
-          setSwapBuyAmount('')
-        }
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e.stack || e)
-        setSwapBuyAmount(swapBuyAmount)
-      }
-    },[swapBuyAmount, swapDenom, bondContract, NOMcontract, setSwapBuyAmount, setPendingTx]
-  )
-
-  const [onSubmit, isWorking, error] = useAsyncFn(submitTrans)
-
-
-  //When input number on the Buy or Sell component input area
-  const  onButtonChange= (e) => {
-
-    if(clicked !== e.target.name)setSwapBuyAmount('')
-
-    clicked = e.target.name
-    if(clicked==="Sell NOM") {
-      onInputChange('NOM')
-      setSwapDenom('NOM')
-    } else{
-      onInputChange('ETH')  
-      setSwapDenom('ETH') 
-    }           
-  }
+  // const onTextAreaKeyDown = (e) => {
+  //   if (e.keyCode === 13 && e.shiftKey === false) {
+  //     e.preventDefault();
+  //   }
+  //   setSwapBuyAmount(e);
+  // };
 
   return (
-    <ExchangeItem name={text} >
-      <form onSubmit={ onSubmit } >
-        <SwapHeader>
-          {text}
-        </SwapHeader>
-        <GridWrapper>
-          <Sending>
-            <LeftComponent>
-                I'm sending
-            </LeftComponent>
-            { error ? error : null }
-            <MiddleComponent isBuyButton={isBuyButton}>
-              <ExchangeInput
-                type='text'
-                value={isBuyButton?swapBuyAmount:''}
-                name={text}
-                onChange={onTextChange}
-                onClick={onButtonChange}
-                placeholder={isWorking ? "Confirming":(isBuyButton?'':"Enter amount to switch")}
-                isBuyButton={isBuyButton}
-              />
-              <TextLabel >
-                {text==='Buy NOM'? 'ETH' : 'NOM'} 
-              </TextLabel> 
-            </MiddleComponent>
-              
-              <RightComponent>
-                <MaxLabel isBuyButton={isBuyButton}>Max</MaxLabel>
-              </RightComponent>
-          </Sending>
+    <ExchangeWrapper>
+      <ExchangeItem>
+        <strong>Buy NOM</strong>
+        <Sending>
+          <strong>I'm sending</strong>
+          <ExchangeInput type="text" value="0.15 ETH" />
+          <MaxBtn>Max</MaxBtn>
+        </Sending>
+        <Receiving>
+          <strong>I'm receiving</strong>
+          <ReceivingValue>123 NOM</ReceivingValue>
+        </Receiving>
+        <div>
+          <ExchangeButton>Buy NOM</ExchangeButton>
+        </div>
+      </ExchangeItem>
 
-          <Receiving>
-            <LeftComponent>
-                I'm receiving
-            </LeftComponent>           
-            <RightComponent isBuyButton={isBuyButton}>
-                { `${!isBuyButton?'': (swapSellAmount ? parseFloat(swapSellAmount).toPrecision(6) : '')} ${text==='Buy NOM'? 'NOM' : 'ETH'}` }
-            </RightComponent>
-          </Receiving>                                           
-          <ExchangeButton colorGradient={colorGradient} type='submit' isBuyButton={isBuyButton} disabled={isBuyButton?false:true}>
-              {text}
-          </ExchangeButton>             
-        </GridWrapper>
-      </form>
-    </ExchangeItem>
-  )
+      <ExchangeItem>
+        <strong>Sell NOM</strong>
+        <Sending>
+          <strong>I'm sending</strong>
+          <ExchangeInput type="text" value="2529 NOM" />
+          <MaxBtn>Max</MaxBtn>
+        </Sending>
+        <Receiving>
+          <strong>I'm receiving</strong>
+          <ReceivingValue>123 ETH</ReceivingValue>
+        </Receiving>
+        <div>
+          <SellBtn>Sell NOM</SellBtn>
+        </div>
+      </ExchangeItem>
+    </ExchangeWrapper>
+  );
 }
+
+/* <form onSubmit={onSubmit}>
+  <SwapHeader>Swap</SwapHeader>
+  <GridWrapper>
+    <LeftComponentWrapper>From:</LeftComponentWrapper>
+    {error ? error : null}
+    <StyledInput
+      type="text"
+      value={swapBuyAmount}
+      onChange={onTextChange}
+      onTextAreaKeyDown={onTextAreaKeyDown}
+      placeholder={isWorking ? "Confirming" : "Enter amount"}
+    />
+    <Dropdown denom={swapDenom} setDenom={setSwapDenom} />
+    <LeftComponentWrapper>To:</LeftComponentWrapper>
+    <MiddleComponentWrapper>
+      {swapSellAmount
+        ? parseFloat(swapSellAmount).toPrecision(10)
+        : null}
+    </MiddleComponentWrapper>
+    <RightComponentWrapper>
+      {swapDenom === "NOM" ? "ETH" : "NOM"}
+    </RightComponentWrapper>
+  </GridWrapper>
+
+  <RowWrapper>
+    <Button type="submit">Execute</Button>
+  </RowWrapper>
+</form> */
