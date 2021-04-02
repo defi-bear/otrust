@@ -15,6 +15,12 @@ const SidebarLayout = styled.div`
   flex-direction: column;
 
   height: 100%;
+
+  @media screen and (max-width: ${responsive.tablet}) {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 100px 100px;
+  }
 `;
 
 const Header = styled.header`
@@ -32,6 +38,11 @@ const Header = styled.header`
   @media screen and (max-width: ${responsive.laptop}) {
     height: 180px;
     padding: 24px 48px;
+  }
+
+  @media screen and (max-width: ${responsive.tablet}) {
+    background-color: ${(props) => props.theme.colors.bgNormal};
+    border-bottom: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
   }
 `;
 
@@ -113,11 +124,22 @@ const Connection = styled.div`
   @media screen and (max-width: ${responsive.laptop}) {
     padding: 24px;
   }
+
+  @media screen and (max-width: ${responsive.tablet}) {
+    flex-direction: row;
+    gap: 40px;
+  }
 `;
 
 const ConnectionRow = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+  }
 
   > strong {
     font-weight: 400;

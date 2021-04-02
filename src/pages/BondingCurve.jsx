@@ -21,17 +21,23 @@ const BondingCurveLayout = styled.div`
   @media screen and (max-width: ${responsive.laptopSmall}) {
     grid-template-columns: 1fr 250px;
   }
+
+  @media screen and (max-width: ${responsive.tablet}) {
+    display: flex;
+    flex-direction: column-reverse;
+    grid-template-columns: none;
+  }
 `;
 
 export default function BondingCurve() {
   return (
     <Container>
-      <BondingCurveLayout>
-        <SwapProvider>
+      <SwapProvider>
+        <BondingCurveLayout>
           <D3Chart />
           <AcctDash />
-        </SwapProvider>
-      </BondingCurveLayout>
+        </BondingCurveLayout>
+      </SwapProvider>
     </Container>
   );
 }
