@@ -80,7 +80,6 @@ const Header = styled.header`
     grid-template-columns: 56px 150px 32px 32px;
 
     border-radius: 0;
-    border: none;
   }
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
