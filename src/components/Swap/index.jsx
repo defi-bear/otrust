@@ -66,6 +66,10 @@ const Sending = styled.div`
     margin-right: auto;
     font-weight: 500;
     white-space: nowrap;
+
+    @media screen and (max-width: ${responsive.tabletSmall}) {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -86,6 +90,10 @@ const Receiving = styled.div`
     color: ${(props) => props.theme.colors.textSecondary};
     margin-right: auto;
     font-weight: 500;
+
+    @media screen and (max-width: ${responsive.tabletSmall}) {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -111,6 +119,12 @@ const ExchangeInput = styled.input`
   font-weight: 500;
   text-align: right;
 
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    width: 100px;
+
+    font-size: 12px;
+  }
+
   &:focus {
     outline: none;
   }
@@ -121,6 +135,10 @@ const ReceivingValue = styled.span`
 
   font-weight: 500;
   color: ${(props) => props.theme.colors.textPrimary};
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    font-size: 12px;
+  }
 `;
 
 const ExchangeButton = styled.button`

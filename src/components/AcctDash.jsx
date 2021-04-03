@@ -22,6 +22,10 @@ const SidebarLayout = styled.div`
     grid-template-rows: 100px 100px;
     justify-content: space-between;
   }
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    grid-template-columns: 1fr 250px;
+  }
 `;
 
 const Header = styled.header`
@@ -65,6 +69,10 @@ const Header = styled.header`
     background-color: ${(props) => props.theme.colors.bgNormal};
     border-bottom: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
     border-radius: 0;
+  }
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    grid-template-columns: 56px 150px 32px 32px;
   }
 `;
 
@@ -123,6 +131,10 @@ const Balances = styled.div`
 
   @media screen and (max-width: ${responsive.laptop}) {
     padding: 24px;
+  }
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    gap: 40px;
   }
 
   strong {
@@ -210,6 +222,10 @@ const Info = styled.footer`
 
   @media screen and (max-width: ${responsive.laptop}) {
     padding: 40px 24px;
+  }
+
+  @media screen and (max-width: ${responsive.tablet}) {
+    gap: 12px;
   }
 `;
 
