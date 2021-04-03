@@ -269,6 +269,8 @@ const Info = styled.footer`
   }
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    padding: 24px 20px;
+
     background-color: ${(props) => props.theme.colors.bgDarken};
   }
 `;
