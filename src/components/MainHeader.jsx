@@ -17,7 +17,7 @@ const HeaderWrapper = styled.header`
     height: 90px;
   }
 
-  @media screen and (max-width: ${responsive.laptop}) {
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
     height: auto;
     padding: 20px;
 

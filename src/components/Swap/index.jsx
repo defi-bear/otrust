@@ -30,9 +30,13 @@ const ExchangeWrapper = styled.div`
 `;
 
 const PopupTriggers = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  display: none;
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
 `;
 
 const ExchangeItem = styled.div`
