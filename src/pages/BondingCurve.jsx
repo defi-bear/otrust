@@ -27,6 +27,13 @@ const BondingCurveLayout = styled.div`
     flex-direction: column-reverse;
     grid-template-columns: none;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    gap: 0;
+    flex-direction: column;
+
+    padding: 0;
+  }
 `;
 
 export default function BondingCurve() {

@@ -20,6 +20,19 @@ const ExchangeWrapper = styled.div`
   padding: 24px 0;
 
   font-size: 14px;
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    grid-template-columns: 1fr;
+    background-color: ${(props) => props.theme.colors.bgDarken};
+
+    padding: 24px 20px;
+  }
+`;
+
+const PopupTriggers = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 `;
 
 const ExchangeItem = styled.div`
@@ -32,6 +45,10 @@ const ExchangeItem = styled.div`
 
   @media screen and (max-width: ${responsive.laptop}) {
     padding: 0 24px;
+  }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: none;
   }
 
   > strong {
@@ -156,6 +173,8 @@ const ExchangeButton = styled.button`
   color: ${(props) => props.theme.colors.textPrimary};
   text-shadow: 0 6px 3px rgba(0, 0, 0, 0.03);
   font-weight: 600;
+
+  cursor: pointer;
 `;
 
 const SellBtn = styled(ExchangeButton)`
@@ -226,6 +245,10 @@ export default function Swap() {
 
   return (
     <ExchangeWrapper>
+      <PopupTriggers>
+        <ExchangeButton>Buy NOM</ExchangeButton>
+        <SellBtn>Sell NOM</SellBtn>
+      </PopupTriggers>
       <ExchangeItem>
         <strong>Buy NOM</strong>
         <Sending>

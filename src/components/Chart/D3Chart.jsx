@@ -33,6 +33,12 @@ const ChartWrapper = styled.div`
   border-radius: 4px;
 `;
 
+const ChartHeader = styled.header`
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: none;
+  }
+`;
+
 const ChartTypeBtn = styled.button`
   height: 50px;
   padding: 16px 24px;
@@ -139,7 +145,7 @@ export default function D3Chart() {
     <Panel>
       <ContentLayout>
         <ChartWrapper>
-          <header>
+          <ChartHeader>
             <ChartTypeBtn onClick={() => setChartType("bondingCurve")}>
               Bonding Curve Chart
             </ChartTypeBtn>
@@ -149,7 +155,7 @@ export default function D3Chart() {
             <ChartTypeBtn onClick={() => setChartType("candleView")}>
               Candle View
             </ChartTypeBtn>
-          </header>
+          </ChartHeader>
           {renderChart(chartType)}
         </ChartWrapper>
         <Swap />

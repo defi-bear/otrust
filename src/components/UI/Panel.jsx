@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { responsive } from "theme/constants";
 
 export const Panel = styled.div`
   padding: 4px;
@@ -7,4 +8,9 @@ export const Panel = styled.div`
   border-radius: 6px;
 
   box-sizing: border-box;
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    border-radius: 0;
+    padding: 0;
+  }
 `;

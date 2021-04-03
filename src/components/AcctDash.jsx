@@ -26,6 +26,11 @@ const SidebarLayout = styled.div`
   @media screen and (max-width: ${responsive.tabletSmall}) {
     grid-template-columns: 1fr 250px;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3, auto);
+  }
 `;
 
 const Header = styled.header`
@@ -73,6 +78,20 @@ const Header = styled.header`
 
   @media screen and (max-width: ${responsive.tabletSmall}) {
     grid-template-columns: 56px 150px 32px 32px;
+
+    border-radius: 0;
+    border: none;
+  }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    grid-template-columns: 56px 1fr 44px 44px;
+    gap: 16px;
+
+    padding: 20px;
+  }
+
+  @media screen and (max-width: ${responsive.smartphone}) {
+    grid-column: 1fr 44px 44px;
   }
 `;
 
@@ -92,6 +111,12 @@ const Avatar = styled.img`
     grid-column: 1/2;
     grid-row: 1/2;
   }
+
+  @media screen and (max-width: ${responsive.smartphone}) {
+    grid-column: none;
+
+    display: none;
+  }
 `;
 
 const AccountNumber = styled.div`
@@ -108,6 +133,12 @@ const AccountNumber = styled.div`
     grid-row: 1/2;
 
     padding-left: 14px;
+  }
+
+  @media screen and (max-width: ${responsive.smartphone}) {
+    grid-column: 1/2;
+
+    padding: 0;
   }
 
   span {
@@ -135,6 +166,12 @@ const Balances = styled.div`
 
   @media screen and (max-width: ${responsive.tabletSmall}) {
     gap: 40px;
+  }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    padding: 20px;
+
+    border: none;
   }
 
   strong {
@@ -169,6 +206,10 @@ const Connection = styled.div`
   @media screen and (max-width: ${responsive.tablet}) {
     flex-direction: row;
     gap: 40px;
+  }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: none;
   }
 `;
 
@@ -227,6 +268,10 @@ const Info = styled.footer`
   @media screen and (max-width: ${responsive.tablet}) {
     gap: 12px;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    background-color: ${(props) => props.theme.colors.bgDarken};
+  }
 `;
 
 const Link = styled.a`
@@ -268,6 +313,13 @@ const ControlsBtn = styled.a`
     &:nth-child(3) {
       grid-column: 4/5;
     }
+  }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    width: 44px;
+    height: 44px;
+
+    font-size: 16px;
   }
 `;
 
