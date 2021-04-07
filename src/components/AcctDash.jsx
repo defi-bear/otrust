@@ -4,10 +4,10 @@ import { useWeb3React } from "@web3-react/core";
 import { formatEther } from "@ethersproject/units";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { Panel } from "components/UI";
 import { useChain } from "context/chain/ChainContext";
-import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { responsive } from "theme/constants";
 
 const SidebarLayout = styled.div`

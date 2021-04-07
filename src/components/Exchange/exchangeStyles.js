@@ -165,3 +165,21 @@ export const ExchangeButton = styled.button`
 export const SellBtn = styled(ExchangeButton)`
   background: linear-gradient(90deg, #c75a5a, #7e1c1c);
 `;
+
+export const ModalTrigger = styled.div`
+  display: none;
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+`;
+
+export const ExchangeModalWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+
+  background-color: ${(props) => props.theme.colors.bgNormal};
+`;

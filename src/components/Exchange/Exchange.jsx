@@ -89,6 +89,7 @@ export default function Exchange() {
   return (
     <ExchangeWrapper>
       <ExchangeModals />
+
       <ExchangeItem>
         <strong>Buy NOM</strong>
         <Sending>
