@@ -1,4 +1,4 @@
-export * from './Swap'
+export * from './Exchange/Exchange'
 export * from './Chart'
 export * from './UI'
 export * from './Dropdown'

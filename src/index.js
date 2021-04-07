@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { Web3ReactProvider } from '@web3-react/core';
+import reportWebVitals from './reportWebVitals';
 import { Web3Provider } from '@ethersproject/providers'
+import Modal from 'react-modal'
+
+import App from './App';
+import './index.css';
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider)
   library.pollingInterval = 12000
   return library
 }
+
+Modal.setAppElement("#root")
 
 ReactDOM.render(
   <React.StrictMode>

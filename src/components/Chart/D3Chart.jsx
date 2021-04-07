@@ -12,7 +12,7 @@ import {
 import { responsive } from "theme/constants";
 
 import { Panel } from "components/UI";
-import Swap from "components/Swap";
+import Swap from "components/Exchange/Exchange";
 import LineChart from "./D3LineChart";
 import HistoricalChart from "./D3HistoricalChart";
 import CandelChart from "./D3CandelChart";
