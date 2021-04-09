@@ -1,6 +1,7 @@
 import { Contract } from "@ethersproject/contracts";
 const NomContractJSON = require('./ERC20NOM.json')
 const BondingContractJSON = require('./BondingNOM.json')
+const GravityContractJSON = require('./Gravity.json')
 
 export const contAddrs = require('./NOMAddrs.json')
 
@@ -16,6 +17,15 @@ export function NOMCont(library) {
  * Haven Contract instance
  */
 export function BondingCont(library) {
+  const ABI = BondingContractJSON.abi
+  return new Contract(contAddrs.BondingNOM, ABI, library.getSigner())
+}
+
+
+/**
+ * Gravity Contract instance
+ */
+ export function GravityCont(library) {
   const ABI = BondingContractJSON.abi
   return new Contract(contAddrs.BondingNOM, ABI, library.getSigner())
 }
