@@ -16,6 +16,13 @@ const HeaderWrapper = styled.header`
   @media screen and (max-width: ${responsive.laptop}) {
     height: 90px;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    height: auto;
+    padding: 20px;
+
+    background-color: ${(props) => props.theme.colors.bgNormal};
+  }
 `;
 
 const Logo = styled.div`
@@ -34,6 +41,10 @@ const LogoText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: none;
+  }
 
   > strong {
     margin-bottom: 5px;
@@ -80,6 +91,10 @@ const HeaderInfoItem = styled.div`
   > strong {
     color: ${(props) => props.theme.colors.textThirdly};
     font-weight: 400;
+
+    @media screen and (max-width: ${responsive.smartphoneLarge}) {
+      font-size: 10px;
+    }
   }
 `;
 
@@ -99,9 +114,22 @@ const Issued = styled.div`
   @media screen and (max-width: ${responsive.laptop}) {
     padding-left: 32px;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    padding: 0;
+
+    border: none;
+  }
 `;
 
 const HeaderInfoItemValue = styled.div`
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
   > strong {
     margin-right: 12px;
 
@@ -111,6 +139,10 @@ const HeaderInfoItemValue = styled.div`
 
     @media screen and (max-width: ${responsive.laptop}) {
       font-size: 20px;
+    }
+
+    @media screen and (max-width: ${responsive.smartphoneLarge}) {
+      font-size: 18px;
     }
   }
 `;
@@ -173,6 +205,3 @@ export default function MainHeader(props) {
     </header>
   );
 }
-
-// I removed sticky header due to design
-// I also removed header constant, because in this case it will be easier to control sizings in SC, it will be a cleaner way and since it doesn't have to be reused, there is no point to extract the values

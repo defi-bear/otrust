@@ -13,9 +13,9 @@ function App() {
     <ThemeProvider theme={darkNew}>
       <AutoLogin>
         <ChainProvider theme={darkNew}>
-            <GlobalStyle/>
-            <MainHeader/>
-            <BondingCurve />
+          <GlobalStyle />
+          <MainHeader />
+          <BondingCurve />
         </ChainProvider>
       </AutoLogin>
     </ThemeProvider>

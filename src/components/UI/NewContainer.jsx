@@ -14,4 +14,8 @@ export const Container = styled.div`
   @media screen and (max-width: ${responsive.laptopSmall}) {
     padding: 0 20px;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    padding: 0;
+  }
 `;
