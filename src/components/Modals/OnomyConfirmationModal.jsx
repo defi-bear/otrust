@@ -22,28 +22,25 @@ const Caption = styled(Modal.Caption)`
 
 export default function OnomyConfirmationModal() {
   return (
-    <>
-      <Dimmer />
-      <Modal.Wrapper>
-        <Modal.CloseIcon>
-          <Close />
-        </Modal.CloseIcon>
+    <Modal.Wrapper>
+      <Modal.CloseIcon>
+        <Close />
+      </Modal.CloseIcon>
 
-        <main>
-          <Caption>Step1. Onomy confirmation</Caption>
+      <main>
+        <Caption>Step1. Onomy confirmation</Caption>
 
-          <Message>
-            Onomy blockchain requires access for selling{" "}
-            <strong>1 239 NOM</strong>. Please confirm you want to do it
-          </Message>
-        </main>
-        <footer>
-          <Modal.FooterControls>
-            <Modal.SecondaryButton>Cancel</Modal.SecondaryButton>
-            <Modal.PrimaryButton>Confirm (59)</Modal.PrimaryButton>
-          </Modal.FooterControls>
-        </footer>
-      </Modal.Wrapper>
-    </>
+        <Message>
+          Onomy blockchain requires access for selling{" "}
+          <strong>1 239 NOM</strong>. Please confirm you want to do it
+        </Message>
+      </main>
+      <footer>
+        <Modal.FooterControls>
+          <Modal.SecondaryButton>Cancel</Modal.SecondaryButton>
+          <Modal.PrimaryButton>Confirm (59)</Modal.PrimaryButton>
+        </Modal.FooterControls>
+      </footer>
+    </Modal.Wrapper>
   );
 }

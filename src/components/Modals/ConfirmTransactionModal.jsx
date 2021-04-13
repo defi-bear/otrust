@@ -113,70 +113,67 @@ export default function ConfirmTransactionModal() {
   const [limit, setLimit] = useState(0);
 
   return (
-    <>
-      <Dimmer />
-      <Modal.Wrapper>
-        <Modal.CloseIcon>
-          <Close />
-        </Modal.CloseIcon>
+    <Modal.Wrapper>
+      <Modal.CloseIcon>
+        <Close />
+      </Modal.CloseIcon>
 
-        <main>
-          <Modal.Caption>Confirm Transaction</Modal.Caption>
+      <main>
+        <Modal.Caption>Confirm Transaction</Modal.Caption>
 
-          <Modal.ExchangeResult>
-            ~ 1239 <sup>NOM</sup>
-          </Modal.ExchangeResult>
+        <Modal.ExchangeResult>
+          ~ 1239 <sup>NOM</sup>
+        </Modal.ExchangeResult>
 
-          <TransactionDetailsRow>
-            <span>Current Exchange Rate</span>
+        <TransactionDetailsRow>
+          <span>Current Exchange Rate</span>
 
-            <strong>1 NOM = 0.07102 ETH</strong>
-          </TransactionDetailsRow>
-          <TransactionDetailsRow>
-            <span>You're Sending</span>
+          <strong>1 NOM = 0.07102 ETH</strong>
+        </TransactionDetailsRow>
+        <TransactionDetailsRow>
+          <span>You're Sending</span>
 
-            <strong>0.15 ETH</strong>
-          </TransactionDetailsRow>
-          <TransactionDetailsRow>
+          <strong>0.15 ETH</strong>
+        </TransactionDetailsRow>
+        <TransactionDetailsRow>
+          <div>
+            <span>Wallet</span>
+
             <div>
-              <span>Wallet</span>
-
-              <div>
-                <strong>0x293s92dsd3h4gh9bvn61...931</strong>
-              </div>
+              <strong>0x293s92dsd3h4gh9bvn61...931</strong>
             </div>
+          </div>
 
-            <WalletIcon>
-              <Metamask />
-            </WalletIcon>
-          </TransactionDetailsRow>
-        </main>
-        <SlippageWrapper>
-          <SlippageCaption>Slippage Limit</SlippageCaption>
-          <SlippageValues>
-            {limitOptions.map((l) => (
-              <LimitBtn
-                active={l.value === limit}
-                key={l.id}
-                onClick={() => setLimit(l.value)}
-              >
-                {l.text}
-              </LimitBtn>
-            ))}
-          </SlippageValues>
-          <SlippageDesc>
-            Slippage is likely in times of high demand. Quote is based on most
-            recent block and does not reflect transactions ahead of you in the
-            mempool
-          </SlippageDesc>
-        </SlippageWrapper>
-        <footer>
-          <Modal.FooterControls>
-            <Modal.SecondaryButton>Cancel</Modal.SecondaryButton>
-            <Modal.PrimaryButton>Confirm (59)</Modal.PrimaryButton>
-          </Modal.FooterControls>
-        </footer>
-      </Modal.Wrapper>
-    </>
+          <WalletIcon>
+            <Metamask />
+          </WalletIcon>
+        </TransactionDetailsRow>
+      </main>
+      <SlippageWrapper>
+        <SlippageCaption>Slippage Limit</SlippageCaption>
+        <SlippageValues>
+          {limitOptions.map((l) => (
+            <LimitBtn
+              active={l.value === limit}
+              key={l.id}
+              onClick={() => setLimit(l.value)}
+            >
+              {l.text}
+            </LimitBtn>
+          ))}
+        </SlippageValues>
+        <SlippageDesc>
+          Slippage is likely in times of high demand. Quote is based on most
+          recent block and does not reflect transactions ahead of you in the
+          mempool
+        </SlippageDesc>
+      </SlippageWrapper>
+      <footer>
+        <Modal.FooterControls>
+          <Modal.SecondaryButton>Cancel</Modal.SecondaryButton>
+          <Modal.PrimaryButton>Confirm (59)</Modal.PrimaryButton>
+        </Modal.FooterControls>
+      </footer>
+    </Modal.Wrapper>
   );
 }

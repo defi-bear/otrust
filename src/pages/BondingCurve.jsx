@@ -7,10 +7,11 @@ import D3Chart from "components/Chart/D3Chart";
 import { Container } from "components/UI";
 import { responsive } from "theme/constants";
 
-// import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
-// import TransactionFailedModal from "components/Modals/TransactionFailedModal";
-// import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
-// import ConfirmTransactionModal from "components/Modals/ConfirmTransactionModal";
+import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
+import TransactionFailedModal from "components/Modals/TransactionFailedModal";
+import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
+import ConfirmTransactionModal from "components/Modals/ConfirmTransactionModal";
+import { Dimmer } from "components/UI/Dimmer";
 
 const BondingCurveLayout = styled.div`
   display: grid;
@@ -44,10 +45,12 @@ const BondingCurveLayout = styled.div`
 export default function BondingCurve() {
   return (
     <Container>
-      {/* <OnomyConfirmationModal /> */}
-      {/* <TransactionFailedModal /> */}
-      {/* <TransactionCompletedModal /> */}
-      {/* <ConfirmTransactionModal /> */}
+      <Dimmer>
+        {/* <OnomyConfirmationModal /> */}
+        <TransactionFailedModal />
+        {/* <TransactionCompletedModal /> */}
+        {/* <ConfirmTransactionModal /> */}
+      </Dimmer>
 
       <SwapProvider>
         <BondingCurveLayout>

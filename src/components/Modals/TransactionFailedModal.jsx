@@ -41,30 +41,27 @@ const Message = styled.div`
 
 export default function TransactionFailedModal() {
   return (
-    <>
-      <Dimmer />
-      <Modal.Wrapper>
-        <Modal.CloseIcon>
-          <Close />
-        </Modal.CloseIcon>
+    <Modal.Wrapper>
+      <Modal.CloseIcon>
+        <Close />
+      </Modal.CloseIcon>
 
-        <main>
-          <FailIconWrapper>
-            <Fail />
-          </FailIconWrapper>
-          <Modal.Caption>Transaction Failed</Modal.Caption>
+      <main>
+        <FailIconWrapper>
+          <Fail />
+        </FailIconWrapper>
+        <Modal.Caption>Transaction Failed</Modal.Caption>
 
-          <Message>
-            Ham followed now ecstatic use speaking exercise may repeated.
-            Himself he evident oh greatly my on inhabit general concern.
-          </Message>
-        </main>
-        <footer>
-          <FooterControls>
-            <Modal.PrimaryButton>Ok &#x1f625;</Modal.PrimaryButton>
-          </FooterControls>
-        </footer>
-      </Modal.Wrapper>
-    </>
+        <Message>
+          Ham followed now ecstatic use speaking exercise may repeated. Himself
+          he evident oh greatly my on inhabit general concern.
+        </Message>
+      </main>
+      <footer>
+        <FooterControls>
+          <Modal.PrimaryButton>Ok &#x1f625;</Modal.PrimaryButton>
+        </FooterControls>
+      </footer>
+    </Modal.Wrapper>
   );
 }

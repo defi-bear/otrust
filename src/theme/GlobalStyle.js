@@ -54,6 +54,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    position: relative;
+    
     font-family: 'Poppins', sans-serif;
     -webkit-font-smooth: antialiased;
     -moz-osx-font-smoothing: grayscale;
