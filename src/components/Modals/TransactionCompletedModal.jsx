@@ -25,9 +25,9 @@ export default function TransactionCompletedModal() {
         <Modal.Caption>Transaction Completed!</Modal.Caption>
 
         {/* BUY */}
-        {/* <ExchangeResult>
-            + 1239 <sup>NOM</sup>
-          </ExchangeResult> */}
+        {/* <Modal.ExchangeResult>
+          + 1239 <sup>NOM</sup>
+        </Modal.ExchangeResult> */}
 
         {/* SELL */}
         <Modal.ExchangeResult>

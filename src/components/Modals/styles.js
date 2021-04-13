@@ -201,7 +201,7 @@ export const ModalIconWrapper = styled.div`
 
   height: 88px;
   width: 88px;
-  margin: 0 auto;
+  margin: 0 auto 16px;
 
   background-color: ${(props) => props.theme.colors.highlightGreen};
   border-radius: 50%;
