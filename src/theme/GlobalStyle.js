@@ -27,6 +27,14 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100%;
   }
 
+  button {
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
   @font-face {
     font-family: 'Bebas Neue';
     font-weight: 300;

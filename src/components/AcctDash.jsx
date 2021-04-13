@@ -89,7 +89,7 @@ const Header = styled.header`
     padding: 20px;
   }
 
-  @media screen and (max-width: ${responsive.smartphone}) {
+  @media screen and (max-width: ${responsive.smartphoneSmall}) {
     grid-column: 1fr 44px 44px;
   }
 `;
@@ -111,7 +111,7 @@ const Avatar = styled.img`
     grid-row: 1/2;
   }
 
-  @media screen and (max-width: ${responsive.smartphone}) {
+  @media screen and (max-width: ${responsive.smartphoneSmall}) {
     grid-column: none;
 
     display: none;
@@ -134,7 +134,7 @@ const AccountNumber = styled.div`
     padding-left: 14px;
   }
 
-  @media screen and (max-width: ${responsive.smartphone}) {
+  @media screen and (max-width: ${responsive.smartphoneSmall}) {
     grid-column: 1/2;
 
     padding: 0;
