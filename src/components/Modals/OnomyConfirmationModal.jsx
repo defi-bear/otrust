@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Dimmer } from "components/UI/Dimmer";
 import { Close } from "./Icons";
 import * as Modal from "./styles";
 import { responsive } from "theme/constants";

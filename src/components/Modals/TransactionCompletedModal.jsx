@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Dimmer } from "components/UI/Dimmer";
 import { Caret, Close, Success } from "./Icons";
 import * as Modal from "./styles";
 

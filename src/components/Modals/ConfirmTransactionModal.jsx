@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 
-import { Dimmer } from "components/UI/Dimmer";
 import { Close, Metamask } from "./Icons";
 import * as Modal from "./styles";
 
