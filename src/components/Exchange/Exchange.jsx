@@ -21,7 +21,7 @@ import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
 export default function Exchange({ text, onInputChange, isBuyButton }) {
   const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap();
-  const { setSwapBuyAmount, setSwapDenom } = useUpdateSwap();
+  const { setSwapBuyAmount } = useUpdateSwap();
   const onTextChange = useCallback(
     (evt) => setSwapBuyAmount(evt.target.value),
     [setSwapBuyAmount]
@@ -72,14 +72,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
     ]
   );
 
-  const [onSubmit, isWorking, error] = useAsyncFn(submitTrans);
-
-  const onTextAreaKeyDown = (e) => {
-    if (e.keyCode === 13 && e.shiftKey === false) {
-      e.preventDefault();
-    }
-    setSwapBuyAmount(e);
-  };
+  const [onSubmit, error] = useAsyncFn(submitTrans);
 
   return (
     <ExchangeWrapper>
