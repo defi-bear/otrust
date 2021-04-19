@@ -108,15 +108,18 @@ const RightIcon = styled.img`
   width: 24px;
 `;
 
-export default function Landing({initWeb3, connectWallet, connectKeplr}) {
-    const onWalletClick = (wallet) => {
+export default function Landing({initWeb3}) {
+    /**
+      const onWalletClick = (wallet) => {
         Object.values(SUPPORTED_WALLETS).forEach(sWallet => {
             if (sWallet.name === wallet.title) {
                 console.log(sWallet.connector)
                 connectWallet(sWallet.connector)
             }
         })
-    }
+      }
+    */
+    
 
     return (
       <Wrapper>
@@ -130,7 +133,7 @@ export default function Landing({initWeb3, connectWallet, connectKeplr}) {
             <BottomDescriptionText>To participate bonding curve process and buy NOM tokens you need to connect your Eth wallet</BottomDescriptionText>
             {
               wallets.map(wallet => (
-                <WalletWrapper key={wallet.title} onClick={() => onWalletClick(wallet)}>
+                <WalletWrapper key={wallet.title} onClick={initWeb3}>
                   <IconWrapper>
                     <WalletIcon alt={`${wallet.title} Icon`} src={wallet.img} />
                   </IconWrapper>
@@ -139,7 +142,6 @@ export default function Landing({initWeb3, connectWallet, connectKeplr}) {
                 </WalletWrapper>
               ))
             }
-            <button onClick={connectKeplr}>Connect to Keplr</button>
           </StyledBottomPart>
         </StyledHeader>
       </Wrapper>

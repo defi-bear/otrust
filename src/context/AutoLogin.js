@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect} from 'react'
 import Landing from '../pages/Landing'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import { InjectedConnector } from '@web3-react/injected-connector'
-// import { SigningCosmosClient } from "@cosmjs/launchpad";
 
 import { useEagerConnect } from '../hooks/useEagerConnect'
 import { useInactiveListener } from '../hooks/useInactiveListener'
@@ -24,7 +23,7 @@ export function AutoLogin({children}) {
     const {
         activate,
         active,
-        connector,
+        connector
     } = useWeb3React()
 
     const initWeb3 = () => {
@@ -40,6 +39,29 @@ export function AutoLogin({children}) {
         }
     }, [activatingConnector, connector])
 
+    // mount only once or face issues :P
+    const triedEager = useEagerConnect()
+    useInactiveListener(!triedEager || !!activatingConnector)
+    
+    /** 
+    const connectWallet = (con) => {
+      try {
+        console.log("Connector: ", con)
+        activate(con, undefined, true).catch(error => {
+            if (error instanceof UnsupportedChainIdError) {
+                activate(connector) // a little janky...can't use setError because the connector isn't set
+            } else {
+                // setPendingError(true)
+            }
+        })
+      } catch (error) {
+          alert('Failed to connect.');
+          console.log(error);
+      }
+    }
+    */
+
+    /**
     const connectKeplr = async () => {
       const chainId = "ochain-testnet";
       if(window.keplr) {
@@ -100,6 +122,8 @@ export function AutoLogin({children}) {
         alert('Install keplr chrome extension')
       }
     }
+     */
+    
 
     // const sendInKeplr = async (recipient, amount) => {
     //   // See above.
@@ -130,28 +154,10 @@ export function AutoLogin({children}) {
     //       alert("Succeed to send tx");
     //   }
     // }
-
-    // mount only once or face issues :P
-    const triedEager = useEagerConnect()
-    useInactiveListener(!triedEager || !!activatingConnector)
-
-    const connectWallet = (con) => {
-      try {
-        activate(con, undefined, true).catch(error => {
-            if (error instanceof UnsupportedChainIdError) {
-                activate(connector) // a little janky...can't use setError because the connector isn't set
-            } else {
-                // setPendingError(true)
-            }
-        })
-      } catch (error) {
-          alert('Failed to connect.');
-          console.log(error);
-      }
-    }
+    
     return (
         <>
-            { active ? children : <Landing initWeb3={initWeb3} connectKeplr={connectKeplr} connectWallet={connectWallet} /> }
+            { active ? children : <Landing initWeb3={initWeb3} /> }
         </>
     )
 }
