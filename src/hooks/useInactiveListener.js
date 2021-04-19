@@ -12,6 +12,11 @@ export function useInactiveListener(suppress = false) {
     }
     const { ethereum } = window;
     if (ethereum && ethereum.on && !active && !error) {
+      const handleConnect = () => {
+        console.log("Handling 'connect' event")
+        activate(injected)
+      }
+
       const handleChainChanged = (chainId) => {
         activate(injected);
       };
@@ -22,19 +27,15 @@ export function useInactiveListener(suppress = false) {
         }
       };
 
-      const handleNetworkChanged = (networkId) => {
-        activate(injected);
-      };
-
+      ethereum.on('connect', handleConnect)
       ethereum.on("chainChanged", handleChainChanged);
       ethereum.on("accountsChanged", handleAccountsChanged);
-      ethereum.on("networkChanged", handleNetworkChanged);
-
+      
       return () => {
         if (ethereum.removeListener) {
+          ethereum.removeListener('connect', handleConnect)
           ethereum.removeListener("chainChanged", handleChainChanged);
           ethereum.removeListener("accountsChanged", handleAccountsChanged);
-          ethereum.removeListener("networkChanged", handleNetworkChanged);
         }
       };
     }

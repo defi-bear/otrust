@@ -3,6 +3,7 @@ import { NetworkConnector } from "@web3-react/network-connector";
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { LedgerConnector } from '@web3-react/ledger-connector';
+import { Networks } from '../utils'
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
@@ -12,14 +13,15 @@ const RPC_URLS = {
 
 const NETWORK_URL = "https://mainnet.infura.io/v3/84842078b09946638c03157f83405213"
 
-export const network = new NetworkConnector({
-  urls: { 1: RPC_URLS[1], 4: RPC_URLS[4] },
-  defaultChainId: 1,
-  pollingInterval: POLLING_INTERVAL,
-});
-
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42],
+  supportedChainIds: [
+    Networks.MainNet, // Mainet
+    Networks.Ropsten, // Ropsten
+    Networks.Rinkeby, // Rinkeby
+    Networks.Goerli, // Goerli
+    Networks.Kovan, // Kovan
+    Networks.Ganache // Ganache Testnet
+  ],
 });
 
 export const walletconnect = new WalletConnectConnector({
@@ -44,16 +46,10 @@ export const ledgerConnect = new LedgerConnector({
 export const SUPPORTED_WALLETS = {
   INJECTED: {
     connector: injected,
-    name: 'Injected',
-    iconName: 'metamask.png',
-    href: null,
-    primary: true,
-  },
-  METAMASK: {
-    connector: network,
     name: 'Metamask',
     iconName: 'metamask.png',
     href: null,
+    primary: true,
   },
   LEDGER: {
     connector: ledgerConnect,

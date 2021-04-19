@@ -115,8 +115,10 @@ export default function Landing({connectWallet}) {
     console.log("Wallet: ", wallet.title)
     Object.values(SUPPORTED_WALLETS).forEach(
       sWallet => {
+        console.log(sWallet)
         if (sWallet.name === wallet.title) {
-            if(sWallet.name === 'Metamask') {
+          console.log(sWallet.connector)
+            if(sWallet.name === 'Injected') {
               if (typeof web3 !== 'undefined') {
                 console.log("Metamask Connector: ", sWallet.connector)
                 connectWallet(sWallet.connector)
@@ -124,6 +126,7 @@ export default function Landing({connectWallet}) {
                 window.open('https://metamask.io/download.html');
               }
             } else {
+              console.log(sWallet.connector)
               connectWallet(sWallet.connector)
             }
         }

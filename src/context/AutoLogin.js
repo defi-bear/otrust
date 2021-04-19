@@ -1,62 +1,68 @@
 import React, { useEffect} from 'react'
 import Landing from '../pages/Landing'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
-import { InjectedConnector } from '@web3-react/injected-connector'
 
 import { useEagerConnect } from '../hooks/useEagerConnect'
 import { useInactiveListener } from '../hooks/useInactiveListener'
-import { Networks } from '../utils'
 
-export const injectedConnector = new InjectedConnector({
-    supportedChainIds: [
-      Networks.MainNet, // Mainet
-      Networks.Ropsten, // Ropsten
-      Networks.Rinkeby, // Rinkeby
-      Networks.Goerli, // Goerli
-      Networks.Kovan, // Kovan
-      Networks.Ganache // Ganache Testnet
-    ],
-})
 
 export function AutoLogin({children}) {
 
     const {
         activate,
         active,
+        account,
         connector
     } = useWeb3React()
-    
     /**
-    const initWeb3 = () => {
-      activate(injectedConnector)
+    const connectWallet = (con) => {
+      try {
+        activate(con, undefined, true).catch(error => {
+            if (error instanceof UnsupportedChainIdError) {
+                console.log(error)
+                activate(connector) // a little janky...can't use setError because the connector isn't set
+            } else {
+                // setPendingError(true)
+            }
+        })
+      } catch (error) {
+          alert('Failed to connect.');
+          console.log(error);
+      }
     } 
     */
-
+    
     async function connectWallet(connection) {
-      console.log("Chosen Connector: ", connection)
-      await activate(connection)
-      console.log("Active: ", active)
+      console.log("Activate Connection")
+      console.log("Active before connect: ", active)
+      activate(connection)
+      console.log("Active after connect: ", active)
     }
 
-    useEffect(() => {
-      console.log("active: ", active)
-      console.log("Connector: ", connector)
-    },[active])
+    
         
     // handle logic to recognize the connector currently being activated
     const [activatingConnector, setActivatingConnector] = React.useState()
     
     useEffect(() => {
+        console.log("activating connector: ", activatingConnector)
+        console.log("account: ", account)
         if (activatingConnector && activatingConnector === connector) {
             setActivatingConnector(undefined)
         }
     }, [activatingConnector, connector])
 
+    // Remove below for production
+    useEffect(() => {
+      console.log("Activating: ", activatingConnector)
+      console.log("Active: ", active)
+      console.log("Connector: ", connector)
+      console.log("Account: ", account)
+    },[account, active, connector, activatingConnector])
+
     // mount only once or face issues :P
     const triedEager = useEagerConnect()
     useInactiveListener(!triedEager || !!activatingConnector)
-     
-    
 
     /**
     const connectKeplr = async () => {
@@ -154,7 +160,7 @@ export function AutoLogin({children}) {
     
     return (
         <>
-            { (active === true) ? children : <Landing connectWallet={connectWallet} /> }
+            { active ? children : <Landing connectWallet={connectWallet} /> }
         </>
     )
 }
