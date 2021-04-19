@@ -180,12 +180,12 @@
       "name": "buyQuoteNOM",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "int128",
           "name": "",
-          "type": "uint256"
+          "type": "int128"
         }
       ],
-      "stateMutability": "view",
+      "stateMutability": "pure",
       "type": "function"
     },
     {
