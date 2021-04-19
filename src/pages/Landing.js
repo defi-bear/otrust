@@ -112,8 +112,15 @@ export default function Landing({initWeb3, connectWallet, connectKeplr}) {
     const onWalletClick = (wallet) => {
         Object.values(SUPPORTED_WALLETS).forEach(sWallet => {
             if (sWallet.name === wallet.title) {
-                console.log(sWallet.connector)
-                connectWallet(sWallet.connector)
+                if(sWallet.name === 'Metamask') {
+                  if (typeof web3 !== 'undefined') {
+                    connectWallet(sWallet.connector)
+                  } else {
+                    window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
+                  }
+                } else {
+                  connectWallet(sWallet.connector)
+                }
             }
         })
     }
