@@ -10,6 +10,7 @@ import coinbase from '../assets/images/coinbase.png'
 import walletConnect from '../assets/images/walletConnect.png'
 import { SUPPORTED_WALLETS } from '../connectors';
 
+
 const wallets = [
   { title: 'Metamask', img: metamask },
   { title: 'Ledger', img: ledger },
@@ -108,42 +109,52 @@ const RightIcon = styled.img`
   width: 24px;
 `;
 
-export default function Landing({initWeb3}) {
-    /**
-      const onWalletClick = (wallet) => {
-        Object.values(SUPPORTED_WALLETS).forEach(sWallet => {
-            if (sWallet.name === wallet.title) {
-                console.log(sWallet.connector)
+export default function Landing({connectWallet}) {
+  
+  const onWalletClick = (wallet) => {
+    console.log("Wallet: ", wallet.title)
+    Object.values(SUPPORTED_WALLETS).forEach(
+      sWallet => {
+        if (sWallet.name === wallet.title) {
+            if(sWallet.name === 'Metamask') {
+              if (typeof web3 !== 'undefined') {
+                console.log("Metamask Connector: ", sWallet.connector)
                 connectWallet(sWallet.connector)
+              } else {
+                window.open('https://metamask.io/download.html');
+              }
+            } else {
+              connectWallet(sWallet.connector)
             }
-        })
+        }
       }
-    */
+    )
+  }
     
 
-    return (
-      <Wrapper>
-        <StyledHeader>
-          <StyledTopPart>
-            <StyledLogo src={logo} alt="logo" />
-            <StyledLogoText>ONOMY</StyledLogoText>
-          </StyledTopPart>
-          <StyledBottomPart>
-            <BottomTitleText>Connect Your Wallet</BottomTitleText>
-            <BottomDescriptionText>To participate bonding curve process and buy NOM tokens you need to connect your Eth wallet</BottomDescriptionText>
-            {
-              wallets.map(wallet => (
-                <WalletWrapper key={wallet.title} onClick={initWeb3}>
-                  <IconWrapper>
-                    <WalletIcon alt={`${wallet.title} Icon`} src={wallet.img} />
-                  </IconWrapper>
-                  <WalletText>{wallet.title}</WalletText>
-                  <RightIcon alt="Right Cursor" src={rightCursor} />
-                </WalletWrapper>
-              ))
-            }
-          </StyledBottomPart>
-        </StyledHeader>
-      </Wrapper>
-    )
+  return (
+    <Wrapper>
+      <StyledHeader>
+        <StyledTopPart>
+          <StyledLogo src={logo} alt="logo" />
+          <StyledLogoText>ONOMY</StyledLogoText>
+        </StyledTopPart>
+        <StyledBottomPart>
+          <BottomTitleText>Connect Your Wallet</BottomTitleText>
+          <BottomDescriptionText>To participate bonding curve process and buy NOM tokens you need to connect your Eth wallet</BottomDescriptionText>
+          {
+            wallets.map(wallet => (
+              <WalletWrapper key={wallet.title} onClick={() => onWalletClick(wallet)}>
+                <IconWrapper>
+                  <WalletIcon alt={`${wallet.title} Icon`} src={wallet.img} />
+                </IconWrapper>
+                <WalletText>{wallet.title}</WalletText>
+                <RightIcon alt="Right Cursor" src={rightCursor} />
+              </WalletWrapper>
+            ))
+          }
+        </StyledBottomPart>
+      </StyledHeader>
+    </Wrapper>
+  )
 }

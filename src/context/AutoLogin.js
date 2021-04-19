@@ -25,11 +25,24 @@ export function AutoLogin({children}) {
         active,
         connector
     } = useWeb3React()
-
+    
+    /**
     const initWeb3 = () => {
       activate(injectedConnector)
+    } 
+    */
+
+    async function connectWallet(connection) {
+      console.log("Chosen Connector: ", connection)
+      await activate(connection)
+      console.log("Active: ", active)
     }
-    
+
+    useEffect(() => {
+      console.log("active: ", active)
+      console.log("Connector: ", connector)
+    },[active])
+        
     // handle logic to recognize the connector currently being activated
     const [activatingConnector, setActivatingConnector] = React.useState()
     
@@ -42,24 +55,8 @@ export function AutoLogin({children}) {
     // mount only once or face issues :P
     const triedEager = useEagerConnect()
     useInactiveListener(!triedEager || !!activatingConnector)
+     
     
-    /** 
-    const connectWallet = (con) => {
-      try {
-        console.log("Connector: ", con)
-        activate(con, undefined, true).catch(error => {
-            if (error instanceof UnsupportedChainIdError) {
-                activate(connector) // a little janky...can't use setError because the connector isn't set
-            } else {
-                // setPendingError(true)
-            }
-        })
-      } catch (error) {
-          alert('Failed to connect.');
-          console.log(error);
-      }
-    }
-    */
 
     /**
     const connectKeplr = async () => {
@@ -157,7 +154,7 @@ export function AutoLogin({children}) {
     
     return (
         <>
-            { active ? children : <Landing initWeb3={initWeb3} /> }
+            { (active === true) ? children : <Landing connectWallet={connectWallet} /> }
         </>
     )
 }
