@@ -78,7 +78,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
     ]
   );
 
-  const [onSubmit, error] = useAsyncFn(submitTrans);
+  const [onBuyNOM, error] = useAsyncFn(submitTrans);
 
   const onEthMax = () => {
     setSwapBuyAmount(new BigNumber(formatEther(ETHbalance)).toFixed(3))
@@ -92,7 +92,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
     <ExchangeWrapper>
       <ExchangeModals />
 
-      <ExchangeItem onSubmit={onSubmit}>
+      <ExchangeItem onSubmit={onBuyNOM}>
         <strong>Buy NOM</strong>
         <Sending>
           <strong>I'm sending</strong>
@@ -115,7 +115,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
         </div>
       </ExchangeItem>
 
-      <ExchangeItem onSubmit={onSubmit}>
+      <ExchangeItem onSubmit={onBuyNOM}>
         <strong>Sell NOM</strong>
         <Sending>
           <strong>I'm sending</strong>
