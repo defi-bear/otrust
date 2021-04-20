@@ -1,4 +1,6 @@
 import React, { useCallback } from "react";
+import { formatEther } from '@ethersproject/units'
+import BigNumber from 'bignumber.js'
 
 import ExchangeModals from "./ExchangeModals";
 import {
@@ -21,12 +23,16 @@ import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
 export default function Exchange({ text, onInputChange, isBuyButton }) {
   const { swapDenom, swapBuyAmount, swapSellAmount } = useSwap();
-  const { setSwapBuyAmount } = useUpdateSwap();
+  const { setSwapBuyAmount, setSwapSellAmount } = useUpdateSwap();
   const onTextChange = useCallback(
     (evt) => setSwapBuyAmount(evt.target.value),
     [setSwapBuyAmount]
   );
-  const { bondContract, NOMcontract } = useChain();
+  const onSwapTextChange = useCallback(
+    (evt) => setSwapSellAmount(evt.target.value),
+    [setSwapSellAmount]
+  );
+  const { bondContract, NOMcontract, ETHbalance, NOMbalance } = useChain();
   const { setPendingTx } = useUpdateChain();
 
   const submitTrans = useCallback(
@@ -74,6 +80,14 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
 
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
+  const onEthMax = () => {
+    setSwapBuyAmount(new BigNumber(formatEther(ETHbalance)).toFixed(3))
+  }
+
+  const onNOMMax = () => {
+    setSwapSellAmount(new BigNumber(formatEther(NOMbalance)).toFixed(3))
+  }
+
   return (
     <ExchangeWrapper>
       <ExchangeModals />
@@ -88,7 +102,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
             value={swapBuyAmount}
           />
           ETH
-          <MaxBtn>Max</MaxBtn>
+          <MaxBtn onClick={onEthMax}>Max</MaxBtn>
         </Sending>
         <Receiving>
           <strong>I'm receiving</strong>
@@ -101,17 +115,17 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
         </div>
       </ExchangeItem>
 
-      <ExchangeItem>
+      <ExchangeItem onSubmit={onSubmit}>
         <strong>Sell NOM</strong>
         <Sending>
           <strong>I'm sending</strong>
           <ExchangeInput
             type="text"
-            onChange={onTextChange}
+            onChange={onSwapTextChange}
             value={swapSellAmount}
           />
           NOM
-          <MaxBtn>Max</MaxBtn>
+          <MaxBtn onClick={onNOMMax}>Max</MaxBtn>
         </Sending>
         <Receiving>
           <strong>I'm receiving</strong>
@@ -120,7 +134,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
           </ReceivingValue>
         </Receiving>
         <div>
-          <SellBtn>Sell NOM</SellBtn>
+          <SellBtn type="submit">Sell NOM</SellBtn>
         </div>
       </ExchangeItem>
 
