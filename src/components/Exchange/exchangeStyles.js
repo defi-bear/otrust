@@ -20,7 +20,7 @@ export const ExchangeWrapper = styled.div`
 `;
 
 
-export const ExchangeItem = styled.form`
+export const ExchangeItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;

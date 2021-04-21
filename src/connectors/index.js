@@ -1,15 +1,19 @@
 import { InjectedConnector } from "@web3-react/injected-connector";
-import { NetworkConnector } from "@web3-react/network-connector";
+// import { NetworkConnector } from "@web3-react/network-connector";
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { LedgerConnector } from '@web3-react/ledger-connector';
 import { Networks } from '../utils'
+
+/**
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
   1: "https://mainnet.infura.io/v3/84842078b09946638c03157f83405213",
   4: "https://rinkeby.infura.io/v3/84842078b09946638c03157f83405213",
 };
+
+ */
 
 const NETWORK_URL = "https://mainnet.infura.io/v3/84842078b09946638c03157f83405213"
 
