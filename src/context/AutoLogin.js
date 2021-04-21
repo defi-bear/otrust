@@ -14,7 +14,7 @@ export function AutoLogin({children}) {
         account,
         connector
     } = useWeb3React()
-    /**
+    
     const connectWallet = (con) => {
       try {
         activate(con, undefined, true).catch(error => {
@@ -30,14 +30,17 @@ export function AutoLogin({children}) {
           console.log(error);
       }
     } 
-    */
     
+    
+    /**
     async function connectWallet(connection) {
       console.log("Activate Connection")
       console.log("Active before connect: ", active)
       activate(connection)
       console.log("Active after connect: ", active)
     }
+    */
+    
 
     
         
@@ -46,7 +49,6 @@ export function AutoLogin({children}) {
     
     useEffect(() => {
         console.log("activating connector: ", activatingConnector)
-        console.log("account: ", account)
         if (activatingConnector && activatingConnector === connector) {
             setActivatingConnector(undefined)
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { parseEther, formatEther } from "@ethersproject/units";
 
-import { ETHtoNOM, NOMtoETH } from 'utils/bonding'
+// import { ETHtoNOM, NOMtoETH } from 'utils/bonding'
 import { useChain } from 'context/chain/ChainContext'
 import BigNumber from 'bignumber.js';
 
@@ -12,7 +12,7 @@ export const UpdateSwapContext = createContext()
 export const useUpdateSwap = () => useContext(UpdateSwapContext)
 
 function SwapProvider({ children }) {
-    const { supplyNOM, bondContract } = useChain()
+    const { bondContract } = useChain()
     const [swapBuyAmount, setSwapBuyAmount] = useState('')
     const [swapBuyResult, setSwapBuyResult] = useState('')
     const [swapDenom, setSwapDenom] = useState('ETH')
@@ -37,34 +37,23 @@ function SwapProvider({ children }) {
         setSwapSupply
     }
 
-    const buyQuoteETH = async () => {
-        if(swapBuyAmount) {
-            const amount = await bondContract.buyQuoteETH(parseEther(swapBuyAmount));
-            setSwapBuyResult(new BigNumber(formatEther(amount)).toFixed(3));
-        }
-    }
-
-    const buyQuoteNOM = async () => {
-        if(swapSellAmount) {
-            const amount = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
-            setSwapSellResult(new BigNumber(formatEther(amount)).toFixed(3));
-        }
-    }
-
     useEffect(() => {
-        if (swapBuyAmount) {
-            // const { supplyBot, supplyTop, diff } = ETHtoNOM(swapBuyAmount, supplyNOM)
-            buyQuoteETH();
-            // setSwapSellAmount(diff)
-            // setSwapSupply([supplyBot, supplyTop])
+        async function swapAmount() {
+            if (swapBuyAmount) {
+                if(swapBuyAmount) {
+                    const amount = await bondContract.buyQuoteETH(parseEther(swapBuyAmount));
+                    setSwapBuyResult(new BigNumber(formatEther(amount)).toFixed(3));
+                }
+            }
+            if(swapSellAmount) {
+                if(swapSellAmount) {
+                    const amount = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
+                    setSwapSellResult(new BigNumber(formatEther(amount)).toFixed(3));
+                }
+            }
         }
-        if(swapSellAmount) {
-            buyQuoteNOM();
-            // const { supplyBot, supplyTop, diff } = NOMtoETH(swapBuyAmount, supplyNOM)
-            // setSwapSellAmount(diff)
-            // setSwapSupply([supplyBot, supplyTop])
-        }
-    }, [swapDenom, swapBuyAmount, swapSellAmount])
+        swapAmount()
+    }, [swapBuyAmount, swapSellAmount, bondContract])
 
     // useEffect(() => {
     //     if(swapSellAmount === 0) {

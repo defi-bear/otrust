@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { formatEther } from '@ethersproject/units'
 import { MaxUint256 } from "@ethersproject/constants";
 import BigNumber from 'bignumber.js';
@@ -24,7 +24,7 @@ import { useChain, useUpdateChain } from "context/chain/ChainContext";
 import { useAllowance } from "context/useAllowance";
 
 export default function Exchange({ text, onInputChange, isBuyButton }) {
-  const { swapDenom, swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult } = useSwap();
+  const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult } = useSwap();
   const { setSwapBuyAmount, setSwapSellAmount, setSwapDenom } = useUpdateSwap();
   const allowance = useAllowance();
 
@@ -75,9 +75,10 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
     },
     [
       swapBuyAmount,
-      swapDenom,
+      swapBuyResult,
+      swapSellAmount,
+      swapSellResult,
       bondContract,
-      NOMcontract,
       setSwapBuyAmount,
       setPendingTx,
     ]
