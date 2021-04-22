@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
+import { useWeb3React } from "@web3-react/core";
+import { parseEther, formatEther } from "@ethersproject/units";
+import BigNumber from 'bignumber.js'
 
+import { useChain } from 'context/chain/ChainContext'
 import { Close, Metamask } from "./Icons";
 import * as Modal from "./styles";
 
@@ -108,12 +112,30 @@ const limitOptions = [
   },
 ];
 
-export default function ConfirmTransactionModal() {
-  const [limit, setLimit] = useState(0);
+export default function ConfirmTransactionModal({ closeModal, type, amount, result, onConfirm, slippage, setSlippage }) {
+  // const [limit, setLimit] = useState(0);
+  const [currentPrice, setCurrentPrice] = useState('');
+  const { account } = useWeb3React();
+  const { bondContract } = useChain()
 
+  useEffect(() => {
+    getCurrentPrice();
+  }, [type])
+
+  const getCurrentPrice = async () => {
+    let amount;
+    if (type === 'ETH') {
+      amount = await bondContract.buyQuoteETH(parseEther('1'));
+    } else {
+      amount = await bondContract.sellQuoteNOM(parseEther('1'));
+    }
+    
+    setCurrentPrice(new BigNumber(formatEther(amount)).toFixed(5));
+  }
+  
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon>
+      <Modal.CloseIcon onClick={closeModal}>
         <Close />
       </Modal.CloseIcon>
 
@@ -121,25 +143,33 @@ export default function ConfirmTransactionModal() {
         <Modal.Caption>Confirm Transaction</Modal.Caption>
 
         <Modal.ExchangeResult>
-          ~ 1239 <sup>NOM</sup>
+          ~ {result} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
           <span>Current Exchange Rate</span>
 
-          <strong>1 NOM = 0.07102 ETH</strong>
+          <strong>1 {type} = {currentPrice} {type === 'ETH' ? 'NOM' : 'ETH'}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
 
-          <strong>0.15 ETH</strong>
+          <strong>{amount} {type}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <div>
             <span>Wallet</span>
 
             <div>
-              <strong>0x293s92dsd3h4gh9bvn61...931</strong>
+              <strong>
+                {account === null
+                  ? "-"
+                  : account
+                  ? `${account.substring(0, 10)}...${account.substring(
+                      account.length - 4
+                    )}`
+                  : ""}
+              </strong>
             </div>
           </div>
 
@@ -153,9 +183,9 @@ export default function ConfirmTransactionModal() {
         <SlippageValues>
           {limitOptions.map((l) => (
             <LimitBtn
-              active={l.value === limit}
+              active={l.value === slippage}
               key={l.id}
-              onClick={() => setLimit(l.value)}
+              onClick={() => setSlippage(l.value)}
             >
               {l.text}
             </LimitBtn>
@@ -169,8 +199,8 @@ export default function ConfirmTransactionModal() {
       </SlippageWrapper>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton>Confirm (59)</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => closeModal()}>Cancel</Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={() => onConfirm()}>Confirm (59)</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
