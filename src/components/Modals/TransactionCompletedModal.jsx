@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useChain } from 'context/chain/ChainContext'
 import { Caret, Close, Success } from "./Icons";
 import * as Modal from "./styles";
 
@@ -9,12 +10,23 @@ export const ExplorerButton = styled(Modal.SecondaryButton)`
   margin-top: 32px;
 `;
 
-export default function TransactionCompletedModal() {
+const networks = {1: '', 4: 'rinkeby.'}
+
+export default function TransactionCompletedModal({ type, amount, result, closeModal, previousTx }) {
   const [detailsActive, setDetailsActive] = useState(false);
+  const { currentETHPrice, currentNOMPrice } = useChain()
+
+  const shortten = addr => {
+    return addr.slice(0,15) + '...' + addr.slice(addr.length - 3)
+  }
+
+  const onExplore = () => {
+    window.open('https://' + networks[previousTx.chainId] + 'etherscan.io/tx/' + previousTx.hash, '_blank')
+  }
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon>
+      <Modal.CloseIcon onClick={closeModal}>
         <Close />
       </Modal.CloseIcon>
 
@@ -31,17 +43,17 @@ export default function TransactionCompletedModal() {
 
         {/* SELL */}
         <Modal.ExchangeResult>
-          + 0.15 <sup>ETH</sup>
+          + {result} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
           <Modal.DetailsSeparator>/</Modal.DetailsSeparator>
           <Modal.Spent>
-            - 1239 <sup>NOM</sup>
+            - {amount} <sup>{type}</sup>
           </Modal.Spent>
         </Modal.ExchangeResult>
 
         <Modal.ExchangeRateWrapper>
           <span>Exchange Rate</span>
 
-          <strong>1 NOM = 0.07102 ETH</strong>
+          <strong>1 {type === 'ETH' ? 'NOM' : 'ETH'} = {type === 'ETH' ? currentNOMPrice : currentETHPrice} {type}</strong>
         </Modal.ExchangeRateWrapper>
       </main>
       <footer>
@@ -52,25 +64,25 @@ export default function TransactionCompletedModal() {
           >
             View Details <Caret />
           </Modal.DetailsButton>
-          <Modal.PrimaryButton>Done</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={closeModal}>Done</Modal.PrimaryButton>
         </Modal.FooterControls>
 
         {detailsActive && (
           <Modal.FooterDetails>
             <Modal.FooterDetailsRow>
-              <span>From</span> <strong>0x293s92dsd3h4gh9bvn61...931</strong>
+              <span>From</span> <strong>{shortten(previousTx.from)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>To</span> <strong>0xd0323d312o31203201s05...455</strong>
+              <span>To</span> <strong>{shortten(previousTx.to)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>TxID</span> <strong>021392231282</strong>
+              <span>TxID</span> <strong>{shortten(previousTx.hash)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>Network Confirmations</span> <strong>24</strong>
+              <span>Network Confirmations</span> <strong>{previousTx.confirmations}</strong>
             </Modal.FooterDetailsRow>
 
-            <ExplorerButton>View in Explorer</ExplorerButton>
+            <ExplorerButton onClick={() => onExplore()}>View in Explorer</ExplorerButton>
           </Modal.FooterDetails>
         )}
       </footer>

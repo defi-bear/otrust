@@ -39,17 +39,17 @@ function SwapProvider({ children }) {
 
     useEffect(() => {
         async function swapAmount() {
-            if (swapBuyAmount) {
-                if(swapBuyAmount) {
-                    const amount = await bondContract.buyQuoteETH(parseEther(swapBuyAmount));
-                    setSwapBuyResult(new BigNumber(formatEther(amount)).toFixed(3));
-                }
+            if (swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount) {
+                const amount = await bondContract.buyQuoteETH(parseEther(swapBuyAmount));
+                setSwapBuyResult(new BigNumber(formatEther(amount)).toFixed(3));
+            } else {
+                setSwapBuyResult(0)
             }
-            if(swapSellAmount) {
-                if(swapSellAmount) {
-                    const amount = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
-                    setSwapSellResult(new BigNumber(formatEther(amount)).toFixed(3));
-                }
+            if(swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount) {
+                const amount = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
+                setSwapSellResult(new BigNumber(formatEther(amount)).toFixed(3));
+            } else {
+                setSwapSellResult(0)
             }
         }
         swapAmount()

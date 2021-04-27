@@ -366,13 +366,13 @@ export default function AcctDash() {
           <AccountNumber>
             <p>My Account</p>
             <span>
-              {account === null
-                ? "-"
-                : account
-                ? `${account.substring(0, 6)}...${account.substring(
-                    account.length - 4
-                  )}`
-                : ""}
+                {account === null
+                  ? "-"
+                  : account
+                  ? `${account.substring(0, 6)}...${account.substring(
+                      account.length - 4
+                    )}`
+                  : ""}
             </span>
           </AccountNumber>
         </Header>

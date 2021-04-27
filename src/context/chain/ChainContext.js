@@ -1,28 +1,17 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
-import { formatEther } from '@ethersproject/units'
+import React, { useState, useEffect, createContext, useContext, useCallback } from 'react'
+import { formatEther, parseEther } from '@ethersproject/units'
 import { useWeb3React } from "@web3-react/core"
-import Modal from 'react-modal';
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
 
 import { NOMCont, BondingCont } from './contracts'
+import BigNumber from 'bignumber.js';
 
 export const ChainContext = createContext()
 export const useChain = () => useContext(ChainContext)
 
 export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
-
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-    }
-};
 
 function ChainProvider({ theme, children }) {
     const { account, active, library } = useWeb3React()
@@ -34,7 +23,9 @@ function ChainProvider({ theme, children }) {
     const NOMcontract = NOMCont(library)
     const [currSupply, setCurrSupply] = useState(1000)
     const [pendingTx, setPendingTx] = useState()
-    const [waitModal, setWaitModal] = useState(false)
+    // const [waitModal, setWaitModal] = useState(false)
+    const [currentETHPrice, setCurrentETHPrice] = useState(new BigNumber(0))
+    const [currentNOMPrice, setCurrentNOMPrice] = useState(new BigNumber(0))
 
     if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
         throw new Error('REACT_APP_GRAPHQL_ENDPOINT environment variable not defined')
@@ -51,10 +42,19 @@ function ChainProvider({ theme, children }) {
         console.log("Library: ", library)
     }, [account, active, library])
 
+    const getCurrentPrice = useCallback(async () => {
+        let amount;
+        amount = await bondContract.buyQuoteETH(parseEther('1'));
+        setCurrentETHPrice(new BigNumber(formatEther(amount)).toFixed(5));
+        amount = await bondContract.sellQuoteNOM(parseEther('1'));
+        setCurrentNOMPrice(new BigNumber(formatEther(amount)).toFixed(5));
+    },[bondContract])
+
     useEffect(() => {
         // listen for changes on an Ethereum address
         library.on('block', (number) => {
             setBlockNumber(number)
+            getCurrentPrice();
             library
                 .getBalance(account)
                 .then((ETHbalance) => {
@@ -76,16 +76,7 @@ function ChainProvider({ theme, children }) {
             library.removeAllListeners('block')
         }
         // trigger the effect only on component mount
-    }, [NOMcontract, account, bondContract, library])
-
-    useEffect(() => {
-        if (pendingTx) {
-            setWaitModal(true)
-            pendingTx.wait().then(() => {
-                setWaitModal(false);
-            })
-        }
-    }, [pendingTx])
+    }, [NOMcontract, account, bondContract, library, getCurrentPrice])
 
     const contextValue = {
         blockNumber,
@@ -95,7 +86,10 @@ function ChainProvider({ theme, children }) {
         NOMbalance,
         NOMcontract,
         supplyNOM,
-        theme
+        theme,
+        currentETHPrice,
+        currentNOMPrice,
+        pendingTx
     }
 
     const updateValue = {
@@ -108,13 +102,6 @@ function ChainProvider({ theme, children }) {
             <UpdateChainContext.Provider value={updateValue}>
                 <ChainContext.Provider value={contextValue} >
                     {children}
-                    <Modal
-                        isOpen={waitModal}
-                        contentLabel="Transaction is pending"
-                        style={customStyles}
-                    >
-                        <h2>Transaction is in pending</h2>
-                    </Modal>
                 </ChainContext.Provider>
             </UpdateChainContext.Provider>
         </ApolloProvider>
