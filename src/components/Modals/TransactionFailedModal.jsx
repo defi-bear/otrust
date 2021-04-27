@@ -38,10 +38,10 @@ const Message = styled.div`
   }
 `;
 
-export default function TransactionFailedModal() {
+export default function TransactionFailedModal({ closeModal, error }) {
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon>
+      <Modal.CloseIcon onClick={closeModal}>
         <Close />
       </Modal.CloseIcon>
 
@@ -52,13 +52,12 @@ export default function TransactionFailedModal() {
         <Modal.Caption>Transaction Failed</Modal.Caption>
 
         <Message>
-          Ham followed now ecstatic use speaking exercise may repeated. Himself
-          he evident oh greatly my on inhabit general concern.
+          {error.toString()}
         </Message>
       </main>
       <footer>
         <FooterControls>
-          <Modal.PrimaryButton>Ok &#x1f625;</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={closeModal}>Ok &#x1f625;</Modal.PrimaryButton>
         </FooterControls>
       </footer>
     </Modal.Wrapper>

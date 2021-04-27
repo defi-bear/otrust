@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import { useWeb3React } from "@web3-react/core";
-import { parseEther, formatEther } from "@ethersproject/units";
-import BigNumber from 'bignumber.js'
 
 import { useChain } from 'context/chain/ChainContext'
 import { Close, Metamask } from "./Icons";
@@ -114,24 +112,8 @@ const limitOptions = [
 
 export default function ConfirmTransactionModal({ closeModal, type, amount, result, onConfirm, slippage, setSlippage }) {
   // const [limit, setLimit] = useState(0);
-  const [currentPrice, setCurrentPrice] = useState('');
   const { account } = useWeb3React();
-  const { bondContract } = useChain()
-
-  useEffect(() => {
-    getCurrentPrice();
-  }, [type])
-
-  const getCurrentPrice = async () => {
-    let amount;
-    if (type === 'ETH') {
-      amount = await bondContract.buyQuoteETH(parseEther('1'));
-    } else {
-      amount = await bondContract.sellQuoteNOM(parseEther('1'));
-    }
-    
-    setCurrentPrice(new BigNumber(formatEther(amount)).toFixed(5));
-  }
+  const { currentETHPrice, currentNOMPrice } = useChain()
   
   return (
     <Modal.Wrapper>
@@ -149,7 +131,7 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
         <TransactionDetailsRow>
           <span>Current Exchange Rate</span>
 
-          <strong>1 {type} = {currentPrice} {type === 'ETH' ? 'NOM' : 'ETH'}</strong>
+          <strong>1 {type} = {type === 'ETH' ? currentETHPrice : currentNOMPrice} {type === 'ETH' ? 'NOM' : 'ETH'}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
