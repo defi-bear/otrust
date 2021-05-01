@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { responsive } from "theme/constants";
 
-import LineChart from "components/Chart/D3LineChart";
+import BondLineChart from "components/Chart/BondLineChart";
 import HistoricalChart from "components/Chart/D3HistoricalChart";
 import CandelChart from "components/Chart/D3CandelChart";
 
@@ -80,7 +80,7 @@ export default function Chart() {
         case "bondingCurve":
         default:
             return (
-            <LineChart />
+            <BondLineChart />
             );
         }
     };

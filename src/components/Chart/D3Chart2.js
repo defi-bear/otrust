@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from 'styled-components';
 
-import LineChart from "./D3LineChart";
+import LineChart from "./BondLineChart";
 import HistoricalChart from "./D3HistoricalChart";
 import CandelChart from "./D3CandelChart";
 import MenuButtons from '../MenuButtons';
