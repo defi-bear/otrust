@@ -19,6 +19,7 @@ function SwapProvider({ children }) {
     const [swapSellAmount, setSwapSellAmount] = useState(0)
     const [swapSellResult, setSwapSellResult] = useState('')
     const [swapSupply, setSwapSupply] = useState([])
+    const { supplyNOM } = useChain()
 
 
     const contextValue = {
@@ -39,21 +40,30 @@ function SwapProvider({ children }) {
 
     useEffect(() => {
         async function swapAmount() {
-            if (swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount) {
-                const amount = await bondContract.buyQuoteETH(parseEther(swapBuyAmount));
-                setSwapBuyResult(new BigNumber(formatEther(amount)).toFixed(3));
-            } else {
-                setSwapBuyResult(0)
-            }
-            if(swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount) {
-                const amount = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
-                setSwapSellResult(new BigNumber(formatEther(amount)).toFixed(3));
-            } else {
-                setSwapSellResult(0)
+            switch (true) {
+                case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount:
+                    {
+                        const buyAmount = await bondContract.buyQuoteETH(parseEther(swapBuyAmount));
+                        setSwapBuyResult(new BigNumber(formatEther(buyAmount)).toFixed(3));
+                    }
+                    break
+                case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount:
+                    {
+                        const sellAmount = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
+                        setSwapSellResult(new BigNumber(formatEther(sellAmount)).toFixed(3));
+                    }
+                    break
+                default:
+                    {
+                        setSwapBuyResult(0)
+                        setSwapSellResult(0)
+                        setSwapSupply([supplyNOM, supplyNOM])
+                    }
             }
         }
         swapAmount()
-    }, [swapBuyAmount, swapSellAmount, bondContract])
+        console.log("Updated Swaps")
+    }, [bondContract, supplyNOM, swapBuyAmount, swapSellAmount])
 
     // useEffect(() => {
     //     if(swapSellAmount === 0) {

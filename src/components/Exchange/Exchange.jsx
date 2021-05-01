@@ -42,6 +42,7 @@ export default function Exchange() {
   const onBuyNOMTextChange = useCallback(
     (evt) => {
       setSwapBuyAmount(evt.target.value)
+      console.log("Set Swap Buy Amount: ", evt.target.value)
     },
     [setSwapBuyAmount]
   );

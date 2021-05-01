@@ -73,6 +73,7 @@ function LineChart({ id = "bondingChart" }) {
       setAreaData(supplyToArray(swapSupply[0], swapSupply[1]));
       setLabelData(labelArray(swapSupply[0], swapSupply[1]));
     }
+    console.log("SwapSupply: ", swapSupply)
   }, [swapSupply]);
   
   // charts and xAxis and yAxis
