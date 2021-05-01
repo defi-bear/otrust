@@ -27,7 +27,7 @@ import TransactionCompletedModal from "components/Modals/TransactionCompletedMod
 import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/TransactionFailedModal";
 
-export default function Exchange({ text, onInputChange, isBuyButton }) {
+export default function Exchange() {
   const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult, swapDenom } = useSwap();
   const { setSwapBuyAmount, setSwapSellAmount, setSwapDenom } = useUpdateSwap();
   const allowance = useAllowance();
@@ -37,16 +37,24 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
   const [slippage, setSlippage] = useState(0);
   const [previousTx, setPreviousTx] = useState(null);
   const [failedModal, setFailedModal] = useState(null);
-
-  const onTextChange = useCallback(
-    (evt) => setSwapBuyAmount(evt.target.value),
+  
+  
+  const onBuyNOMTextChange = useCallback(
+    (evt) => {
+      setSwapBuyAmount(evt.target.value)
+    },
     [setSwapBuyAmount]
   );
-  const onSwapTextChange = useCallback(
-    (evt) => setSwapSellAmount(evt.target.value),
+  
+  const onSellNOMTextChange = useCallback(
+    (evt) => {
+      setSwapSellAmount(evt.target.value)
+    },
     [setSwapSellAmount]
   );
+  
   const { bondContract, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
+  
   const { setPendingTx } = useUpdateChain();
 
   const submitTrans = useCallback(
@@ -105,11 +113,13 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
   const onBuy = () => {
     setSwapDenom('ETH');
     setConfirmModal('ETH');
+    console.log("On buy")
   }
 
   const onSell = () => {
     setSwapDenom('NOM');
     setConfirmModal('NOM');
+    console.log("On sell")
   }
 
   const onApprove = async () => {
@@ -185,7 +195,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
           <strong>I'm sending</strong>
           <ExchangeInput
             type="text"
-            onChange={onTextChange}
+            onChange={onBuyNOMTextChange}
             value={swapBuyAmount}
           />
           ETH
@@ -208,7 +218,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
           <strong>I'm sending</strong>
           <ExchangeInput
             type="text"
-            onChange={onSwapTextChange}
+            onChange={onSellNOMTextChange}
             value={swapSellAmount}
           />
           NOM

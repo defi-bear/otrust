@@ -32,7 +32,7 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
   const { theme } = useContext(ChainContext);
 
-
+  
   // charts and xAxis and yAxis
   useEffect(() => {
     const margin = { top: 20, right: 20, bottom: 40, left: 60 }
@@ -187,8 +187,8 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     yComplex.selectAll(".tick line")
       .style("color", `${theme.colors.bgNormal}`)
-      ;
-
+    console.log("Area Data: ", areaData);
+    console.log("Data: ", data)
   }, [priceAvg, areaData, data, dimensions, theme]);
 
   return (

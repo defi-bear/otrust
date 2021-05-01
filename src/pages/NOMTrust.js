@@ -3,7 +3,7 @@ import SwapProvider from 'context/SwapContext'
 
 // Components
 import AcctDash from 'components/AcctDash'
-import D3Chart from 'components/Chart/D3Chart'
+import Bonding from 'components/Bonding'
 
 
 const ContentWrapper = styled.div`
@@ -23,7 +23,7 @@ export default function NOMTrust() {
     return (
         <ContentWrapper>
             <SwapProvider>
-                <D3Chart />
+                <Bonding />
                 <LeftComponent>
                     <AcctDash />
                 </LeftComponent>            
