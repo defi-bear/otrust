@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { responsive } from "theme/constants";
@@ -10,14 +10,11 @@ import CandelChart from "components/Chart/D3CandelChart";
 // import { useQuery } from "@apollo/client";
 // import { gql } from "apollo-boost";
 
-import { useSwap } from "context/SwapContext";
-
 import {
   historicalHeaderDefault,
   candelHeaderDefault,
 } from "components/Chart/defaultChartData";
 
-import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 
 const ChartWrapper = styled.div`
   padding: 20px;
@@ -55,27 +52,6 @@ const ChartTypeBtn = styled.button`
   }
 `;
 
-function supplyToArray(supBegin, supEnd) {
-  var dataArray = [];
-  const dif = supEnd - supBegin;
-  const n = 100;
-  for (var i = 0; i < n; i++) {
-    dataArray.push({
-      x: supBegin + (dif * i) / n,
-      y: priceAtSupply(supBegin + (dif * i) / n),
-    });
-  }
-
-  return dataArray;
-}
-
-function labelArray(supBegin, supEnd) {
-    const paymentETH = NOMsupplyETH(supEnd, supBegin);
-    const priceAvg = paymentETH / (supEnd - supBegin);
-    const supAvg = supplyAtPrice(priceAvg);
-    return { paymentETH, supAvg, priceAvg };
-}
-
 export default function Chart() {
     const [chartType, setChartType] = useState("bondingCurve");
 
@@ -84,13 +60,6 @@ export default function Chart() {
 
     const [candelHeaderId] = useState("1");
     const [candelHeader] = useState(candelHeaderDefault);
-
-    const [data, setData] = useState(supplyToArray(0, 100000000))
-    const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
-
-    const [labelData, setLabelData] = useState('') 
-
-    const { swapSupply } = useSwap();
 
     const renderChart = (type) => {
         switch (type) {
@@ -111,23 +80,10 @@ export default function Chart() {
         case "bondingCurve":
         default:
             return (
-            <LineChart data={data} areaData={areaData} labelData={labelData} />
+            <LineChart />
             );
         }
     };
-
-    useEffect(() => {
-        if (swapSupply[1]) {
-          var digitsUpper = Math.floor(Math.log10(swapSupply[1]));
-          // upperBound = 10**(digitsUpper + 1)
-          const upperBound =
-            (Math.round(swapSupply[1] / 10 ** digitsUpper) + 1) * 10 ** digitsUpper;
-          const lowerBound = 0;
-          setData(supplyToArray(lowerBound, upperBound));
-          setAreaData(supplyToArray(swapSupply[0], swapSupply[1]));
-          setLabelData(labelArray(swapSupply[0], swapSupply[1]));
-        }
-    }, [swapSupply]);
 
     return (
         <ChartWrapper>
