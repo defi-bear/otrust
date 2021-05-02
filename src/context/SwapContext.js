@@ -11,16 +11,15 @@ export const UpdateSwapContext = createContext()
 export const useUpdateSwap = () => useContext(UpdateSwapContext)
 
 function SwapProvider({ children }) {
+    const { supplyNOM, supplyNOMRaw } = useChain()
     const { bondContract } = useChain()
-    const [swapBuyAmount, setSwapBuyAmount] = useState('')
-    const [swapBuyResult, setSwapBuyResult] = useState('')
+    const [swapBuyAmount, setSwapBuyAmount] = useState(0)
+    const [swapBuyResult, setSwapBuyResult] = useState(0)
     const [swapDenom, setSwapDenom] = useState('ETH')
     const [swapSellAmount, setSwapSellAmount] = useState(0)
     const [swapSellResult, setSwapSellResult] = useState('')
-    const [swapSupply, setSwapSupply] = useState([])
-    const { supplyNOM, supplyNOMRaw } = useChain()
-
-
+    const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
+    
     const contextValue = {
         swapBuyAmount,
         swapBuyResult,
@@ -73,7 +72,7 @@ function SwapProvider({ children }) {
                         console.log("Defaulting")
                         setSwapBuyResult(0)
                         setSwapSellResult(0)
-                        setSwapSupply([0, supplyNOM])
+                        setSwapSupply([supplyNOM, supplyNOM])
                     }
             }
         }

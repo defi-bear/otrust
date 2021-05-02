@@ -55,6 +55,11 @@ function ChainProvider({ theme, children }) {
             // listen for changes on an Ethereum address
             library.on('block', async (number) => {
                 setBlockNumber(number)
+                Promise.all(
+                    [
+                        
+                    ]
+                )
                 await getCurrentPrice();
                 await library
                     .getBalance(account)
@@ -70,7 +75,6 @@ function ChainProvider({ theme, children }) {
                     .getSupplyNOM()
                     .then((supNOM) => {
                         setSupplyNOM(parseFloat(formatEther(supNOM)))
-                        setSupplyNOMRaw(supNOM)
                     }).catch((err) => { })
             })
             // remove listener when the component is unmounted

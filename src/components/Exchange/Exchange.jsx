@@ -134,11 +134,11 @@ export default function Exchange() {
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
   const onEthMax = () => {
-    setSwapBuyAmount(new BigNumber(formatEther(ETHbalance)).toFixed(3))
+    setSwapBuyAmount(parseFloat(formatEther(ETHbalance)))
   }
 
   const onNOMMax = () => {
-    setSwapSellAmount(new BigNumber(formatEther(NOMbalance)).toFixed(3))
+    setSwapSellAmount(parseFloat(formatEther(NOMbalance)))
   }
 
   return (
