@@ -19,7 +19,6 @@ function ChainProvider({ theme, children }) {
     const [ETHbalance, setETHBalance] = useState()
     const [NOMbalance, setNOMBalance] = useState()
     const [supplyNOM, setSupplyNOM] = useState()
-    const [supplyNOMRaw, setSupplyNOMRaw] = useState()
     const bondContract = BondingCont(library)
     const NOMcontract = NOMCont(library)
     const [pendingTx, setPendingTx] = useState()
@@ -57,25 +56,16 @@ function ChainProvider({ theme, children }) {
                 setBlockNumber(number)
                 Promise.all(
                     [
-                        
+                        library.getBalance(account),
+                        NOMcontract.balanceOf(account),
+                        bondContract.getSupplyNOM(),
+                        getCurrentPrice()  
                     ]
-                )
-                await getCurrentPrice();
-                await library
-                    .getBalance(account)
-                    .then((ETHbalance) => {
-                        setETHBalance(ETHbalance)
-                    }).catch((err) => { })
-                await NOMcontract
-                    .balanceOf(account)
-                    .then((NOMbalance) => {
-                        setNOMBalance(NOMbalance)
-                    }).catch((err) => { })
-                await bondContract
-                    .getSupplyNOM()
-                    .then((supNOM) => {
-                        setSupplyNOM(parseFloat(formatEther(supNOM)))
-                    }).catch((err) => { })
+                ).then((values) => {
+                    setETHBalance(values[0])
+                    setNOMBalance(values[1])
+                    setSupplyNOM(parseFloat(formatEther(values[2])))
+                }).catch((err) => { console.log(err) })
             })
             // remove listener when the component is unmounted
             return () => {
@@ -95,7 +85,6 @@ function ChainProvider({ theme, children }) {
         NOMbalance,
         NOMcontract,
         supplyNOM,
-        supplyNOMRaw,
         theme,
         pendingTx
     }

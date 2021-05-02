@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { formatEther } from '@ethersproject/units'
 import { MaxUint256 } from "@ethersproject/constants";
-import BigNumber from 'bignumber.js';
 import { parseEther } from "@ethersproject/units";
 import { useAsyncFn } from "lib/use-async-fn";
 
