@@ -69,7 +69,7 @@ function ChainProvider({ theme, children }) {
                 await bondContract
                     .getSupplyNOM()
                     .then((supNOM) => {
-                        setSupplyNOM(new BigNumber(formatEther(supNOM)).toFixed(5))
+                        setSupplyNOM(parseFloat(formatEther(supNOM)))
                         setSupplyNOMRaw(supNOM)
                     }).catch((err) => { })
             })
