@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { formatEther } from '@ethersproject/units'
 import { MaxUint256 } from "@ethersproject/constants";
-import BigNumber from 'bignumber.js';
 import { parseEther } from "@ethersproject/units";
 import { useAsyncFn } from "lib/use-async-fn";
 
@@ -27,7 +26,7 @@ import TransactionCompletedModal from "components/Modals/TransactionCompletedMod
 import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/TransactionFailedModal";
 
-export default function Exchange({ text, onInputChange, isBuyButton }) {
+export default function Exchange() {
   const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult, swapDenom } = useSwap();
   const { setSwapBuyAmount, setSwapSellAmount, setSwapDenom } = useUpdateSwap();
   const allowance = useAllowance();
@@ -37,17 +36,23 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
   const [slippage, setSlippage] = useState(0);
   const [previousTx, setPreviousTx] = useState(null);
   const [failedModal, setFailedModal] = useState(null);
-
-  const onTextChange = useCallback(
-    (evt) => setSwapBuyAmount(evt.target.value),
-    [setSwapBuyAmount]
-  );
-  const onSwapTextChange = useCallback(
-    (evt) => setSwapSellAmount(evt.target.value),
-    [setSwapSellAmount]
-  );
+  
   const { bondContract, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
   const { setPendingTx } = useUpdateChain();
+  
+  const onBuyNOMTextChange = useCallback(
+    (evt) => {
+      setSwapBuyAmount(evt.target.value)
+    },
+    [setSwapBuyAmount]
+  );
+  
+  const onSellNOMTextChange = useCallback(
+    (evt) => {
+      setSwapSellAmount(evt.target.value)
+    },
+    [setSwapSellAmount]
+  );
 
   const submitTrans = useCallback(
     async (denom) => {
@@ -55,16 +60,16 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
       try {
         if (denom === "ETH") {
           const tx = await bondContract.buyNOM(
-            parseEther(swapBuyResult),
+            parseEther(swapBuyResult.toString()),
             slippage * 100,
-            { value: parseEther(swapBuyAmount.toString())}
+            { value: parseEther(swapBuyAmount.toString()) }
           );
           setPendingTx(tx);
           setSwapBuyAmount("");
         } else {
           const tx = await bondContract.sellNOM(
-            parseEther(swapSellAmount),
-            parseEther(swapSellResult),
+            parseEther(swapSellAmount).toString(),
+            parseEther(swapSellResult).toString(),
             slippage * 100,
           );
           setPendingTx(tx);
@@ -72,7 +77,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
         }
       } catch (e) {
         // eslint-disable-next-line no-console
-        // console.error(e.code, e.message.message);
+        console.error(e.code, e.message.message);
         // alert(e.message)
         setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
         // setSwapBuyAmount(swapBuyAmount);
@@ -105,11 +110,13 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
   const onBuy = () => {
     setSwapDenom('ETH');
     setConfirmModal('ETH');
+    console.log("On buy")
   }
 
   const onSell = () => {
     setSwapDenom('NOM');
     setConfirmModal('NOM');
+    console.log("On sell")
   }
 
   const onApprove = async () => {
@@ -123,11 +130,11 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
   const onEthMax = () => {
-    setSwapBuyAmount(new BigNumber(formatEther(ETHbalance)).toFixed(3))
+    setSwapBuyAmount(parseFloat(formatEther(ETHbalance)))
   }
 
   const onNOMMax = () => {
-    setSwapSellAmount(new BigNumber(formatEther(NOMbalance)).toFixed(3))
+    setSwapSellAmount(parseFloat(formatEther(NOMbalance)))
   }
 
   return (
@@ -185,7 +192,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
           <strong>I'm sending</strong>
           <ExchangeInput
             type="text"
-            onChange={onTextChange}
+            onChange={onBuyNOMTextChange}
             value={swapBuyAmount}
           />
           ETH
@@ -208,7 +215,7 @@ export default function Exchange({ text, onInputChange, isBuyButton }) {
           <strong>I'm sending</strong>
           <ExchangeInput
             type="text"
-            onChange={onSwapTextChange}
+            onChange={onSellNOMTextChange}
             value={swapSellAmount}
           />
           NOM

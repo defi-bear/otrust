@@ -3,7 +3,7 @@ import SwapProvider from "context/SwapContext";
 
 // Components
 import AcctDash from "components/AcctDash";
-import D3Chart from "components/Chart/D3Chart";
+import Bonding from "components/Bonding";
 import { Container } from "components/UI";
 import { responsive } from "theme/constants";
 
@@ -54,7 +54,7 @@ export default function BondingCurve() {
 
       <SwapProvider>
         <BondingCurveLayout>
-          <D3Chart />
+          <Bonding />
           <AcctDash />
         </BondingCurveLayout>
       </SwapProvider>
