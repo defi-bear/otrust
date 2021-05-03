@@ -44,12 +44,16 @@ export default function Exchange() {
   const { setPendingTx } = useUpdateChain();
  
   const onBuyNOMTextChange = useCallback(
-    (evt) => setSwapBuyAmount(evt.target.value),
+    (evt) => {
+      setSwapSellAmount('')
+      setSwapBuyAmount(evt.target.value)
+    },
     [setSwapBuyAmount]
   );
   
   const onSellNOMTextChange = useCallback(
     (evt) => {
+      setSwapBuyAmount('')
       setSwapSellAmount(evt.target.value)
     },
     [setSwapSellAmount]
