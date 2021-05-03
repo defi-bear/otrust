@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useContext } from "react";
+import React, { useRef, useEffect, useContext, useState } from "react";
 import styled from "styled-components";
 
-import { ChainContext } from 'context/chain/ChainContext'
 import {
   area,
   extent,
@@ -12,8 +11,12 @@ import {
   axisBottom,
   axisLeft,
 } from "d3";
-import { useResizeObserver } from "./utils";
 
+import { ChainContext } from 'context/chain/ChainContext'
+import { useSwap } from "context/SwapContext";
+import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
+
+import { useResizeObserver } from "./utils";
 
 const StyledSVG = styled.svg`
     display: block;
@@ -21,18 +24,58 @@ const StyledSVG = styled.svg`
     height: 400px;
     overflow: visible;
 `
+function supplyToArray(supBegin, supEnd) {
+  var dataArray = [];
+  const dif = supEnd - supBegin;
+  const n = 100;
+  for (var i = 0; i < n; i++) {
+      dataArray.push({
+      x: supBegin + (dif * i) / n,
+      y: priceAtSupply(supBegin + (dif * i) / n),
+      });
+  }
+
+  return dataArray;
+}
+
+export function labelArray(supBegin, supEnd) {
+  const paymentETH = NOMsupplyETH(supEnd, supBegin);
+  const priceAvg = paymentETH / (supEnd - supBegin);
+  const supAvg = supplyAtPrice(priceAvg);
+  return { paymentETH, supAvg, priceAvg };
+}
 
 /**
  * Component that renders a ZoomableLineChart
  */
-function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart" }) {
+function LineChart({ id = "bondingChart" }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
   const { theme } = useContext(ChainContext);
 
+  const [data, setData] = useState(supplyToArray(0, 100000000))
+  const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
 
+  const [labelData, setLabelData] = useState('') 
+
+  const { swapSupply } = useSwap();
+
+  useEffect(() => {
+    if (swapSupply[1]) {
+      var digitsUpper = Math.floor(Math.log10(swapSupply[1]));
+      // upperBound = 10**(digitsUpper + 1)
+      const upperBound =
+        (Math.round(swapSupply[1] / 10 ** digitsUpper) + 1) * 10 ** digitsUpper;
+      const lowerBound = 0;
+      setData(supplyToArray(lowerBound, upperBound));
+      setAreaData(supplyToArray(swapSupply[0], swapSupply[1]));
+      setLabelData(labelArray(swapSupply[0], swapSupply[1]));
+    }
+    console.log("SwapSupply: ", swapSupply)
+  }, [swapSupply]);
+  
   // charts and xAxis and yAxis
   useEffect(() => {
     const margin = { top: 20, right: 20, bottom: 40, left: 60 }
@@ -187,9 +230,10 @@ function LineChart({ data, areaData, labelData: { priceAvg }, id = "bondingChart
 
     yComplex.selectAll(".tick line")
       .style("color", `${theme.colors.bgNormal}`)
-      ;
-
-  }, [priceAvg, areaData, data, dimensions, theme]);
+    console.log("Area Data: ", areaData);
+    console.log("Data: ", data)
+    console.log("Label Data: ", labelData)
+  }, [areaData, data, dimensions, labelData, theme]);
 
   return (
     <div ref={wrapperRef} style={{ marginTop: "1rem", height: "400px" }}>

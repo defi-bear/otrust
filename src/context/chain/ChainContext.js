@@ -21,7 +21,6 @@ function ChainProvider({ theme, children }) {
     const [supplyNOM, setSupplyNOM] = useState()
     const bondContract = BondingCont(library)
     const NOMcontract = NOMCont(library)
-    const [currSupply, setCurrSupply] = useState(1000)
     const [pendingTx, setPendingTx] = useState()
     // const [waitModal, setWaitModal] = useState(false)
     const [currentETHPrice, setCurrentETHPrice] = useState(new BigNumber(0))
@@ -45,55 +44,52 @@ function ChainProvider({ theme, children }) {
     const getCurrentPrice = useCallback(async () => {
         let amount;
         amount = await bondContract.buyQuoteETH(parseEther('1'));
-        setCurrentETHPrice(new BigNumber(formatEther(amount)).toFixed(5));
+        setCurrentETHPrice(parseFloat(formatEther(amount)));
         amount = await bondContract.sellQuoteNOM(parseEther('1'));
-        setCurrentNOMPrice(new BigNumber(formatEther(amount)).toFixed(5));
+        setCurrentNOMPrice(parseFloat(formatEther(amount)));
     },[bondContract])
 
     useEffect(() => {
-        // listen for changes on an Ethereum address
-        library.on('block', (number) => {
-            setBlockNumber(number)
-            getCurrentPrice();
-            library
-                .getBalance(account)
-                .then((ETHbalance) => {
-                    setETHBalance(ETHbalance)
-                }).catch((err) => { })
-            NOMcontract
-                .balanceOf(account)
-                .then((NOMbalance) => {
-                    setNOMBalance(NOMbalance)
-                }).catch((err) => { })
-            bondContract
-                .getSupplyNOM()
-                .then((supNOM) => {
-                    setSupplyNOM(formatEther(supNOM))
-                }).catch((err) => { })
-        })
-        // remove listener when the component is unmounted
-        return () => {
-            library.removeAllListeners('block')
+        async function blocker() {
+            // listen for changes on an Ethereum address
+            library.on('block', async (number) => {
+                setBlockNumber(number)
+                Promise.all(
+                    [
+                        library.getBalance(account),
+                        NOMcontract.balanceOf(account),
+                        bondContract.getSupplyNOM(),
+                        getCurrentPrice()  
+                    ]
+                ).then((values) => {
+                    setETHBalance(values[0])
+                    setNOMBalance(values[1])
+                    setSupplyNOM(parseFloat(formatEther(values[2])))
+                }).catch((err) => { console.log(err) })
+            })
+            // remove listener when the component is unmounted
+            return () => {
+                library.removeAllListeners('block')
+            }
+            // trigger the effect only on component mount
         }
-        // trigger the effect only on component mount
+        blocker()
     }, [NOMcontract, account, bondContract, library, getCurrentPrice])
 
     const contextValue = {
         blockNumber,
         bondContract,
-        currSupply,
+        currentETHPrice,
+        currentNOMPrice,
         ETHbalance,
         NOMbalance,
         NOMcontract,
         supplyNOM,
         theme,
-        currentETHPrice,
-        currentNOMPrice,
         pendingTx
     }
 
     const updateValue = {
-        setCurrSupply,
         setPendingTx
     }
 
