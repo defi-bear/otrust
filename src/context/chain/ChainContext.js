@@ -14,7 +14,7 @@ export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
 function ChainProvider({ theme, children }) {
-    const { account, active, library } = useWeb3React()
+    const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
     const [ETHbalance, setETHBalance] = useState()
     const [NOMbalance, setNOMBalance] = useState()
@@ -34,12 +34,6 @@ function ChainProvider({ theme, children }) {
         uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
         cache: new InMemoryCache(),
     })
-
-    useEffect(() => {
-        console.log("Account: ", account)
-        console.log("Active: ", active)
-        console.log("Library: ", library)
-    }, [account, active, library])
 
     const getCurrentPrice = useCallback(async () => {
         let amount;
