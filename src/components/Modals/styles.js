@@ -334,3 +334,268 @@ export const LoadingWrapper = styled.div`
   justify-content: center;
   padding-bottom: 20px;
 `;
+
+/* Bridge Modal Styles */
+
+export const BridgeModalWrapper = styled(Wrapper)`
+  width: 1300px;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    width: 1010px;
+  }
+
+  @media screen and (max-width: ${responsive.laptopSmall}) {
+    width: 600px;
+
+    top: 50px;
+    transform: translate( -50%, 0);
+  }
+`;
+
+export const Info = styled.aside`
+  padding: 40px;
+
+  border-radius: 8px;
+  background-color: ${(props) => props.theme.colors.bgDarken};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 24px;
+  }
+
+  h2 {
+    margin: 0 0 20px;
+
+    font-family: Bebas Neue, sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+  }
+`;
+
+export const InfoRow = styled.section`
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 30px;
+  justify-items: center;
+  align-items: start;
+
+  margin-bottom: 10px;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    grid-template-columns: 1fr 150px;
+  }
+`;
+
+export const ConnectionItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  padding: 20px;
+
+  border-radius: 8px;
+  background-color: ${(props) => props.theme.colors.bgDarken};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    gap: 20px;
+  }
+`;
+
+export const InfoImgWrapper = styled.div`
+  padding: 40px 50px;
+
+  border-radius: 8px;
+  background-color: ${(props) => props.theme.colors.bgNormal};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    padding: 40px;
+  }
+`;
+
+export const InfoSubCaption = styled.h3`
+  margin: 0 0 12px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    font-size: 14px;
+  }
+`;
+
+export const ConnectionItemIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  min-width: 56px;
+  height: 56px;
+
+  border-radius: 50%;
+  border: 3px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  background-color: ${(props) => props.theme.colors.bgNormal};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+  }
+
+  img {
+    overflow: hidden;
+  }
+`;
+
+export const ConnectionItemContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  > strong {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  > span {
+    font-size: 16px;
+    font-weight: 500;
+    color: ${(props) => props.theme.colors.textSecondary};
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 14px;
+    }
+  }
+`;
+
+export const Balance = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  margin-left: auto;
+
+  > strong {
+    font-size: 12px;
+    font-weight: 400;
+    color: ${(props) => props.theme.colors.textSecondary};
+    white-space: nowrap;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 10px;
+    }
+  }
+
+  span {
+    font-family: Bebas Neue, sans-serif;
+    font-size: 28px;
+
+    @media screen and (max-width: ${responsive.laptop}) {
+      font-size: 24px;
+    }
+  }
+`;
+
+export const ConnectionStatus = styled.div`
+  display: block;
+  margin: 40px auto;
+  padding: 16px 40px;
+
+  position: relative;
+
+  border-radius: 8px;
+  background-color: ${(props) => (props.disconnected ? "#30232e" : "#2a3438")};
+
+  color: ${(props) =>
+    props.disconnected
+      ? props.theme.colors.highlightRed
+      : props.theme.colors.highlightGreen};
+  white-space: nowrap;
+
+  &::before,
+  &::after {
+    content: "";
+
+    display: block;
+    width: 1px;
+    height: 20px;
+
+    position: absolute;
+    top: -30px;
+    left: 50%;
+
+    background-color: ${(props) =>
+    props.disconnected
+      ? props.theme.colors.highlightRed
+      : props.theme.colors.highlightGreen};
+  }
+
+  &::after {
+    top: auto;
+    bottom: -30px;
+
+    background-color: ${(props) =>
+    props.disconnected
+      ? props.theme.colors.bgHighlightBorder
+      : props.theme.colors.highlightGreen};
+  }
+`;
+
+
+export const BridgeLayout = styled.div`
+  display: grid;
+  grid-template-columns: 520px 1fr;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    grid-template-columns: 400px 1fr;
+  }
+
+  @media screen and (max-width: ${responsive.laptopSmall}) {
+    grid-template-columns: none;
+
+
+  }
+
+  & > main {
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+export const Desc = styled.p`
+  max-width: 600px;
+  margin-bottom: 40px;
+
+  color: ${(props) => props.theme.colors.textSecondary};
+
+  strong {
+    font-weight: 500;
+    color: ${(props) => props.theme.colors.textPrimary};
+  }
+`;
+export const List = styled.ol`
+  padding-left: 1em;
+
+  color: ${(props) => props.theme.colors.textSecondary};
+
+  li::marker {
+    color: ${(props) => props.theme.colors.textPrimary};
+  }
+
+  li + li {
+    margin-top: 12px;
+  }
+`;
+
+export const FullWidthButton = styled(PrimaryButton)`
+  width: 100%;
+`;
+
+export const CaptionLeft = styled(Caption)`
+  text-align: left;
+`;

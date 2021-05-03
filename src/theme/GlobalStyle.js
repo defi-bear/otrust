@@ -11,12 +11,15 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+
   :root {
-    color: ${props => props.theme.colors.textPrimary};
+    position: relative;
+
     background: linear-gradient(135deg, #16161f, #06060f);
 
+    color: ${props => props.theme.colors.textPrimary};
     font-size: 14px;
-    font-family: 'Poppins';
+    font-family: 'Poppins', sans-serif;
   
     @media screen and (max-width: ${responsive.laptop}) {
       font-size: 12px;
@@ -54,10 +57,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    position: relative;
-    
     font-family: 'Poppins', sans-serif;
-    -webkit-font-smooth: antialiased;
+    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 `

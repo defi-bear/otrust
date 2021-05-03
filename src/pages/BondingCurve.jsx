@@ -7,7 +7,9 @@ import Bonding from "components/Bonding";
 import { Container } from "components/UI";
 import { responsive } from "theme/constants";
 
-// import { Dimmer } from "components/UI/Dimmer";
+import { Dimmer } from "components/UI/Dimmer";
+import BridgeSwapModal from "components/Modals/BridgeSwapModal";
+import BridgeSwapModalDisconnected from "components/Modals/BridgeSwapModalDisconnected";
 // import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
 // import TransactionFailedModal from "components/Modals/TransactionFailedModal";
 // import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
@@ -45,12 +47,14 @@ const BondingCurveLayout = styled.div`
 export default function BondingCurve() {
   return (
     <Container>
-      {/* <Dimmer> */}
-      {/* <OnomyConfirmationModal /> */}
-      {/* <TransactionFailedModal /> */}
-      {/* <TransactionCompletedModal /> */}
-      {/* <ConfirmTransactionModal /> */}
-      {/* </Dimmer> */}
+      <Dimmer>
+        <BridgeSwapModal />
+        {/* <BridgeSwapModalDisconnected /> */}
+        {/* <OnomyConfirmationModal /> */}
+        {/* <TransactionFailedModal /> */}
+        {/* <TransactionCompletedModal /> */}
+        {/* <ConfirmTransactionModal /> */}
+      </Dimmer>
 
       <SwapProvider>
         <BondingCurveLayout>
