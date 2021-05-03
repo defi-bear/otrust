@@ -31,8 +31,10 @@ function SwapProvider({ children }) {
 
     const updateValue = {
         setSwapBuyAmount,
+        setSwapBuyResult,
         setSwapDenom,
         setSwapSellAmount,
+        setSwapSellResult,
         setSwapSupply
     }
 
@@ -41,35 +43,26 @@ function SwapProvider({ children }) {
             switch (true) {
                 case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount:
                     {
-                        const buyAmountRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount)) 
-                        const buyAmount = parseFloat(formatEther(buyAmountRaw))
-                        const supplyTop = supplyNOM + buyAmount
+                        const amountNOMRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount)) 
+                        const amountNOM = parseFloat(formatEther(amountNOMRaw))
+                        const supplyTop = supplyNOM + amountNOM
                         
-                        setSwapBuyResult(buyAmount)
-
-                        console.log("Supply NOM: ", supplyNOM)
-                        console.log("Buy Amount: ", buyAmount)
-                        console.log("SupplyTop: ", supplyTop)
+                        setSwapBuyResult(amountNOM)
                         setSwapSupply([supplyNOM, supplyTop])
                     }
                     break
                 case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount:
                     {
-                        const sellAmountRaw = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
-                        const sellAmount = parseFloat(formatEther(sellAmountRaw))
-                        const supplyBot = supplyNOM - sellAmount
+                        const amountETHRaw = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
+                        const amountETH = parseFloat(formatEther(amountETHRaw))
+                        const supplyBot = supplyNOM - swapSellAmount
 
-                        setSwapSellResult(sellAmount)
-                        
-                        console.log("Supply NOM: ", supplyNOM)
-                        console.log("Sell Amount: ", sellAmount)
-                        console.log("SupplyBot: ", supplyBot)
+                        setSwapSellResult(amountETH)
                         setSwapSupply([supplyBot, supplyNOM])
                     }
                     break
                 default:
                     {
-                        console.log("Defaulting")
                         setSwapBuyResult('')
                         setSwapSellResult('')
                         setSwapSupply([supplyNOM, supplyNOM])
@@ -77,7 +70,6 @@ function SwapProvider({ children }) {
             }
         }
         swapAmount()
-        console.log("Updated Swaps")
     }, [bondContract, supplyNOM, supplyNOMRaw, swapBuyAmount, swapSellAmount])
 
     return (

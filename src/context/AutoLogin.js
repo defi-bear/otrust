@@ -11,7 +11,7 @@ export function AutoLogin({children}) {
     const {
         activate,
         active,
-        account,
+        // account,
         connector
     } = useWeb3React()
     
@@ -30,19 +30,6 @@ export function AutoLogin({children}) {
           console.log(error);
       }
     } 
-    
-    
-    /**
-    async function connectWallet(connection) {
-      console.log("Activate Connection")
-      console.log("Active before connect: ", active)
-      activate(connection)
-      console.log("Active after connect: ", active)
-    }
-    */
-    
-
-    
         
     // handle logic to recognize the connector currently being activated
     const [activatingConnector, setActivatingConnector] = React.useState()
@@ -53,14 +40,6 @@ export function AutoLogin({children}) {
             setActivatingConnector(undefined)
         }
     }, [activatingConnector, connector])
-
-    // Remove below for production
-    useEffect(() => {
-      console.log("Activating: ", activatingConnector)
-      console.log("Active: ", active)
-      console.log("Connector: ", connector)
-      console.log("Account: ", account)
-    },[account, active, connector, activatingConnector])
 
     // mount only once or face issues :P
     const triedEager = useEagerConnect()

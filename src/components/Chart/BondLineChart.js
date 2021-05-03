@@ -230,9 +230,9 @@ function LineChart({ id = "bondingChart" }) {
 
     yComplex.selectAll(".tick line")
       .style("color", `${theme.colors.bgNormal}`)
-    console.log("Area Data: ", areaData);
-    console.log("Data: ", data)
-    console.log("Label Data: ", labelData)
+    // console.log("Area Data: ", areaData);
+    // console.log("Data: ", data)
+    // console.log("Label Data: ", labelData)
   }, [areaData, data, dimensions, labelData, theme]);
 
   return (
