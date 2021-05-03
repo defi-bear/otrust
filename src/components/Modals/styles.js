@@ -134,6 +134,11 @@ export const SecondaryButton = styled(PrimaryButton)`
   }
 `;
 
+export const ExchangeResultDescription = styled.div`
+  font-size: 12px;
+  opacity: 0.5;
+  margin-bottom: 15px;
+`;
 
 export const ExchangeResult = styled.div`
   padding: 32px;
@@ -184,6 +189,23 @@ export const Caption = styled.h3`
   font-weight: 500;
 
   text-align: center;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    font-size: 14px;
+  }
+
+  @media screen and (max-width: ${responsive.smartphone}) {
+    font-size: 16px;
+  }
+`;
+
+export const PendingCaption = styled.h3`
+  margin: 0 0 24px;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  text-align: left;
 
   @media screen and (max-width: ${responsive.laptop}) {
     font-size: 14px;
@@ -298,3 +320,13 @@ export const FooterDetailsRow = styled.div`
   }
 `;
 
+export const PendingDescription = styled.div`
+  font-size: 12px;
+  opacity: 0.5;
+`;
+
+export const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+`;
