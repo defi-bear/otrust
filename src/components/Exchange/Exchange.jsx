@@ -37,11 +37,12 @@ export default function Exchange() {
   const [previousTx, setPreviousTx] = useState(null);
   const [failedModal, setFailedModal] = useState(null);
   
+  const { bondContract, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
+  const { setPendingTx } = useUpdateChain();
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
       setSwapBuyAmount(evt.target.value)
-      console.log("Set Swap Buy Amount: ", evt.target.value)
     },
     [setSwapBuyAmount]
   );
@@ -52,10 +53,6 @@ export default function Exchange() {
     },
     [setSwapSellAmount]
   );
-  
-  const { bondContract, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
-  
-  const { setPendingTx } = useUpdateChain();
 
   const submitTrans = useCallback(
     async (denom) => {
@@ -63,9 +60,9 @@ export default function Exchange() {
       try {
         if (denom === "ETH") {
           const tx = await bondContract.buyNOM(
-            parseEther(swapBuyResult).toString(),
+            parseEther(swapBuyResult.toString()),
             slippage * 100,
-            [{ value: parseEther(swapBuyAmount.toString()) }]
+            { value: parseEther(swapBuyAmount.toString()) }
           );
           setPendingTx(tx);
           setSwapBuyAmount("");
