@@ -42,6 +42,7 @@ export default function Exchange() {
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
+      setSwapSellAmount('')
       setSwapBuyAmount(evt.target.value)
     },
     [setSwapBuyAmount]
@@ -49,6 +50,7 @@ export default function Exchange() {
   
   const onSellNOMTextChange = useCallback(
     (evt) => {
+      setSwapBuyAmount('')
       setSwapSellAmount(evt.target.value)
     },
     [setSwapSellAmount]
@@ -110,13 +112,11 @@ export default function Exchange() {
   const onBuy = () => {
     setSwapDenom('ETH');
     setConfirmModal('ETH');
-    console.log("On buy")
   }
 
   const onSell = () => {
     setSwapDenom('NOM');
     setConfirmModal('NOM');
-    console.log("On sell")
   }
 
   const onApprove = async () => {

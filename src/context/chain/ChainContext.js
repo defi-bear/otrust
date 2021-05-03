@@ -35,12 +35,6 @@ function ChainProvider({ theme, children }) {
         cache: new InMemoryCache(),
     })
 
-    useEffect(() => {
-        console.log("Account: ", account)
-        console.log("Active: ", active)
-        console.log("Library: ", library)
-    }, [account, active, library])
-
     const getCurrentPrice = useCallback(async () => {
         let amount;
         amount = await bondContract.buyQuoteETH(parseEther('1'));
