@@ -28,7 +28,7 @@ import TransactionFailedModal from "components/Modals/TransactionFailedModal";
 
 export default function Exchange() {
   const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult, swapDenom } = useSwap();
-  const { setSwapBuyAmount, setSwapSellAmount, setSwapDenom } = useUpdateSwap();
+  const { setSwapBuyAmount, setSwapBuyResult, setSwapSellAmount, setSwapSellResult, setSwapDenom } = useUpdateSwap();
   const allowance = useAllowance();
   const [confirmModal, setConfirmModal] = useState('');
   const [approveModal, setApproveModal] = useState(false);
@@ -43,6 +43,9 @@ export default function Exchange() {
   const onBuyNOMTextChange = useCallback(
     (evt) => {
       setSwapSellAmount('')
+      setSwapSellResult('')
+      setSwapDenom('ETH')
+      
       setSwapBuyAmount(evt.target.value)
     },
     [setSwapBuyAmount]
@@ -51,6 +54,8 @@ export default function Exchange() {
   const onSellNOMTextChange = useCallback(
     (evt) => {
       setSwapBuyAmount('')
+      setSwapBuyResult('')
+      setSwapDenom('NOM')
       setSwapSellAmount(evt.target.value)
     },
     [setSwapSellAmount]

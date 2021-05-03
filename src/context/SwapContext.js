@@ -31,8 +31,10 @@ function SwapProvider({ children }) {
 
     const updateValue = {
         setSwapBuyAmount,
+        setSwapBuyResult,
         setSwapDenom,
         setSwapSellAmount,
+        setSwapSellResult,
         setSwapSupply
     }
 
@@ -68,7 +70,6 @@ function SwapProvider({ children }) {
             }
         }
         swapAmount()
-        console.log("Updated Swaps")
     }, [bondContract, supplyNOM, supplyNOMRaw, swapBuyAmount, swapSellAmount])
 
     return (
