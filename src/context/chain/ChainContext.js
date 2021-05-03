@@ -14,7 +14,7 @@ export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
 function ChainProvider({ theme, children }) {
-    const { account, active, library } = useWeb3React()
+    const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
     const [ETHbalance, setETHBalance] = useState()
     const [NOMbalance, setNOMBalance] = useState()

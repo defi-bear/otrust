@@ -11,7 +11,7 @@ export function AutoLogin({children}) {
     const {
         activate,
         active,
-        account,
+        // account,
         connector
     } = useWeb3React()
     

@@ -48,7 +48,7 @@ export default function Exchange() {
       
       setSwapBuyAmount(evt.target.value)
     },
-    [setSwapBuyAmount]
+    [setSwapBuyAmount, setSwapDenom, setSwapSellAmount, setSwapSellResult]
   );
   
   const onSellNOMTextChange = useCallback(
@@ -58,7 +58,7 @@ export default function Exchange() {
       setSwapDenom('NOM')
       setSwapSellAmount(evt.target.value)
     },
-    [setSwapSellAmount]
+    [setSwapSellAmount, setSwapDenom, setSwapBuyAmount, setSwapBuyResult]
   );
 
   const submitTrans = useCallback(
