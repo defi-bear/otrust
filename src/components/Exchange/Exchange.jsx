@@ -25,21 +25,24 @@ import { useAllowance } from "context/useAllowance";
 import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
 import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/TransactionFailedModal";
+import PendingModal from "components/Modals/PendingModal";
 
 export default function Exchange() {
   const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult, swapDenom } = useSwap();
   const { setSwapBuyAmount, setSwapBuyResult, setSwapSellAmount, setSwapSellResult, setSwapDenom } = useUpdateSwap();
   const allowance = useAllowance();
-  const [confirmModal, setConfirmModal] = useState('');
+  const [confirmModal, setConfirmModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [completedModal, setCompletedModal] = useState('');
+  const [completedAmount, setCompletedAmount] = useState(null);
+  const [completedResult, setCompletedResult] = useState(null);
   const [slippage, setSlippage] = useState(0);
   const [previousTx, setPreviousTx] = useState(null);
   const [failedModal, setFailedModal] = useState(null);
-  
+  const [pendingModal, setPendingModal] = useState(false);
   const { bondContract, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
   const { setPendingTx } = useUpdateChain();
-  
+ 
   const onBuyNOMTextChange = useCallback(
     (evt) => {
       setSwapSellAmount('')
@@ -65,23 +68,26 @@ export default function Exchange() {
     async (denom) => {
       if (!swapBuyAmount && !swapSellAmount) return;
       try {
+        let tx;
         if (denom === "ETH") {
-          const tx = await bondContract.buyNOM(
+          tx = await bondContract.buyNOM(
             parseEther(swapBuyResult.toString()),
             slippage * 100,
             { value: parseEther(swapBuyAmount.toString()) }
           );
-          setPendingTx(tx);
-          setSwapBuyAmount("");
         } else {
-          const tx = await bondContract.sellNOM(
+          tx = await bondContract.sellNOM(
             parseEther(swapSellAmount).toString(),
             parseEther(swapSellResult).toString(),
             slippage * 100,
           );
-          setPendingTx(tx);
-          setSwapBuyAmount("");
         }
+        setPendingTx(tx);
+        setConfirmModal('');
+        setPendingModal(true);
+        setSwapBuyAmount("");
+        setCompletedAmount(completedModal === 'ETH' ? swapBuyAmount : swapSellAmount);
+        setCompletedResult(completedModal === 'ETH' ? swapBuyResult : swapSellResult);
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e.code, e.message.message);
@@ -98,7 +104,10 @@ export default function Exchange() {
       bondContract,
       setSwapBuyAmount,
       setPendingTx,
-      slippage
+      slippage,
+      completedModal,
+      setCompletedAmount,
+      setCompletedResult
     ]
   );
 
@@ -109,10 +118,19 @@ export default function Exchange() {
         setPreviousTx(pendingTx);
         setCompletedModal(swapDenom);
         setPendingTx(null);
+        setPendingModal(false);
         // setWaitModal(false);
       })
     }
-  }, [pendingTx, swapDenom, setPendingTx])
+  }, [
+    pendingTx,
+    swapDenom,
+    setPendingTx,
+    swapBuyAmount,
+    swapSellAmount,
+    swapBuyResult,
+    swapSellResult,
+  ])
 
   const onBuy = () => {
     setSwapDenom('ETH');
@@ -125,6 +143,7 @@ export default function Exchange() {
   }
 
   const onApprove = async () => {
+    setApproveModal(false);
     let tx = await NOMcontract.approve(
       bondContract.address,
       MaxUint256
@@ -141,7 +160,6 @@ export default function Exchange() {
   const onNOMMax = () => {
     setSwapSellAmount(parseFloat(formatEther(NOMbalance)))
   }
-
   return (
     <ExchangeWrapper>
       <ExchangeModals />
@@ -176,8 +194,8 @@ export default function Exchange() {
             <TransactionCompletedModal
               closeModal={() => setCompletedModal(false)}
               type={completedModal}
-              amount={completedModal === 'ETH' ? swapBuyAmount : swapSellAmount}
-              result={completedModal === 'ETH' ? swapBuyResult : swapSellResult}
+              amount={completedAmount}
+              result={completedResult}
               previousTx={previousTx}
             />
           </Dimmer>
@@ -190,6 +208,13 @@ export default function Exchange() {
             error={failedModal}
           />
         </Dimmer>)
+      }
+      {
+        pendingModal && (
+          <Dimmer>
+            <PendingModal />
+          </Dimmer>
+        )
       }
       <ExchangeItem>
         <strong>Buy NOM</strong>
@@ -234,7 +259,7 @@ export default function Exchange() {
         </Receiving>
         <div>
           {
-            allowance && !allowance.eq(0) ? (
+            allowance && allowance.eq && !allowance.eq(0) ? (
               <SellBtn onClick={onSell}>Sell NOM</SellBtn>
             ) : (
               <SellBtn onClick={() => setApproveModal(true)}>Approve</SellBtn>
