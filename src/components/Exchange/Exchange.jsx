@@ -63,16 +63,16 @@ export default function Exchange() {
       try {
         if (denom === "ETH") {
           const tx = await bondContract.buyNOM(
-            parseEther(swapBuyResult),
+            parseEther(swapBuyResult).toString(),
             slippage * 100,
-            { value: parseEther(swapBuyAmount.toString())}
+            [{ value: parseEther(swapBuyAmount.toString()) }]
           );
           setPendingTx(tx);
           setSwapBuyAmount("");
         } else {
           const tx = await bondContract.sellNOM(
-            parseEther(swapSellAmount),
-            parseEther(swapSellResult),
+            parseEther(swapSellAmount).toString(),
+            parseEther(swapSellResult).toString(),
             slippage * 100,
           );
           setPendingTx(tx);
@@ -80,7 +80,7 @@ export default function Exchange() {
         }
       } catch (e) {
         // eslint-disable-next-line no-console
-        // console.error(e.code, e.message.message);
+        console.error(e.code, e.message.message);
         // alert(e.message)
         setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
         // setSwapBuyAmount(swapBuyAmount);

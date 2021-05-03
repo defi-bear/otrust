@@ -44,9 +44,9 @@ function ChainProvider({ theme, children }) {
     const getCurrentPrice = useCallback(async () => {
         let amount;
         amount = await bondContract.buyQuoteETH(parseEther('1'));
-        setCurrentETHPrice(new BigNumber(formatEther(amount)).toFixed(5));
+        setCurrentETHPrice(parseFloat(formatEther(amount)));
         amount = await bondContract.sellQuoteNOM(parseEther('1'));
-        setCurrentNOMPrice(new BigNumber(formatEther(amount)).toFixed(5));
+        setCurrentNOMPrice(parseFloat(formatEther(amount)));
     },[bondContract])
 
     useEffect(() => {
