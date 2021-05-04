@@ -56,8 +56,8 @@ function ChainProvider({ theme, children }) {
                         getCurrentPrice()  
                     ]
                 ).then((values) => {
-                    setETHBalance(values[0])
-                    setNOMBalance(values[1])
+                    setETHBalance(parseFloat(formatEther(values[0])))
+                    setNOMBalance(parseFloat(formatEther(values[1])))
                     setSupplyNOM(parseFloat(formatEther(values[2])))
                 }).catch((err) => { console.log(err) })
             })

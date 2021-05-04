@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { parseEther, formatEther } from "@ethersproject/units";
+import { chopFloat } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
 
@@ -12,7 +13,7 @@ export const useUpdateSwap = () => useContext(UpdateSwapContext)
 
 function SwapProvider({ children }) {
     const { supplyNOM, supplyNOMRaw } = useChain()
-    const { bondContract } = useChain()
+    const { bondContract, ETHbalance, NOMbalance } = useChain()
     const [swapBuyAmount, setSwapBuyAmount] = useState('')
     const [swapBuyResult, setSwapBuyResult] = useState('')
     const [swapDenom, setSwapDenom] = useState('ETH')
@@ -42,19 +43,27 @@ function SwapProvider({ children }) {
         async function swapAmount() {
             switch (true) {
                 case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount:
-                    {
-
-                        const amountNOMRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount)) 
+                        
+                    console.log("ETH", ETHbalance.toString())
+                    console.log("SwapBuyamount: ", swapBuyAmount)
+                    try {
+                        const amountNOMRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount))
                         const amountNOM = parseFloat(formatEther(amountNOMRaw))
                         const supplyTop = supplyNOM + amountNOM
-                        
+                    
                         setSwapBuyResult(amountNOM)
                         setSwapSupply([supplyNOM, supplyTop])
+                    } catch (err) {
+                        setSwapBuyAmount(chopFloat(ETHbalance, 5))
+                        setSwapSupply([supplyNOM, supplyNOM])
                     }
+                            
                     break
                 case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount:
                     
-                    if (swapSellAmount < supplyNOM) {
+                    if (swapSellAmount <= supplyNOM) {
+                        console.log("NOM", NOMbalance.toString())
+                        console.log("Swapsellamount: ", swapSellAmount)
                         const amountETHRaw = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
                         const amountETH = parseFloat(formatEther(amountETHRaw))
                         const supplyBot = supplyNOM - swapSellAmount
@@ -62,7 +71,8 @@ function SwapProvider({ children }) {
                         setSwapSellResult(amountETH)
                         setSwapSupply([supplyBot, supplyNOM])
                     } else {
-                        setSwapSellResult("Too much NOM")
+                        setSwapSellAmount(chopFloat(NOMbalance, 5))
+                        setSwapSupply([supplyNOM, supplyNOM])
                     }
                     
                     break
@@ -73,9 +83,9 @@ function SwapProvider({ children }) {
                         setSwapSupply([supplyNOM, supplyNOM])
                     }
             }
-        }
+        }  
         swapAmount()
-    }, [bondContract, supplyNOM, supplyNOMRaw, swapBuyAmount, swapSellAmount])
+    }, [bondContract, ETHbalance, NOMbalance, supplyNOM, supplyNOMRaw, swapBuyAmount, swapSellAmount])
 
     return (
         <UpdateSwapContext.Provider value={updateValue}>

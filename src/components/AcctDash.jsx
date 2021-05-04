@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useWeb3React } from "@web3-react/core";
-import { formatEther } from "@ethersproject/units";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
@@ -383,7 +382,7 @@ export default function AcctDash() {
               {ETHbalance === null
                 ? "Error"
                 : ETHbalance
-                ? `${parseFloat(formatEther(ETHbalance)).toPrecision(8)}`
+                ? `${ETHbalance.toPrecision(8)}`
                 : ""}
             </span>
           </div>
@@ -393,7 +392,7 @@ export default function AcctDash() {
               {NOMbalance === null
                 ? "Error"
                 : NOMbalance
-                ? `${parseFloat(formatEther(NOMbalance)).toPrecision(8)}`
+                ? `${NOMbalance.toPrecision(8)}`
                 : ""}
             </span>
           </div>
