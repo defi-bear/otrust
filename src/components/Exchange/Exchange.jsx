@@ -107,7 +107,6 @@ export default function Exchange() {
       setSwapBuyAmount,
       setPendingTx,
       slippage,
-      completedModal,
       setCompletedAmount,
       setCompletedResult
     ]
