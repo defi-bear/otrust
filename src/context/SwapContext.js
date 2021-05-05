@@ -14,10 +14,10 @@ export const useUpdateSwap = () => useContext(UpdateSwapContext)
 function SwapProvider({ children }) {
     const { supplyNOM, supplyNOMRaw } = useChain()
     const { bondContract, ETHbalance, NOMbalance } = useChain()
-    const [swapBuyAmount, setSwapBuyAmount] = useState('')
+    const [swapBuyAmount, setSwapBuyAmount] = useState(0)
     const [swapBuyResult, setSwapBuyResult] = useState('')
     const [swapDenom, setSwapDenom] = useState('ETH')
-    const [swapSellAmount, setSwapSellAmount] = useState('')
+    const [swapSellAmount, setSwapSellAmount] = useState(0)
     const [swapSellResult, setSwapSellResult] = useState('')
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
     

@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import { useWeb3React } from "@web3-react/core";
+import useInterval from '@use-it/interval';
+import LoadingBar from 'react-top-loading-bar'
 
 import { useChain } from 'context/chain/ChainContext'
 import { Close, Metamask } from "./Icons";
 import * as Modal from "./styles";
+import './loadingBar.css';
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -114,9 +117,23 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
   // const [limit, setLimit] = useState(0);
   const { account } = useWeb3React();
   const { currentETHPrice, currentNOMPrice } = useChain()
+  const [count, setCount] = useState(60);
+  const [delay, setDelay] = useState(1000);
+
+  const increaseCount = () => {
+    if(count === 0) {
+      setDelay(null);
+      closeModal();
+    } else {
+      setCount(count - 1);
+    }
+  }
+
+  useInterval(increaseCount, delay);
   
   return (
     <Modal.Wrapper>
+      <LoadingBar progress={(60 - count) / 60 * 100} color='#dddae8' className="loadingBar" />
       <Modal.CloseIcon onClick={closeModal}>
         <Close />
       </Modal.CloseIcon>
@@ -125,6 +142,7 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
         <Modal.Caption>Confirm Transaction</Modal.Caption>
 
         <Modal.ExchangeResult>
+          <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>
           ~ {result} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
@@ -182,7 +200,7 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
       <footer>
         <Modal.FooterControls>
           <Modal.SecondaryButton onClick={() => closeModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => onConfirm()}>Confirm (59)</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => onConfirm()}>Confirm ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>

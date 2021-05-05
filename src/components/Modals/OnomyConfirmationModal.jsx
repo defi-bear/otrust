@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import useInterval from '@use-it/interval';
 
 import { Close } from "./Icons";
 import * as Modal from "./styles";
@@ -19,10 +20,23 @@ const Caption = styled(Modal.Caption)`
   text-align: left;
 `;
 
-export default function OnomyConfirmationModal() {
+export default function OnomyConfirmationModal({ closeModal, onConfirm }) {
+  const [count, setCount] = useState(60);
+  const [delay, setDelay] = useState(1000);
+
+  const increaseCount = () => {
+    if(count === 0) {
+      setDelay(null);
+      closeModal();
+    } else {
+      setCount(count - 1);
+    }
+  }
+
+  useInterval(increaseCount, delay);
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon>
+      <Modal.CloseIcon onClick={() => closeModal()}>
         <Close />
       </Modal.CloseIcon>
 
@@ -30,14 +44,13 @@ export default function OnomyConfirmationModal() {
         <Caption>Step1. Onomy confirmation</Caption>
 
         <Message>
-          Onomy blockchain requires access for selling{" "}
-          <strong>1 239 NOM</strong>. Please confirm you want to do it
+          Onomy blockchain requires access for selling. Please confirm you want to do it
         </Message>
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton>Confirm (59)</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => closeModal()}>Cancel</Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={() => onConfirm()}>Approve ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
