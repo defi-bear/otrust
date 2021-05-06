@@ -182,6 +182,10 @@ export const ExchangeRateWrapper = styled.div`
   }
 `;
 
+export const ExchangeApproveText = styled.div`
+  text-align: center;
+`;
+
 export const Caption = styled.h3`
   margin: 0 0 24px;
 
