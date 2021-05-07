@@ -35,26 +35,36 @@ export default function TransactionCompletedModal({ type, amount, result, closeM
           <Success />
         </Modal.ModalIconWrapper>
         <Modal.Caption>Transaction Completed!</Modal.Caption>
-
-        {/* BUY */}
-        {/* <Modal.ExchangeResult>
-          + 1239 <sup>NOM</sup>
-        </Modal.ExchangeResult> */}
-
-        {/* SELL */}
-        <Modal.ExchangeResult>
-          + {result} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
-          <Modal.DetailsSeparator>/</Modal.DetailsSeparator>
-          <Modal.Spent>
-            - {amount} <sup>{type}</sup>
-          </Modal.Spent>
-        </Modal.ExchangeResult>
-
-        <Modal.ExchangeRateWrapper>
-          <span>Exchange Rate</span>
-
-          <strong>1 {type === 'ETH' ? 'NOM' : 'ETH'} = {type === 'ETH' ? currentNOMPrice : currentETHPrice} {type}</strong>
-        </Modal.ExchangeRateWrapper>
+        {
+          type !== 'APPROVE' ? (
+            <>
+      
+              {/* BUY */}
+              {/* <Modal.ExchangeResult>
+                + 1239 <sup>NOM</sup>
+              </Modal.ExchangeResult> */}
+      
+              {/* SELL */}
+              <Modal.ExchangeResult>
+                + {result} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
+                <Modal.DetailsSeparator>/</Modal.DetailsSeparator>
+                <Modal.Spent>
+                  - {amount} <sup>{type}</sup>
+                </Modal.Spent>
+              </Modal.ExchangeResult>
+      
+              <Modal.ExchangeRateWrapper>
+                <span>Exchange Rate</span>
+      
+                <strong>1 {type === 'ETH' ? 'NOM' : 'ETH'} = {type === 'ETH' ? currentNOMPrice : currentETHPrice} {type}</strong>
+              </Modal.ExchangeRateWrapper>
+            </>
+          ) : (
+            <Modal.ExchangeApproveText>
+              Onomy blockchain confired access for selling.
+            </Modal.ExchangeApproveText>
+          )
+        }
       </main>
       <footer>
         <Modal.FooterControls>

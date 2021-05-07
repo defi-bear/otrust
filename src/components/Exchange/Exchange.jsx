@@ -144,12 +144,22 @@ export default function Exchange() {
   }
 
   const onApprove = async () => {
-    setApproveModal(false);
-    let tx = await NOMcontract.approve(
-      bondContract.address,
-      MaxUint256
-    );
-    setPendingTx(tx);
+    try {
+      setApproveModal(false);
+      setSwapDenom('APPROVE')
+      let tx = await NOMcontract.approve(
+        bondContract.address,
+        MaxUint256
+      );
+      setPendingModal(true);
+      setPendingTx(tx);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      // console.error(e.code, e.message.message);
+      // alert(e.message)
+      setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
+      // setSwapBuyAmount(swapBuyAmount);
+    }
   }
 
   const [onSubmit, error] = useAsyncFn(submitTrans);
@@ -261,7 +271,7 @@ export default function Exchange() {
         </Receiving>
         <div>
           {
-            allowance && allowance.eq && !allowance.eq(0) ? (
+            allowance && allowance.eq && allowance.eq(0) ? (
               <SellBtn onClick={onSell}>Sell NOM</SellBtn>
             ) : (
               <SellBtn onClick={() => setApproveModal(true)}>Approve</SellBtn>
