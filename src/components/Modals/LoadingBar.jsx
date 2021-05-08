@@ -125,24 +125,9 @@ const LoadingBar = forwardRef(
       })
     }, [color, loaderStyle, shadowStyle])
 
-    useEffect(() => {
-      if (ref) {
-        if (ref && progress !== undefined) {
-          console.warn(
-            'react-top-loading-bar: You can\'t use both controlling by props and ref methods to control the bar! Please use only props or only ref methods! Ref methods will override props if "ref" property is available.'
-          )
-          return
-        }
-        checkIfFull(localProgress)
-        setUsingProps(false)
-      } else {
-        if (progress) checkIfFull(progress)
+    
 
-        setUsingProps(true)
-      }
-    }, [checkIfFull, localProgress, progress, ref])
-
-    const checkIfFull = (_progress) => {
+    const checkIfFull = React.useCallback((_progress) => {
       if (_progress >= 100) {
         // now it should wait a little bit
         loaderStyleSet({
@@ -210,7 +195,24 @@ const LoadingBar = forwardRef(
           })
         }
       }
-    }
+    }, [color, loaderSpeed, loaderStyle, onLoaderFinished, pressedContinuous, pressedStaticStart, shadow, shadowStyle, transitionTime, waitingTime])
+
+    useEffect(() => {
+        if (ref) {
+          if (ref && progress !== undefined) {
+            console.warn(
+              'react-top-loading-bar: You can\'t use both controlling by props and ref methods to control the bar! Please use only props or only ref methods! Ref methods will override props if "ref" property is available.'
+            )
+            return
+          }
+          checkIfFull(localProgress)
+          setUsingProps(false)
+        } else {
+          if (progress) checkIfFull(progress)
+  
+          setUsingProps(true)
+        }
+    }, [checkIfFull, localProgress, progress, ref])
 
     useInterval(
       () => {
