@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { lighten } from "polished";
 import { useWeb3React } from "@web3-react/core";
 import useInterval from '@use-it/interval';
-import LoadingBar from 'react-top-loading-bar'
+import LoadingBar from 'components/Modals/LoadingBar'
 
 import { useChain } from 'context/chain/ChainContext'
 import { Close, Metamask } from "./Icons";
