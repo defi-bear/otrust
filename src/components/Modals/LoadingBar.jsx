@@ -123,7 +123,7 @@ const LoadingBar = forwardRef(
         ...shadowStyle,
         boxShadow: `0 0 10px ${color}, 0 0 5px ${color}`,
       })
-    }, [color])
+    }, [color, loaderStyle, shadowStyle])
 
     useEffect(() => {
       if (ref) {
@@ -140,7 +140,7 @@ const LoadingBar = forwardRef(
 
         setUsingProps(true)
       }
-    }, [progress])
+    }, [checkIfFull, localProgress, progress, ref])
 
     const checkIfFull = (_progress) => {
       if (_progress >= 100) {

@@ -20,7 +20,7 @@ export function useInterval(
     if (!immediate) return
     if (delay === null || delay === false) return
     savedCallback.current()
-  }, [immediate])
+  }, [immediate, delay])
 
   // Set up the interval.
   useEffect(() => {
