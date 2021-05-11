@@ -231,7 +231,7 @@ const ConnectionRow = styled.div`
   }
 `;
 
-const ConnectionStatus = styled.div`
+export const ConnectionStatus = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -365,13 +365,13 @@ export default function AcctDash() {
           <AccountNumber>
             <p>My Account</p>
             <span>
-                {account === null
-                  ? "-"
-                  : account
-                  ? `${account.substring(0, 6)}...${account.substring(
-                      account.length - 4
-                    )}`
-                  : ""}
+              {account === null
+                ? "-"
+                : account
+                ? `${account.substring(0, 6)}...${account.substring(
+                    account.length - 4
+                  )}`
+                : ""}
             </span>
           </AccountNumber>
         </Header>

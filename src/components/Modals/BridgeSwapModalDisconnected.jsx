@@ -19,6 +19,10 @@ const ConnectWalletWrapper = styled.div`
 
   border-radius: 8px;
   background-color: ${(props) => props.theme.colors.bgDarken};
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    padding: 24px;
+  }
 `;
 
 export default function BridgeSwapModalDisconnected() {
@@ -32,27 +36,31 @@ export default function BridgeSwapModalDisconnected() {
         <main>
           <Modal.CaptionLeft>Onomy Bridge</Modal.CaptionLeft>
 
-          <Modal.ConnectionItem>
-            <Modal.ConnectionItemIcon>
-              <img src={bridgeCurveImg} alt="" />
-            </Modal.ConnectionItemIcon>
-            <Modal.ConnectionItemContent>
-              <strong>Onomy Bonding Curve</strong>
-              <span>0x526..123sdas8b</span>
-            </Modal.ConnectionItemContent>
-            <Modal.Balance>
-              <strong>wNOM Balance</strong>
-              <span>10,429.22</span>
-            </Modal.Balance>
-          </Modal.ConnectionItem>
+          <Modal.BridgeContent>
+            <Modal.ConnectionItem>
+              <Modal.ConnectionItemIcon>
+                <img src={bridgeCurveImg} alt="" />
+              </Modal.ConnectionItemIcon>
+              <Modal.ConnectionItemContent>
+                <strong>Onomy Bonding Curve</strong>
+                <span>0x526..123sdas8b</span>
+              </Modal.ConnectionItemContent>
+              <Modal.Balance>
+                <strong>wNOM Balance</strong>
+                <span>10,429.22</span>
+              </Modal.Balance>
+            </Modal.ConnectionItem>
 
-          <Modal.ConnectionStatus disconnected>
-            Onomy wallet is not connected
-          </Modal.ConnectionStatus>
+            <Modal.ConnectionStatus disconnected>
+              Onomy wallet is not connected
+            </Modal.ConnectionStatus>
 
-          <ConnectWalletWrapper>
-            <Modal.FullWidthButton>Connect Onomy Wallet</Modal.FullWidthButton>
-          </ConnectWalletWrapper>
+            <ConnectWalletWrapper>
+              <Modal.FullWidthButton>
+                Connect Onomy Wallet
+              </Modal.FullWidthButton>
+            </ConnectWalletWrapper>
+          </Modal.BridgeContent>
         </main>
         <Modal.Info>
           <h2>What is Onomy Bridge?</h2>

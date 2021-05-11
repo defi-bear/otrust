@@ -20,6 +20,16 @@ const FormWrapper = styled.form`
   margin: 32px -32px 0 -36px;
 
   border-top: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    margin-left: -28px;
+    margin-right: -24px;
+  }
+
+  @media screen and (max-width: ${responsive.laptopSmall}) {
+    margin-left: -28px;
+    margin-right: -28px;
+  }
 `;
 
 export default function BridgeSwapModal() {
@@ -33,31 +43,33 @@ export default function BridgeSwapModal() {
         <main>
           <Modal.CaptionLeft>Onomy Bridge</Modal.CaptionLeft>
 
-          <Modal.ConnectionItem>
-            <Modal.ConnectionItemIcon>
-              <img src={bridgeCurveImg} alt="" />
-            </Modal.ConnectionItemIcon>
-            <Modal.ConnectionItemContent>
-              <strong>Onomy Bonding Curve</strong>
-              <span>0x526..123sdas8b</span>
-            </Modal.ConnectionItemContent>
-            <Modal.Balance>
-              <strong>wNOM Balance</strong>
-              <span>10,429.22</span>
-            </Modal.Balance>
-          </Modal.ConnectionItem>
+          <Modal.BridgeContent>
+            <Modal.ConnectionItem>
+              <Modal.ConnectionItemIcon>
+                <img src={bridgeCurveImg} alt="" />
+              </Modal.ConnectionItemIcon>
+              <Modal.ConnectionItemContent>
+                <strong>Onomy Bonding Curve</strong>
+                <span>0x526..123sdas8b</span>
+              </Modal.ConnectionItemContent>
+              <Modal.Balance>
+                <strong>wNOM Balance</strong>
+                <span>10,429.22</span>
+              </Modal.Balance>
+            </Modal.ConnectionItem>
 
-          <Modal.ConnectionStatus>Bridge Connected</Modal.ConnectionStatus>
+            <Modal.ConnectionStatus>Bridge Connected</Modal.ConnectionStatus>
 
-          <Modal.ConnectionItem>
-            <Modal.ConnectionItemIcon>
-              <img src={walletImg} alt="" />
-            </Modal.ConnectionItemIcon>
-            <Modal.ConnectionItemContent>
-              <strong>My Onomy Wallet</strong>
-              <span>0x5262f6ef7cbdsad334123sdas8b</span>
-            </Modal.ConnectionItemContent>
-          </Modal.ConnectionItem>
+            <Modal.ConnectionItem>
+              <Modal.ConnectionItemIcon>
+                <img src={walletImg} alt="" />
+              </Modal.ConnectionItemIcon>
+              <Modal.ConnectionItemContent>
+                <strong>My Onomy Wallet</strong>
+                <span>0x5262f6ef7cbdsad334123sdas8b</span>
+              </Modal.ConnectionItemContent>
+            </Modal.ConnectionItem>
+          </Modal.BridgeContent>
 
           <FormWrapper>
             <InputWrapper>

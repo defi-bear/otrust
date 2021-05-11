@@ -350,6 +350,10 @@ export const BridgeModalWrapper = styled(Wrapper)`
     top: 50px;
     transform: translate( -50%, 0);
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+   width: 100%;
+ }
 `;
 
 export const Info = styled.aside`
@@ -388,6 +392,17 @@ export const InfoRow = styled.section`
   @media screen and (max-width: ${responsive.laptop}) {
     grid-template-columns: 1fr 150px;
   }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > img {
+      width: 230px;
+      margin: 32px auto;
+    }
+  }
 `;
 
 export const ConnectionItem = styled.div`
@@ -402,6 +417,12 @@ export const ConnectionItem = styled.div`
 
   @media screen and (max-width: ${responsive.laptop}) {
     gap: 20px;
+  }
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    &:first-child {
+      grid-column: 1/3;
+    }
   }
 `;
 
@@ -502,7 +523,10 @@ export const Balance = styled.div`
 `;
 
 export const ConnectionStatus = styled.div`
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   margin: 40px auto;
   padding: 16px 40px;
 
@@ -516,6 +540,18 @@ export const ConnectionStatus = styled.div`
       ? props.theme.colors.highlightRed
       : props.theme.colors.highlightGreen};
   white-space: nowrap;
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    grid-column: 2/3;
+    grid-row: 2/3;
+
+    height: 100%;
+    margin: 0;
+    padding: 24px;
+
+    white-space: pre-wrap;
+    text-align: center;
+  }
 
   &::before,
   &::after {
@@ -533,6 +569,10 @@ export const ConnectionStatus = styled.div`
     props.disconnected
       ? props.theme.colors.highlightRed
       : props.theme.colors.highlightGreen};
+
+    @media screen and (max-width: ${responsive.tabletSmall}) {
+      display: none;
+    }
   }
 
   &::after {
@@ -557,8 +597,6 @@ export const BridgeLayout = styled.div`
 
   @media screen and (max-width: ${responsive.laptopSmall}) {
     grid-template-columns: none;
-
-
   }
 
   & > main {
@@ -599,3 +637,15 @@ export const FullWidthButton = styled(PrimaryButton)`
 export const CaptionLeft = styled(Caption)`
   text-align: left;
 `;
+
+export const BridgeContent = styled.div`
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    grid-template-columns: 1fr 150px;
+    grid-template-rows: 1fr 1fr;
+    gap: 24px;
+  }
+  
+`
