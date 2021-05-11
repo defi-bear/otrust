@@ -34,7 +34,6 @@ export default function OnomyConfirmationModal({ closeModal, onConfirm }) {
   }
 
   useInterval(increaseCount, delay);
-
   return (
     <Modal.Wrapper>
       <Modal.CloseIcon onClick={() => closeModal()}>
