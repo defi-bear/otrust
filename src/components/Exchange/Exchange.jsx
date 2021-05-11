@@ -271,7 +271,7 @@ export default function Exchange() {
         </Receiving>
         <div>
           {
-            allowance && allowance.eq && allowance.eq(0) ? (
+            allowance && allowance.eq && !allowance.eq(0) ? (
               <SellBtn onClick={onSell}>Sell NOM</SellBtn>
             ) : (
               <SellBtn onClick={() => setApproveModal(true)}>Approve</SellBtn>
