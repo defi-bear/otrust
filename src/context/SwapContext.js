@@ -54,6 +54,7 @@ function SwapProvider({ children }) {
                         setSwapBuyAmount(chopFloat(ETHbalance, 5))
                         setSwapSupply([supplyNOM, supplyNOM])
                     }
+                    break;
                 case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount.toString():
                     
                     if (swapSellAmount <= supplyNOM) {
