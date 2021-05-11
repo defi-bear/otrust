@@ -42,12 +42,9 @@ function SwapProvider({ children }) {
     useEffect(() => {
         async function swapAmount() {
             switch (true) {
-                case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount:
-                        
-                    console.log("ETH", ETHbalance.toString())
-                    console.log("SwapBuyamount: ", swapBuyAmount)
+                case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount.toString():
                     try {
-                        const amountNOMRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount))
+                        const amountNOMRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount.toString()))
                         const amountNOM = parseFloat(formatEther(amountNOMRaw))
                         const supplyTop = supplyNOM + amountNOM
                     
@@ -57,19 +54,21 @@ function SwapProvider({ children }) {
                         setSwapBuyAmount(chopFloat(ETHbalance, 5))
                         setSwapSupply([supplyNOM, supplyNOM])
                     }
-                            
-                    break
-                case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount:
+                    break;
+                case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount.toString():
                     
                     if (swapSellAmount <= supplyNOM) {
-                        console.log("NOM", NOMbalance.toString())
-                        console.log("Swapsellamount: ", swapSellAmount)
-                        const amountETHRaw = await bondContract.sellQuoteNOM(parseEther(swapSellAmount));
-                        const amountETH = parseFloat(formatEther(amountETHRaw))
-                        const supplyBot = supplyNOM - swapSellAmount
+                        try {
+                            const amountETHRaw = await bondContract.sellQuoteNOM(parseEther(swapSellAmount.toString()));
+                            const amountETH = parseFloat(formatEther(amountETHRaw))
+                            const supplyBot = supplyNOM - swapSellAmount
 
-                        setSwapSellResult(amountETH)
-                        setSwapSupply([supplyBot, supplyNOM])
+                            setSwapSellResult(amountETH)
+                            setSwapSupply([supplyBot, supplyNOM])
+                        } catch {
+                            setSwapSellAmount(chopFloat(NOMbalance, 5))
+                            setSwapSupply([supplyNOM, supplyNOM])
+                        }
                     } else {
                         setSwapSellAmount(chopFloat(NOMbalance, 5))
                         setSwapSupply([supplyNOM, supplyNOM])
