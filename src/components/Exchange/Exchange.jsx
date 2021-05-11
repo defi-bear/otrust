@@ -36,7 +36,7 @@ export default function Exchange() {
   const [completedModal, setCompletedModal] = useState('');
   const [completedAmount, setCompletedAmount] = useState(null);
   const [completedResult, setCompletedResult] = useState(null);
-  const [slippage, setSlippage] = useState(0);
+  const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
   const [failedModal, setFailedModal] = useState(null);
   
