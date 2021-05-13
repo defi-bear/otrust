@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { MaxUint256 } from "@ethersproject/constants";
 import { parseEther } from "@ethersproject/units";
 import { useAsyncFn } from "lib/use-async-fn";
 import { chopFloat } from "utils/math"
@@ -142,25 +141,33 @@ export default function Exchange() {
     setSwapDenom('NOM');
     setConfirmModal('NOM');
   }
-
-  const onApprove = async () => {
-    try {
-      setApproveModal(false);
-      setSwapDenom('APPROVE')
-      let tx = await NOMcontract.approve(
-        bondContract.address,
-        MaxUint256
-      );
-      setPendingModal(true);
-      setPendingTx(tx);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      // console.error(e.code, e.message.message);
-      // alert(e.message)
-      setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
-      // setSwapBuyAmount(swapBuyAmount);
+  
+  const onApprove = async (value) => {
+    if(value <= NOMbalance) {
+      try {
+        setApproveModal(false);
+        setSwapDenom('APPROVE')
+        console.log("Approve: ", value)
+        console.log("Balance: ", NOMbalance.toPrecision(5))
+        let tx = await NOMcontract.increaseAllowance(
+          bondContract.address,
+          parseEther(value).toString()
+        );
+        setPendingModal(true);
+        setPendingTx(tx);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        // console.error(e.code, e.message.message);
+        // alert(e.message)
+        setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
+        // setSwapBuyAmount(swapBuyAmount);
+      }    
+    } else {
+      setFailedModal('NOM Balance too low')
     }
-  }
+  } 
+  
+  
 
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
@@ -284,32 +291,3 @@ export default function Exchange() {
     </ExchangeWrapper>
   );
 }
-
-/* <form onSubmit={onSubmit}>
-  <SwapHeader>Swap</SwapHeader>
-  <GridWrapper>
-    <LeftComponentWrapper>From:</LeftComponentWrapper>
-    {error ? error : null}
-    <StyledInput
-      type="text"
-      value={swapBuyAmount}
-      onChange={onTextChange}
-      onTextAreaKeyDown={onTextAreaKeyDown}
-      placeholder={isWorking ? "Confirming" : "Enter amount"}
-    />
-    <Dropdown denom={swapDenom} setDenom={setSwapDenom} />
-    <LeftComponentWrapper>To:</LeftComponentWrapper>
-    <MiddleComponentWrapper>
-      {swapSellAmount
-        ? parseFloat(swapSellAmount).toPrecision(10)
-        : null}
-    </MiddleComponentWrapper>
-    <RightComponentWrapper>
-      {swapDenom === "NOM" ? "ETH" : "NOM"}
-    </RightComponentWrapper>
-  </GridWrapper>
-
-  <RowWrapper>
-    <Button type="submit">Execute</Button>
-  </RowWrapper>
-</form> */

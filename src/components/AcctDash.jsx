@@ -349,8 +349,8 @@ const SocialBtn = styled.a`
 
 export default function AcctDash() {
   const { active, error, chainId, account } = useWeb3React();
-  const { ETHbalance, NOMbalance, blockNumber } = useChain();
-
+  const { ETHbalance, NOMallowance, NOMbalance, blockNumber } = useChain();
+  console.log(NOMallowance)
   return (
     <Panel>
       <SidebarLayout>
