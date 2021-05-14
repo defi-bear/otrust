@@ -46,17 +46,16 @@ export default function TransactionCompletedModal({ type, amount, result, closeM
       
               {/* SELL */}
               <Modal.ExchangeResult>
-                + {result} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
-                <Modal.DetailsSeparator>/</Modal.DetailsSeparator>
+                + {parseFloat(result).toFixed(8)} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
                 <Modal.Spent>
-                  - {amount} <sup>{type}</sup>
+                  - {parseFloat(amount).toFixed(8)} <sup>{type}</sup>
                 </Modal.Spent>
               </Modal.ExchangeResult>
       
               <Modal.ExchangeRateWrapper>
                 <span>Exchange Rate</span>
       
-                <strong>1 {type === 'ETH' ? 'NOM' : 'ETH'} = {type === 'ETH' ? currentNOMPrice : currentETHPrice} {type}</strong>
+                <strong>1 {type === 'ETH' ? 'NOM' : 'ETH'} = {type === 'ETH' ? parseFloat(currentNOMPrice).toFixed(8) : parseFloat(currentETHPrice).toFixed(8)} {type}</strong>
               </Modal.ExchangeRateWrapper>
             </>
           ) : (
