@@ -4,14 +4,14 @@ import styled from "styled-components";
 import { responsive } from "theme/constants";
 
 import BondLineChart from "components/Chart/BondLineChart";
-import HistoricalChart from "components/Chart/D3HistoricalChart";
+import LineChart from "components/Chart/D3LineChart";
 import CandelChart from "components/Chart/D3CandelChart";
 
 import { useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";
 
 import {
-  historicalHeaderDefault,
+  lineHeaderDefault,
   candelHeaderDefault,
 } from "components/Chart/defaultChartData";
 
@@ -74,19 +74,19 @@ export default function Chart() {
 
     const [chartType, setChartType] = useState("bondingCurve");
 
-    const [historicalHeaderId] = useState("1");
-    const [historicalHeader] = useState(historicalHeaderDefault);
+    const [lineHeaderId] = useState("1");
+    const [lineHeader] = useState(lineHeaderDefault);
 
     const [candelHeaderId] = useState("1");
     const [candelHeader] = useState(candelHeaderDefault);
 
     const renderChart = (type) => {
         switch (type) {
-        case "historicalChart":
+        case "lineChart":
             return (
-            <HistoricalChart
-                historicalHeader={historicalHeader}
-                historicalHeaderId={historicalHeaderId}
+            <LineChart
+                lineHeader={lineHeader}
+                lineHeaderId={lineHeaderId}
                 bondData={bondData}
                 error={error}
                 loading={loading}
@@ -113,8 +113,8 @@ export default function Chart() {
             <ChartTypeBtn onClick={() => setChartType("bondingCurve")}>
               Bonding Curve Chart
             </ChartTypeBtn>
-            <ChartTypeBtn onClick={() => setChartType("historicalChart")}>
-              Historical Chart
+            <ChartTypeBtn onClick={() => setChartType("lineChart")}>
+              Line Chart
             </ChartTypeBtn>
             <ChartTypeBtn onClick={() => setChartType("candleView")}>
               Candle View
