@@ -9,10 +9,10 @@ import Exchange from "components/Exchange/Exchange"
 
 const ContentLayout = styled.div`
   display: grid;
-  grid-template-rows: 550px auto;
+  grid-template-rows: auto auto;
 
   @media screen and (max-width: ${responsive.laptop}) {
-    grid-template-rows: 400px auto;
+    grid-template-rows: auto auto;
   }
 `;
 
