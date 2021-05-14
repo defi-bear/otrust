@@ -350,7 +350,7 @@ const SocialBtn = styled.a`
 export default function AcctDash() {
   const { active, error, chainId, account } = useWeb3React();
   const { ETHbalance, NOMallowance, NOMbalance, blockNumber } = useChain();
-  console.log(NOMallowance)
+  console.log("NOM allownce: ", NOMallowance)
   return (
     <Panel>
       <SidebarLayout>
@@ -393,10 +393,9 @@ export default function AcctDash() {
                 ? "Error"
                 : NOMbalance
                 ? `${NOMbalance.toPrecision(8)}`
-                : ""}
+                : "0"}
             </span>
           </div>
-
           {/* <Balance /> */}
         </Balances>
         <Connection>

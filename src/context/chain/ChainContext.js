@@ -3,9 +3,9 @@ import { formatEther, parseEther } from '@ethersproject/units'
 import { useWeb3React } from "@web3-react/core"
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
-import { contAddrs } from './contracts'
 
 import { NOMCont, BondingCont } from './contracts'
+import addrs from 'context/chain/NOMAddrs.json';
 import BigNumber from 'bignumber.js';
 
 export const ChainContext = createContext()
@@ -18,8 +18,8 @@ function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
     const [ETHbalance, setETHBalance] = useState()
-    const [NOMallowance, setNOMallowance] = useState()
     const [NOMbalance, setNOMBalance] = useState()
+    const [NOMallowance, setNOMAllowance] = useState(0)
     const [supplyNOM, setSupplyNOM] = useState()
     const bondContract = BondingCont(library)
     const NOMcontract = NOMCont(library)
@@ -54,14 +54,14 @@ function ChainProvider({ theme, children }) {
                     [
                         library.getBalance(account),
                         NOMcontract.balanceOf(account),
-                        NOMcontract.allowance(account, contAddrs.NOMERC20),
+                        NOMcontract.allowance(account, addrs.BondingNOM),
                         bondContract.getSupplyNOM(),
                         getCurrentPrice()  
                     ]
                 ).then((values) => {
                     setETHBalance(parseFloat(formatEther(values[0])))
                     setNOMBalance(parseFloat(formatEther(values[1])))
-                    setNOMallowance(parseFloat(formatEther(values[2])))
+                    setNOMAllowance(parseFloat(formatEther(values[2])))
                     setSupplyNOM(parseFloat(formatEther(values[3])))
                 }).catch((err) => { console.log(err) })
             })

@@ -20,7 +20,7 @@ import { Dimmer } from "components/UI/Dimmer";
 
 import { useSwap, useUpdateSwap } from "context/SwapContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
-import { useAllowance } from "context/useAllowance";
+// import { useAllowance } from "context/useAllowance";
 import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
 import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/TransactionFailedModal";
@@ -29,7 +29,7 @@ import PendingModal from "components/Modals/PendingModal";
 export default function Exchange() {
   const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult, swapDenom } = useSwap();
   const { setSwapBuyAmount, setSwapBuyResult, setSwapSellAmount, setSwapSellResult, setSwapDenom } = useUpdateSwap();
-  const allowance = useAllowance();
+  // const allowance = useAllowance();
   const [confirmModal, setConfirmModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [completedModal, setCompletedModal] = useState('');
@@ -40,7 +40,7 @@ export default function Exchange() {
   const [failedModal, setFailedModal] = useState(null);
   
   const [pendingModal, setPendingModal] = useState(false);
-  const { bondContract, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
+  const { bondContract, NOMallowance, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
   const { setPendingTx } = useUpdateChain();
   
   const onBuyNOMTextChange = useCallback(
@@ -89,6 +89,7 @@ export default function Exchange() {
         setCompletedResult(denom === 'ETH' ? swapBuyResult : swapSellResult);
         setPendingModal(true);
         setSwapBuyAmount("");
+        setSwapSellAmount("");
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e.code, e.message.message);
@@ -107,7 +108,8 @@ export default function Exchange() {
       setPendingTx,
       slippage,
       setCompletedAmount,
-      setCompletedResult
+      setCompletedResult,
+      setSwapSellAmount
     ]
   );
 
@@ -146,14 +148,12 @@ export default function Exchange() {
     if(value <= NOMbalance) {
       try {
         setApproveModal(false);
+        setPendingModal(true);
         setSwapDenom('APPROVE')
-        console.log("Approve: ", value)
-        console.log("Balance: ", NOMbalance.toPrecision(5))
         let tx = await NOMcontract.increaseAllowance(
           bondContract.address,
           parseEther(value).toString()
         );
-        setPendingModal(true);
         setPendingTx(tx);
       } catch (e) {
         // eslint-disable-next-line no-console
@@ -203,7 +203,7 @@ export default function Exchange() {
           <Dimmer>
             <OnomyConfirmationModal
               closeModal={() => setApproveModal(false)}
-              onConfirm={onApprove}
+              onConfirm={() => onApprove(swapSellAmount)}
             />
           </Dimmer>
       }
@@ -278,11 +278,11 @@ export default function Exchange() {
         </Receiving>
         <div>
           {
-            allowance && allowance.eq && !allowance.eq(0) ? (
-              <SellBtn onClick={onSell}>Sell NOM</SellBtn>
-            ) : (
-              <SellBtn onClick={() => setApproveModal(true)}>Approve</SellBtn>
-            )
+            NOMallowance > swapSellAmount && NOMbalance > swapSellAmount ? (
+              <SellBtn onClick={onSell}>Sell NOM</SellBtn>) : 
+                  NOMbalance > swapSellAmount ? (
+                    <SellBtn onClick={() => setApproveModal(true)}>Approve</SellBtn>
+                  ) : <SellBtn>Not enough NOM</SellBtn>
           }
         </div>
       </ExchangeItem>
