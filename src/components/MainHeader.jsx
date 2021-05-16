@@ -197,7 +197,6 @@ export default function MainHeader(props) {
                       : ""}
                   </span>
                   </strong>
-                  <Details type="decrease">32.11%</Details>
                 </HeaderInfoItemValue>
               </HeaderInfoItem>
             </ExchangeRate>
@@ -214,7 +213,7 @@ export default function MainHeader(props) {
                         : ""}
                     </span>
                   </strong>
-                  <Details>/ 100,000,000</Details>
+                  <Details>/ 1E8</Details>
                 </HeaderInfoItemValue>
               </HeaderInfoItem>
             </Issued>

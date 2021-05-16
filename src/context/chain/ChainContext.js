@@ -22,6 +22,7 @@ function ChainProvider({ theme, children }) {
     const [NOMallowance, setNOMAllowance] = useState(0)
     const [supplyNOM, setSupplyNOM] = useState()
     const [bondPrice, setBondPrice] = useState()
+    // const [ETHUSD, setETHUSD] = useState()
     const bondContract = BondingCont(library)
     const NOMcontract = NOMCont(library)
     const [pendingTx, setPendingTx] = useState()
@@ -58,6 +59,7 @@ function ChainProvider({ theme, children }) {
                         NOMcontract.allowance(account, addrs.BondingNOM),
                         bondContract.getSupplyNOM(),
                         bondContract.buyQuoteETH(parseEther('1')),
+                        // UniSwapCont.getReserves(),
                         getCurrentPrice()  
                     ]
                 ).then((values) => {
@@ -66,6 +68,7 @@ function ChainProvider({ theme, children }) {
                     setNOMAllowance(parseFloat(formatEther(values[2])))
                     setSupplyNOM(parseFloat(formatEther(values[3])))
                     setBondPrice(parseFloat(formatEther(values[4])))
+                    // setETHUSD(values[5])
                 }).catch((err) => { console.log(err) })
             })
             // remove listener when the component is unmounted
@@ -84,6 +87,7 @@ function ChainProvider({ theme, children }) {
         currentETHPrice,
         currentNOMPrice,
         ETHbalance,
+    //    ETHUSD,
         NOMallowance,
         NOMbalance,
         NOMcontract,
