@@ -4,6 +4,8 @@ import { useWeb3React } from "@web3-react/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { formatEther } from "@ethersproject/units";
+import { truncate } from 'utils/math'
 
 import { Panel } from "components/UI";
 import { useChain } from "context/chain/ChainContext";
@@ -349,8 +351,7 @@ const SocialBtn = styled.a`
 
 export default function AcctDash() {
   const { active, error, chainId, account } = useWeb3React();
-  const { ETHbalance, NOMallowance, NOMbalance, blockNumber } = useChain();
-  console.log("NOM allownce: ", NOMallowance)
+  const { ETHbalance, NOMbalance, blockNumber } = useChain();
   return (
     <Panel>
       <SidebarLayout>
@@ -382,7 +383,7 @@ export default function AcctDash() {
               {ETHbalance === null
                 ? "Error"
                 : ETHbalance
-                ? `${ETHbalance.toPrecision(8)}`
+                ? `${truncate(formatEther(ETHbalance), 4)}`
                 : ""}
             </span>
           </div>
@@ -392,7 +393,7 @@ export default function AcctDash() {
               {NOMbalance === null
                 ? "Error"
                 : NOMbalance
-                ? `${NOMbalance.toPrecision(8)}`
+                ? `${truncate(formatEther(NOMbalance), 4)}`
                 : "0"}
             </span>
           </div>

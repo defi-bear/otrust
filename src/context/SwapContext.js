@@ -1,9 +1,7 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
-import { parseEther, formatEther } from "@ethersproject/units";
-import { chopFloat } from 'utils/math'
+import { BigNumber } from "@ethersproject/bignumber"
 
 import { useChain } from 'context/chain/ChainContext'
-
 
 export const SwapContext = createContext()
 export const useSwap = () => useContext(SwapContext)
@@ -12,13 +10,13 @@ export const UpdateSwapContext = createContext()
 export const useUpdateSwap = () => useContext(UpdateSwapContext)
 
 function SwapProvider({ children }) {
-    const { supplyNOM, supplyNOMRaw } = useChain()
+    const { supplyNOM } = useChain()
     const { bondContract, ETHbalance, NOMbalance } = useChain()
-    const [swapBuyAmount, setSwapBuyAmount] = useState(0)
-    const [swapBuyResult, setSwapBuyResult] = useState('')
+    const [swapBuyAmount, setSwapBuyAmount] = useState(BigNumber.from(0))
+    const [swapBuyResult, setSwapBuyResult] = useState(BigNumber.from(0))
     const [swapDenom, setSwapDenom] = useState('ETH')
-    const [swapSellAmount, setSwapSellAmount] = useState(0)
-    const [swapSellResult, setSwapSellResult] = useState('')
+    const [swapSellAmount, setSwapSellAmount] = useState(BigNumber.from(0))
+    const [swapSellResult, setSwapSellResult] = useState(BigNumber.from(0))
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
     
     const contextValue = {
@@ -44,14 +42,13 @@ function SwapProvider({ children }) {
             switch (true) {
                 case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount.toString():
                     try {
-                        const amountNOMRaw = await bondContract.buyQuoteETH(parseEther(swapBuyAmount.toString()))
-                        const amountNOM = parseFloat(formatEther(amountNOMRaw))
-                        const supplyTop = supplyNOM + amountNOM
+                        const amountNOM = await bondContract.buyQuoteETH(swapBuyAmount)
+                        const supplyTop = supplyNOM.add(amountNOM)
                     
                         setSwapBuyResult(amountNOM)
                         setSwapSupply([supplyNOM, supplyTop])
                     } catch (err) {
-                        setSwapBuyAmount(chopFloat(ETHbalance, 5))
+                        setSwapBuyAmount(ETHbalance)
                         setSwapSupply([supplyNOM, supplyNOM])
                     }
                     break;
@@ -59,32 +56,31 @@ function SwapProvider({ children }) {
                     
                     if (swapSellAmount <= supplyNOM) {
                         try {
-                            const amountETHRaw = await bondContract.sellQuoteNOM(parseEther(swapSellAmount.toString()));
-                            const amountETH = parseFloat(formatEther(amountETHRaw))
-                            const supplyBot = supplyNOM - swapSellAmount
+                            const amountETH = await bondContract.sellQuoteNOM(swapSellAmount);
+                            const supplyBot = supplyNOM.sub(swapSellAmount)
 
                             setSwapSellResult(amountETH)
                             setSwapSupply([supplyBot, supplyNOM])
                         } catch {
-                            setSwapSellAmount(chopFloat(NOMbalance, 5))
+                            setSwapSellAmount(NOMbalance)
                             setSwapSupply([supplyNOM, supplyNOM])
                         }
                     } else {
-                        setSwapSellAmount(chopFloat(NOMbalance, 5))
+                        setSwapSellAmount(NOMbalance)
                         setSwapSupply([supplyNOM, supplyNOM])
                     }
                     
                     break
                 default:
                     {
-                        setSwapBuyResult('')
-                        setSwapSellResult('')
+                        setSwapBuyResult(BigNumber.from(0))
+                        setSwapSellResult(BigNumber.from(0))
                         setSwapSupply([supplyNOM, supplyNOM])
                     }
             }
         }  
         swapAmount()
-    }, [bondContract, ETHbalance, NOMbalance, supplyNOM, supplyNOMRaw, swapBuyAmount, swapSellAmount])
+    }, [bondContract, ETHbalance, NOMbalance, supplyNOM, swapBuyAmount, swapSellAmount])
 
     return (
         <UpdateSwapContext.Provider value={updateValue}>

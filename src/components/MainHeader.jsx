@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { formatEther } from "@ethersproject/units";
 
 import logo from "assets/logo.svg";
 import { Container } from "./UI";
@@ -162,7 +163,7 @@ const Details = styled.span`
 `;
 
 export default function MainHeader(props) {
-  const { supplyNOM, bondPrice } = useChain()
+  const { supplyNOM, currentETHPrice } = useChain()
 
   return (
     <header>
@@ -190,10 +191,10 @@ export default function MainHeader(props) {
                 <HeaderInfoItemValue>
                   <strong>
                   <span>
-                    {bondPrice === null
+                    {currentETHPrice === null
                       ? "Loading"
-                      : bondPrice
-                      ? `${bondPrice.toPrecision(4)}`
+                      : currentETHPrice
+                      ? `${Math.round(parseFloat(formatEther(currentETHPrice)))}`
                       : ""}
                   </span>
                   </strong>
@@ -209,7 +210,7 @@ export default function MainHeader(props) {
                       {supplyNOM === null
                         ? "Loading"
                         : supplyNOM
-                        ? `${Math.round(supplyNOM)}`
+                        ? `${Math.round(parseFloat(formatEther(supplyNOM)))}`
                         : ""}
                     </span>
                   </strong>
