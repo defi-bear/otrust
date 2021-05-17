@@ -1,10 +1,11 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useAsyncFn } from "lib/use-async-fn";
-import { chopFloat, truncate } from "utils/math"
+import { truncate } from "utils/math"
 import { BigNumber } from "@ethersproject/bignumber"
-import { parseEther, formatEther } from "@ethersproject/units";
+import { formatEther } from "@ethersproject/units";
 
 import ExchangeModals from "./ExchangeModals";
+
 import {
   ExchangeWrapper,
   ExchangeItem,
@@ -16,12 +17,13 @@ import {
   SellBtn,
   ExchangeButton,
 } from "./exchangeStyles";
+
 import ConfirmTransactionModal from '../Modals/ConfirmTransactionModal';
 import { Dimmer } from "components/UI/Dimmer";
 
 import { useSwap, useUpdateSwap } from "context/SwapContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
-// import { useAllowance } from "context/useAllowance";
+
 import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
 import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/TransactionFailedModal";
@@ -31,12 +33,12 @@ export default function Exchange() {
   const { 
     swapBuyAmount, 
     swapBuyResult,
-    swapBuyValue, 
     swapSellAmount, 
     swapSellResult,
     swapSellValue, 
     swapDenom 
   } = useSwap();
+  
   const { 
     setSwapBuyAmount, 
     setSwapBuyResult, 
@@ -46,7 +48,7 @@ export default function Exchange() {
     setSwapSellValue, 
     setSwapDenom 
   } = useUpdateSwap();
-  // const allowance = useAllowance();
+  
   const [confirmModal, setConfirmModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [completedModal, setCompletedModal] = useState('');
@@ -57,40 +59,65 @@ export default function Exchange() {
   const [failedModal, setFailedModal] = useState(null);
   
   const [pendingModal, setPendingModal] = useState(false);
-  const { bondContract, NOMallowance, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
+  
+  const { 
+    bondContract, 
+    NOMallowance, 
+    NOMcontract, 
+    ETHbalance, 
+    NOMbalance, 
+    pendingTx 
+  } = useChain();
+  
   const { setPendingTx } = useUpdateChain();
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
+      evt.preventDefault()
       setSwapBuyValue(evt.target.value)
       setSwapSellAmount('')
-      setSwapSellResult(0)
-      setSwapSellValue('')
+      setSwapSellResult('')
       setSwapDenom('ETH')
       if (!evt.target.value) {
-        setSwapBuyAmount(0)
+        setSwapBuyAmount('')
+        setSwapBuyResult('')
       } else {
-        setSwapBuyAmount(parseEther(parseFloat(evt.target.value).toString()))
+        setSwapBuyAmount(evt.target.value)
       }
     },
-    [setSwapBuyAmount, setSwapDenom, setSwapSellAmount, setSwapSellResult]
+    [
+      setSwapBuyAmount,
+      setSwapBuyResult,
+      setSwapBuyValue,
+      setSwapDenom, 
+      setSwapSellAmount,
+      setSwapSellResult
+    ]
   );
   
   const onSellNOMTextChange = useCallback(
     (evt) => {
+      evt.preventDefault()
       setSwapSellValue(evt.target.value)
       setSwapBuyAmount('')
-      setSwapBuyResult(0)
-      setSwapBuyValue('')
+      setSwapBuyResult('')
       setSwapDenom('NOM')
 
       if (!evt.target.value) {
-        setSwapSellAmount(0)
+        setSwapSellAmount('')
+        setSwapSellResult('')
       } else {
-        setSwapSellAmount(parseEther(parseFloat(evt.target.value).toString()))
+        setSwapSellAmount(evt.target.value)
       }
     },
-    [setSwapSellAmount, setSwapDenom, setSwapBuyAmount, setSwapBuyResult]
+    [
+      setSwapBuyAmount, 
+      setSwapBuyResult,
+      setSwapDenom,
+      setSwapSellAmount,
+      setSwapSellResult,
+      setSwapSellValue
+    ]
   );
 
   const submitTrans = useCallback(
@@ -270,7 +297,7 @@ export default function Exchange() {
           <ExchangeInput
             type="text"
             onChange={onBuyNOMTextChange}
-            value={swapBuyValue}
+            value={swapBuyAmount}
           />
           ETH
           <MaxBtn onClick={onEthMax}>Max</MaxBtn>
@@ -278,7 +305,11 @@ export default function Exchange() {
         <Receiving>
           <strong>I'm receiving</strong>
           <ReceivingValue>
-            {truncate(formatEther(swapBuyResult), 4)} NOM
+            {
+              BigNumber.isBigNumber(swapBuyResult) ? 
+              truncate(formatEther(swapBuyResult), 4) : 
+              ''
+            } NOM
           </ReceivingValue>
         </Receiving>
         <div>
@@ -301,7 +332,11 @@ export default function Exchange() {
         <Receiving>
           <strong>I'm receiving</strong>
           <ReceivingValue>
-            {truncate(formatEther(swapSellResult), 4)} ETH
+            {
+              BigNumber.isBigNumber(swapSellResult) ? 
+              truncate(formatEther(swapSellResult), 4) : 
+              ''
+            } ETH
           </ReceivingValue>
         </Receiving>
         <div>
