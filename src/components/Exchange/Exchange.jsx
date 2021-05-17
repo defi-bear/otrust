@@ -28,8 +28,24 @@ import TransactionFailedModal from "components/Modals/TransactionFailedModal";
 import PendingModal from "components/Modals/PendingModal";
 
 export default function Exchange() {
-  const { swapBuyAmount, swapBuyResult, swapSellAmount, swapSellResult, swapDenom } = useSwap();
-  const { setSwapBuyAmount, setSwapBuyResult, setSwapSellAmount, setSwapSellResult, setSwapDenom } = useUpdateSwap();
+  const { 
+    swapBuyAmount, 
+    swapBuyResult,
+    swapBuyValue, 
+    swapSellAmount, 
+    swapSellResult,
+    swapSellValue, 
+    swapDenom 
+  } = useSwap();
+  const { 
+    setSwapBuyAmount, 
+    setSwapBuyResult, 
+    setSwapBuyValue, 
+    setSwapSellAmount, 
+    setSwapSellResult,
+    setSwapSellValue, 
+    setSwapDenom 
+  } = useUpdateSwap();
   // const allowance = useAllowance();
   const [confirmModal, setConfirmModal] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
@@ -46,13 +62,15 @@ export default function Exchange() {
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
-      setSwapSellAmount(BigNumber.from(0))
-      setSwapSellResult(BigNumber.from(0))
+      setSwapBuyValue(evt.target.value)
+      setSwapSellAmount('')
+      setSwapSellResult(0)
+      setSwapSellValue('')
       setSwapDenom('ETH')
-      if (evt.target.value > 0) {
-        setSwapBuyAmount(parseEther(evt.target.value))
+      if (!evt.target.value) {
+        setSwapBuyAmount(0)
       } else {
-        setSwapBuyAmount(BigNumber.from(0))
+        setSwapBuyAmount(parseEther(parseFloat(evt.target.value).toString()))
       }
     },
     [setSwapBuyAmount, setSwapDenom, setSwapSellAmount, setSwapSellResult]
@@ -60,14 +78,16 @@ export default function Exchange() {
   
   const onSellNOMTextChange = useCallback(
     (evt) => {
-      setSwapBuyAmount(BigNumber.from(0))
-      setSwapBuyResult(BigNumber.from(0))
+      setSwapSellValue(evt.target.value)
+      setSwapBuyAmount('')
+      setSwapBuyResult(0)
+      setSwapBuyValue('')
       setSwapDenom('NOM')
 
-      if (evt.target.value > 0) {
-        setSwapSellAmount(parseEther(parseFloat(evt.target.value).toString()))
+      if (!evt.target.value) {
+        setSwapSellAmount(0)
       } else {
-        setSwapSellAmount(BigNumber.from(0))
+        setSwapSellAmount(parseEther(parseFloat(evt.target.value).toString()))
       }
     },
     [setSwapSellAmount, setSwapDenom, setSwapBuyAmount, setSwapBuyResult]
@@ -250,7 +270,7 @@ export default function Exchange() {
           <ExchangeInput
             type="text"
             onChange={onBuyNOMTextChange}
-            value={formatEther(swapBuyAmount).toString()}
+            value={swapBuyValue}
           />
           ETH
           <MaxBtn onClick={onEthMax}>Max</MaxBtn>
@@ -273,6 +293,7 @@ export default function Exchange() {
           <ExchangeInput
             type="text"
             onChange={onSellNOMTextChange}
+            value={swapSellValue}
           />
           NOM
           <MaxBtn onClick={onNOMMax}>Max</MaxBtn>

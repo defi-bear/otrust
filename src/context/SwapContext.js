@@ -14,26 +14,32 @@ function SwapProvider({ children }) {
     const { bondContract, ETHbalance, NOMbalance } = useChain()
     const [swapBuyAmount, setSwapBuyAmount] = useState(BigNumber.from(0))
     const [swapBuyResult, setSwapBuyResult] = useState(BigNumber.from(0))
+    const [swapBuyValue, setSwapBuyValue] = useState(0)
     const [swapDenom, setSwapDenom] = useState('ETH')
     const [swapSellAmount, setSwapSellAmount] = useState(BigNumber.from(0))
     const [swapSellResult, setSwapSellResult] = useState(BigNumber.from(0))
+    const [swapSellValue, setSwapSellValue] = useState(0)
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
     
     const contextValue = {
         swapBuyAmount,
         swapBuyResult,
+        swapBuyValue,
         swapDenom,
         swapSellAmount,
-        swapSupply,
-        swapSellResult
+        swapSellResult,
+        swapSellValue,
+        swapSupply
     }
 
     const updateValue = {
         setSwapBuyAmount,
         setSwapBuyResult,
+        setSwapBuyValue,
         setSwapDenom,
         setSwapSellAmount,
         setSwapSellResult,
+        setSwapSellValue,
         setSwapSupply
     }
 
