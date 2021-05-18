@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from "@ethersproject/bignumber"
-import { parseEther } from '@ethersproject/units'
+import { parseEther, formatEther } from '@ethersproject/units'
 
 import { useChain } from 'context/chain/ChainContext'
 
@@ -56,10 +56,16 @@ function SwapProvider({ children }) {
                         const supplyTop = supplyNOM.add(amountNOM)
                     
                         setSwapBuyResult(amountNOM)
-                        setSwapSupply([supplyNOM, supplyTop])
+                        setSwapSupply([
+                            parseFloat(formatEther(supplyNOM.toString())), 
+                            parseFloat(formatEther(supplyTop.toString()))
+                        ])
                     } catch (err) {
                         setSwapBuyAmount(ETHbalance)
-                        setSwapSupply([supplyNOM, supplyNOM])
+                        setSwapSupply([
+                            parseFloat(formatEther(supplyNOM.toString())), 
+                            parseFloat(formatEther(supplyNOM.toString()))
+                        ])
                     }
                     break;
                 case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount.toString():
@@ -71,14 +77,23 @@ function SwapProvider({ children }) {
                             const supplyBot = supplyNOM.sub(swapSellAmount)
 
                             setSwapSellResult(amountETH)
-                            setSwapSupply([supplyBot, supplyNOM])
+                            setSwapSupply([
+                                parseFloat(formatEther(supplyBot.toString())), 
+                                parseFloat(formatEther(supplyNOM.toString()))
+                            ])
                         } catch (err) {
                             setSwapSellAmount(NOMbalance)
-                            setSwapSupply([supplyNOM, supplyNOM])
+                            setSwapSupply([
+                                parseFloat(formatEther(supplyNOM.toString())), 
+                                parseFloat(formatEther(supplyNOM.toString()))
+                            ])
                         }
                     } else {
                         setSwapSellAmount(NOMbalance)
-                        setSwapSupply([supplyNOM, supplyNOM])
+                        setSwapSupply([
+                            parseFloat(formatEther(supplyNOM.toString())), 
+                            parseFloat(formatEther(supplyNOM.toString()))
+                        ])
                     }
                     
                     break
@@ -88,7 +103,10 @@ function SwapProvider({ children }) {
                         setSwapBuyValue('')
                         setSwapSellResult('')
                         setSwapSellValue('')
-                        setSwapSupply([supplyNOM, supplyNOM])
+                        setSwapSupply([
+                            parseFloat(formatEther(supplyNOM.toString())), 
+                            parseFloat(formatEther(supplyNOM.toString()))
+                        ])
                     }
             }
         }  
