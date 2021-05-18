@@ -21,14 +21,13 @@ function ChainProvider({ theme, children }) {
     const [NOMbalance, setNOMBalance] = useState(BigNumber.from(0))
     const [NOMallowance, setNOMAllowance] = useState(BigNumber.from(0))
     const [supplyNOM, setSupplyNOM] = useState(BigNumber.from(0))
-    // const [ETHUSD, setETHUSD] = useState()
-    const bondContract = BondingCont(library)
-    const NOMcontract = NOMCont(library)
     const [pendingTx, setPendingTx] = useState()
-    // const [waitModal, setWaitModal] = useState(false)
     const [currentETHPrice, setCurrentETHPrice] = useState(BigNumber.from(0))
     const [currentNOMPrice, setCurrentNOMPrice] = useState(BigNumber.from(0))
 
+    const bondContract = BondingCont(library)
+    const NOMcontract = NOMCont(library)
+    
     if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
         throw new Error('REACT_APP_GRAPHQL_ENDPOINT environment variable not defined')
     }

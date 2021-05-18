@@ -4,8 +4,6 @@ import { truncate } from "utils/math"
 import { BigNumber } from "@ethersproject/bignumber"
 import { formatEther } from "@ethersproject/units";
 
-import ExchangeModals from "./ExchangeModals";
-
 import {
   ExchangeWrapper,
   ExchangeItem,
@@ -21,6 +19,8 @@ import {
 import ConfirmTransactionModal from '../Modals/ConfirmTransactionModal';
 import { Dimmer } from "components/UI/Dimmer";
 
+import ExchangeModals from "./ExchangeModals";
+import { useModal, useUpdateModal } from 'context/ModalContext'
 import { useSwap, useUpdateSwap } from "context/SwapContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
@@ -30,6 +30,22 @@ import TransactionFailedModal from "components/Modals/TransactionFailedModal";
 import PendingModal from "components/Modals/PendingModal";
 
 export default function Exchange() {
+  const {
+    approveModal,
+    completedModal,
+    confirmModal,
+    failedModal,
+    pendingModal
+  } = useModal();
+
+  const {
+    setApproveModal,
+    setCompletedModal,
+    setConfirmModal,
+    setFailedModal,
+    setPendingModal
+  } = useUpdateModal()
+
   const { 
     swapBuyAmount, 
     swapBuyResult,
@@ -48,18 +64,7 @@ export default function Exchange() {
     setSwapSellValue, 
     setSwapDenom 
   } = useUpdateSwap();
-  
-  const [confirmModal, setConfirmModal] = useState(false);
-  const [approveModal, setApproveModal] = useState(false);
-  const [completedModal, setCompletedModal] = useState('');
-  const [completedAmount, setCompletedAmount] = useState(null);
-  const [completedResult, setCompletedResult] = useState(null);
-  const [slippage, setSlippage] = useState(1);
-  const [previousTx, setPreviousTx] = useState(null);
-  const [failedModal, setFailedModal] = useState(null);
-  
-  const [pendingModal, setPendingModal] = useState(false);
-  
+
   const { 
     bondContract, 
     NOMallowance, 
@@ -70,6 +75,11 @@ export default function Exchange() {
   } = useChain();
   
   const { setPendingTx } = useUpdateChain();
+
+  const [completedAmount, setCompletedAmount] = useState(null);
+  const [completedResult, setCompletedResult] = useState(null);
+  const [slippage, setSlippage] = useState(1);
+  const [previousTx, setPreviousTx] = useState(null);
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
@@ -154,17 +164,20 @@ export default function Exchange() {
       }
     },
     [
+      bondContract,
+      setCompletedAmount,
+      setCompletedResult,
+      setConfirmModal,
+      setFailedModal,
+      setPendingModal,
+      setPendingTx,
+      setSwapSellAmount,
+      setSwapBuyAmount,
+      slippage,
       swapBuyAmount,
       swapBuyResult,
       swapSellAmount,
-      swapSellResult,
-      bondContract,
-      setSwapBuyAmount,
-      setPendingTx,
-      slippage,
-      setCompletedAmount,
-      setCompletedResult,
-      setSwapSellAmount
+      swapSellResult
     ]
   );
 
@@ -181,11 +194,13 @@ export default function Exchange() {
     }
   }, [
     pendingTx,
-    swapDenom,
+    setCompletedModal,
+    setPendingModal,
     setPendingTx,
     swapBuyAmount,
-    swapSellAmount,
     swapBuyResult,
+    swapDenom,
+    swapSellAmount,
     swapSellResult,
   ])
 

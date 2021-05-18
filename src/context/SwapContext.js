@@ -45,12 +45,10 @@ function SwapProvider({ children }) {
     }
 
     useEffect(() => {
-        async function swapAmount() {
-            console.log("Before: ", swapBuyValue)
+        async function swapAmount() {  
             switch (true) {
                 case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount:
                     try {
-                        console.log("Try: ", swapBuyValue)
                         setSwapBuyResult('Loading')
                         const amountNOM = await bondContract.buyQuoteETH(parseEther(swapBuyAmount))
                         const supplyTop = supplyNOM.add(amountNOM)
@@ -61,7 +59,7 @@ function SwapProvider({ children }) {
                             parseFloat(formatEther(supplyTop.toString()))
                         ])
                     } catch (err) {
-                        setSwapBuyAmount(ETHbalance)
+                        setSwapBuyAmount(parseFloat(formatEther(ETHbalance)))
                         setSwapSupply([
                             parseFloat(formatEther(supplyNOM.toString())), 
                             parseFloat(formatEther(supplyNOM.toString()))
@@ -69,7 +67,6 @@ function SwapProvider({ children }) {
                     }
                     break;
                 case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount.toString():
-                    
                     if (swapSellAmount <= supplyNOM) {
                         try {
                             setSwapSellResult('Loading')
