@@ -42,7 +42,7 @@ export default function Exchange() {
   const [pendingModal, setPendingModal] = useState(false);
   const { bondContract, NOMallowance, NOMcontract, ETHbalance, NOMbalance, pendingTx } = useChain();
   const { setPendingTx } = useUpdateChain();
-  
+ 
   const onBuyNOMTextChange = useCallback(
     (evt) => {
       setSwapSellAmount('')
@@ -178,7 +178,6 @@ export default function Exchange() {
   const onNOMMax = () => {
     setSwapSellAmount(NOMbalance)
   }
-
   return (
     <ExchangeWrapper>
       <ExchangeModals />
