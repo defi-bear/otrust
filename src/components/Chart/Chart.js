@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { responsive } from "theme/constants";
@@ -70,7 +70,7 @@ const TRANSACTIONS_QUERY = gql`
 
 export default function Chart() {
     // useQuery Apollo Client Hook to get data from TheGraph
-    const { error, loading, bondData } = useQuery(TRANSACTIONS_QUERY)
+    const { error, loading, data } = useQuery(TRANSACTIONS_QUERY)
 
     const [chartType, setChartType] = useState("bondingCurve");
 
@@ -80,6 +80,12 @@ export default function Chart() {
     const [candelHeaderId] = useState("1");
     const [candelHeader] = useState(candelHeaderDefault);
 
+    useEffect(() => {
+      console.log("Error: ", error)
+      console.log("Loading: ", loading)
+      console.log("Bond Data: ", data)
+    }, [error, loading, data])
+
     const renderChart = (type) => {
         switch (type) {
         case "lineChart":
@@ -87,7 +93,7 @@ export default function Chart() {
             <LineChart
                 lineHeader={lineHeader}
                 lineHeaderId={lineHeaderId}
-                bondData={bondData}
+                bondData={data}
                 error={error}
                 loading={loading}
             />

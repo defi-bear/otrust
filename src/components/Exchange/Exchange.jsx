@@ -75,12 +75,12 @@ export default function Exchange() {
   } = useChain();
   
   const { setPendingTx } = useUpdateChain();
-
+  
   const [completedAmount, setCompletedAmount] = useState(null);
   const [completedResult, setCompletedResult] = useState(null);
   const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
-  
+ 
   const onBuyNOMTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
@@ -264,7 +264,6 @@ export default function Exchange() {
   const onNOMMax = () => {
     setSwapSellAmount(NOMbalance)
   }
-
   return (
     <ExchangeWrapper>
       <ExchangeModals />
