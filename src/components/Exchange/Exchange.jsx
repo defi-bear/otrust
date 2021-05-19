@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useAsyncFn } from "lib/use-async-fn";
 import { BigNumber } from 'bignumber.js'
-import { format18 } from 'utils/math'
+import { format18, parse18 } from 'utils/math'
 
 import {
   ExchangeWrapper,
@@ -48,6 +48,7 @@ export default function Exchange() {
   const { 
     swapBuyAmount, 
     swapBuyResult,
+    swapBuyValue,
     swapSellAmount, 
     swapSellResult,
     swapSellValue, 
@@ -87,12 +88,18 @@ export default function Exchange() {
       setSwapBuyValue(evt.target.value)
       setSwapSellAmount('')
       setSwapSellResult('')
+      setSwapSellValue('')
       setSwapDenom('ETH')
-      if (!evt.target.value) {
+      if (BigNumber.isBigNumber(evt.target.value)) {
         setSwapBuyAmount('')
         setSwapBuyResult('')
       } else {
-        setSwapBuyAmount(evt.target.value)
+        try {
+          setSwapBuyAmount(parse18(new BigNumber(evt.target.value)))  
+        } catch {
+          setSwapBuyAmount(new BigNumber(0))
+        }
+        
       }
     },
     [
@@ -117,7 +124,12 @@ export default function Exchange() {
         setSwapSellAmount('')
         setSwapSellResult('')
       } else {
-        setSwapSellAmount(evt.target.value)
+        try {
+          setSwapSellAmount(parse18(new BigNumber(evt.target.value)))
+        } catch {
+          setSwapSellAmount(new BigNumber(0))
+        }
+        
       }
     },
     [
@@ -183,13 +195,11 @@ export default function Exchange() {
 
   useEffect(() => {
     if (pendingTx) {
-      // setWaitModal(true)
       pendingTx.wait().then(() => {
         setPreviousTx(pendingTx);
         setCompletedModal(swapDenom);
         setPendingTx(null);
         setPendingModal(false);
-        // setWaitModal(false);
       })
     }
   }, [
@@ -312,7 +322,7 @@ export default function Exchange() {
           <ExchangeInput
             type="text"
             onChange={onBuyNOMTextChange}
-            value={swapBuyAmount}
+            value={swapBuyValue}
           />
           ETH
           <MaxBtn onClick={onEthMax}>Max</MaxBtn>
