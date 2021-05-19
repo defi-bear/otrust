@@ -49,13 +49,13 @@ function SwapProvider({ children }) {
     useEffect(() => {
         async function swapAmount() {  
             switch (true) {
-                case swapBuyAmount && parseFloat(swapBuyAmount) && parseFloat(swapBuyAmount).toString() === swapBuyAmount:
+                case BigNumber.isBigNumber(swapBuyAmount):
+                    console.log("Input: ", swapBuyAmount.toString())
                     try {
-                        setSwapBuyResult('Loading')
                         const amountNOM = await bondContract.buyQuoteETH(parse18(swapBuyAmount))
                         const supplyTop = supplyNOM.add(amountNOM)
                     
-                        setSwapBuyResult(amountNOM)
+                        setSwapBuyResult(new BigNumber(amountNOM.toString()))
                         setSwapSupply([
                             format18(supplyNOM).toNumber(), 
                             format18(supplyTop).toNumber()
@@ -68,14 +68,13 @@ function SwapProvider({ children }) {
                         ])
                     }
                     break;
-                case swapSellAmount && parseFloat(swapSellAmount) && parseFloat(swapSellAmount).toString() === swapSellAmount.toString():
-                    if (swapSellAmount <= supplyNOM) {
+                case BigNumber.isBigNumber(swapSellAmount):
+                    if (swapSellAmount.lte(supplyNOM)) {
                         try {
-                            setSwapSellResult('Loading')
                             const amountETH = await bondContract.sellQuoteNOM(parse18(swapSellAmount));
                             const supplyBot = supplyNOM.sub(swapSellAmount)
 
-                            setSwapSellResult(amountETH)
+                            setSwapSellResult(new BigNumber(amountETH.toString()))
                             setSwapSupply([
                                 format18(supplyBot).toNumber(), 
                                 format18(supplyNOM).toNumber()
@@ -98,10 +97,6 @@ function SwapProvider({ children }) {
                     break
                 default:
                     {
-                        setSwapBuyResult('')
-                        setSwapBuyValue('')
-                        setSwapSellResult('')
-                        setSwapSellValue('')
                         setSwapSupply([
                             format18(supplyNOM).toNumber(), 
                             format18(supplyNOM).toNumber()

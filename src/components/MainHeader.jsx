@@ -165,7 +165,6 @@ const Details = styled.span`
 
 export default function MainHeader(props) {
   const { supplyNOM, currentETHPrice } = useChain()
-  console.log("Header: ", currentETHPrice.toString())
   return (
     <header>
       <Container>

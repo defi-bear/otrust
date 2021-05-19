@@ -83,7 +83,6 @@ export default function Exchange() {
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
-      console.log("onBuyNomText: ", swapBuyAmount)
       evt.preventDefault()
       setSwapBuyValue(evt.target.value)
       setSwapSellAmount('')
@@ -95,7 +94,14 @@ export default function Exchange() {
         setSwapBuyResult('')
       } else {
         try {
-          setSwapBuyAmount(parse18(new BigNumber(evt.target.value)))  
+          setSwapBuyAmount(
+            parse18(
+              new BigNumber(
+                evt.target.value
+                )
+                )
+                )
+                  
         } catch {
           setSwapBuyAmount(new BigNumber(0))
         }
