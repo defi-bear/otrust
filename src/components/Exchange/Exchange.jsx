@@ -1,8 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useAsyncFn } from "lib/use-async-fn";
-import { truncate } from "utils/math"
-import { BigNumber } from "@ethersproject/bignumber"
-import { formatEther } from "@ethersproject/units";
+import { BigNumber } from 'bignumber.js'
+import { format18 } from 'utils/math'
 
 import {
   ExchangeWrapper,
@@ -83,6 +82,7 @@ export default function Exchange() {
   
   const onBuyNOMTextChange = useCallback(
     (evt) => {
+      console.log("onBuyNomText: ", swapBuyAmount)
       evt.preventDefault()
       setSwapBuyValue(evt.target.value)
       setSwapSellAmount('')
@@ -322,7 +322,7 @@ export default function Exchange() {
           <ReceivingValue>
             {
               BigNumber.isBigNumber(swapBuyResult) ? 
-              truncate(formatEther(swapBuyResult), 4) : 
+              format18(swapBuyResult).toFixed(4) : 
               ''
             } NOM
           </ReceivingValue>
@@ -349,7 +349,7 @@ export default function Exchange() {
           <ReceivingValue>
             {
               BigNumber.isBigNumber(swapSellResult) ? 
-              truncate(formatEther(swapSellResult), 4) : 
+              format18(swapSellResult).toFixed(4) : 
               ''
             } ETH
           </ReceivingValue>

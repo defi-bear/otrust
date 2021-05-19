@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { formatEther } from "@ethersproject/units";
 
 import logo from "assets/logo.svg";
 import { Container } from "./UI";
 import { responsive } from "theme/constants";
 import { useChain } from "context/chain/ChainContext"
+import { format18 } from 'utils/math'
+import { BigNumber } from 'bignumber.js'
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -164,7 +165,7 @@ const Details = styled.span`
 
 export default function MainHeader(props) {
   const { supplyNOM, currentETHPrice } = useChain()
-
+  console.log("Header: ", currentETHPrice.toString())
   return (
     <header>
       <Container>
@@ -191,11 +192,11 @@ export default function MainHeader(props) {
                 <HeaderInfoItemValue>
                   <strong>
                   <span>
-                    {currentETHPrice === null
-                      ? "Loading"
-                      : currentETHPrice
-                      ? `${Math.round(parseFloat(formatEther(currentETHPrice)))}`
-                      : ""}
+                    {
+                      BigNumber.isBigNumber(currentETHPrice)
+                        ? `${Math.round(format18(currentETHPrice))}`
+                        : "Loading"
+                    }
                   </span>
                   </strong>
                 </HeaderInfoItemValue>
@@ -207,11 +208,11 @@ export default function MainHeader(props) {
                 <HeaderInfoItemValue>
                   <strong>
                     <span>
-                      {supplyNOM === null
-                        ? "Loading"
-                        : supplyNOM
-                        ? `${Math.round(parseFloat(formatEther(supplyNOM)))}`
-                        : ""}
+                      {
+                        BigNumber.isBigNumber(supplyNOM)
+                          ? `${Math.round(format18(supplyNOM))}`
+                          : "Loading"
+                      }
                     </span>
                   </strong>
                   <Details>/ 1E8</Details>

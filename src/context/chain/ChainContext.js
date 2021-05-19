@@ -1,12 +1,12 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react'
-import { parseEther } from '@ethersproject/units'
+import { parse18 } from 'utils/math'
 import { useWeb3React } from "@web3-react/core"
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
 
 import { NOMCont, BondingCont } from './contracts'
 import addrs from 'context/chain/NOMAddrs.json';
-import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumber } from 'bignumber.js';
 
 export const ChainContext = createContext()
 export const useChain = () => useContext(ChainContext)
@@ -14,16 +14,18 @@ export const useChain = () => useContext(ChainContext)
 export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
+const big1e18 = parse18(new BigNumber(1))
+
 function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
-    const [ETHbalance, setETHBalance] = useState(BigNumber.from(0))
-    const [NOMbalance, setNOMBalance] = useState(BigNumber.from(0))
-    const [NOMallowance, setNOMAllowance] = useState(BigNumber.from(0))
-    const [supplyNOM, setSupplyNOM] = useState(BigNumber.from(0))
+    const [ETHbalance, setETHBalance] = useState(new BigNumber(0))
+    const [NOMbalance, setNOMBalance] = useState(new BigNumber(0))
+    const [NOMallowance, setNOMAllowance] = useState(new BigNumber(0))
+    const [supplyNOM, setSupplyNOM] = useState(new BigNumber(0))
     const [pendingTx, setPendingTx] = useState()
-    const [currentETHPrice, setCurrentETHPrice] = useState(BigNumber.from(0))
-    const [currentNOMPrice, setCurrentNOMPrice] = useState(BigNumber.from(0))
+    const [currentETHPrice, setCurrentETHPrice] = useState(new BigNumber(0))
+    const [currentNOMPrice, setCurrentNOMPrice] = useState(new BigNumber(0))
 
     const bondContract = BondingCont(library)
     const NOMcontract = NOMCont(library)
@@ -39,9 +41,9 @@ function ChainProvider({ theme, children }) {
 
     const getCurrentPrice = useCallback(async () => {
         let amount;
-        amount = await bondContract.buyQuoteETH(parseEther('1'));
+        amount = await bondContract.buyQuoteETH(parse18('1'));
         setCurrentETHPrice(amount);
-        amount = await bondContract.sellQuoteNOM(parseEther('1'));
+        amount = await bondContract.sellQuoteNOM(parse18('1'));
         setCurrentNOMPrice(amount);
     },[bondContract])
 
@@ -56,17 +58,22 @@ function ChainProvider({ theme, children }) {
                         NOMcontract.balanceOf(account),
                         NOMcontract.allowance(account, addrs.BondingNOM),
                         bondContract.getSupplyNOM(),
+                        bondContract.buyQuoteETH(big1e18.toString()),
+                        bondContract.sellQuoteNOM(big1e18.toString())
                         
                         // UniSwapCont.getReserves(),
-                        getCurrentPrice()  
+
                     ]
                 ).then((values) => {
-                    setETHBalance(values[0])
-                    setNOMBalance(values[1])
-                    setNOMAllowance(values[2])
-                    setSupplyNOM(values[3])
+                    setETHBalance(new BigNumber(values[0].toString()))
+                    setNOMBalance(new BigNumber(values[1].toString()))
+                    setNOMAllowance(new BigNumber(values[2].toString()))
+                    setSupplyNOM(new BigNumber(values[3].toString()))
+                    setCurrentETHPrice(new BigNumber(values[4].toString()))
+                    setCurrentNOMPrice(new BigNumber(values[5].toString()))
                     
-                    // setETHUSD(values[4])
+                    // setETHUSD(new BigNumber(values[6]))
+
                 }).catch((err) => { console.log(err) })
             })
 

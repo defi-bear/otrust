@@ -4,12 +4,12 @@ import { useWeb3React } from "@web3-react/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { formatEther } from "@ethersproject/units";
-import { truncate } from 'utils/math'
 
 import { Panel } from "components/UI";
 import { useChain } from "context/chain/ChainContext";
 import { responsive } from "theme/constants";
+import { format18 } from "utils/math"
+import BigNumber from "bignumber.js";
 
 const SidebarLayout = styled.div`
   display: flex;
@@ -380,21 +380,21 @@ export default function AcctDash() {
           <div>
             <strong>ETH Balance</strong>
             <span>
-              {ETHbalance === null
-                ? "Error"
-                : ETHbalance
-                ? `${truncate(formatEther(ETHbalance), 4)}`
-                : ""}
+              {
+                BigNumber.isBigNumber(ETHbalance)
+                  ? `${format18(ETHbalance).toFixed(6)}`
+                  : 'Loading'
+              }
             </span>
           </div>
           <div>
             <strong>NOM Balance</strong>
             <span>
-              {NOMbalance === null
-                ? "Error"
-                : NOMbalance
-                ? `${truncate(formatEther(NOMbalance), 4)}`
-                : "0"}
+              {
+                BigNumber.isBigNumber(NOMbalance)
+                  ? `${format18(NOMbalance).toFixed(6)}`
+                  : 'Loading'
+              }
             </span>
           </div>
           {/* <Balance /> */}

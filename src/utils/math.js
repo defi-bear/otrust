@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js'
+
 export function chopFloat(value, precision) {
     return Math.round(value*10**precision)/10**precision
 }
@@ -12,4 +14,12 @@ export function truncate(str, maxDecimalDigits) {
         return parts[0] + '.' + parts[1].slice(0, maxDecimalDigits);
     }
     return str;
+}
+
+export function format18(bignumber) {
+    return bignumber.dividedBy(new BigNumber(10**18))
+}
+
+export function parse18(bignumber) {
+    return bignumber.times(new BigNumber(10**18))
 }
