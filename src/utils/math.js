@@ -23,3 +23,7 @@ export function format18(bignumber) {
 export function parse18(bignumber) {
     return bignumber.times(new BigNumber(10**18))
 }
+
+export var isNumber = function isNumber(value) {
+    return typeof value === 'number' && isFinite(value);
+}

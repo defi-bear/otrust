@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useAsyncFn } from "lib/use-async-fn";
 import { BigNumber } from 'bignumber.js'
-import { format18, parse18 } from 'utils/math'
+import { format18, isNumber, parse18 } from 'utils/math'
 
 import {
   ExchangeWrapper,
@@ -89,23 +89,23 @@ export default function Exchange() {
       setSwapSellResult('')
       setSwapSellValue('')
       setSwapDenom('ETH')
-      if (BigNumber.isBigNumber(evt.target.value)) {
-        setSwapBuyAmount('')
-        setSwapBuyResult('')
-      } else {
+      if (isNumber(parseFloat(evt.target.value))) {
         try {
+          console.log(evt.target.value)
           setSwapBuyAmount(
             parse18(
               new BigNumber(
-                evt.target.value
-                )
-                )
-                )
-                  
-        } catch {
+                parseFloat(evt.target.value).toString()
+              )
+            )
+          )    
+        } catch (e) {
+          console.log("Error: ", e)
           setSwapBuyAmount(new BigNumber(0))
         }
-        
+      } else {
+        setSwapBuyAmount('')
+        setSwapBuyResult('')
       }
     },
     [
@@ -126,16 +126,23 @@ export default function Exchange() {
       setSwapBuyResult('')
       setSwapDenom('NOM')
 
-      if (!evt.target.value) {
-        setSwapSellAmount('')
-        setSwapSellResult('')
-      } else {
+      if (isNumber(parseFloat(evt.target.value))) {
         try {
-          setSwapSellAmount(parse18(new BigNumber(evt.target.value)))
+          console.log(evt.target.value)
+          setSwapSellAmount(
+            parse18(
+              new BigNumber(
+                parseFloat(evt.target.value).toString()
+              )
+            )
+          )
+                  
         } catch {
           setSwapSellAmount(new BigNumber(0))
         }
-        
+      } else {
+        setSwapSellAmount('')
+        setSwapSellResult('')
       }
     },
     [

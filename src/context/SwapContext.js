@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { format18, parse18 } from 'utils/math'
+import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
 
@@ -12,7 +12,7 @@ export const useUpdateSwap = () => useContext(UpdateSwapContext)
 
 function SwapProvider({ children }) {
     const { supplyNOM } = useChain()
-    const { bondContract, ETHbalance, NOMbalance } = useChain()
+    const { bondContract } = useChain()
 
     const [swapBuyAmount, setSwapBuyAmount] = useState('')
     const [swapBuyResult, setSwapBuyResult] = useState('')
@@ -48,70 +48,69 @@ function SwapProvider({ children }) {
 
     useEffect(() => {
         async function swapAmount() {  
-            switch (true) {
-                case BigNumber.isBigNumber(swapBuyAmount):
-                    console.log("Input: ", swapBuyAmount.toString())
-                    try {
-                        const amountNOM = await bondContract.buyQuoteETH(parse18(swapBuyAmount))
-                        const supplyTop = supplyNOM.add(amountNOM)
-                    
-                        setSwapBuyResult(new BigNumber(amountNOM.toString()))
-                        setSwapSupply([
-                            format18(supplyNOM).toNumber(), 
-                            format18(supplyTop).toNumber()
-                        ])
-                    } catch (err) {
-                        setSwapBuyAmount(format18(ETHbalance).toString())
-                        setSwapSupply([
-                            format18(supplyNOM).toNumber(), 
-                            format18(supplyNOM).toNumber()
-                        ])
-                    }
-                    break;
-                case BigNumber.isBigNumber(swapSellAmount):
-                    if (swapSellAmount.lte(supplyNOM)) {
-                        try {
-                            const amountETH = await bondContract.sellQuoteNOM(parse18(swapSellAmount));
-                            const supplyBot = supplyNOM.sub(swapSellAmount)
-
-                            setSwapSellResult(new BigNumber(amountETH.toString()))
-                            setSwapSupply([
-                                format18(supplyBot).toNumber(), 
-                                format18(supplyNOM).toNumber()
-                            ])
-                        } catch (err) {
-                            setSwapSellAmount(NOMbalance)
-                            setSwapSupply([
-                                format18(supplyNOM).toNumber(), 
-                                format18(supplyNOM).toNumber()
-                            ])
-                        }
-                    } else {
-                        setSwapSellAmount(NOMbalance)
-                        setSwapSupply([
-                            format18(supplyNOM).toNumber(), 
-                            format18(supplyNOM).toNumber()
-                        ])
-                    }
-                    
-                    break
-                default:
-                    {
-                        setSwapSupply([
-                            format18(supplyNOM).toNumber(), 
-                            format18(supplyNOM).toNumber()
-                        ])
-                    }
+            if (BigNumber.isBigNumber(swapBuyAmount)) {
+                try {
+                    const amountNOM = await bondContract.buyQuoteETH(swapBuyAmount.toFixed(0))
+                    const supplyTop = supplyNOM.plus(amountNOM)
+            
+                    setSwapBuyResult(new BigNumber(amountNOM.toString()))
+                    setSwapSupply([
+                        format18(supplyNOM).toNumber(), 
+                        format18(supplyTop).toNumber()
+                    ])
+                } catch (err) {
+                    console.log("Error: ", err)
+                    setSwapSupply([
+                        format18(supplyNOM).toNumber(), 
+                        format18(supplyNOM).toNumber()
+                    ])    
+                }
+            } else {
+                setSwapSupply([
+                    format18(supplyNOM).toNumber(), 
+                    format18(supplyNOM).toNumber()
+                ])
             }
-        }  
+        }              
         swapAmount()
     }, [
         bondContract, 
-        ETHbalance, 
-        NOMbalance,
         supplyNOM, 
-        swapBuyAmount,
-        swapBuyValue,
+        swapBuyAmount
+    ])
+    
+    useEffect(() => {
+        async function swapAmount() {
+            if (BigNumber.isBigNumber(swapSellAmount)) {
+                if (swapSellAmount.lte(supplyNOM)) {
+                    try {
+                        const amountETH = await bondContract.sellQuoteNOM(swapSellAmount.toFixed(0));
+                        const supplyBot = supplyNOM.minus(swapSellAmount)
+
+                        setSwapSellResult(new BigNumber(amountETH.toString()))
+                        setSwapSupply([
+                            format18(supplyBot).toNumber(), 
+                            format18(supplyNOM).toNumber()
+                        ])
+                    } catch (err) {
+                        console.log("Error: ", err)
+                        setSwapSupply([
+                            format18(supplyNOM).toNumber(), 
+                            format18(supplyNOM).toNumber()
+                        ])
+                    }
+                } else {
+                    setSwapSupply([
+                        format18(supplyNOM).toNumber(), 
+                        format18(supplyNOM).toNumber()
+                    ])
+                }
+            }
+        }
+        swapAmount()
+    },[
+        bondContract, 
+        supplyNOM, 
         swapSellAmount
     ])
 
