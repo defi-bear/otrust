@@ -7,7 +7,8 @@ const StyledSVG = styled.svg`
     overflow: visible;
 `
 
-function CandelChart() {
+function LineChart(bondData) {
+  console.log("Bond Data: ", bondData)
   const id = "historicalChart"
   return (
   <div  style={{ marginTop: "1rem", height: "400px" }}>
@@ -26,4 +27,4 @@ function CandelChart() {
     );
 }
 
-export default CandelChart;
+export default LineChart;

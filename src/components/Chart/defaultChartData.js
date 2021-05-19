@@ -14,7 +14,7 @@ export const leftHeaderDefault = [
   }
 ]
 
-export const historicalHeaderDefault = [
+export const lineHeaderDefault = [
   {
     id: 'Day',
     text: 'Day',

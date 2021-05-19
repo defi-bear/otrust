@@ -290,7 +290,7 @@ export const DetailsButton = styled.button`
   }
 `;
 
-export const Spent = styled.span`
+export const Spent = styled.div`
   color: ${(props) => props.theme.colors.textThirdly};
 `;
 

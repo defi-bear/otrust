@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { responsive } from "theme/constants";
 
 import BondLineChart from "components/Chart/BondLineChart";
-import HistoricalChart from "components/Chart/D3HistoricalChart";
+import LineChart from "components/Chart/D3LineChart";
 import CandelChart from "components/Chart/D3CandelChart";
 
-// import { useQuery } from "@apollo/client";
-// import { gql } from "apollo-boost";
+import { useQuery } from "@apollo/client";
+import { gql } from "apollo-boost";
 
 import {
-  historicalHeaderDefault,
+  lineHeaderDefault,
   candelHeaderDefault,
 } from "components/Chart/defaultChartData";
 
@@ -52,22 +52,50 @@ const ChartTypeBtn = styled.button`
   }
 `;
 
+const TRANSACTIONS_QUERY = gql`
+    query transactions {
+        transactionRecords {
+            id
+            senderAddress
+            amountNOM
+            amountETH
+            price
+            supply
+            buyOrSell
+            slippage
+            timestamp
+        }
+    }
+`
+
 export default function Chart() {
+    // useQuery Apollo Client Hook to get data from TheGraph
+    const { error, loading, data } = useQuery(TRANSACTIONS_QUERY)
+
     const [chartType, setChartType] = useState("bondingCurve");
 
-    const [historicalHeaderId] = useState("1");
-    const [historicalHeader] = useState(historicalHeaderDefault);
+    const [lineHeaderId] = useState("1");
+    const [lineHeader] = useState(lineHeaderDefault);
 
     const [candelHeaderId] = useState("1");
     const [candelHeader] = useState(candelHeaderDefault);
 
+    useEffect(() => {
+      console.log("Error: ", error)
+      console.log("Loading: ", loading)
+      console.log("Bond Data: ", data)
+    }, [error, loading, data])
+
     const renderChart = (type) => {
         switch (type) {
-        case "historicalChart":
+        case "lineChart":
             return (
-            <HistoricalChart
-                historicalHeader={historicalHeader}
-                historicalHeaderId={historicalHeaderId}
+            <LineChart
+                lineHeader={lineHeader}
+                lineHeaderId={lineHeaderId}
+                bondData={data}
+                error={error}
+                loading={loading}
             />
             );
         case "candleView":
@@ -91,8 +119,8 @@ export default function Chart() {
             <ChartTypeBtn onClick={() => setChartType("bondingCurve")}>
               Bonding Curve Chart
             </ChartTypeBtn>
-            <ChartTypeBtn onClick={() => setChartType("historicalChart")}>
-              Historical Chart
+            <ChartTypeBtn onClick={() => setChartType("lineChart")}>
+              Line Chart
             </ChartTypeBtn>
             <ChartTypeBtn onClick={() => setChartType("candleView")}>
               Candle View

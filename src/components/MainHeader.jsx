@@ -4,6 +4,7 @@ import styled from "styled-components";
 import logo from "assets/logo.svg";
 import { Container } from "./UI";
 import { responsive } from "theme/constants";
+import { useChain } from "context/chain/ChainContext"
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -161,6 +162,8 @@ const Details = styled.span`
 `;
 
 export default function MainHeader(props) {
+  const { supplyNOM, bondPrice } = useChain()
+
   return (
     <header>
       <Container>
@@ -185,8 +188,15 @@ export default function MainHeader(props) {
               <HeaderInfoItem>
                 <strong>NOM / ETH</strong>
                 <HeaderInfoItemValue>
-                  <strong>0.07</strong>
-                  <Details type="decrease">32.11%</Details>
+                  <strong>
+                  <span>
+                    {bondPrice === null
+                      ? "Loading"
+                      : bondPrice
+                      ? `${bondPrice.toPrecision(4)}`
+                      : ""}
+                  </span>
+                  </strong>
                 </HeaderInfoItemValue>
               </HeaderInfoItem>
             </ExchangeRate>
@@ -194,8 +204,16 @@ export default function MainHeader(props) {
               <HeaderInfoItem>
                 <strong>NOM Issued</strong>
                 <HeaderInfoItemValue>
-                  <strong>14,024,810</strong>
-                  <Details>/ 54,112,321</Details>
+                  <strong>
+                    <span>
+                      {supplyNOM === null
+                        ? "Loading"
+                        : supplyNOM
+                        ? `${Math.round(supplyNOM)}`
+                        : ""}
+                    </span>
+                  </strong>
+                  <Details>/ 1E8</Details>
                 </HeaderInfoItemValue>
               </HeaderInfoItem>
             </Issued>
