@@ -12,7 +12,13 @@ import * as Modal from "./styles";
 import oneWayBridgeImg from "./assets/one-way-bridge.svg";
 import whyBridgeImg from "./assets/why-bridge.svg";
 
-const ExchangeModalWrapper = styled.div`
+const BridgeSwapModalWrapper = styled.div`
+  @media screen and (min-width: 701px) {
+    display: none;
+  }
+`;
+
+const BridgeSwapModal = styled.div`
   width: 100%;
   height: 100%;
 
@@ -133,23 +139,90 @@ const modalOverride = {
 
 export default function BridgeSwapMobile() {
   const [swapModal, setSwapModal] = useState(true);
-  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [infoModal, setInfoModal] = useState(false);
 
   return (
-    <>
-      <InfoModal
-        active={showInfoModal}
-        onClose={() => {
-          setSwapModal(true);
-          setShowInfoModal(false);
-        }}
-      />
+    <BridgeSwapModalWrapper>
+      <ReactModal isOpen={infoModal} style={modalOverride}>
+        <BridgeSwapModal>
+          <ModalHeader>
+            <ModalBtn
+              onClick={() => {
+                setSwapModal(true);
+                setInfoModal(false);
+              }}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </ModalBtn>
+            <h6>What Is Onomy Bridge?</h6>
+          </ModalHeader>
+
+          <ModalInfo>
+            <Modal.Info>
+              <h2>What is Onomy Bridge?</h2>
+
+              <Modal.Desc>
+                The Onomy Bonding Curve platform is a gateway into the Onomy
+                Network. This is achieved by participants purchasing
+                wrapped-NOM, an ERC-20 token on the Ethereum Network, and
+                swapping for NOM on the Onomy Network.
+              </Modal.Desc>
+
+              <Modal.InfoRow>
+                <div>
+                  <Modal.InfoSubCaption>One Way Bridge</Modal.InfoSubCaption>
+
+                  <Modal.Desc>
+                    Choose to bridge when you are ready to do so to finalize
+                    your purchase of NOM!{" "}
+                    <strong>
+                      After bridging, you can no longer sell back to the bonding
+                      curve or bridge back for wNOM.
+                    </strong>{" "}
+                    There are no guarantees of liquid markets.
+                  </Modal.Desc>
+                </div>
+
+                <img src={oneWayBridgeImg} alt="" />
+              </Modal.InfoRow>
+
+              <Modal.InfoRow>
+                <div>
+                  <Modal.InfoSubCaption>Why Bridge?</Modal.InfoSubCaption>
+
+                  <Modal.List>
+                    <li>
+                      You must hold NOM to participate in the Onomy Network.{" "}
+                    </li>
+                    <li>
+                      Early stakers of NOM take advantage of larger staking
+                      yield.{" "}
+                    </li>
+                    <li>
+                      NOM is used for governance, staking, and collateral to
+                      mint stablecoins.
+                    </li>
+                    <li>
+                      All bridged wNOM is burned from the bonding curve supply.{" "}
+                    </li>
+                    <li>NOM would be listed on exchanges rather than wNOM. </li>
+                  </Modal.List>
+                </div>
+
+                <Modal.InfoImgWrapper>
+                  <img src={whyBridgeImg} alt="" />
+                </Modal.InfoImgWrapper>
+              </Modal.InfoRow>
+            </Modal.Info>
+          </ModalInfo>
+        </BridgeSwapModal>
+      </ReactModal>
       <ReactModal
         isOpen={swapModal}
         style={modalOverride}
         // onRequestClose={() => {}}
       >
-        <ExchangeModalWrapper>
+        <BridgeSwapModal>
           <ModalHeader>
             <ModalBtn onClick={() => setSwapModal(false)}>
               <FontAwesomeIcon icon={faChevronLeft} />
@@ -190,92 +263,15 @@ export default function BridgeSwapMobile() {
             <Modal.SecondaryButton
               style={{ width: "100%" }}
               onClick={() => {
+                setInfoModal(true);
                 setSwapModal(false);
-                setShowInfoModal(true);
               }}
             >
               What is Onomy Bridge?
             </Modal.SecondaryButton>
           </FormWrapper>
-        </ExchangeModalWrapper>
+        </BridgeSwapModal>
       </ReactModal>
-    </>
-  );
-}
-
-function InfoModal(active, onClose) {
-  return (
-    <ReactModal
-      isOpen={active}
-      style={modalOverride}
-      // onRequestClose={() => {}}
-    >
-      <ExchangeModalWrapper>
-        <ModalHeader>
-          <ModalBtn onClick={onClose}>
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </ModalBtn>
-          <h6>What Is Onomy Bridge?</h6>
-        </ModalHeader>
-
-        <ModalInfo>
-          <Modal.Info>
-            <h2>What is Onomy Bridge?</h2>
-
-            <Modal.Desc>
-              The Onomy Bonding Curve platform is a gateway into the Onomy
-              Network. This is achieved by participants purchasing wrapped-NOM,
-              an ERC-20 token on the Ethereum Network, and swapping for NOM on
-              the Onomy Network.
-            </Modal.Desc>
-
-            <Modal.InfoRow>
-              <div>
-                <Modal.InfoSubCaption>One Way Bridge</Modal.InfoSubCaption>
-
-                <Modal.Desc>
-                  Choose to bridge when you are ready to do so to finalize your
-                  purchase of NOM!{" "}
-                  <strong>
-                    After bridging, you can no longer sell back to the bonding
-                    curve or bridge back for wNOM.
-                  </strong>{" "}
-                  There are no guarantees of liquid markets.
-                </Modal.Desc>
-              </div>
-
-              <img src={oneWayBridgeImg} alt="" />
-            </Modal.InfoRow>
-
-            <Modal.InfoRow>
-              <div>
-                <Modal.InfoSubCaption>Why Bridge?</Modal.InfoSubCaption>
-
-                <Modal.List>
-                  <li>
-                    You must hold NOM to participate in the Onomy Network.{" "}
-                  </li>
-                  <li>
-                    Early stakers of NOM take advantage of larger staking yield.{" "}
-                  </li>
-                  <li>
-                    NOM is used for governance, staking, and collateral to mint
-                    stablecoins.
-                  </li>
-                  <li>
-                    All bridged wNOM is burned from the bonding curve supply.{" "}
-                  </li>
-                  <li>NOM would be listed on exchanges rather than wNOM. </li>
-                </Modal.List>
-              </div>
-
-              <Modal.InfoImgWrapper>
-                <img src={whyBridgeImg} alt="" />
-              </Modal.InfoImgWrapper>
-            </Modal.InfoRow>
-          </Modal.Info>
-        </ModalInfo>
-      </ExchangeModalWrapper>
-    </ReactModal>
+    </BridgeSwapModalWrapper>
   );
 }

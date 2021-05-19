@@ -352,7 +352,7 @@ export const BridgeModalWrapper = styled(Wrapper)`
   }
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
-   width: 100%;
+    display: none;
  }
 `;
 
