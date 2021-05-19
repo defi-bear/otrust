@@ -8,11 +8,7 @@ const StyledSVG = styled.svg`
 `
 
 function LineChart(bondData) {
-<<<<<<< HEAD
-  console.log("Historical Data: ", bondData)
-=======
   console.log("Bond Data: ", bondData)
->>>>>>> dev
   const id = "historicalChart"
   return (
   <div  style={{ marginTop: "1rem", height: "400px" }}>
