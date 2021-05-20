@@ -16,7 +16,6 @@ import {
 } from "./exchangeStyles";
 
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
-import { Dimmer } from "components/UI/Dimmer";
 
 import { useModal, useUpdateModal } from 'context/modal/ModalContext'
 import { useSwap, useUpdateSwap } from "context/SwapContext";
@@ -29,7 +28,6 @@ import PendingModal from "components/Modals/components/PendingModal";
 
 export default function Exchange() {
   let { handleModal } = useModal()
-  } = useModal();
 
   const {
     setApproveModal,
@@ -204,9 +202,16 @@ export default function Exchange() {
     if (pendingTx) {
       pendingTx.wait().then(() => {
         setPreviousTx(pendingTx);
-        setCompletedModal(swapDenom);
         setPendingTx(null);
-        setPendingModal(false);
+        handleModal(
+          <TransactionCompletedModal
+            closeModal={() => handleModal()}
+            type={swapDenom}
+            amount={completedAmount}
+            result={completedResult}
+            previousTx={previousTx}
+          />
+        )
       })
     }
   }, [
@@ -223,19 +228,48 @@ export default function Exchange() {
 
   const onBuy = () => {
     setSwapDenom('ETH');
-    setConfirmModal('ETH');
+    handleModal(
+      <Dimmer>
+        <ConfirmTransactionModal
+          closeModal={() => setConfirmModal('')}
+          type='ETH'
+          amount={swapBuyAmount}
+          result={swapBuyResult}
+          onConfirm={() => 
+            onSubmit('ETH')
+          }
+          setSlippage={setSlippage}
+          slippage={slippage}
+        />
+      </Dimmer>
+    )
   }
 
   const onSell = () => {
     setSwapDenom('NOM');
-    setConfirmModal('NOM');
+    handleModal(
+      <Dimmer>
+        <ConfirmTransactionModal
+          closeModal={() => setConfirmModal('')}
+          type='NOM'
+          amount={swapSellAmount}
+          result={swapSellResult}
+          onConfirm={() => 
+            onSubmit('NOM')
+          }
+          setSlippage={setSlippage}
+          slippage={slippage}
+        />
+      </Dimmer>
+    )
   }
   
   const onApprove = async (value) => {
     if(value <= NOMbalance) {
       try {
-        setApproveModal(false);
-        setPendingModal(true);
+        handleModal(
+          <PendingModal />
+        );
         setSwapDenom('APPROVE')
         let tx = await NOMcontract.increaseAllowance(
           bondContract.address,
@@ -246,11 +280,20 @@ export default function Exchange() {
         // eslint-disable-next-line no-console
         // console.error(e.code, e.message.message);
         // alert(e.message)
-        setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
-        // setSwapBuyAmount(swapBuyAmount);
+        handleModal(
+          <TransactionFailedModal
+            closeModal={() => handleModal()}
+            error={e.code + '\n' + e.message.slice(0,80) + '...'}
+          />
+        )
       }    
     } else {
-      setFailedModal('NOM Balance too low')
+      handleModal(
+            <TransactionFailedModal
+              closeModal={() => handleModal()}
+              error={'NOM Balance too low'}
+            />
+      )
     }
   } 
   
@@ -267,21 +310,6 @@ export default function Exchange() {
   }
   return (
     <ExchangeWrapper>
-      {confirmModal && 
-        <Dimmer>
-          <ConfirmTransactionModal
-            closeModal={() => setConfirmModal('')}
-            type={confirmModal}
-            amount={confirmModal === 'ETH' ? swapBuyAmount : swapSellAmount}
-            result={confirmModal === 'ETH' ? swapBuyResult : swapSellResult}
-            onConfirm={() => 
-              onSubmit(confirmModal)
-            }
-            setSlippage={setSlippage}
-            slippage={slippage}
-          />
-        </Dimmer>
-      }
         {/* <TransactionCompletedModal /> */}
       {
         approveModal && 
@@ -291,34 +319,6 @@ export default function Exchange() {
               onConfirm={() => onApprove(swapSellAmount)}
             />
           </Dimmer>
-      }
-      {
-        completedModal && (
-          <Dimmer>
-            <TransactionCompletedModal
-              closeModal={() => setCompletedModal(false)}
-              type={completedModal}
-              amount={completedAmount}
-              result={completedResult}
-              previousTx={previousTx}
-            />
-          </Dimmer>
-        )
-      }
-      {
-        failedModal && (<Dimmer>
-          <TransactionFailedModal
-            closeModal={() => setFailedModal(null)}
-            error={failedModal}
-          />
-        </Dimmer>)
-      }
-      {
-        pendingModal && (
-          <Dimmer>
-            <PendingModal />
-          </Dimmer>
-        )
       }
       <ExchangeItem>
         <strong>Buy NOM</strong>
@@ -374,7 +374,14 @@ export default function Exchange() {
             NOMallowance > swapSellAmount && NOMbalance > swapSellAmount ? (
               <SellBtn onClick={onSell}>Sell NOM</SellBtn>) : 
                   NOMbalance > swapSellAmount ? (
-                    <SellBtn onClick={() => setApproveModal(true)}>Approve</SellBtn>
+                    <SellBtn onClick={() => handleModal(
+                      <Dimmer>
+                        <OnomyConfirmationModal
+                          closeModal={() => handleModal()}
+                          onConfirm={() => onApprove(swapSellAmount)}
+                        />
+                      </Dimmer>
+                    )}>Approve</SellBtn>
                   ) : <SellBtn>Not enough NOM</SellBtn>
           }
         </div>
