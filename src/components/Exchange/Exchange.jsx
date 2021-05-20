@@ -75,7 +75,6 @@ export default function Exchange() {
       setSwapDenom('ETH')
       if (isNumber(parseFloat(evt.target.value))) {
         try {
-          console.log(evt.target.value)
           setSwapBuyAmount(
             parse18(
               new BigNumber(
@@ -98,7 +97,8 @@ export default function Exchange() {
       setSwapBuyValue,
       setSwapDenom, 
       setSwapSellAmount,
-      setSwapSellResult
+      setSwapSellResult,
+      setSwapSellValue
     ]
   );
   
@@ -179,6 +179,7 @@ export default function Exchange() {
     },
     [
       bondContract,
+      handleModal,
       setCompletedAmount,
       setCompletedResult,
       setPendingTx,
@@ -209,7 +210,11 @@ export default function Exchange() {
       })
     }
   }, [
+    completedAmount,
+    completedResult,
+    handleModal,
     pendingTx,
+    previousTx,
     setPendingTx,
     swapBuyAmount,
     swapBuyResult,

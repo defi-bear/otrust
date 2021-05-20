@@ -25,70 +25,89 @@ function SwapProvider({ children }) {
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
 
     useEffect(() => {
-        async function swapAmount() {  
-            if (BigNumber.isBigNumber(swapBuyAmount)) {
+        async function swapAmount() {
+            if (BigNumber.isBigNumber(swapBuyAmount) && swapDenom === 'ETH') {
+                console.log("Buy NOM")
                 try {
                     const amountNOM = await bondContract.buyQuoteETH(swapBuyAmount.toFixed(0))
-                    const supplyTop = supplyNOM.plus(amountNOM)
-            
+                    
+                    const supplyTop = supplyNOM.plus(new BigNumber(amountNOM.toString()))
+                    
+                    console.log("SupplyNOM: ", format18(supplyNOM).toString())
+                    console.log("Supply Top: ",format18(supplyTop).toString())
+
                     setSwapBuyResult(new BigNumber(amountNOM.toString()))
                     setSwapSupply([
-                        format18(supplyNOM).toNumber(), 
-                        format18(supplyTop).toNumber()
+                        supplyNOM, 
+                        supplyTop
                     ])
                 } catch (err) {
                     console.log("Error: ", err)
                     setSwapSupply([
-                        format18(supplyNOM).toNumber(), 
-                        format18(supplyNOM).toNumber()
+                        supplyNOM, 
+                        supplyNOM
                     ])    
                 }
             } else {
                 setSwapSupply([
-                    format18(supplyNOM).toNumber(), 
-                    format18(supplyNOM).toNumber()
+                    supplyNOM, 
+                    supplyNOM
                 ])
             }
         }              
-        swapAmount()
+        if (supplyNOM) {
+            swapAmount()
+        }
     }, [
-        bondContract, 
-        supplyNOM, 
+        bondContract,
+        swapDenom, 
+        supplyNOM,
         swapBuyAmount
     ])
     
     useEffect(() => {
         async function swapAmount() {
-            if (BigNumber.isBigNumber(swapSellAmount)) {
+            if (BigNumber.isBigNumber(swapSellAmount) && swapDenom === 'NOM') {
+                console.log("Sell NOM")
                 if (swapSellAmount.lte(supplyNOM)) {
                     try {
-                        const amountETH = await bondContract.sellQuoteNOM(swapSellAmount.toFixed(0));
-                        const supplyBot = supplyNOM.minus(swapSellAmount)
+                        const amountETH = await bondContract.sellQuoteNOM(
+                            swapSellAmount.toFixed(0)
+                        )
+                        const supplyBot = supplyNOM.minus(
+                            new BigNumber(swapSellAmount.toString())
+                        )
+                        
+                        console.log("Supply Bot: ",format18(supplyBot).toString())
+                        console.log("Supply NOM: ", format18(supplyNOM).toString())
 
                         setSwapSellResult(new BigNumber(amountETH.toString()))
                         setSwapSupply([
-                            format18(supplyBot).toNumber(), 
-                            format18(supplyNOM).toNumber()
+                            supplyBot, 
+                            supplyNOM
                         ])
                     } catch (err) {
                         console.log("Error: ", err)
                         setSwapSupply([
-                            format18(supplyNOM).toNumber(), 
-                            format18(supplyNOM).toNumber()
+                            supplyNOM, 
+                            supplyNOM
                         ])
                     }
                 } else {
                     setSwapSupply([
-                        format18(supplyNOM).toNumber(), 
-                        format18(supplyNOM).toNumber()
+                        supplyNOM, 
+                        supplyNOM
                     ])
                 }
             }
         }
-        swapAmount()
+        if(supplyNOM) {
+            swapAmount()
+        } 
     },[
         bondContract, 
-        supplyNOM, 
+        supplyNOM,
+        swapDenom, 
         swapSellAmount
     ])
 

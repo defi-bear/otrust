@@ -17,7 +17,7 @@ export function truncate(str, maxDecimalDigits) {
 }
 
 export function format18(bignumber) {
-    return bignumber.dividedBy(new BigNumber(10**18))
+    return bignumber.div(new BigNumber(10**18))
 }
 
 export function parse18(bignumber) {

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import styled from "styled-components";
+import { BigNumber } from 'bignumber.js'
 
 import {
   area,
@@ -45,6 +46,15 @@ export function labelArray(supBegin, supEnd) {
   return { paymentETH, supAvg, priceAvg };
 }
 
+export function bounds(swapSupply) {
+  var digitsUpper = 0
+    do { digitsUpper++ } 
+    while (swapSupply[1].isLessThan(new BigNumber(10**digitsUpper)))
+    const upperBound = new BigNumber(10 ** digitsUpper)
+    const lowerBound = 0;
+    return { lowerBound, upperBound }
+}
+
 /**
  * Component that renders a ZoomableLineChart
  */
@@ -53,27 +63,26 @@ function LineChart({ id = "bondingChart" }) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const { theme } = useContext(ChainContext);
-
   const [data, setData] = useState(supplyToArray(0, 100000000))
   const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
-
   const [labelData, setLabelData] = useState('') 
 
+  const { theme } = useContext(ChainContext);
   const { swapSupply } = useSwap();
+
+  console.log("Swap Supply: ", swapSupply)
 
   useEffect(() => {
     if (swapSupply[1]) {
-      var digitsUpper = Math.floor(Math.log10(swapSupply[1]));
-      // upperBound = 10**(digitsUpper + 1)
-      const upperBound =
-        (Math.round(swapSupply[1] / 10 ** digitsUpper) + 1) * 10 ** digitsUpper;
-      const lowerBound = 0;
+      const { lowerBound, upperBound } = bounds(swapSupply)
       setData(supplyToArray(lowerBound, upperBound));
       setAreaData(supplyToArray(swapSupply[0], swapSupply[1]));
       setLabelData(labelArray(swapSupply[0], swapSupply[1]));
     }
   }, [swapSupply]);
+
+  console.log("Data: ", data)
+  console.log("Area Data: ", areaData)
   
   // charts and xAxis and yAxis
   useEffect(() => {
