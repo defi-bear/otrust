@@ -21,9 +21,9 @@ import { useModal } from 'context/modal/ModalContext'
 import { useSwap, useUpdateSwap } from "context/SwapContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
-import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
+import TransactionCompletedModal from "components/Modals/components/TransactionCompletedModal";
 import OnomyConfirmationModal from "components/Modals/components/OnomyConfirmationModal";
-import TransactionFailedModal from "components/Modals/TransactionFailedModal";
+import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
 import PendingModal from "components/Modals/components/PendingModal";
 
 export default function Exchange() {
@@ -146,14 +146,14 @@ export default function Exchange() {
         let tx;
         if (denom === "ETH") {
           tx = await bondContract.buyNOM(
-            swapBuyResult,
+            swapBuyResult.toFixed(0),
             slippage * 100,
-            { value: swapBuyAmount }
+            { value: swapBuyAmount.toFixed(0) }
           );
         } else {
           tx = await bondContract.sellNOM(
-            swapSellAmount,
-            swapSellResult,
+            swapSellAmount.toFixed(0),
+            swapSellResult.toFixed(0),
             slippage * 100,
           );
         }
@@ -221,9 +221,8 @@ export default function Exchange() {
   const onBuy = () => {
     setSwapDenom('ETH');
     handleModal(
-      <Dimmer>
         <ConfirmTransactionModal
-          closeModal={() => setConfirmModal('')}
+          closeModal={() => handleModal()}
           type='ETH'
           amount={swapBuyAmount}
           result={swapBuyResult}
@@ -233,16 +232,14 @@ export default function Exchange() {
           setSlippage={setSlippage}
           slippage={slippage}
         />
-      </Dimmer>
     )
   }
 
   const onSell = () => {
     setSwapDenom('NOM');
     handleModal(
-      <Dimmer>
         <ConfirmTransactionModal
-          closeModal={() => setConfirmModal('')}
+          closeModal={() => handleModal()}
           type='NOM'
           amount={swapSellAmount}
           result={swapSellResult}
@@ -252,7 +249,6 @@ export default function Exchange() {
           setSlippage={setSlippage}
           slippage={slippage}
         />
-      </Dimmer>
     )
   }
   
@@ -265,7 +261,7 @@ export default function Exchange() {
         setSwapDenom('APPROVE')
         let tx = await NOMcontract.increaseAllowance(
           bondContract.address,
-          value
+          value.toFixed(0)
         );
         setPendingTx(tx);
       } catch (e) {
@@ -357,12 +353,10 @@ export default function Exchange() {
               <SellBtn onClick={onSell}>Sell NOM</SellBtn>) : 
                   NOMbalance > swapSellAmount ? (
                     <SellBtn onClick={() => handleModal(
-                      <Dimmer>
                         <OnomyConfirmationModal
                           closeModal={() => handleModal()}
                           onConfirm={() => onApprove(swapSellAmount)}
                         />
-                      </Dimmer>
                     )}>Approve</SellBtn>
                   ) : <SellBtn>Not enough NOM</SellBtn>
           }

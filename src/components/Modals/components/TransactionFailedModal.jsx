@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Close, Fail } from "./Icons";
-import * as Modal from "./styles";
+import { Close, Fail } from "../Icons";
+import * as Modal from "../styles";
 import { responsive } from "theme/constants";
 
 const FailIconWrapper = styled(Modal.ModalIconWrapper)`

@@ -166,7 +166,7 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
         <TransactionDetailsRow>
           <span>You're Sending</span>
 
-          <strong>{amount} {type}</strong>
+          <strong>{format18(amount).toFixed(6)} {type}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <div>

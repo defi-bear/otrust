@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { useChain } from 'context/chain/ChainContext'
-import { Caret, Close, Success } from "./Icons";
-import * as Modal from "./styles";
+import { Caret, Close, Success } from "../Icons";
+import * as Modal from "../styles";
 
 export const ExplorerButton = styled(Modal.SecondaryButton)`
   width: 100%;

@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useState, createContext, useContext } from 'react'
 import Modal from "context/modal/modal";
 
 export const ModalContext = createContext()
 export const useModal = () => useContext(ModalContext)
 
 export const UpdateModalContext = createContext()
-export const useUpdateModal = () => useContext(UpdateSwapContext)
+export const useUpdateModal = () => useContext(UpdateModalContext)
 
 
 let ModalProvider = ({ children }) => {
-  let [modal, updateModal] = React.useState(false);
-  let [modalContent, updateModalContent] = React.useState("I'm the Modal Content");
+  let [modal, updateModal] = useState(false);
+  let [modalContent, updateModalContent] = useState("I'm the Modal Content");
 
   let handleModal = (content = false) => {
-    setModal(!modal);
+    updateModal(!modal);
     if (content) {
-      setModalContent(content);
+      updateModalContent(content);
     }
   };
 

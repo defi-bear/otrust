@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react'
 import ReactDOM from "react-dom";
-import ModalContext from "context/modal/ModalContext";
+import { useModal } from "context/modal/ModalContext";
 import { Dimmer } from "components/UI/Dimmer";
 
 const Modal = () => {
-  let { modalContent, modal } = React.useContext(ModalContext);
+  let { modalContent, modal } = useModal();
   if (modal) {
     return ReactDOM.createPortal(
       <Dimmer>
