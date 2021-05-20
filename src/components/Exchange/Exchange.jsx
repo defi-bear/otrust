@@ -17,7 +17,7 @@ import {
 
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
 
-import { useModal, useUpdateModal } from 'context/modal/ModalContext'
+import { useModal } from 'context/modal/ModalContext'
 import { useSwap, useUpdateSwap } from "context/SwapContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
@@ -28,14 +28,6 @@ import PendingModal from "components/Modals/components/PendingModal";
 
 export default function Exchange() {
   let { handleModal } = useModal()
-
-  const {
-    setApproveModal,
-    setCompletedModal,
-    setConfirmModal,
-    setFailedModal,
-    setPendingModal
-  } = useUpdateModal()
 
   const { 
     swapBuyAmount, 
@@ -166,27 +158,29 @@ export default function Exchange() {
           );
         }
         setPendingTx(tx);
-        setConfirmModal('');
         setCompletedAmount(denom === 'ETH' ? swapBuyAmount : swapSellAmount);
         setCompletedResult(denom === 'ETH' ? swapBuyResult : swapSellResult);
-        setPendingModal(true);
+        handleModal(
+          <PendingModal />
+        )
         setSwapBuyAmount("");
         setSwapSellAmount("");
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e.code, e.message.message);
         // alert(e.message)
-        setFailedModal(e.code + '\n' + e.message.slice(0,80) + '...')
-        // setSwapBuyAmount(swapBuyAmount);
+        handleModal(
+          <TransactionFailedModal
+            closeModal={() => handleModal()}
+            error={e.code + '\n' + e.message.slice(0,80) + '...'}
+          />
+        )
       }
     },
     [
       bondContract,
       setCompletedAmount,
       setCompletedResult,
-      setConfirmModal,
-      setFailedModal,
-      setPendingModal,
       setPendingTx,
       setSwapSellAmount,
       setSwapBuyAmount,
@@ -216,8 +210,6 @@ export default function Exchange() {
     }
   }, [
     pendingTx,
-    setCompletedModal,
-    setPendingModal,
     setPendingTx,
     swapBuyAmount,
     swapBuyResult,
@@ -310,16 +302,6 @@ export default function Exchange() {
   }
   return (
     <ExchangeWrapper>
-        {/* <TransactionCompletedModal /> */}
-      {
-        approveModal && 
-          <Dimmer>
-            <OnomyConfirmationModal
-              closeModal={() => setApproveModal(false)}
-              onConfirm={() => onApprove(swapSellAmount)}
-            />
-          </Dimmer>
-      }
       <ExchangeItem>
         <strong>Buy NOM</strong>
         <Sending>

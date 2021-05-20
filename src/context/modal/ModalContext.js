@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "./modal";
+import Modal from "context/modal/modal";
 
 export const ModalContext = createContext()
 export const useModal = () => useContext(ModalContext)
@@ -20,6 +20,7 @@ let ModalProvider = ({ children }) => {
   };
 
   const contextValue = {
+    handleModal,
     modal,
     modalContent,
   }
@@ -32,6 +33,7 @@ let ModalProvider = ({ children }) => {
   return (
     <UpdateModalContext.Provider value={updateValue}>
         <ModalContext.Provider value={contextValue} >
+            <Modal />
             {children}
         </ModalContext.Provider>
     </UpdateModalContext.Provider>

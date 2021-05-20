@@ -8,9 +8,9 @@ import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
-import { Close, Metamask } from "./Icons";
-import * as Modal from "./styles";
-import './loadingBar.css';
+import { Close, Metamask } from "components/Modals/Icons";
+import * as Modal from "components/Modals/styles";
+import 'components/Modals/loadingBar.css';
 
 const TransactionDetailsRow = styled.div`
   display: flex;
