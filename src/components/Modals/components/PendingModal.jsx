@@ -1,5 +1,5 @@
 import LoadingSpinner from "components/UI/LoadingSpinner";
-import * as Modal from "./styles";
+import * as Modal from "../styles";
 
 export default function PendingModal() {
     return (

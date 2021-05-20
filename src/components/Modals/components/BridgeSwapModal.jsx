@@ -1,31 +1,38 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Close } from "./Icons";
-import * as Modal from "./styles";
+import { Close } from "../Icons";
+import * as Modal from "../styles";
 import { responsive } from "theme/constants";
+import { Sending, ExchangeInput, MaxBtn } from "../../Exchange/exchangeStyles";
 
 import oneWayBridgeImg from "./assets/one-way-bridge.svg";
 import whyBridgeImg from "./assets/why-bridge.svg";
 import bridgeCurveImg from "./assets/icon-bridge-curve.svg";
+import walletImg from "./assets/icon-onomy-wallet.svg";
 
-const ConnectWalletWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const InputWrapper = styled.div`
+  margin: 0 0 25px;
+`;
 
-  height: 100%;
-  padding: 100px 32px;
+const FormWrapper = styled.form`
+  padding: 32px 32px 0;
+  margin: 32px -32px 0 -36px;
 
-  border-radius: 8px;
-  background-color: ${(props) => props.theme.colors.bgDarken};
+  border-top: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
 
-  @media screen and (max-width: ${responsive.tabletSmall}) {
-    padding: 24px;
+  @media screen and (max-width: ${responsive.laptop}) {
+    margin-left: -28px;
+    margin-right: -24px;
+  }
+
+  @media screen and (max-width: ${responsive.laptopSmall}) {
+    margin-left: -28px;
+    margin-right: -28px;
   }
 `;
 
-export default function BridgeSwapModalDisconnected() {
+export default function BridgeSwapModal() {
   return (
     <Modal.BridgeModalWrapper>
       <Modal.CloseIcon>
@@ -51,16 +58,31 @@ export default function BridgeSwapModalDisconnected() {
               </Modal.Balance>
             </Modal.ConnectionItem>
 
-            <Modal.ConnectionStatus disconnected>
-              Onomy wallet is not connected
-            </Modal.ConnectionStatus>
+            <Modal.ConnectionStatus>Bridge Connected</Modal.ConnectionStatus>
 
-            <ConnectWalletWrapper>
-              <Modal.FullWidthButton>
-                Connect Onomy Wallet
-              </Modal.FullWidthButton>
-            </ConnectWalletWrapper>
+            <Modal.ConnectionItem>
+              <Modal.ConnectionItemIcon>
+                <img src={walletImg} alt="" />
+              </Modal.ConnectionItemIcon>
+              <Modal.ConnectionItemContent>
+                <strong>My Onomy Wallet</strong>
+                <span>0x5262f6ef7cbdsad334123sdas8b</span>
+              </Modal.ConnectionItemContent>
+            </Modal.ConnectionItem>
           </Modal.BridgeContent>
+
+          <FormWrapper>
+            <InputWrapper>
+              <Sending>
+                <strong>Swap to NOM</strong>
+                <ExchangeInput type="text" />
+                wNOM
+                <MaxBtn>Max</MaxBtn>
+              </Sending>
+            </InputWrapper>
+
+            <Modal.FullWidthButton>Swap wNOM for NOM</Modal.FullWidthButton>
+          </FormWrapper>
         </main>
         <Modal.Info>
           <h2>What is Onomy Bridge?</h2>

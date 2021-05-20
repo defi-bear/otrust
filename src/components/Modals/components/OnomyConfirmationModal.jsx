@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import useInterval from '@use-it/interval';
 
-import { Close } from "./Icons";
-import * as Modal from "./styles";
+import { Close } from "../Icons";
+import * as Modal from "../styles";
 import { responsive } from "theme/constants";
 
 const Message = styled.div`

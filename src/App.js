@@ -5,7 +5,7 @@ import { GlobalStyle } from 'theme/GlobalStyle'
 import MainHeader from 'components/MainHeader'
 import { AutoLogin } from 'context/AutoLogin'
 import ChainProvider from 'context/chain/ChainContext'
-import ModalProvider from 'context/ModalContext'
+import ModalProvider from 'context/modal/ModalContext'
 import BondingCurve from 'pages/BondingCurve'
 
 

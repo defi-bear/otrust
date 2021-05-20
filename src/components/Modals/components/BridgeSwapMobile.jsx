@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 import { responsive } from "theme/constants";
-import { Sending, ExchangeInput, MaxBtn } from "../Exchange/exchangeStyles";
-import { ConnectionStatus } from "../AcctDash";
-import * as Modal from "./styles";
+import { Sending, ExchangeInput, MaxBtn } from "../../Exchange/exchangeStyles";
+import { ConnectionStatus } from "../../AcctDash";
+import * as Modal from "../styles";
 
 import oneWayBridgeImg from "./assets/one-way-bridge.svg";
 import whyBridgeImg from "./assets/why-bridge.svg";

@@ -23,28 +23,6 @@ function SwapProvider({ children }) {
     const [swapSellValue, setSwapSellValue] = useState('')
     
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
-    
-    const contextValue = {
-        swapBuyAmount,
-        swapBuyResult,
-        swapBuyValue,
-        swapDenom,
-        swapSellAmount,
-        swapSellResult,
-        swapSellValue,
-        swapSupply
-    }
-
-    const updateValue = {
-        setSwapBuyAmount,
-        setSwapBuyResult,
-        setSwapBuyValue,
-        setSwapDenom,
-        setSwapSellAmount,
-        setSwapSellResult,
-        setSwapSellValue,
-        setSwapSupply
-    }
 
     useEffect(() => {
         async function swapAmount() {  
@@ -113,6 +91,28 @@ function SwapProvider({ children }) {
         supplyNOM, 
         swapSellAmount
     ])
+
+    const contextValue = {
+        swapBuyAmount,
+        swapBuyResult,
+        swapBuyValue,
+        swapDenom,
+        swapSellAmount,
+        swapSellResult,
+        swapSellValue,
+        swapSupply
+    }
+
+    const updateValue = {
+        setSwapBuyAmount,
+        setSwapBuyResult,
+        setSwapBuyValue,
+        setSwapDenom,
+        setSwapSellAmount,
+        setSwapSellResult,
+        setSwapSellValue,
+        setSwapSupply
+    }
 
     return (
         <UpdateSwapContext.Provider value={updateValue}>

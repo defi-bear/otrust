@@ -15,26 +15,20 @@ import {
   ExchangeButton,
 } from "./exchangeStyles";
 
-import ConfirmTransactionModal from '../Modals/ConfirmTransactionModal';
+import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
 import { Dimmer } from "components/UI/Dimmer";
 
-import ExchangeModals from "./ExchangeModals";
-import { useModal, useUpdateModal } from 'context/ModalContext'
+import { useModal, useUpdateModal } from 'context/modal/ModalContext'
 import { useSwap, useUpdateSwap } from "context/SwapContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
 import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
-import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
+import OnomyConfirmationModal from "components/Modals/components/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/TransactionFailedModal";
-import PendingModal from "components/Modals/PendingModal";
+import PendingModal from "components/Modals/components/PendingModal";
 
 export default function Exchange() {
-  const {
-    approveModal,
-    completedModal,
-    confirmModal,
-    failedModal,
-    pendingModal
+  let { handleModal } = useModal()
   } = useModal();
 
   const {
@@ -273,7 +267,6 @@ export default function Exchange() {
   }
   return (
     <ExchangeWrapper>
-      <ExchangeModals />
       {confirmModal && 
         <Dimmer>
           <ConfirmTransactionModal
