@@ -47,32 +47,63 @@ function ChainProvider({ theme, children }) {
         setCurrentNOMPrice(amount);
     },[bondContract])
 
+    const getChainData = useCallback(
+       async () => {
+           var quoteAmount = 10**18
+           if (supplyNOM < (new BigNumber((10**18).toString()))) {
+               quoteAmount = 0
+           }
+
+           var p = await Promise.all(
+               [
+                    library.getBalance(account),
+                    NOMcontract.balanceOf(account),
+                    NOMcontract.allowance(account, addrs.BondingNOM),
+                    bondContract.getSupplyNOM(),
+                    bondContract.buyQuoteETH((10**18).toString())
+                    // UniSwapCont.getReserves(),
+               ]
+           ).catch((err) => ( console.log(err)))
+           console.log("Pull promise")
+           return p
+       },[blockNumber, bondContract]
+    )
+
     useEffect(() => {
         async function blocker() {
             // listen for changes on an Ethereum address
             library.on('block', async (number) => {
                 setBlockNumber(number)
                 console.log("Block Number: ", number)
-                Promise.all(
-                    [
-                        library.getBalance(account),
-                    //    NOMcontract.balanceOf(account),
-                    //    NOMcontract.allowance(account, addrs.BondingNOM),
-                    //    bondContract.getSupplyNOM(),
-                    //    bondContract.buyQuoteETH(big1e18.toString()),
-                    //    bondContract.sellQuoteNOM(big1e18.toString())
-                        
-                        // UniSwapCont.getReserves(),
-
-                    ]
-                ).then((values) => {
-                    setETHBalance(new BigNumber(values[0].toString()))
-                    // setNOMBalance(new BigNumber(values[1].toString()))
-                    // setNOMAllowance(new BigNumber(values[2].toString()))
-                    // setSupplyNOM(new BigNumber(values[1].toString()))
-                    // setCurrentETHPrice(new BigNumber(values[1].toString()))
-                    // setCurrentNOMPrice(new BigNumber(values[1].toString()))
+                await getChainData()
+                .then((values) => {
+                    if(ETHbalance.toString() != values[0].toString()) {
+                        setETHBalance(new BigNumber(values[0].toString()))
+                    }
                     
+                    if(NOMbalance.toString() != values[1].toString()) {
+                        setNOMBalance(new BigNumber(values[1].toString()))
+                    }
+
+                    if(NOMallowance.toString() != values[2].toString()) {
+                        setNOMAllowance(new BigNumber(values[2].toString()))
+                    }
+
+                    if(supplyNOM.toString() != values[3].toString()) {
+                        setSupplyNOM(new BigNumber(values[3].toString()))
+                    }
+
+                    if(currentETHPrice.toString() != values[4].toString()) {
+                        setCurrentETHPrice(new BigNumber(values[4].toString()))
+                    }
+                    
+                    if(currentNOMPrice.toString() != 
+                        (new BigNumber('1')).div(new BigNumber(values[4].toString()))) {
+                            setCurrentETHPrice(
+                                (new BigNumber('1')).div(new BigNumber(values[4].toString()))
+                            )
+                    }
+
                     // setETHUSD(new BigNumber(values[6]))
 
                 }).catch((err) => { console.log(err) })
@@ -85,7 +116,7 @@ function ChainProvider({ theme, children }) {
             // trigger the effect only on component mount
         }
         blocker()
-    }, [NOMcontract, account, bondContract, library, getCurrentPrice])
+    }, [library])
 
     const contextValue = {
         blockNumber,
