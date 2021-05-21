@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import styled from "styled-components";
-import { BigNumber } from 'bignumber.js'
+import { format18 } from 'utils/math'
 
 import {
   area,
@@ -26,6 +26,10 @@ const StyledSVG = styled.svg`
     overflow: visible;
 `
 function supplyToArray(supBegin, supEnd) {
+  
+  console.log("Supply Begin: ", supBegin)
+  console.log("Supply End: ", supEnd)
+  
   var dataArray = [];
   const dif = supEnd - supBegin;
   const n = 100;
@@ -47,12 +51,29 @@ export function labelArray(supBegin, supEnd) {
 }
 
 export function bounds(swapSupply) {
-  var digitsUpper = 0
-    do { digitsUpper++ } 
-    while (swapSupply[1].isLessThan(new BigNumber(10**digitsUpper)))
-    const upperBound = new BigNumber(10 ** digitsUpper)
-    const lowerBound = 0;
-    return { lowerBound, upperBound }
+  var lowerBound
+  var upperBound
+
+  try{
+    var digitsUpper = Math.floor(
+      Math.log10(
+        format18(swapSupply[1]).toFixed(8)
+      )
+    );
+    // upperBound = 10**(digitsUpper + 1)
+    upperBound =
+      (Math.round(
+        format18(swapSupply[1]).toFixed(8) / 
+        10 ** digitsUpper) + 1) * 10 ** digitsUpper
+    lowerBound = 0;
+  } catch (err) {
+    console.log(err)
+  }
+
+  console.log("Upper Bound: ", upperBound)
+  console.log("Lower Bound: ", lowerBound)
+  
+  return { lowerBound, upperBound }
 }
 
 /**
@@ -76,8 +97,18 @@ function LineChart({ id = "bondingChart" }) {
     if (swapSupply[1]) {
       const { lowerBound, upperBound } = bounds(swapSupply)
       setData(supplyToArray(lowerBound, upperBound));
-      setAreaData(supplyToArray(swapSupply[0], swapSupply[1]));
-      setLabelData(labelArray(swapSupply[0], swapSupply[1]));
+      setAreaData(
+        supplyToArray(
+          format18(swapSupply[0]).toFixed(8), 
+          format18(swapSupply[1]).toFixed(8)
+        )
+      )
+      setLabelData(
+        labelArray(
+          format18(swapSupply[0]).toFixed(8), 
+          format18(swapSupply[1]).toFixed(8)
+        )
+      )
     }
   }, [swapSupply]);
 

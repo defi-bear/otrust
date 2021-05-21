@@ -52,25 +52,26 @@ function ChainProvider({ theme, children }) {
             // listen for changes on an Ethereum address
             library.on('block', async (number) => {
                 setBlockNumber(number)
+                console.log("Block Number: ", number)
                 Promise.all(
                     [
                         library.getBalance(account),
-                        NOMcontract.balanceOf(account),
-                        NOMcontract.allowance(account, addrs.BondingNOM),
-                        bondContract.getSupplyNOM(),
-                        bondContract.buyQuoteETH(big1e18.toString()),
-                        bondContract.sellQuoteNOM(big1e18.toString())
+                    //    NOMcontract.balanceOf(account),
+                    //    NOMcontract.allowance(account, addrs.BondingNOM),
+                    //    bondContract.getSupplyNOM(),
+                    //    bondContract.buyQuoteETH(big1e18.toString()),
+                    //    bondContract.sellQuoteNOM(big1e18.toString())
                         
                         // UniSwapCont.getReserves(),
 
                     ]
                 ).then((values) => {
                     setETHBalance(new BigNumber(values[0].toString()))
-                    setNOMBalance(new BigNumber(values[1].toString()))
-                    setNOMAllowance(new BigNumber(values[2].toString()))
-                    setSupplyNOM(new BigNumber(values[3].toString()))
-                    setCurrentETHPrice(new BigNumber(values[4].toString()))
-                    setCurrentNOMPrice(new BigNumber(values[5].toString()))
+                    // setNOMBalance(new BigNumber(values[1].toString()))
+                    // setNOMAllowance(new BigNumber(values[2].toString()))
+                    // setSupplyNOM(new BigNumber(values[1].toString()))
+                    // setCurrentETHPrice(new BigNumber(values[1].toString()))
+                    // setCurrentNOMPrice(new BigNumber(values[1].toString()))
                     
                     // setETHUSD(new BigNumber(values[6]))
 

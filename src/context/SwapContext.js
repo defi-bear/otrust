@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from 'react'
+import React, { useCallback, useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
@@ -14,28 +14,30 @@ function SwapProvider({ children }) {
     const { supplyNOM } = useChain()
     const { bondContract } = useChain()
 
-    const [swapBuyAmount, setSwapBuyAmount] = useState('')
+    const [swapBuyAmount, setSwapBuyAmount] = useState(new BigNumber(0))
     const [swapBuyResult, setSwapBuyResult] = useState('')
     const [swapBuyValue, setSwapBuyValue] = useState('')
     const [swapDenom, setSwapDenom] = useState('ETH')
-    const [swapSellAmount, setSwapSellAmount] = useState(new BigNumber(0))
+    const [swapSellAmount, setSwapSellAmount] = useState('')
     const [swapSellResult, setSwapSellResult] = useState('')
     const [swapSellValue, setSwapSellValue] = useState('')
     
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
 
     useEffect(() => {
+        
+        console.log("Swap Denom: ", swapDenom)
+        console.log("Supply NOM: ", supplyNOM)
+        console.log("Swap Buy Amount: ", swapBuyAmount.toString())
+
         async function swapAmount() {
-            if (BigNumber.isBigNumber(swapBuyAmount) && swapDenom === 'ETH') {
-                console.log("Buy NOM")
+            if (supplyNOM && BigNumber.isBigNumber(swapBuyAmount) && swapDenom === 'ETH') {
                 try {
-                    const amountNOM = await bondContract.buyQuoteETH(swapBuyAmount.toFixed(0))
-                    
+                    const amountNOM = await bondContract.buyQuoteETH(swapBuyAmount.toString())
+                    console.log("Swap Buy Amount: ", amountNOM.toString())
+                    console.log("Amount NOM: ", format18(new BigNumber(amountNOM.toString())).toFixed(4))
                     const supplyTop = supplyNOM.plus(new BigNumber(amountNOM.toString()))
                     
-                    console.log("SupplyNOM: ", format18(supplyNOM).toString())
-                    console.log("Supply Top: ",format18(supplyTop).toString())
-
                     setSwapBuyResult(new BigNumber(amountNOM.toString()))
                     setSwapSupply([
                         supplyNOM, 
@@ -48,18 +50,14 @@ function SwapProvider({ children }) {
                         supplyNOM
                     ])    
                 }
-            } else {
-                setSwapSupply([
-                    supplyNOM, 
-                    supplyNOM
-                ])
             }
         }              
         if (supplyNOM) {
             swapAmount()
         }
+        console.log("Swap Supply 0: ", format18(swapSupply[0]).toFixed(5))
+        console.log("Swap Supply 1: ", format18(swapSupply[1]).toFixed(5))
     }, [
-        bondContract,
         swapDenom, 
         supplyNOM,
         swapBuyAmount
@@ -68,7 +66,6 @@ function SwapProvider({ children }) {
     useEffect(() => {
         async function swapAmount() {
             if (BigNumber.isBigNumber(swapSellAmount) && swapDenom === 'NOM') {
-                console.log("Sell NOM")
                 if (swapSellAmount.lte(supplyNOM)) {
                     try {
                         const amountETH = await bondContract.sellQuoteNOM(
@@ -93,11 +90,6 @@ function SwapProvider({ children }) {
                             supplyNOM
                         ])
                     }
-                } else {
-                    setSwapSupply([
-                        supplyNOM, 
-                        supplyNOM
-                    ])
                 }
             }
         }
