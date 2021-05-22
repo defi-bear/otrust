@@ -67,7 +67,7 @@ export default function Exchange() {
     (evt) => {
       evt.preventDefault()
       setInput(evt.target.value)
-      setDenom("strong")
+      setBidDenom("strong")
 
       if (isNumber(parseFloat(evt.target.value))) {
         try {
@@ -79,24 +79,21 @@ export default function Exchange() {
           
           if (bidAmountUpdate !== bidAmount) {
             setBidAmount(
-              bidAmount
+              bidAmountUpdate
             ) 
           }   
         } catch (e) {
           if (bidAmount !== '') {
-            setDisplay("Invalid Input")
+            setOutput("Invalid Input")
             setBidAmount('')
           }  
         }
+      }
     },
     [
-      setSwapBuyAmount,
-      setSwapBuyResult,
-      setSwapBuyValue,
-      setSwapDenom, 
-      setSwapSellAmount,
-      setSwapSellResult,
-      setSwapSellValue
+      setBidDenom,
+      setBidAmount,
+      setOutput
     ]
   );
   
@@ -261,7 +258,7 @@ export default function Exchange() {
     )
   }
   
-  const onApprove = async (value) => {
+  const onApprove = async (value)) => {
     if(value <= NOMbalance) {
       try {
         handleModal(
@@ -298,12 +295,12 @@ export default function Exchange() {
 
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
-  const onEthMax = () => {
-    setSwapBuyAmount(ETHbalance)
+  const onStrongMax = () => {
+    setInput(format18(ETHbalance).toString())
   }
 
-  const onNOMMax = () => {
-    setSwapSellAmount(NOMbalance)
+  const onWeakMax = (weakBalance) => {
+    setInput(format18(weakBalance).toString)
   }
   return (
     <ExchangeWrapper>
@@ -313,11 +310,11 @@ export default function Exchange() {
           <strong>I'm sending</strong>
           <ExchangeInput
             type="text"
-            onChange={onBidWeakTextChange}
+            onChange={onBidStrongTextChange}
             value={(bidDenom == 'strong') ? output : ''}
           />
           ETH
-          <MaxBtn onClick={onEthMax}>Max</MaxBtn>
+          <MaxBtn onClick={onStrongMax}>Max</MaxBtn>
         </Sending>
         <Receiving>
           <strong>I'm receiving</strong>
@@ -348,7 +345,7 @@ export default function Exchange() {
             value={(bidDenom == 'weak') ? input : ''}
           />
           NOM
-          <MaxBtn onClick={onNOMMax}>Max</MaxBtn>
+          <MaxBtn onClick={onWeakMax}>Max</MaxBtn>
         </Sending>
         <Receiving>
           <strong>I'm receiving</strong>

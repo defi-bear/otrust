@@ -13,16 +13,16 @@ export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 function ExchangeProvider({ children }) {
     const { supplyNOM } = useChain()
     const { bondContract } = useChain()
-    const [bidDenom, setBidDenom] = useState('ETH')
+    const [bidDenom, setBidDenom] = useState('strong')
     const [bidAmount, setBidAmount] = useState('')
     const [askAmount, setAskAmount] = useState('')
     const [input, setInput] = useState('')
     const [output, setOutput] = useState('')
     
-    
+    // This would be set by user, but for Bonding Curve is static
     // Strong (left): pair[0]
     // Weak (right): pair[1]
-    const [pair, setPair] = useState(['ETH', 'NOM'])
+    const [pair, setPair] = useState(['ETH', 'wNOM'])
     
 
     useEffect(() => {

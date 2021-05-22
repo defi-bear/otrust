@@ -16,8 +16,8 @@ export const useUpdateChain = () => useContext(UpdateChainContext)
 function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
-    const [ETHbalance, setETHBalance] = useState(new BigNumber(0))
-    const [NOMbalance, setNOMBalance] = useState(new BigNumber(0))
+    const [strongBalance, setWeakBalance] = useState(new BigNumber(0))
+    const [weakBalance, setWeakBalance] = useState(new BigNumber(0))
     const [NOMallowance, setNOMAllowance] = useState(new BigNumber(0))
     const [supplyNOM, setSupplyNOM] = useState(new BigNumber(0))
     const [pendingTx, setPendingTx] = useState()
@@ -61,12 +61,12 @@ function ChainProvider({ theme, children }) {
                 console.log("Block Number: ", number)
                 await getChainData()
                 .then((values) => {
-                    if(ETHbalance.toString() !== values[0].toString()) {
-                        setETHBalance(new BigNumber(values[0].toString()))
+                    if(strongBalance.toString() !== values[0].toString()) {
+                        setWeakBalance(new BigNumber(values[0].toString()))
                     }
                     
-                    if(NOMbalance.toString() !== values[1].toString()) {
-                        setNOMBalance(new BigNumber(values[1].toString()))
+                    if(weakBalance.toString() !== values[1].toString()) {
+                        setWeakBalance(new BigNumber(values[1].toString()))
                     }
 
                     if(NOMallowance.toString() !== values[2].toString()) {
@@ -107,10 +107,10 @@ function ChainProvider({ theme, children }) {
         bondContract,
         currentETHPrice,
         currentNOMPrice,
-        ETHbalance,
     //    ETHUSD,
         NOMallowance,
-        NOMbalance,
+        weakBalance,
+        strongBalance,
         NOMcontract,
         supplyNOM,
         theme,
