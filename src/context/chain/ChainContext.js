@@ -38,7 +38,7 @@ function ChainProvider({ theme, children }) {
 
     const getChainData = useCallback(
         async () => {
-            var p = await Promise.all(
+            var values = await Promise.all(
                 [
                         library.getBalance(account),
                         NOMcontract.balanceOf(account),
@@ -49,7 +49,7 @@ function ChainProvider({ theme, children }) {
                 ]
             ).catch((err) => ( console.log(err)))
             console.log("Pull promise")
-            return p
+            return values
        },[blockNumber, bondContract]
     )
 
@@ -83,7 +83,7 @@ function ChainProvider({ theme, children }) {
                     
                     if(currentNOMPrice.toString() !== 
                         (new BigNumber('1')).div(new BigNumber(values[4].toString()))) {
-                            setCurrentETHPrice(
+                            setCurrentNOMPrice(
                                 (new BigNumber('1')).div(new BigNumber(values[4].toString()))
                             )
                     }
