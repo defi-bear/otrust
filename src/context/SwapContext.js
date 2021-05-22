@@ -19,9 +19,9 @@ function SwapProvider({ children }) {
     const [display, setDisplay] = useState('')
     const [bidDenom, setBidDenom] = useState('ETH')
     
-    // Weaker (left): pair[0]
-    // Stronger (right): pair[1]
-    // const [pair, setPair] = useState(['NOM', 'ETH'])
+    // Strong (left): pair[0]
+    // Weak (right): pair[1]
+    const [pair, setPair] = useState(['ETH', 'NOM'])
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
 
     useEffect(() => {
@@ -120,25 +120,21 @@ function SwapProvider({ children }) {
     ])
 
     const contextValue = {
-        swapBuyAmount,
-        swapBuyResult,
-        swapBuyValue,
-        swapDenom,
-        swapSellAmount,
-        swapSellResult,
-        swapSellValue,
-        swapSupply
+        bidAmount,
+        askAmount,
+        input,
+        display,
+        bidDenom,
+        pair
     }
 
     const updateValue = {
-        setSwapBuyAmount,
-        setSwapBuyResult,
-        setSwapBuyValue,
-        setSwapDenom,
-        setSwapSellAmount,
-        setSwapSellResult,
-        setSwapSellValue,
-        setSwapSupply
+        setBidAmount,
+        setAskAmount,
+        setInput,
+        setDisplay,
+        setBidDenom,
+        setPair
     }
 
     return (

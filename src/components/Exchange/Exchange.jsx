@@ -34,7 +34,8 @@ export default function Exchange() {
     askAmount,
     input,
     display,
-    bidDenom
+    bidDenom,
+    pair
   } = useSwap();
   
   const { 
@@ -42,7 +43,8 @@ export default function Exchange() {
     setAskAmount,
     setInput,
     setDisplay,
-    setBidDenom
+    setBidDenom,
+    setPair
   } = useUpdateSwap();
 
   const { 
@@ -64,7 +66,7 @@ export default function Exchange() {
   const onWeakTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
-      setSwapBuyValue(evt.target.value)
+      setInput(evt.target.value)
       
       if (swapSellValue) {
         setSwapSellAmount('')
@@ -150,7 +152,10 @@ export default function Exchange() {
       if (!swapBuyAmount && !swapSellAmount) return;
       try {
         let tx;
-        if (denom === "ETH") {
+        if (bidDenom === "strong") {
+          switch (pair[1]) {
+            case 'ETH':
+
           tx = await bondContract.buyNOM(
             swapBuyResult.toFixed(0),
             slippage * 100,
@@ -164,13 +169,12 @@ export default function Exchange() {
           );
         }
         setPendingTx(tx);
-        setCompletedAmount(denom === 'ETH' ? swapBuyAmount : swapSellAmount);
-        setCompletedResult(denom === 'ETH' ? swapBuyResult : swapSellResult);
+        setCompletedAmount(denom === 'strong' ? swapBuyAmount : swapSellAmount);
+        setCompletedResult(denom === 'weak' ? swapBuyResult : swapSellResult);
         handleModal(
           <PendingModal />
         )
-        setSwapBuyAmount("");
-        setSwapSellAmount("");
+        bidAmount("");
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e.code, e.message.message);
