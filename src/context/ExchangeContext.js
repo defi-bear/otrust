@@ -63,47 +63,10 @@ function ExchangeProvider({ children }) {
         if (supplyNOM) {
             exchAmount()
         }
-        console.log("Exchange Supply 0: ", format18(swapSupply[0]).toFixed(5))
-        console.log("Exchange Supply 1: ", format18(swapSupply[1]).toFixed(5))
     }, [
         bidAmount,
         bidDenom, 
         supplyNOM,
-    ])
-    
-    useEffect(() => {
-        async function swapAmount() {
-            if (BigNumber.isBigNumber(swapSellAmount) && swapDenom === 'NOM') {
-                if (swapSellAmount.lte(supplyNOM)) {
-                    try {
-                        
-                        
-                        console.log("Supply Bot: ",format18(supplyBot).toString())
-                        console.log("Supply NOM: ", format18(supplyNOM).toString())
-
-                        setExchangeSellResult(new BigNumber(amountETH.toString()))
-                        setExchangeSupply([
-                            supplyBot, 
-                            supplyNOM
-                        ])
-                    } catch (err) {
-                        console.log("Error: ", err)
-                        setExchangeSupply([
-                            supplyNOM, 
-                            supplyNOM
-                        ])
-                    }
-                }
-            }
-        }
-        if(supplyNOM) {
-            swapAmount()
-        } 
-    },[
-        bondContract, 
-        supplyNOM,
-        swapDenom, 
-        swapSellAmount
     ])
 
     const contextValue = {

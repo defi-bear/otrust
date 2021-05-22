@@ -138,8 +138,8 @@ export default function Exchange() {
   );
 
   const submitTrans = useCallback(
-    async (denom) => {
-      if (!swapBuyAmount && !swapSellAmount) return;
+    async () => {
+      if (!bidAmount || !askAmount) return;
       try {
         let tx;
         switch (bidDenom) {
@@ -191,18 +191,13 @@ export default function Exchange() {
       }
     },
     [
-      bondContract,
-      handleModal,
+      askAmount,
+      bidAmount,
+      bidDenom,
+      pair,
+      setPendingTx,
       setCompletedAmount,
       setCompletedResult,
-      setPendingTx,
-      setSwapSellAmount,
-      setSwapBuyAmount,
-      slippage,
-      swapBuyAmount,
-      swapBuyResult,
-      swapSellAmount,
-      swapSellResult
     ]
   );
 
@@ -214,7 +209,7 @@ export default function Exchange() {
         handleModal(
           <TransactionCompletedModal
             closeModal={() => handleModal()}
-            type={swapDenom}
+            type={bidDenom}
             amount={completedAmount}
             result={completedResult}
             previousTx={previousTx}
@@ -223,29 +218,25 @@ export default function Exchange() {
       })
     }
   }, [
+    bidDenom,
     completedAmount,
     completedResult,
     handleModal,
     pendingTx,
     previousTx,
     setPendingTx,
-    swapBuyAmount,
-    swapBuyResult,
-    swapDenom,
-    swapSellAmount,
-    swapSellResult,
   ])
 
-  const onBuy = () => {
-    setSwapDenom('ETH');
+  const onBidStrong = () => {
+    setBidDenom('ETH');
     handleModal(
         <ConfirmTransactionModal
           closeModal={() => handleModal()}
-          type='ETH'
-          amount={swapBuyAmount}
-          result={swapBuyResult}
+          type={bidDenom}
+          amount={bidAmount}
+          result={askResult}
           onConfirm={() => 
-            onSubmit('ETH')
+            onSubmit(bidDenom)
           }
           setSlippage={setSlippage}
           slippage={slippage}
@@ -253,16 +244,16 @@ export default function Exchange() {
     )
   }
 
-  const onSell = () => {
-    setSwapDenom('NOM');
+  const onBidWeak = () => {
+    setBidDenom('NOM');
     handleModal(
         <ConfirmTransactionModal
           closeModal={() => handleModal()}
-          type='NOM'
-          amount={swapSellAmount}
-          result={swapSellResult}
+          type={bidDenom}
+          amount={bidAmount}
+          result={askAmount}
           onConfirm={() => 
-            onSubmit('NOM')
+            onSubmit(bidDenom)
           }
           setSlippage={setSlippage}
           slippage={slippage}
@@ -276,7 +267,7 @@ export default function Exchange() {
         handleModal(
           <PendingModal />
         );
-        setSwapDenom('APPROVE')
+        setBidDenom('APPROVE')
         let tx = await NOMcontract.increaseAllowance(
           bondContract.address,
           value.toFixed(0)
@@ -343,7 +334,7 @@ export default function Exchange() {
           </ReceivingValue>
         </Receiving>
         <div>
-          <ExchangeButton onClick={onBuy}>Buy NOM</ExchangeButton>
+          <ExchangeButton onClick={onBidStrong}>Buy NOM</ExchangeButton>
         </div>
       </ExchangeItem>
 
@@ -376,14 +367,17 @@ export default function Exchange() {
         <div>
           {
             NOMallowance > bidAmount && bidDenom == 'weak' && NOMbalance > bidAmount ? (
-              <SellBtn onClick={onSell}>Sell {pair[1]}</SellBtn>) : 
+              <SellBtn onClick={onBidWeak}>Sell {pair[1]}</SellBtn>) : 
                   NOMbalance > bidAmount ? (
-                    <SellBtn onClick={() => handleModal(
+                    <SellBtn 
+                      onClick={() => handleModal(
                         <OnomyConfirmationModal
                           closeModal={() => handleModal()}
                           onConfirm={() => onApprove(bidAmount)}
                         />
-                    )}>Approve</SellBtn>
+                      )}>
+                      Approve
+                    </SellBtn>
                   ) : <SellBtn>Not enough {pair[1]}</SellBtn>
           }
         </div>
