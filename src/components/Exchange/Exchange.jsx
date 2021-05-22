@@ -139,7 +139,7 @@ export default function Exchange() {
           case 'weak': 
           { 
             switch (pair[1]) {
-              case 'NOM':
+              case 'wNOM':
                 {
                   tx = await bondContract.sellNOM(
                     bidAmount.toFixed(0),
@@ -207,7 +207,7 @@ export default function Exchange() {
   ])
 
   const onBidStrong = () => {
-    setBidDenom('ETH');
+    setBidDenom(pair[0]);
     handleModal(
         <ConfirmTransactionModal
           closeModal={() => handleModal()}
@@ -224,7 +224,7 @@ export default function Exchange() {
   }
 
   const onBidWeak = () => {
-    setBidDenom('NOM');
+    setBidDenom(pair[1]);
     handleModal(
         <ConfirmTransactionModal
           closeModal={() => handleModal()}
@@ -240,7 +240,7 @@ export default function Exchange() {
     )
   }
   
-  const onApprove = async (value)) => {
+  const onApprove = async (value) => {
     if(value <= NOMbalance) {
       try {
         handleModal(
@@ -287,7 +287,7 @@ export default function Exchange() {
   return (
     <ExchangeWrapper>
       <ExchangeItem>
-        <strong>Buy NOM</strong>
+        <strong>Bid {pair[1]}</strong>
         <Sending>
           <strong>I'm sending</strong>
           <ExchangeInput
@@ -318,7 +318,7 @@ export default function Exchange() {
       </ExchangeItem>
 
       <ExchangeItem>
-        <strong>Sell NOM</strong>
+        <strong>Bid {pair[0]}</strong>
         <Sending>
           <strong>I'm sending</strong>
           <ExchangeInput
