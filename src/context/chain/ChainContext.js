@@ -1,5 +1,4 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react'
-import { parse18 } from 'utils/math'
 import { useWeb3React } from "@web3-react/core"
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
@@ -13,8 +12,6 @@ export const useChain = () => useContext(ChainContext)
 
 export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
-
-const big1e18 = parse18(new BigNumber(1))
 
 function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
@@ -39,33 +36,20 @@ function ChainProvider({ theme, children }) {
         cache: new InMemoryCache(),
     })
 
-    const getCurrentPrice = useCallback(async () => {
-        let amount;
-        amount = await bondContract.buyQuoteETH(parse18('1'));
-        setCurrentETHPrice(amount);
-        amount = await bondContract.sellQuoteNOM(parse18('1'));
-        setCurrentNOMPrice(amount);
-    },[bondContract])
-
     const getChainData = useCallback(
-       async () => {
-           var quoteAmount = 10**18
-           if (supplyNOM < (new BigNumber((10**18).toString()))) {
-               quoteAmount = 0
-           }
-
-           var p = await Promise.all(
-               [
-                    library.getBalance(account),
-                    NOMcontract.balanceOf(account),
-                    NOMcontract.allowance(account, addrs.BondingNOM),
-                    bondContract.getSupplyNOM(),
-                    bondContract.buyQuoteETH((10**18).toString())
-                    // UniSwapCont.getReserves(),
-               ]
-           ).catch((err) => ( console.log(err)))
-           console.log("Pull promise")
-           return p
+        async () => {
+            var p = await Promise.all(
+                [
+                        library.getBalance(account),
+                        NOMcontract.balanceOf(account),
+                        NOMcontract.allowance(account, addrs.BondingNOM),
+                        bondContract.getSupplyNOM(),
+                        bondContract.buyQuoteETH((10**18).toString()),
+                        // UniSwapCont.getReserves(),
+                ]
+            ).catch((err) => ( console.log(err)))
+            console.log("Pull promise")
+            return p
        },[blockNumber, bondContract]
     )
 
@@ -77,27 +61,27 @@ function ChainProvider({ theme, children }) {
                 console.log("Block Number: ", number)
                 await getChainData()
                 .then((values) => {
-                    if(ETHbalance.toString() != values[0].toString()) {
+                    if(ETHbalance.toString() !== values[0].toString()) {
                         setETHBalance(new BigNumber(values[0].toString()))
                     }
                     
-                    if(NOMbalance.toString() != values[1].toString()) {
+                    if(NOMbalance.toString() !== values[1].toString()) {
                         setNOMBalance(new BigNumber(values[1].toString()))
                     }
 
-                    if(NOMallowance.toString() != values[2].toString()) {
+                    if(NOMallowance.toString() !== values[2].toString()) {
                         setNOMAllowance(new BigNumber(values[2].toString()))
                     }
 
-                    if(supplyNOM.toString() != values[3].toString()) {
+                    if(supplyNOM.toString() !== values[3].toString()) {
                         setSupplyNOM(new BigNumber(values[3].toString()))
                     }
 
-                    if(currentETHPrice.toString() != values[4].toString()) {
+                    if(currentETHPrice.toString() !== values[4].toString()) {
                         setCurrentETHPrice(new BigNumber(values[4].toString()))
                     }
                     
-                    if(currentNOMPrice.toString() != 
+                    if(currentNOMPrice.toString() !== 
                         (new BigNumber('1')).div(new BigNumber(values[4].toString()))) {
                             setCurrentETHPrice(
                                 (new BigNumber('1')).div(new BigNumber(values[4].toString()))
