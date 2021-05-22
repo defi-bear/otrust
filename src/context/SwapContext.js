@@ -79,9 +79,9 @@ function SwapProvider({ children }) {
         console.log("Swap Supply 0: ", format18(swapSupply[0]).toFixed(5))
         console.log("Swap Supply 1: ", format18(swapSupply[1]).toFixed(5))
     }, [
-        swapDenom, 
+        denom, 
         supplyNOM,
-        swapBuyAmount
+        bidAmount
     ])
     
     useEffect(() => {

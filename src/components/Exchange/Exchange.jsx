@@ -63,41 +63,31 @@ export default function Exchange() {
   const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
  
-  const onWeakTextChange = useCallback(
+  const onStrongBidTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
       setInput(evt.target.value)
-      
-      if (swapSellValue) {
-        setSwapSellAmount('')
-        setSwapSellResult('')
-        setSwapSellValue('')
-        setSwapDenom('ETH')
-      }
-      
+      setDenom("strong")
+
       if (isNumber(parseFloat(evt.target.value))) {
         try {
-          const buyAmount = parse18(
+          const bidAmountUpdate = parse18(
             new BigNumber(
               parseFloat(evt.target.value).toString()
             )
           )
           
-          if (swapBuyAmount !== buyAmount) {
-            setSwapBuyAmount(
-              buyAmount
+          if (bidAmountUpdate !== bidAmount) {
+            setBidAmount(
+              bidAmount
             ) 
           }   
         } catch (e) {
-          if (swapBuyAmount !== '') {
-            setSwapValue("Invalid")
-            setSwapBuyAmount('')
+          if (bidAmount !== '') {
+            setDisplay("Invalid Input")
+            setBidAmount('')
           }  
         }
-      } else {
-        setSwapBuyAmount('')
-        setSwapBuyResult('')
-      }
     },
     [
       setSwapBuyAmount,
