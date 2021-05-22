@@ -51,8 +51,8 @@ export default function Exchange() {
     bondContract, 
     NOMallowance, 
     NOMcontract, 
-    ETHbalance, 
-    NOMbalance, 
+    strongBalance, 
+    weakBalance, 
     pendingTx 
   } = useChain();
   
@@ -62,18 +62,14 @@ export default function Exchange() {
   const [completedResult, setCompletedResult] = useState(null);
   const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
- 
-  const onBidStrongTextChange = useCallback(
-    (evt) => {
-      evt.preventDefault()
-      setInput(evt.target.value)
-      setBidDenom("strong")
-
-      if (isNumber(parseFloat(evt.target.value))) {
+  
+  const bidAmountUpdater = useCallback(
+    (amount) => {
+      if (isNumber(parseFloat(amount))) {
         try {
           const bidAmountUpdate = parse18(
             new BigNumber(
-              parseFloat(evt.target.value).toString()
+              parseFloat(amount).toString()
             )
           )
           
@@ -89,48 +85,34 @@ export default function Exchange() {
           }  
         }
       }
+    },[]
+  )
+
+  const onBidStrongTextChange = useCallback(
+    (evt) => {
+      evt.preventDefault()
+      setInput(evt.target.value)
+      setBidDenom("strong")
+      bidAmountUpdater(evt.target.value)
     },
     [
+      setInput,
       setBidDenom,
-      setBidAmount,
-      setOutput
+      bidAmountUpdater
     ]
   );
   
   const onBidWeakTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
-      setSwapSellValue(evt.target.value)
-      setSwapBuyAmount('')
-      setSwapBuyResult('')
-      setSwapDenom('NOM')
-
-      if (isNumber(parseFloat(evt.target.value))) {
-        try {
-          console.log(evt.target.value)
-          setSwapSellAmount(
-            parse18(
-              new BigNumber(
-                parseFloat(evt.target.value).toString()
-              )
-            )
-          )
-                  
-        } catch {
-          setSwapSellAmount(new BigNumber(0))
-        }
-      } else {
-        setSwapSellAmount('')
-        setSwapSellResult('')
-      }
+      setInput(evt.target.value)
+      setBidDenom("weak")
+      bidAmountUpdater(evt.target.value)
     },
     [
-      setSwapBuyAmount, 
-      setSwapBuyResult,
-      setSwapDenom,
-      setSwapSellAmount,
-      setSwapSellResult,
-      setSwapSellValue
+      setInput,
+      setBidDenom,
+      bidAmountUpdater
     ]
   );
 
@@ -285,7 +267,7 @@ export default function Exchange() {
       handleModal(
             <TransactionFailedModal
               closeModal={() => handleModal()}
-              error={'NOM Balance too low'}
+              error={`${pair[1]} Balance too low`}
             />
       )
     }
@@ -296,7 +278,7 @@ export default function Exchange() {
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
   const onStrongMax = () => {
-    setInput(format18(ETHbalance).toString())
+    setInput(format18(strongBalance).toString())
   }
 
   const onWeakMax = (weakBalance) => {
@@ -365,7 +347,7 @@ export default function Exchange() {
           {
             NOMallowance > bidAmount && bidDenom == 'weak' && NOMbalance > bidAmount ? (
               <SellBtn onClick={onBidWeak}>Sell {pair[1]}</SellBtn>) : 
-                  NOMbalance > bidAmount ? (
+                  (NOMbalance > bidAmount) ? 
                     <SellBtn 
                       onClick={() => handleModal(
                         <OnomyConfirmationModal
@@ -374,8 +356,8 @@ export default function Exchange() {
                         />
                       )}>
                       Approve
-                    </SellBtn>
-                  ) : <SellBtn>Not enough {pair[1]}</SellBtn>
+                    </SellBtn> :
+                    <SellBtn>Not enough {pair[1]}</SellBtn>
           }
         </div>
       </ExchangeItem>
