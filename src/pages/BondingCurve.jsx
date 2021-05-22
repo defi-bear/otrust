@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import SwapProvider from "context/SwapContext";
+import SwapProvider from "context/ExchangeContext";
 
 // Components
 import AcctDash from "components/AcctDash";

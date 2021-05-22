@@ -1,55 +1,49 @@
-import React, { useCallback, useEffect, useState, createContext, useContext } from 'react'
+import React, { useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
 
-export const SwapContext = createContext()
-export const useSwap = () => useContext(SwapContext)
+export const ExchangeContext = createContext()
+export const useExchange = () => useContext(ExchangeContext)
 
-export const UpdateSwapContext = createContext()
-export const useUpdateSwap = () => useContext(UpdateSwapContext)
+export const UpdateExchangeContext = createContext()
+export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
-function SwapProvider({ children }) {
+function ExchangeProvider({ children }) {
     const { supplyNOM } = useChain()
     const { bondContract } = useChain()
+    const [bidDenom, setBidDenom] = useState('ETH')
     const [bidAmount, setBidAmount] = useState('')
     const [askAmount, setAskAmount] = useState('')
     const [input, setInput] = useState('')
-    const [display, setDisplay] = useState('')
-    const [bidDenom, setBidDenom] = useState('ETH')
+    const [output, setOutput] = useState('')
+    
     
     // Strong (left): pair[0]
     // Weak (right): pair[1]
     const [pair, setPair] = useState(['ETH', 'NOM'])
-    const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
+    
 
     useEffect(() => {
         async function swapAmount() {
-            if (supplyNOM && BigNumber.isBigNumber(bidAmount) {
+            if (supplyNOM && BigNumber.isBigNumber(bidAmount)) {
                 try {
                     var askAmountUpdate
-                    var supplyBot = supplyNOM
-                    var supplyTop = supplyNOM
-
                     switch (bidDenom) {
                         case 'strong':
                             {
                                 askAmountUpdate = await bondContract.buyQuoteETH(
                                     bidAmount.toFixed(0)
                                 )
-                                supplyTop = supplyNOM.plus(
-                                    new BigNumber(askAmountUpdate.toString())
-                                )
+                                
                             }
                         case 'weak':
                             {
                                 askAmountUpdate = await bondContract.sellQuoteNOM(
                                     bidAmount.toFixed(0)
                                 )
-                                supplyBot = supplyNOM.minus(
-                                    new BigNumber(bidAmount.toString())
-                                )
+                                
                             }
                         default:
                             {
@@ -58,30 +52,30 @@ function SwapProvider({ children }) {
                     }
                         
                     setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                    setSwapSupply([
+                    setExchangeSupply([
                         supplyBot, 
                         supplyTop
                     ])
                 } catch (err) {
                     console.log("Error: ", err)
-                    setSwapSupply([
+                    setExchangeSupply([
                         supplyNOM, 
                         supplyNOM
                     ])    
                 }
             } else {
-                setDisplay("Invalid Input")
+                setOutput("Invalid Input")
             }
         }              
         if (supplyNOM) {
             swapAmount()
         }
-        console.log("Swap Supply 0: ", format18(swapSupply[0]).toFixed(5))
-        console.log("Swap Supply 1: ", format18(swapSupply[1]).toFixed(5))
+        console.log("Exchange Supply 0: ", format18(swapSupply[0]).toFixed(5))
+        console.log("Exchange Supply 1: ", format18(swapSupply[1]).toFixed(5))
     }, [
-        denom, 
+        bidAmount,
+        bidDenom, 
         supplyNOM,
-        bidAmount
     ])
     
     useEffect(() => {
@@ -94,14 +88,14 @@ function SwapProvider({ children }) {
                         console.log("Supply Bot: ",format18(supplyBot).toString())
                         console.log("Supply NOM: ", format18(supplyNOM).toString())
 
-                        setSwapSellResult(new BigNumber(amountETH.toString()))
-                        setSwapSupply([
+                        setExchangeSellResult(new BigNumber(amountETH.toString()))
+                        setExchangeSupply([
                             supplyBot, 
                             supplyNOM
                         ])
                     } catch (err) {
                         console.log("Error: ", err)
-                        setSwapSupply([
+                        setExchangeSupply([
                             supplyNOM, 
                             supplyNOM
                         ])
@@ -138,12 +132,12 @@ function SwapProvider({ children }) {
     }
 
     return (
-        <UpdateSwapContext.Provider value={updateValue}>
-            <SwapContext.Provider value={contextValue} >
+        <UpdateExchangeContext.Provider value={updateValue}>
+            <ExchangeContext.Provider value={contextValue} >
                 {children}
-            </SwapContext.Provider>
-        </UpdateSwapContext.Provider>
+            </ExchangeContext.Provider>
+        </UpdateExchangeContext.Provider>
     )
 }
 
-export default SwapProvider
+export default ExchangeProvider

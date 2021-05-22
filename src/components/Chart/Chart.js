@@ -5,7 +5,7 @@ import { responsive } from "theme/constants";
 
 import BondLineChart from "components/Chart/BondLineChart";
 import LineChart from "components/Chart/HistoricalLineChart";
-import CandelChart from "components/Chart/D3CandelChart";
+import CandelChart from "components/Chart/CandleChart";
 
 import { useQuery } from "@apollo/client";
 import { gql } from "apollo-boost";

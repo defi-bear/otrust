@@ -18,7 +18,7 @@ import {
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
 
 import { useModal } from 'context/modal/ModalContext'
-import { useSwap, useUpdateSwap } from "context/SwapContext";
+import { useExchange, useUpdateExchange } from "context/ExchangeContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
 import TransactionCompletedModal from "components/Modals/components/TransactionCompletedModal";
@@ -36,7 +36,7 @@ export default function Exchange() {
     display,
     bidDenom,
     pair
-  } = useSwap();
+  } = useExchange();
   
   const { 
     setBidAmount,
@@ -45,7 +45,7 @@ export default function Exchange() {
     setDisplay,
     setBidDenom,
     setPair
-  } = useUpdateSwap();
+  } = useUpdateExchange();
 
   const { 
     bondContract, 

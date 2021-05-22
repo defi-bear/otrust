@@ -14,7 +14,7 @@ import {
 } from "d3";
 
 import { ChainContext } from 'context/chain/ChainContext'
-import { useSwap } from "context/SwapContext";
+import { useExchange } from "context/ExchangeContext";
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 
 import { useResizeObserver } from "./utils";
@@ -25,7 +25,7 @@ const StyledSVG = styled.svg`
     height: 400px;
     overflow: visible;
 `
-function supplyToArray(supBegin, supEnd) {
+function supplyToArray([supBegin, supEnd]) {
   
   console.log("Supply Begin: ", supBegin)
   console.log("Supply End: ", supEnd)
@@ -43,27 +43,27 @@ function supplyToArray(supBegin, supEnd) {
   return dataArray;
 }
 
-export function labelArray(supBegin, supEnd) {
+export function labelArray([supBegin, supEnd]) {
   const paymentETH = NOMsupplyETH(supEnd, supBegin);
   const priceAvg = paymentETH / (supEnd - supBegin);
   const supAvg = supplyAtPrice(priceAvg);
   return { paymentETH, supAvg, priceAvg };
 }
 
-export function bounds(swapSupply) {
+export function bounds(formatSupply) {
   var lowerBound
   var upperBound
 
   try{
     var digitsUpper = Math.floor(
       Math.log10(
-        format18(swapSupply[1]).toFixed(8)
+        format18(formatSupply[1]).toFixed(8)
       )
     );
     // upperBound = 10**(digitsUpper + 1)
     upperBound =
       (Math.round(
-        format18(swapSupply[1]).toFixed(8) / 
+        format18(formatSupply[1]).toFixed(8) / 
         10 ** digitsUpper) + 1) * 10 ** digitsUpper
     lowerBound = 0;
   } catch (err) {
@@ -89,28 +89,45 @@ function LineChart({ id = "bondingChart" }) {
   const [labelData, setLabelData] = useState('') 
 
   const { theme } = useContext(ChainContext);
-  const { swapSupply } = useSwap();
-
-  console.log("Swap Supply: ", swapSupply)
+  const { askAmount, bidAmount, bidDenom } = useExchange();
 
   useEffect(() => {
-    if (swapSupply[1]) {
-      const { lowerBound, upperBound } = bounds(swapSupply)
+    if(bidAmount) {
+      var supplyTop = supplyNOM
+      var supplyBot = supplyNOM
+
+      switch (bidDenom) {
+        case 'strong':
+          {
+            supplyTop = supplyNOM.plus(new BigNumber(askAmount.toString()))
+          }
+        case 'weak':
+          {
+            supplyBot = supplyBot = supplyNOM.minus(new BigNumber(bidAmount.toString()))
+          }
+      }
+
+      const formatSupply = [
+        format18(supplyBot).toFixed(8),
+        format18(supplyTop).toFixed(8)
+      ]
+      
+      const { lowerBound, upperBound } = bounds(formatSupply)
+      
       setData(supplyToArray(lowerBound, upperBound));
       setAreaData(
         supplyToArray(
-          format18(swapSupply[0]).toFixed(8), 
-          format18(swapSupply[1]).toFixed(8)
+          formatSupply
         )
       )
       setLabelData(
         labelArray(
-          format18(swapSupply[0]).toFixed(8), 
-          format18(swapSupply[1]).toFixed(8)
+          formatSupply
         )
       )
+
     }
-  }, [swapSupply]);
+  },[askAmount, bidAmount])
 
   console.log("Data: ", data)
   console.log("Area Data: ", areaData)
