@@ -7,6 +7,7 @@ import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { Panel } from "components/UI";
 import { useChain } from "context/chain/ChainContext";
+import { useExchange } from "context/ExchangeContext"
 import { responsive } from "theme/constants";
 import { format18 } from "utils/math"
 import BigNumber from "bignumber.js";
@@ -350,8 +351,9 @@ const SocialBtn = styled.a`
 `;
 
 export default function AcctDash() {
-  const { active, error, chainId, account } = useWeb3React();
-  const { ETHbalance, NOMbalance, blockNumber } = useChain();
+  const { active, error, chainId, account } = useWeb3React()
+  const { strongBalance, weakBalance, blockNumber } = useChain()
+  const { pair } = useExchange()
   return (
     <Panel>
       <SidebarLayout>
@@ -378,21 +380,21 @@ export default function AcctDash() {
         </Header>
         <Balances>
           <div>
-            <strong>ETH Balance</strong>
+            <strong>{pair[0]} Balance</strong>
             <span>
               {
-                BigNumber.isBigNumber(ETHbalance)
-                  ? `${format18(ETHbalance).toFixed(6)}`
+                BigNumber.isBigNumber(strongBalance)
+                  ? `${format18(strongBalance).toFixed(6)}`
                   : 'Loading'
               }
             </span>
           </div>
           <div>
-            <strong>NOM Balance</strong>
+            <strong>{pair[1]} Balance</strong>
             <span>
               {
-                BigNumber.isBigNumber(NOMbalance)
-                  ? `${format18(NOMbalance).toFixed(6)}`
+                BigNumber.isBigNumber(weakBalance)
+                  ? `${format18(weakBalance).toFixed(6)}`
                   : 'Loading'
               }
             </span>

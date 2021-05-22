@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import styled from "styled-components";
+import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import {
@@ -13,7 +14,7 @@ import {
   axisLeft,
 } from "d3";
 
-import { ChainContext } from 'context/chain/ChainContext'
+import { ChainContext, useChain } from 'context/chain/ChainContext'
 import { useExchange } from "context/ExchangeContext";
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 
@@ -89,6 +90,7 @@ function LineChart({ id = "bondingChart" }) {
   const [labelData, setLabelData] = useState('') 
 
   const { theme } = useContext(ChainContext);
+  const { supplyNOM } = useChain()
   const { askAmount, bidAmount, bidDenom } = useExchange();
 
   useEffect(() => {
@@ -98,13 +100,13 @@ function LineChart({ id = "bondingChart" }) {
 
       switch (bidDenom) {
         case 'strong':
-          {
-            supplyTop = supplyNOM.plus(new BigNumber(askAmount.toString()))
-          }
+          supplyTop = supplyNOM.plus(new BigNumber(askAmount.toString()))
+          break
         case 'weak':
-          {
-            supplyBot = supplyBot = supplyNOM.minus(new BigNumber(bidAmount.toString()))
-          }
+          supplyBot = supplyBot = supplyNOM.minus(new BigNumber(bidAmount.toString()))
+          break
+        default:
+          {}
       }
 
       const formatSupply = [
@@ -127,7 +129,7 @@ function LineChart({ id = "bondingChart" }) {
       )
 
     }
-  },[askAmount, bidAmount])
+  },[askAmount, bidAmount, bidDenom, supplyNOM])
 
   console.log("Data: ", data)
   console.log("Area Data: ", areaData)

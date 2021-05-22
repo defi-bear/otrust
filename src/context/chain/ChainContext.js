@@ -16,10 +16,11 @@ export const useUpdateChain = () => useContext(UpdateChainContext)
 function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
     const [blockNumber, setBlockNumber] = useState()
-    const [strongBalance, setWeakBalance] = useState(new BigNumber(0))
+    const [strongBalance, setStrongBalance] = useState(new BigNumber(0))
     const [weakBalance, setWeakBalance] = useState(new BigNumber(0))
     const [NOMallowance, setNOMAllowance] = useState(new BigNumber(0))
     const [supplyNOM, setSupplyNOM] = useState(new BigNumber(0))
+    const [pendingData, setPendingData] = useState(false)
     const [pendingTx, setPendingTx] = useState()
     const [currentETHPrice, setCurrentETHPrice] = useState(new BigNumber(0))
     const [currentNOMPrice, setCurrentNOMPrice] = useState(new BigNumber(0))
@@ -50,19 +51,24 @@ function ChainProvider({ theme, children }) {
             ).catch((err) => ( console.log(err)))
             console.log("Pull promise")
             return values
-       },[blockNumber, bondContract]
+       },[account, bondContract, library, NOMcontract]
     )
 
     useEffect(() => {
         async function blocker() {
             // listen for changes on an Ethereum address
             library.on('block', async (number) => {
-                setBlockNumber(number)
                 console.log("Block Number: ", number)
+                if (number === blockNumber) return
+                setBlockNumber(number)
+
                 await getChainData()
                 .then((values) => {
                     if(strongBalance.toString() !== values[0].toString()) {
-                        setWeakBalance(new BigNumber(values[0].toString()))
+                        console.log("Old Strong Balance: ", strongBalance.toString())
+                        console.log("Set Strong Balance: ", values[0].toString())
+                        console.log("New Strong Balance: ", (new BigNumber(values[0].toString())).toString())
+                        setStrongBalance(new BigNumber(values[0].toString()))
                     }
                     
                     if(weakBalance.toString() !== values[1].toString()) {
@@ -89,8 +95,11 @@ function ChainProvider({ theme, children }) {
                     }
 
                     // setETHUSD(new BigNumber(values[6]))
-
-                }).catch((err) => { console.log(err) })
+                    setPendingData(false)
+                }).catch((err) => { 
+                    console.log(err)
+                    setPendingData(false) 
+                })
             })
 
             // remove listener when the component is unmounted
@@ -100,7 +109,18 @@ function ChainProvider({ theme, children }) {
             // trigger the effect only on component mount
         }
         blocker()
-    }, [library])
+    },[
+        blockNumber, 
+        currentETHPrice, 
+        currentNOMPrice, 
+        getChainData, 
+        library, 
+        NOMallowance, 
+        pendingData, 
+        strongBalance, 
+        supplyNOM, 
+        weakBalance
+    ])
 
     const contextValue = {
         blockNumber,

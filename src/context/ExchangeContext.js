@@ -1,6 +1,5 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
 
@@ -27,28 +26,25 @@ function ExchangeProvider({ children }) {
 
     useEffect(() => {
         async function exchAmount() {
+            if (input === '') return
             if (supplyNOM && BigNumber.isBigNumber(bidAmount)) {
                 try {
                     var askAmountUpdate
                     switch (bidDenom) {
                         case 'strong':
-                            {
-                                askAmountUpdate = await bondContract.buyQuoteETH(
-                                    bidAmount.toFixed(0)
-                                )
-                                
-                            }
+                            askAmountUpdate = await bondContract.buyQuoteETH(
+                                bidAmount.toFixed(0)
+                            )
+                            break
+
                         case 'weak':
-                            {
-                                askAmountUpdate = await bondContract.sellQuoteNOM(
-                                    bidAmount.toFixed(0)
-                                )
-                                
-                            }
+                            askAmountUpdate = await bondContract.sellQuoteNOM(
+                                bidAmount.toFixed(0)
+                            )
+                            break
+
                         default:
-                            {
-                                error("denom not set")
-                            }
+                            console.error("Denom not set");
                     }
                         
                     setAskAmount(new BigNumber(askAmountUpdate.toString()))
@@ -65,7 +61,9 @@ function ExchangeProvider({ children }) {
         }
     }, [
         bidAmount,
-        bidDenom, 
+        bidDenom,
+        bondContract,
+        input,
         supplyNOM,
     ])
 
@@ -82,7 +80,7 @@ function ExchangeProvider({ children }) {
         setBidAmount,
         setAskAmount,
         setInput,
-        setDisplay,
+        setOutput,
         setBidDenom,
         setPair
     }

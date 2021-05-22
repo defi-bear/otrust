@@ -40,11 +40,9 @@ export default function Exchange() {
   
   const { 
     setBidAmount,
-    setAskAmount,
     setInput,
-    setDisplay,
+    setOutput,
     setBidDenom,
-    setPair
   } = useUpdateExchange();
 
   const { 
@@ -72,11 +70,13 @@ export default function Exchange() {
               parseFloat(amount).toString()
             )
           )
-          
-          if (bidAmountUpdate !== bidAmount) {
-            setBidAmount(
-              bidAmountUpdate
-            ) 
+          switch (bidAmount) {
+            case bidAmountUpdate:
+              break
+            default:
+              setBidAmount(
+                bidAmountUpdate
+              ) 
           }   
         } catch (e) {
           if (bidAmount !== '') {
@@ -85,7 +85,7 @@ export default function Exchange() {
           }  
         }
       }
-    },[]
+    },[bidAmount, setBidAmount, setOutput]
   )
 
   const onBidStrongTextChange = useCallback(
@@ -123,33 +123,39 @@ export default function Exchange() {
         let tx;
         switch (bidDenom) {
           case 'strong':
-            {
-              // Preparing for many tokens / coins
-              switch (pair[0]) {
-                case 'ETH':
-                {
-                  tx = await bondContract.buyNOM(
-                    askAmount.toFixed(0),
-                    slippage * 100,
-                    { value: bidAmount.toFixed(0) }
-                  );
-                }
-              }
+            // Preparing for many tokens / coins
+            switch (pair[0]) {
+              case 'ETH':
+                tx = await bondContract.buyNOM(
+                  askAmount.toFixed(0),
+                  slippage * 100,
+                  { value: bidAmount.toFixed(0) }
+                );
+              break
+
+              default:
+                {}
             }
-          case 'weak': 
-          { 
+            break
+          
+          case 'weak':
             switch (pair[1]) {
               case 'wNOM':
-                {
-                  tx = await bondContract.sellNOM(
-                    bidAmount.toFixed(0),
-                    askAmount.toFixed(0),
-                    slippage * 100,
-                  );
-                }
+                tx = await bondContract.sellNOM(
+                  bidAmount.toFixed(0),
+                  askAmount.toFixed(0),
+                  slippage * 100,
+                )
+                break
+              default:
+                {}
             }
-          }
+            break
+          
+          default:
+            {}
         }
+      
         setPendingTx(tx);
         setCompletedAmount(bidAmount);
         setCompletedResult(askAmount);
@@ -173,10 +179,13 @@ export default function Exchange() {
       askAmount,
       bidAmount,
       bidDenom,
+      bondContract,
+      handleModal,
       pair,
       setPendingTx,
       setCompletedAmount,
       setCompletedResult,
+      slippage
     ]
   );
 
@@ -213,7 +222,7 @@ export default function Exchange() {
           closeModal={() => handleModal()}
           type={bidDenom}
           amount={bidAmount}
-          result={askResult}
+          result={askAmount}
           onConfirm={() => 
             onSubmit(bidDenom)
           }
@@ -241,7 +250,7 @@ export default function Exchange() {
   }
   
   const onApprove = async (value) => {
-    if(value <= NOMbalance) {
+    if(value <= weakBalance) {
       try {
         handleModal(
           <PendingModal />
@@ -289,20 +298,20 @@ export default function Exchange() {
       <ExchangeItem>
         <strong>Bid {pair[1]}</strong>
         <Sending>
-          <strong>I'm sending</strong>
+          <strong>I'm bidding</strong>
           <ExchangeInput
             type="text"
             onChange={onBidStrongTextChange}
-            value={(bidDenom == 'strong') ? output : ''}
+            value={(bidDenom === 'strong') ? input : ''}
           />
-          ETH
+          {pair[0]}
           <MaxBtn onClick={onStrongMax}>Max</MaxBtn>
         </Sending>
         <Receiving>
-          <strong>I'm receiving</strong>
+          <strong>I'm asking</strong>
           <ReceivingValue>
             {
-              (bidDenom == 'strong') ?
+              (bidDenom === 'strong') ?
               (
                 (BigNumber.isBigNumber(output)) ? 
                   format18(output).toFixed(8) : 
@@ -313,51 +322,50 @@ export default function Exchange() {
           </ReceivingValue>
         </Receiving>
         <div>
-          <ExchangeButton onClick={onBidStrong}>Buy NOM</ExchangeButton>
+          <ExchangeButton onClick={onBidStrong}>Buy {pair[1]}</ExchangeButton>
         </div>
       </ExchangeItem>
 
       <ExchangeItem>
         <strong>Bid {pair[0]}</strong>
         <Sending>
-          <strong>I'm sending</strong>
+          <strong>I'm bidding</strong>
           <ExchangeInput
             type="text"
             onChange={onBidWeakTextChange}
-            value={(bidDenom == 'weak') ? input : ''}
+            value={(bidDenom === 'weak') ? input : ''}
           />
-          NOM
+          {pair[1]}
           <MaxBtn onClick={onWeakMax}>Max</MaxBtn>
         </Sending>
         <Receiving>
-          <strong>I'm receiving</strong>
+          <strong>I'm asking</strong>
           <ReceivingValue>
             {
-              (bidDenom == 'weak') ?
-              (
-                (BigNumber.isBigNumber(output)) ? 
+              (bidDenom === 'weak') ?
+              (BigNumber.isBigNumber(output)) ? 
                   format18(output).toFixed(8) : 
-                  output
-              ) :
-              ''
+                  output :  ''
             } {pair[0]}
           </ReceivingValue>
         </Receiving>
         <div>
           {
-            NOMallowance > bidAmount && bidDenom == 'weak' && NOMbalance > bidAmount ? (
-              <SellBtn onClick={onBidWeak}>Sell {pair[1]}</SellBtn>) : 
-                  (NOMbalance > bidAmount) ? 
-                    <SellBtn 
-                      onClick={() => handleModal(
-                        <OnomyConfirmationModal
-                          closeModal={() => handleModal()}
-                          onConfirm={() => onApprove(bidAmount)}
-                        />
-                      )}>
-                      Approve
-                    </SellBtn> :
-                    <SellBtn>Not enough {pair[1]}</SellBtn>
+            (
+              NOMallowance > bidAmount && 
+              bidDenom === 'weak' && weakBalance > bidAmount) ? 
+              (<SellBtn onClick={onBidWeak}>Sell {pair[1]}</SellBtn>) : 
+              (weakBalance > bidAmount) ? 
+                <SellBtn 
+                  onClick={() => handleModal(
+                    <OnomyConfirmationModal
+                      closeModal={() => handleModal()}
+                      onConfirm={() => onApprove(bidAmount)}
+                    />
+                )}>
+                  Approve
+                </SellBtn> :
+                <SellBtn>Not enough {pair[1]}</SellBtn>
           }
         </div>
       </ExchangeItem>
