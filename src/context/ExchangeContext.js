@@ -26,7 +26,7 @@ function ExchangeProvider({ children }) {
     
 
     useEffect(() => {
-        async function swapAmount() {
+        async function exchAmount() {
             if (supplyNOM && BigNumber.isBigNumber(bidAmount)) {
                 try {
                     var askAmountUpdate
@@ -52,23 +52,16 @@ function ExchangeProvider({ children }) {
                     }
                         
                     setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                    setExchangeSupply([
-                        supplyBot, 
-                        supplyTop
-                    ])
+                    
                 } catch (err) {
-                    console.log("Error: ", err)
-                    setExchangeSupply([
-                        supplyNOM, 
-                        supplyNOM
-                    ])    
+                    console.log("Error: ", err)    
                 }
             } else {
                 setOutput("Invalid Input")
             }
         }              
         if (supplyNOM) {
-            swapAmount()
+            exchAmount()
         }
         console.log("Exchange Supply 0: ", format18(swapSupply[0]).toFixed(5))
         console.log("Exchange Supply 1: ", format18(swapSupply[1]).toFixed(5))
@@ -117,7 +110,7 @@ function ExchangeProvider({ children }) {
         bidAmount,
         askAmount,
         input,
-        display,
+        output,
         bidDenom,
         pair
     }
