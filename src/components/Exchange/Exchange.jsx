@@ -30,23 +30,19 @@ export default function Exchange() {
   let { handleModal } = useModal()
 
   const { 
-    swapBuyAmount, 
-    swapBuyResult,
-    swapBuyValue,
-    swapSellAmount, 
-    swapSellResult,
-    swapSellValue, 
-    swapDenom 
+    bidAmount,
+    askAmount,
+    input,
+    display,
+    bidDenom
   } = useSwap();
   
   const { 
-    setSwapBuyAmount, 
-    setSwapBuyResult, 
-    setSwapBuyValue, 
-    setSwapSellAmount, 
-    setSwapSellResult,
-    setSwapSellValue, 
-    setSwapDenom 
+    setBidAmount,
+    setAskAmount,
+    setInput,
+    setDisplay,
+    setBidDenom
   } = useUpdateSwap();
 
   const { 
@@ -65,26 +61,36 @@ export default function Exchange() {
   const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
  
-  const onBuyNOMTextChange = useCallback(
+  const onWeakTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
       setSwapBuyValue(evt.target.value)
-      setSwapSellAmount('')
-      setSwapSellResult('')
-      setSwapSellValue('')
-      setSwapDenom('ETH')
+      
+      if (swapSellValue) {
+        setSwapSellAmount('')
+        setSwapSellResult('')
+        setSwapSellValue('')
+        setSwapDenom('ETH')
+      }
+      
       if (isNumber(parseFloat(evt.target.value))) {
         try {
-          setSwapBuyAmount(
-            parse18(
-              new BigNumber(
-                parseFloat(evt.target.value).toString()
-              )
+          const buyAmount = parse18(
+            new BigNumber(
+              parseFloat(evt.target.value).toString()
             )
-          )    
+          )
+          
+          if (swapBuyAmount !== buyAmount) {
+            setSwapBuyAmount(
+              buyAmount
+            ) 
+          }   
         } catch (e) {
-          console.log("Error: ", e)
-          setSwapBuyAmount(new BigNumber(0))
+          if (swapBuyAmount !== '') {
+            setSwapValue("Invalid")
+            setSwapBuyAmount('')
+          }  
         }
       } else {
         setSwapBuyAmount('')
@@ -102,7 +108,7 @@ export default function Exchange() {
     ]
   );
   
-  const onSellNOMTextChange = useCallback(
+  const onStrongTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
       setSwapSellValue(evt.target.value)

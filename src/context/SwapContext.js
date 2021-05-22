@@ -13,27 +13,53 @@ export const useUpdateSwap = () => useContext(UpdateSwapContext)
 function SwapProvider({ children }) {
     const { supplyNOM } = useChain()
     const { bondContract } = useChain()
-
-    const [swapBuyAmount, setSwapBuyAmount] = useState(new BigNumber(0))
-    const [swapBuyResult, setSwapBuyResult] = useState('')
-    const [swapBuyValue, setSwapBuyValue] = useState('')
-    const [swapDenom, setSwapDenom] = useState('ETH')
-    const [swapSellAmount, setSwapSellAmount] = useState('')
-    const [swapSellResult, setSwapSellResult] = useState('')
-    const [swapSellValue, setSwapSellValue] = useState('')
+    const [bidAmount, setBidAmount] = useState('')
+    const [askAmount, setAskAmount] = useState('')
+    const [input, setInput] = useState('')
+    const [display, setDisplay] = useState('')
+    const [bidDenom, setBidDenom] = useState('ETH')
     
+    // Weaker (left): pair[0]
+    // Stronger (right): pair[1]
+    // const [pair, setPair] = useState(['NOM', 'ETH'])
     const [swapSupply, setSwapSupply] = useState([supplyNOM, supplyNOM])
 
     useEffect(() => {
         async function swapAmount() {
-            if (supplyNOM && BigNumber.isBigNumber(swapBuyAmount) && swapDenom === 'ETH') {
+            if (supplyNOM && BigNumber.isBigNumber(bidAmount) {
                 try {
-                    const amountNOM = await bondContract.buyQuoteETH(swapBuyAmount.toString())
-                    const supplyTop = supplyNOM.plus(new BigNumber(amountNOM.toString()))
-                    
-                    setSwapBuyResult(new BigNumber(amountNOM.toString()))
+                    var askAmountUpdate
+                    var supplyBot = supplyNOM
+                    var supplyTop = supplyNOM
+
+                    switch (bidDenom) {
+                        case 'strong':
+                            {
+                                askAmountUpdate = await bondContract.buyQuoteETH(
+                                    bidAmount.toFixed(0)
+                                )
+                                supplyTop = supplyNOM.plus(
+                                    new BigNumber(askAmountUpdate.toString())
+                                )
+                            }
+                        case 'weak':
+                            {
+                                askAmountUpdate = await bondContract.sellQuoteNOM(
+                                    bidAmount.toFixed(0)
+                                )
+                                supplyBot = supplyNOM.minus(
+                                    new BigNumber(bidAmount.toString())
+                                )
+                            }
+                        default:
+                            {
+                                error("denom not set")
+                            }
+                    }
+                        
+                    setAskAmount(new BigNumber(askAmountUpdate.toString()))
                     setSwapSupply([
-                        supplyNOM, 
+                        supplyBot, 
                         supplyTop
                     ])
                 } catch (err) {
@@ -43,6 +69,8 @@ function SwapProvider({ children }) {
                         supplyNOM
                     ])    
                 }
+            } else {
+                setDisplay("Invalid Input")
             }
         }              
         if (supplyNOM) {
@@ -61,12 +89,7 @@ function SwapProvider({ children }) {
             if (BigNumber.isBigNumber(swapSellAmount) && swapDenom === 'NOM') {
                 if (swapSellAmount.lte(supplyNOM)) {
                     try {
-                        const amountETH = await bondContract.sellQuoteNOM(
-                            swapSellAmount.toFixed(0)
-                        )
-                        const supplyBot = supplyNOM.minus(
-                            new BigNumber(swapSellAmount.toString())
-                        )
+                        
                         
                         console.log("Supply Bot: ",format18(supplyBot).toString())
                         console.log("Supply NOM: ", format18(supplyNOM).toString())

@@ -21,7 +21,7 @@ export default function Bonding() {
   return (
     <Panel>
       <ContentLayout>
-        <Chart />
+       
         <Exchange />
       </ContentLayout>
     </Panel>
