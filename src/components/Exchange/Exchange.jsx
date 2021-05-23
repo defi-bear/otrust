@@ -60,45 +60,18 @@ export default function Exchange() {
   const [completedResult, setCompletedResult] = useState(null);
   const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
-  
-  const bidAmountUpdater = useCallback(
-    (amount) => {
-      if (isNumber(parseFloat(amount))) {
-        try {
-          const bidAmountUpdate = parse18(
-            new BigNumber(
-              parseFloat(amount).toString()
-            )
-          )
-          switch (bidAmount) {
-            case bidAmountUpdate:
-              break
-            default:
-              setBidAmount(
-                bidAmountUpdate
-              ) 
-          }   
-        } catch (e) {
-          if (bidAmount !== '') {
-            setOutput("Invalid Input")
-            setBidAmount('')
-          }  
-        }
-      }
-    },[bidAmount, setBidAmount, setOutput]
-  )
 
   const onBidStrongTextChange = useCallback(
     (evt) => {
       evt.preventDefault()
       setInput(evt.target.value)
-      setBidDenom("strong")
-      bidAmountUpdater(evt.target.value)
+      if (bidDenom !== "strong") {
+        setBidDenom("strong")
+      }
     },
     [
       setInput,
-      setBidDenom,
-      bidAmountUpdater
+      setBidDenom
     ]
   );
   
@@ -106,15 +79,38 @@ export default function Exchange() {
     (evt) => {
       evt.preventDefault()
       setInput(evt.target.value)
-      setBidDenom("weak")
-      bidAmountUpdater(evt.target.value)
+      if (bidDenom !== "weak") {
+        setBidDenom("weak")
+      }
     },
     [
       setInput,
-      setBidDenom,
-      bidAmountUpdater
+      setBidDenom
     ]
   );
+
+  useEffect(() => {
+    if (isNumber(parseFloat(input))) {
+      try {
+        const bidAmountUpdate = parse18(
+          new BigNumber(
+            parseFloat(input).toString()
+          )
+        )
+        if (bidAmount !== bidAmountUpdate) {
+            setBidAmount(
+              bidAmountUpdate
+            ) 
+        }
+      } catch (e) {
+        console.log(e)
+        if (input !== '') {
+          setOutput("Invalid Input")
+          setBidAmount('')
+        }  
+      }
+    }
+  },[bidAmount, input, setOutput, setBidAmount])
 
   const submitTrans = useCallback(
     async () => {
@@ -126,11 +122,13 @@ export default function Exchange() {
             // Preparing for many tokens / coins
             switch (pair[0]) {
               case 'ETH':
-                tx = await bondContract.buyNOM(
-                  askAmount.toFixed(0),
-                  slippage * 100,
-                  { value: bidAmount.toFixed(0) }
-                );
+                {
+                  tx = await bondContract.buyNOM(
+                    askAmount.toFixed(0),
+                    slippage * 100,
+                    { value: bidAmount.toFixed(0) }
+                  )
+                }
               break
 
               default:
@@ -141,11 +139,13 @@ export default function Exchange() {
           case 'weak':
             switch (pair[1]) {
               case 'wNOM':
-                tx = await bondContract.sellNOM(
-                  bidAmount.toFixed(0),
-                  askAmount.toFixed(0),
-                  slippage * 100,
-                )
+                {
+                  tx = await bondContract.sellNOM(
+                    bidAmount.toFixed(0),
+                    askAmount.toFixed(0),
+                    slippage * 100,
+                  )
+                }
                 break
               default:
                 {}
@@ -153,7 +153,7 @@ export default function Exchange() {
             break
           
           default:
-            {}
+            console.log()
         }
       
         setPendingTx(tx);
@@ -364,8 +364,8 @@ export default function Exchange() {
                     />
                 )}>
                   Approve
-                </SellBtn> :
-                <SellBtn>Not enough {pair[1]}</SellBtn>
+                </SellBtn> : (bidDenom === 'weak') ?
+                <SellBtn>Not enough {pair[1]}</SellBtn> : {}
           }
         </div>
       </ExchangeItem>

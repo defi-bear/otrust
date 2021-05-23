@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { format18 } from 'utils/math'
+import { format18, parse18, isNumber } from 'utils/math'
 import { useChain } from 'context/chain/ChainContext'
 
 export const ExchangeContext = createContext()
@@ -22,11 +22,9 @@ function ExchangeProvider({ children }) {
     // Strong (left): pair[0]
     // Weak (right): pair[1]
     const [pair, setPair] = useState(['ETH', 'wNOM'])
-    
 
     useEffect(() => {
         async function exchAmount() {
-            if (input === '') return
             if (supplyNOM && BigNumber.isBigNumber(bidAmount)) {
                 try {
                     var askAmountUpdate
@@ -46,8 +44,11 @@ function ExchangeProvider({ children }) {
                         default:
                             console.error("Denom not set");
                     }  
-                    setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                    setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(6))
+                    if (askAmount !== askAmountUpdate) {
+                        setAskAmount(new BigNumber(askAmountUpdate.toString()))
+                        setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(6))
+                    }
+
                 } catch (err) {
                     console.log("Error: ", err)    
                 }
@@ -62,7 +63,6 @@ function ExchangeProvider({ children }) {
         bidAmount,
         bidDenom,
         bondContract,
-        input,
         supplyNOM,
     ])
 
