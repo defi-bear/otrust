@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react'
 import { BigNumber } from 'bignumber.js'
-
+import { format18 } from 'utils/math'
 import { useChain } from 'context/chain/ChainContext'
 
 export const ExchangeContext = createContext()
@@ -45,10 +45,9 @@ function ExchangeProvider({ children }) {
 
                         default:
                             console.error("Denom not set");
-                    }
-                        
+                    }  
                     setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                    
+                    setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(6))
                 } catch (err) {
                     console.log("Error: ", err)    
                 }

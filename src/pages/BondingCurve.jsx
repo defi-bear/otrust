@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import SwapProvider from "context/ExchangeContext";
+import ExchangeProvider from "context/ExchangeContext";
 
 // Components
 import AcctDash from "components/AcctDash";
@@ -58,12 +58,12 @@ export default function BondingCurve() {
       {/* <ConfirmTransactionModal /> */}
       {/* <BridgeSwapMobile /> */}
 
-      <SwapProvider>
+      <ExchangeProvider>
         <BondingCurveLayout>
           <Bonding />
           <AcctDash />
         </BondingCurveLayout>
-      </SwapProvider>
+      </ExchangeProvider>
     </Container>
   );
 }
