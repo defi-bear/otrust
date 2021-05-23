@@ -6,7 +6,8 @@ import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { Panel } from "components/UI";
-import { useChain } from "context/chain/ChainContext";
+import { useChain } from "context/chain/ChainContext"
+import { useContract } from "context/chain/ContractContext"
 import { useExchange } from "context/ExchangeContext"
 import { responsive } from "theme/constants";
 import { format18 } from "utils/math"
@@ -352,8 +353,10 @@ const SocialBtn = styled.a`
 
 export default function AcctDash() {
   const { active, error, chainId, account } = useWeb3React()
-  const { strongBalance, weakBalance, blockNumber } = useChain()
+  const { blockNumber } = useChain()
+  const { strongBalance, weakBalance } = useContract()
   const { pair } = useExchange()
+  
   return (
     <Panel>
       <SidebarLayout>

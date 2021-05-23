@@ -4,7 +4,7 @@ import styled from "styled-components";
 import logo from "assets/logo.svg";
 import { Container } from "./UI";
 import { responsive } from "theme/constants";
-import { useChain } from "context/chain/ChainContext"
+import { useContract } from "context/chain/ContractContext"
 import { format18 } from 'utils/math'
 import { BigNumber } from 'bignumber.js'
 
@@ -164,7 +164,7 @@ const Details = styled.span`
 `;
 
 export default function MainHeader(props) {
-  const { supplyNOM, currentETHPrice } = useChain()
+  const { supplyNOM, currentETHPrice } = useContract()
   return (
     <header>
       <Container>
