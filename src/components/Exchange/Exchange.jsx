@@ -61,57 +61,6 @@ export default function Exchange() {
   const [slippage, setSlippage] = useState(1);
   const [previousTx, setPreviousTx] = useState(null);
 
-  const onBidStrongTextChange = useCallback(
-    (evt) => {
-      evt.preventDefault()
-      setInput(evt.target.value)
-      if (bidDenom !== "strong") {
-        setBidDenom("strong")
-      }
-    },
-    [
-      setInput,
-      setBidDenom
-    ]
-  );
-  
-  const onBidWeakTextChange = useCallback(
-    (evt) => {
-      evt.preventDefault()
-      setInput(evt.target.value)
-      if (bidDenom !== "weak") {
-        setBidDenom("weak")
-      }
-    },
-    [
-      setInput,
-      setBidDenom
-    ]
-  );
-
-  useEffect(() => {
-    if (isNumber(parseFloat(input))) {
-      try {
-        const bidAmountUpdate = parse18(
-          new BigNumber(
-            parseFloat(input).toString()
-          )
-        )
-        if (bidAmount !== bidAmountUpdate) {
-            setBidAmount(
-              bidAmountUpdate
-            ) 
-        }
-      } catch (e) {
-        console.log(e)
-        if (input !== '') {
-          setOutput("Invalid Input")
-          setBidAmount('')
-        }  
-      }
-    }
-  },[bidAmount, input, setOutput, setBidAmount])
-
   const submitTrans = useCallback(
     async () => {
       if (!bidAmount || !askAmount) return;
@@ -215,22 +164,7 @@ export default function Exchange() {
     setPendingTx,
   ])
 
-  const onBidStrong = () => {
-    setBidDenom(pair[0]);
-    handleModal(
-        <ConfirmTransactionModal
-          closeModal={() => handleModal()}
-          type={bidDenom}
-          amount={bidAmount}
-          result={askAmount}
-          onConfirm={() => 
-            onSubmit(bidDenom)
-          }
-          setSlippage={setSlippage}
-          slippage={slippage}
-        />
-    )
-  }
+  
 
   const onBidWeak = () => {
     setBidDenom(pair[1]);
@@ -291,7 +225,7 @@ export default function Exchange() {
   }
 
   const onWeakMax = (weakBalance) => {
-    setInput(format18(weakBalance).toString)
+    setInput(format18(weakBalance).toString())
   }
   return (
     <ExchangeWrapper>
