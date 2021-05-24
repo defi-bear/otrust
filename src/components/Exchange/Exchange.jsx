@@ -152,7 +152,14 @@ export default function Exchange() {
 
   return (
     <ExchangeWrapper>
-      
+      <ExchangeQuote
+        strength='strong'
+        onSubmit={onSubmit}
+      />
+      <ExchangeQuote
+        strength='weak'
+        onSubmit={onSubmit}
+      />
       {error && <div>{error}</div>}
     </ExchangeWrapper>
   );

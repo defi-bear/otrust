@@ -128,7 +128,7 @@ export default function ExchangeQuote(strength, onSubmit) {
                   value={(bidDenom === strength) ? input : ''}
               />
               {(bidDenom === strength) ? pair[0] : pair[1]}
-              <MaxBtn onClick={onMax()}>Max</MaxBtn>
+              <MaxBtn onClick={() => onMax()}>Max</MaxBtn>
           </Sending>
           <Receiving>
               <strong>I'm asking</strong>
