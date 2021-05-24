@@ -101,17 +101,16 @@ export default function ExchangeQuote({strength, onSubmit}) {
         try {
           const bidAmountUpdate = parse18(
             new BigNumber(
-              parseFloat(input).toString()
+              parseFloat(evt.target.value).toString()
             )
           )
-          console.log("Input: ", input)
+          console.log("Input: ", evt.target.value)
           console.log("Bid Amount Update", bidAmountUpdate.toString())
           if (bidAmount !== bidAmountUpdate) {
             console.log("Update Bid Amount")
             setBidAmount(
               bidAmountUpdate
             )
-            setOutput(input)
           }
         } catch (e) {
           console.log(e)
