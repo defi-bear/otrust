@@ -117,9 +117,9 @@ const limitOptions = [
 
 export default function ConfirmTransactionModal({ closeModal, type, amount, result, onConfirm, slippage, setSlippage }) {
   // const [limit, setLimit] = useState(0);
-  console.log("Amount: ", amount)
-  console.log("Result: ", result)
-  console.log("Slippage: ", slippage)
+  console.log("Amount: ", amount.toString())
+  console.log("Result: ", result.toString())
+  console.log("Slippage: ", slippage.toString())
   const { account } = useWeb3React();
   const { currentETHPrice, currentNOMPrice } = useChain()
   const [count, setCount] = useState(60);

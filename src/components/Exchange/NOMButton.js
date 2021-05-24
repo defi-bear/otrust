@@ -72,13 +72,12 @@ export default function NOMButton(onBid) {
     }
     
     return (
-      <div>
+      <> 
         {
-          (NOMallowance > bidAmount && 
-            bidDenom === 'weak' && weakBalance > bidAmount) ? 
+          (NOMallowance > bidAmount && bidDenom === 'weak' && weakBalance > bidAmount) ? 
             (<SellBtn onClick={onBid}>Sell {pair[1]}</SellBtn>) : 
-            (weakBalance > bidAmount) ? 
-              <SellBtn 
+            ((weakBalance > bidAmount) ? 
+              (<SellBtn 
                 onClick={() => handleModal(
                   <OnomyConfirmationModal
                     closeModal={() => handleModal()}
@@ -86,9 +85,14 @@ export default function NOMButton(onBid) {
                   />
               )}>
                 Approve
-              </SellBtn> : (bidDenom === 'weak') ?
-              <SellBtn>Not enough {pair[1]}</SellBtn> : {}
+              </SellBtn>) : 
+              (
+                (bidDenom === 'weak') ?
+                <SellBtn>Not enough {pair[1]}</SellBtn> : 
+                <SellBtn>Input Value</SellBtn>
+              )
+            )
         }
-      </div>
+      </>
     )
   }

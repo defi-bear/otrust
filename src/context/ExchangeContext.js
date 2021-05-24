@@ -24,51 +24,6 @@ function ExchangeProvider({ children }) {
     // Weak (right): pair[1]
     const [pair, setPair] = useState(['ETH', 'wNOM'])
 
-    useEffect(() => {
-        async function exchAmount() {
-            if (supplyNOM && BigNumber.isBigNumber(bidAmount)) {
-                try {
-                    var askAmountUpdate
-                    switch (bidDenom) {
-                        case 'strong':
-                            console.log("Ask Amount Update")
-                            askAmountUpdate = await bondContract.buyQuoteETH(
-                                bidAmount.toFixed(0)
-                            )
-                            console.log(askAmountUpdate.toString())
-                            break
-
-                        case 'weak':
-                            askAmountUpdate = await bondContract.sellQuoteNOM(
-                                bidAmount.toFixed(0)
-                            )
-                            break
-
-                        default:
-                            console.error("Denom not set");
-                    }  
-                    if (askAmount !== askAmountUpdate) {
-                        setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                        setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
-                    }
-
-                } catch (err) {
-                    console.log("Error Quote: ", err)    
-                }
-            } else {
-                setOutput("Invalid Input")
-            }
-        }              
-        if (supplyNOM) {
-            exchAmount()
-        }
-    }, [
-        bidAmount,
-        bidDenom,
-        bondContract,
-        supplyNOM,
-    ])
-
     const contextValue = {
         bidAmount,
         askAmount,

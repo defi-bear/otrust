@@ -43,112 +43,17 @@ export default function Exchange() {
   
   const [previousTx, setPreviousTx] = useState(null);
 
-  const submitTrans = useCallback(
-    async () => {
-      if (!bidAmount || !askAmount) return;
-      try {
-        let tx;
-        switch (bidDenom) {
-          case 'strong':
-            // Preparing for many tokens / coins
-            switch (pair[0]) {
-              case 'ETH':
-                {
-                  tx = await bondContract.buyNOM(
-                    askAmount.toFixed(0),
-                    slippage * 100,
-                    { value: bidAmount.toFixed(0) }
-                  )
-                }
-              break
-
-              default:
-                {}
-            }
-            break
-          
-          case 'weak':
-            switch (pair[1]) {
-              case 'wNOM':
-                {
-                  tx = await bondContract.sellNOM(
-                    bidAmount.toFixed(0),
-                    askAmount.toFixed(0),
-                    slippage * 100,
-                  )
-                }
-                break
-              default:
-                {}
-            }
-            break
-          
-          default:
-            console.log()
-        }
-      
-        setPendingTx(tx);
-        setCompletedAmount(bidAmount);
-        setCompletedResult(askAmount);
-        handleModal(
-          <PendingModal />
-        )
-        bidAmount("");
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e.code, e.message.message);
-        // alert(e.message)
-        handleModal(
-          <TransactionFailedModal
-            closeModal={() => handleModal()}
-            error={e.code + '\n' + e.message.slice(0,80) + '...'}
-          />
-        )
-      }
-    },
-    [
-      askAmount,
-      bidAmount,
-      bidDenom,
-      bondContract,
-      handleModal,
-      pair,
-      setPendingTx,
-      setCompletedAmount,
-      setCompletedResult,
-      slippage
-    ]
-  );
-
-  useEffect(() => {
-    if (pendingTx) {
-      pendingTx.wait().then(() => {
-        setPreviousTx(pendingTx);
-        setPendingTx(null);
-        handleModal(
-          <TransactionCompletedModal
-            closeModal={() => handleModal()}
-            type={bidDenom}
-            amount={completedAmount}
-            result={completedResult}
-            previousTx={previousTx}
-          />
-        )
-      })
-    }
-  }, [
-    bidDenom,
-    completedAmount,
-    completedResult,
-    handleModal,
-    pendingTx,
-    previousTx,
-    setPendingTx,
-  ])
   
+  const submitTrans = useCallback(
+    async () => {}
+  )
   
   
   const [onSubmit, error] = useAsyncFn(submitTrans);
+  
+  useEffect(() => {
+    console.log("Exchange Error: ", error)
+  },[error])
 
   return (
     <ExchangeWrapper>

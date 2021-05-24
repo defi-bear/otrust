@@ -36,6 +36,7 @@ function ChainProvider({ theme, children }) {
     
     useEffect(() => {
             library.on('block', (number) => {
+                if (number !== blockNumber)
                 postBlockNumber(number)
             })
 
