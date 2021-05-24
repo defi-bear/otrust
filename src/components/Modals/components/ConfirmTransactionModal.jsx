@@ -8,6 +8,7 @@ import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
+import { useExchange } from 'context/ExchangeContext'
 import { Close, Metamask } from "components/Modals/Icons";
 import * as Modal from "components/Modals/styles";
 import 'components/Modals/loadingBar.css';
@@ -122,6 +123,7 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
   console.log("Slippage: ", slippage.toString())
   const { account } = useWeb3React();
   const { currentETHPrice, currentNOMPrice } = useChain()
+  const { bidDenom, pair } = useExchange()
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
 
@@ -134,6 +136,7 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
     }
   }
 
+  
   useInterval(increaseCount, delay);
   
   return (
@@ -155,10 +158,10 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
           <span>Current Exchange Rate</span>
 
           <strong>
-            1 {type} = {
-                type === 'ETH' ? 
-                  format18(currentETHPrice).toFixed(6) : 
-                  format18(currentNOMPrice).toFixed(6)
+            1 {bidDenom} = {
+                (bidDenom === pair[0]) ? 
+                (BigNumber.isBigNumber(currentETHPrice) ? format18(currentETHPrice).fixed(6) : "Loading") :
+                (BigNumber.isBigNumber(currentNOMPrice) ? format18(currentNOMPrice).fixed(6) : 'Loading')
               } 
             {type === 'ETH' ? 'NOM' : 'ETH'}
           </strong>

@@ -30,27 +30,26 @@ import { format18, isNumber, parse18 } from 'utils/math'
 
 export default function ExchangeQuote({strength, onSubmit}) {
   let { handleModal } = useModal()
-  let { strongBalance, weakBalance } = useContract()
+  let { bondContract, strongBalance, weakBalance, supplyNOM } = useContract()
 
   const { 
-      bidAmount,
-      askAmount,
-      input,
-      output,
-      bidDenom,
-      pair,
-      slippage
-    } = useExchange();
-    
-    const { 
-      setInput,
-      setBidAmount,
-      setBidDenom,
-      setOutput,
-      setSlippage
-    } = useUpdateExchange();
-
+    bidAmount,
+    askAmount,
+    input,
+    output,
+    bidDenom,
+    pair,
+    slippage
+  } = useExchange();
   
+  const { 
+    setBidAmount,
+    setBidDenom,
+    setAskAmount,
+    setInput,
+    setOutput,
+    setSlippage
+  } = useUpdateExchange();
 
   const onBid = () => {
       if (bidDenom !== strength) {
@@ -87,7 +86,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
   },[])
 
   const onTextChange = useCallback(
-    (evt) => {
+    async (evt) => {
       evt.preventDefault()
       console.log("Pair :", pair[0])
 
@@ -111,6 +110,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
             setBidAmount(
               bidAmountUpdate
             )
+            exchAmount(parse18(new BigNumber(evt.target.value)))
           }
         } catch (e) {
           console.log(e)
@@ -119,18 +119,64 @@ export default function ExchangeQuote({strength, onSubmit}) {
             setBidAmount('')
           }  
         }
-      }
-    },
-    [ 
-      bidAmount,
-      bidDenom,
-      input, 
-      setBidAmount,
-      setBidDenom,
-      setOutput, 
-      setInput,
-    ]
+    } else {
+        setOutput('')
+    }
+  },
+  [ 
+    bidAmount,
+    bidDenom,
+    input, 
+    setBidAmount,
+    setBidDenom,
+    setOutput, 
+    setInput,
+  ]
 );
+
+const exchAmount = useCallback( async (amount) => {
+  if (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0) {
+      try {
+          var askAmountUpdate
+          switch (bidDenom) {
+              case 'strong':
+                  console.log("Ask Amount Update")
+                  askAmountUpdate = await bondContract.buyQuoteETH(
+                      amount.toFixed(0)
+                  )
+                  console.log("Ask Amount Update", askAmountUpdate.toString())
+                  break
+
+              case 'weak':
+                  askAmountUpdate = await bondContract.sellQuoteNOM(
+                      amount.toFixed(0)
+                  )
+                  break
+
+              default:
+                  console.error("Denom not set");
+          }  
+          if (askAmount !== askAmountUpdate) {
+              setAskAmount(new BigNumber(askAmountUpdate.toString()))
+              setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
+          }
+      } catch (err) {
+          console.log("Error Quote: ", err)    
+      }
+  } else {
+    if (amount === '') {
+      setOutput('')
+    } else {
+      setOutput('Invalid Value')
+      setBidAmount('')
+    }
+  }
+}, [
+  bidAmount,
+  bidDenom,
+  bondContract,
+  supplyNOM,
+])
 
   return(
       <ExchangeItem>
