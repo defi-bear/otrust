@@ -17,6 +17,7 @@ function ExchangeProvider({ children }) {
     const [askAmount, setAskAmount] = useState('')
     const [input, setInput] = useState('')
     const [output, setOutput] = useState('')
+    const [slippage, setSlippage] = useState(1);
     
     // This would be set by user, but for Bonding Curve is static
     // Strong (left): pair[0]
@@ -72,7 +73,8 @@ function ExchangeProvider({ children }) {
         input,
         output,
         bidDenom,
-        pair
+        pair,
+        slippage
     }
 
     const updateValue = {
@@ -81,7 +83,8 @@ function ExchangeProvider({ children }) {
         setInput,
         setOutput,
         setBidDenom,
-        setPair
+        setPair,
+        setSlippage
     }
 
     return (
