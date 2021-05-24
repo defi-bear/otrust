@@ -49,34 +49,37 @@ function ContractProvider({ theme, children }) {
     )
 
     const updateContractData = useCallback((values) => {
-            if(strongBalance.toString() !== values[0].toString()) {
-                console.log("Old Strong Balance: ", strongBalance.toString())
-                console.log("Set Strong Balance: ", values[0].toString())
-                console.log("New Strong Balance: ", (new BigNumber(values[0].toString())).toString())
-                setStrongBalance(new BigNumber(values[0].toString()))
-            }
+            if (values) {
+                if(strongBalance.toString() !== values[0].toString()) {
+                    console.log("Old Strong Balance: ", strongBalance.toString())
+                    console.log("Set Strong Balance: ", values[0].toString())
+                    console.log("New Strong Balance: ", (new BigNumber(values[0].toString())).toString())
+                    setStrongBalance(new BigNumber(values[0].toString()))
+                }
+                
+                if(weakBalance.toString() !== values[1].toString()) {
+                    setWeakBalance(new BigNumber(values[1].toString()))
+                }
+    
+                if(NOMallowance.toString() !== values[2].toString()) {
+                    setNOMAllowance(new BigNumber(values[2].toString()))
+                }
+    
+                if(supplyNOM.toString() !== values[3].toString()) {
+                    setSupplyNOM(new BigNumber(values[3].toString()))
+                }
+    
+                if(currentETHPrice.toString() !== values[4].toString()) {
+                    setCurrentETHPrice(new BigNumber(values[4].toString()))
+                }
             
-            if(weakBalance.toString() !== values[1].toString()) {
-                setWeakBalance(new BigNumber(values[1].toString()))
-            }
-
-            if(NOMallowance.toString() !== values[2].toString()) {
-                setNOMAllowance(new BigNumber(values[2].toString()))
-            }
-
-            if(supplyNOM.toString() !== values[3].toString()) {
-                setSupplyNOM(new BigNumber(values[3].toString()))
-            }
-
-            if(currentETHPrice.toString() !== values[4].toString()) {
-                setCurrentETHPrice(new BigNumber(values[4].toString()))
-            }
-        
-            if(currentNOMPrice.toString() !== 
-                (new BigNumber('1')).div(new BigNumber(values[4].toString()))) {
-                    setCurrentNOMPrice(
-                        (new BigNumber('1')).div(new BigNumber(values[4].toString()))
-                    )
+                if(currentNOMPrice.toString() !== 
+                    (new BigNumber('1')).div(new BigNumber(values[4].toString()))) {
+                        setCurrentNOMPrice(
+                            (new BigNumber('1')).div(new BigNumber(values[4].toString()))
+                        )
+                }
+    
             }
     }, [
         currentETHPrice, 

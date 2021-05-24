@@ -31,9 +31,11 @@ function ExchangeProvider({ children }) {
                     var askAmountUpdate
                     switch (bidDenom) {
                         case 'strong':
+                            console.log("Ask Amount Update")
                             askAmountUpdate = await bondContract.buyQuoteETH(
                                 bidAmount.toFixed(0)
                             )
+                            console.log(askAmountUpdate.toString())
                             break
 
                         case 'weak':
@@ -47,11 +49,11 @@ function ExchangeProvider({ children }) {
                     }  
                     if (askAmount !== askAmountUpdate) {
                         setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                        setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(6))
+                        setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
                     }
 
                 } catch (err) {
-                    console.log("Error: ", err)    
+                    console.log("Error Quote: ", err)    
                 }
             } else {
                 setOutput("Invalid Input")

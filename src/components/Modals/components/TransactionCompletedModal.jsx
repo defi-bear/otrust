@@ -26,7 +26,7 @@ export default function TransactionCompletedModal({ type, amount, result, closeM
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={closeModal}>
+      <Modal.CloseIcon onClick={() => closeModal()}>
         <Close />
       </Modal.CloseIcon>
 
@@ -73,7 +73,7 @@ export default function TransactionCompletedModal({ type, amount, result, closeM
           >
             View Details <Caret />
           </Modal.DetailsButton>
-          <Modal.PrimaryButton onClick={closeModal}>Done</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => closeModal()}>Done</Modal.PrimaryButton>
         </Modal.FooterControls>
 
         {detailsActive && (

@@ -1,4 +1,7 @@
 import React, { useCallback, useEffect } from "react";
+
+import { ErrorBoundary } from 'react-error-boundary'
+
 import { 
     useExchange, 
     useUpdateExchange 
@@ -50,6 +53,7 @@ export default function ExchangeQuote(strength, onSubmit) {
   const onTextChange = useCallback(
       (evt) => {
         evt.preventDefault()
+        console.log("Text Change", evt.target.value)
         setInput(evt.target.value)
         if (bidDenom !== strength) {
           setBidDenom(strength)
@@ -64,7 +68,7 @@ export default function ExchangeQuote(strength, onSubmit) {
 
   const onBid = () => {
       if (bidDenom !== strength) {
-              setBidDenom(strength);
+        setBidDenom(strength);
       }
       
       handleModal(
@@ -82,40 +86,15 @@ export default function ExchangeQuote(strength, onSubmit) {
       )
   }
 
-  const onBidNOM = () => {
-    if (bidDenom !== strength) {
-      setBidDenom(strength);
-    }
-  }
-
   const onMax = () => {
       (strength === 'strong') ? 
           setInput(format18(strongBalance).toString()) :
           setInput(format18(weakBalance).toString())
   }
 
-  useEffect(() => {
-      if (isNumber(parseFloat(input))) {
-        try {
-          const bidAmountUpdate = parse18(
-            new BigNumber(
-              parseFloat(input).toString()
-            )
-          )
-          if (bidAmount !== bidAmountUpdate) {
-              setBidAmount(
-                bidAmountUpdate
-              ) 
-          }
-        } catch (e) {
-          console.log(e)
-          if (input !== '') {
-            setOutput("Invalid Input")
-            setBidAmount('')
-          }  
-        }
-      }
-  },[bidAmount, input, setOutput, setBidAmount])
+  const onError = (e) => {
+    console.log(e)
+  }
 
   return(
       <ExchangeItem>
@@ -130,30 +109,31 @@ export default function ExchangeQuote(strength, onSubmit) {
               {(bidDenom === strength) ? pair[0] : pair[1]}
               <MaxBtn onClick={() => onMax()}>Max</MaxBtn>
           </Sending>
-          <Receiving>
-              <strong>I'm asking</strong>
-              <ReceivingValue>
-                  {
-                      (bidDenom === strength) ?
-                      (
-                          (BigNumber.isBigNumber(output)) ? 
-                          format18(output).toFixed(8) : 
-                          output
-                      ) : ''
-                  } {
-                  (strength === 'strong') ? pair[1] : pair[0]
-              }
-              </ReceivingValue>
-          </Receiving>
-          { 
-            (pair[1] === 'wNOM') ?
-            <NOMButton 
-              onBid={onBid}
-            /> : 
-            <ExchangeButton onClick={onBid}>
-              Buy {strength === 'strong' ? pair[1] : pair[0]}
-            </ExchangeButton>
-          }
+            <Receiving>
+                <strong>I'm asking</strong>
+                <ReceivingValue>
+                    {(bidDenom === strength) ? output : ''} 
+                    {(strength === 'strong') ? pair[1] : pair[0]}
+                </ReceivingValue>
+            </Receiving>
+            { 
+              (pair[1] === 'wNOM') ?
+              (<ErrorBoundary
+                    onError={onError}
+                    FallbackComponent={(<div>
+
+                    </div>)}>
+                    <NOMButton 
+                      onBid={onBid}
+                    />
+                  </ErrorBoundary>
+                ) : 
+              (<ExchangeButton onClick={onBid}>
+                  Buy {strength === 'strong' ? pair[1] : pair[0]}
+                </ExchangeButton>
+              ) 
+            }
+
       </ExchangeItem>
   )
 }

@@ -22,8 +22,8 @@ function ChainProvider({ theme, children }) {
         cache: new InMemoryCache(),
     })
 
-    useEffect(() => {
-        library.on('block', (number) => {
+    const postBlockNumber = useCallback(
+        (number) => {
             if (blockNumber) {
                 if (number.toString() !== blockNumber.toString()) {
                     setBlockNumber(number)
@@ -31,12 +31,18 @@ function ChainProvider({ theme, children }) {
             } else {
                 setBlockNumber(number) 
             }
-        })
+        },
+    [blockNumber, setBlockNumber, library])
+    
+    useEffect(() => {
+            library.on('block', (number) => {
+                postBlockNumber(number)
+            })
 
-        return () => {
-            library.removeAllListeners('block')
-        }
-    },[])
+            return () => {
+                library.removeAllListeners('block')
+            }
+    },[library, postBlockNumber])
     
 
     const contextValue = {
