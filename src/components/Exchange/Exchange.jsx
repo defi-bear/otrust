@@ -25,6 +25,7 @@ import TransactionCompletedModal from "components/Modals/components/TransactionC
 import OnomyConfirmationModal from "components/Modals/components/OnomyConfirmationModal";
 import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
 import PendingModal from "components/Modals/components/PendingModal";
+import ExchangeQuote from "./ExchangeQuote";
 
 export default function Exchange() {
   let { handleModal } = useModal()
@@ -220,45 +221,19 @@ export default function Exchange() {
 
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
-  const onStrongMax = () => {
-    setInput(format18(strongBalance).toString())
-  }
+  
 
   const onWeakMax = (weakBalance) => {
     setInput(format18(weakBalance).toString())
   }
   return (
     <ExchangeWrapper>
-      <ExchangeItem>
-        <strong>Bid {pair[1]}</strong>
-        <Sending>
-          <strong>I'm bidding</strong>
-          <ExchangeInput
-            type="text"
-            onChange={onBidStrongTextChange}
-            value={(bidDenom === 'strong') ? input : ''}
-          />
-          {pair[0]}
-          <MaxBtn onClick={onStrongMax}>Max</MaxBtn>
-        </Sending>
-        <Receiving>
-          <strong>I'm asking</strong>
-          <ReceivingValue>
-            {
-              (bidDenom === 'strong') ?
-              (
-                (BigNumber.isBigNumber(output)) ? 
-                  format18(output).toFixed(8) : 
-                  output
-              ) :
-              ''
-            } {pair[1]}
-          </ReceivingValue>
-        </Receiving>
-        <div>
-          <ExchangeButton onClick={onBidStrong}>Buy {pair[1]}</ExchangeButton>
-        </div>
-      </ExchangeItem>
+      <ExchangeQuote
+        strength='strong'
+      />
+      <ExchangeQuote
+        strength='weak'
+      />
 
       <ExchangeItem>
         <strong>Bid {pair[0]}</strong>
