@@ -10,9 +10,7 @@ import {
   Receiving,
   ExchangeInput,
   MaxBtn,
-  ReceivingValue,
-  SellBtn,
-  ExchangeButton,
+  ReceivingValue
 } from "./exchangeStyles";
 
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
@@ -258,25 +256,7 @@ export default function Exchange() {
             } {pair[0]}
           </ReceivingValue>
         </Receiving>
-        <div>
-        {
-            (
-              NOMallowance > bidAmount && 
-              bidDenom === 'weak' && weakBalance > bidAmount) ? 
-              (<SellBtn onClick={onBidWeak}>Sell {pair[1]}</SellBtn>) : 
-              (weakBalance > bidAmount) ? 
-                <SellBtn 
-                  onClick={() => handleModal(
-                    <OnomyConfirmationModal
-                      closeModal={() => handleModal()}
-                      onConfirm={() => onApprove(bidAmount)}
-                    />
-                )}>
-                  Approve
-                </SellBtn> : (bidDenom === 'weak') ?
-                <SellBtn>Not enough {pair[1]}</SellBtn> : {}
-          }
-        </div>
+        
       </ExchangeItem>
 
       {error && <div>{error}</div>}

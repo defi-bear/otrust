@@ -13,6 +13,30 @@ import {
     ExchangeButton,
 } from "./exchangeStyles"
 
+function NOMButton() {
+  
+  return (
+    <div>
+      {
+        (NOMallowance > bidAmount && 
+          bidDenom === 'weak' && weakBalance > bidAmount) ? 
+          (<SellBtn onClick={onBidWeak}>Sell {pair[1]}</SellBtn>) : 
+          (weakBalance > bidAmount) ? 
+            <SellBtn 
+              onClick={() => handleModal(
+                <OnomyConfirmationModal
+                  closeModal={() => handleModal()}
+                  onConfirm={() => onApprove(bidAmount)}
+                />
+            )}>
+              Approve
+            </SellBtn> : (bidDenom === 'weak') ?
+            <SellBtn>Not enough {pair[1]}</SellBtn> : {}
+      }
+    </div>
+  )
+}
+
 export default function ExchangeQuote(strength) {
     const { 
         bidAmount,
@@ -63,6 +87,12 @@ export default function ExchangeQuote(strength) {
               slippage={slippage}
             />
         )
+    }
+
+    onBidNOM = () => {
+      if (bidDenom !== strength) {
+        setBidDenom(strength);
+      }
     }
 
     const onMax = () => {
@@ -122,11 +152,13 @@ export default function ExchangeQuote(strength) {
                 }
                 </ReceivingValue>
             </Receiving>
-            <div>
-            <ExchangeButton onClick={onBid}>Buy {
-                strength === 'strong' ? pair[1] : pair[0]
-            }</ExchangeButton>
-            </div>
+            { 
+              (pair[1] === 'wNOM') ?
+              <NOMButton /> : 
+              <ExchangeButton onClick={onBid}>
+                Buy {strength === 'strong' ? pair[1] : pair[0]}
+              </ExchangeButton>
+            }
         </ExchangeItem>
     )
 }
