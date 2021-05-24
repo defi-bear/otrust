@@ -105,26 +105,26 @@ export default function ExchangeQuote(strength) {
                     value={(bidDenom === strength) ? input : ''}
                 />
                 {(bidDenom === strength) ? pair[0] : pair[1]}
-                <MaxBtn onClick={onMax(
-                    strength === 'strong' ? setInput() : pair[1]
-                )}>Max</MaxBtn>
+                <MaxBtn onClick={onMax()}>Max</MaxBtn>
             </Sending>
             <Receiving>
                 <strong>I'm asking</strong>
                 <ReceivingValue>
                     {
-                        (bidDenom === 'strong') ?
+                        (bidDenom === strength) ?
                         (
                             (BigNumber.isBigNumber(output)) ? 
                             format18(output).toFixed(8) : 
                             output
                         ) : ''
-                    } {pair[1]}
+                    } {
+                    (strength === 'strong') ? pair[1] : pair[0]
+                }
                 </ReceivingValue>
             </Receiving>
             <div>
             <ExchangeButton onClick={onBid}>Buy {
-                strength === 'strong' ? pair[1] : pair[2]
+                strength === 'strong' ? pair[1] : pair[0]
             }</ExchangeButton>
             </div>
         </ExchangeItem>

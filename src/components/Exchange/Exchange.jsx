@@ -259,7 +259,7 @@ export default function Exchange() {
           </ReceivingValue>
         </Receiving>
         <div>
-          {
+        {
             (
               NOMallowance > bidAmount && 
               bidDenom === 'weak' && weakBalance > bidAmount) ? 
