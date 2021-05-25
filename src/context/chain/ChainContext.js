@@ -3,12 +3,6 @@ import { useWeb3React } from "@web3-react/core"
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
 
-export const ChainContext = createContext()
-export const useChain = () => useContext(ChainContext)
-
-export const UpdateChainContext = createContext()
-export const useUpdateChain = () => useContext(UpdateChainContext)
-
 function reducer(state, action) {
     console.log("Block Number State: ", state.blockNumber)
     console.log("Block Number Update: ", action.blockNumber)
@@ -19,6 +13,12 @@ function reducer(state, action) {
             throw new Error();
     }
 }
+
+export const ChainContext = createContext()
+export const useChain = () => useContext(ChainContext)
+
+export const UpdateChainContext = createContext()
+export const useUpdateChain = () => useContext(UpdateChainContext)
 
 function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
@@ -40,10 +40,12 @@ function ChainProvider({ theme, children }) {
     const postBlockNumber = useCallback(
         (number) => { 
             if (number) {
-                if (state.blockNumber == 0) {
+                if (state.blockNumber === 0) {
                     dispatch({type: 'blockNumber', blockNumber: number})
                 } else {
                     if (number.toString() !== state.blockNumber.toString()) {
+                            console.log("New Blocknumber", number.toString())
+                            console.log("Blocknumber State: ", state.blockNumber)
                             dispatch({type: 'blockNumber', blockNumber: number})
                         } 
                     }
@@ -61,8 +63,9 @@ function ChainProvider({ theme, children }) {
     },[library, postBlockNumber])
 
     const contextValue = {
-        state,
-        library
+        account,
+        library,
+        ...state
     }
 
     return (
