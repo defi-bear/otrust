@@ -4,8 +4,6 @@ import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
 
 function reducer(state, action) {
-    console.log("Block Number State: ", state.blockNumber)
-    console.log("Block Number Update: ", action.blockNumber)
     switch (action.type) {
         case 'blockNumber':
             return {blockNumber: action.blockNumber}
@@ -44,8 +42,6 @@ function ChainProvider({ theme, children }) {
                     dispatch({type: 'blockNumber', blockNumber: number})
                 } else {
                     if (number.toString() !== state.blockNumber.toString()) {
-                            console.log("New Blocknumber", number.toString())
-                            console.log("Blocknumber State: ", state.blockNumber)
                             dispatch({type: 'blockNumber', blockNumber: number})
                         } 
                     }

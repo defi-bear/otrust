@@ -11,14 +11,17 @@ const initialState = {
     currentETHPrice: '',
     currentNOMPrice: '',
     NOMallowance: '',
+    pending: false,
     strongBalance: '',
     supplyNOM: '',
     weakBalance: '',
 }
 
 function reducer(state, action) {
-    console.log(action.value)
     switch (action.type) {
+        case 'pending': return {
+                block: action.value
+            }
         case 'updateAll':
             var update
             for (let i = 0; i < action.value.length; i++) {
@@ -160,30 +163,38 @@ function ContractProvider({ theme, children }) {
                         // UniSwapCont.getReserves(),
                 ]
             ).catch((err) => ( console.log(err)))
-            console.log("Pull promise")
+            console.log("Promise Pulled")
             return values
        },[account, bondContract, library, NOMcontract]
     )
 
     useEffect(() => {
         async function blocker() {
-            console.log("Blocknumber: ", blockNumber)
-            // listen for changes on an Ethereum address
-            try {
-                await getContractData()
-                    .then((values) => {
-                        dispatch({type: 'updateAll', value: values})
-                }).catch((err) => { 
-                    console.log(err)
-                })
-            } catch (e) {
-                console.log(e)
+            if (state.pendingBlock === blockNumber) {
+                return 
+            } else {
+                console.log("Blocknumber Contract State: ", blockNumber)
+                console.log("Pending Block: ", state.pendingBlock)
+                console.log("Pending: ", state.pending)
+                // listen for changes on an Ethereum address
+                try {
+                    dispatch({type: 'pending', value: blockNumber})
+                    await getContractData()
+                        .then((values) => {
+                            dispatch({type: 'updateAll', value: values})
+                            dispatch({type: 'pending', value: ''})
+                    }).catch((err) => { 
+                        console.log(err)
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
             }
         }
-
         blocker()
     },[
         blockNumber,
+        state.pending,
         getContractData
     ])
 
