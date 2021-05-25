@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect } from "react";
 
-import { ErrorBoundary } from 'react-error-boundary'
-
 import { BigNumber } from 'bignumber.js'
 
 import { 
@@ -82,6 +80,53 @@ export default function ExchangeQuote({strength, onSubmit}) {
     console.log("Output: ", output)
   },[output])
 
+  const exchAmount = useCallback( async (amount) => {
+    if (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0) {
+        try {
+            var askAmountUpdate
+            switch (strength) {
+                case 'strong':
+                    console.log("Ask Amount Update")
+                    askAmountUpdate = await bondContract.buyQuoteETH(
+                        amount.toFixed(0)
+                    )
+                    console.log("Ask Amount Update", askAmountUpdate.toString())
+                    break
+  
+                case 'weak':
+                    askAmountUpdate = await bondContract.sellQuoteNOM(
+                        amount.toFixed(0)
+                    )
+                    break
+  
+                default:
+                    console.error("Denom not set");
+            }  
+            if (askAmount !== askAmountUpdate) {
+                setAskAmount(new BigNumber(askAmountUpdate.toString()))
+                setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
+            }
+        } catch (err) {
+            console.log("Error Quote: ", err)    
+        }
+    } else {
+      if (amount === '') {
+        setOutput('')
+      } else {
+        setOutput('Invalid Value')
+        setBidAmount('')
+      }
+    }
+  }, [
+    askAmount,
+    bondContract,
+    setAskAmount,
+    setBidAmount,
+    setOutput,
+    strength,
+    supplyNOM,
+  ])
+
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
@@ -123,57 +168,16 @@ export default function ExchangeQuote({strength, onSubmit}) {
   [ 
     bidAmount,
     bidDenom,
-    input, 
+    exchAmount,
+    input,
+    pair,
     setBidAmount,
     setBidDenom,
     setOutput, 
     setInput,
+    strength
   ]
 );
-
-const exchAmount = useCallback( async (amount) => {
-  if (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0) {
-      try {
-          var askAmountUpdate
-          switch (bidDenom) {
-              case 'strong':
-                  console.log("Ask Amount Update")
-                  askAmountUpdate = await bondContract.buyQuoteETH(
-                      amount.toFixed(0)
-                  )
-                  console.log("Ask Amount Update", askAmountUpdate.toString())
-                  break
-
-              case 'weak':
-                  askAmountUpdate = await bondContract.sellQuoteNOM(
-                      amount.toFixed(0)
-                  )
-                  break
-
-              default:
-                  console.error("Denom not set");
-          }  
-          if (askAmount !== askAmountUpdate) {
-              setAskAmount(new BigNumber(askAmountUpdate.toString()))
-              setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
-          }
-      } catch (err) {
-          console.log("Error Quote: ", err)    
-      }
-  } else {
-    if (amount === '') {
-      setOutput('')
-    } else {
-      setOutput('Invalid Value')
-      setBidAmount('')
-    }
-  }
-}, [
-  bidAmount,
-  bidDenom,
-  bondContract,
-  supplyNOM,
-])
 
   return(
       <ExchangeItem>

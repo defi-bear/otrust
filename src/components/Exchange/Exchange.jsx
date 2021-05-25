@@ -6,10 +6,9 @@ import {
 } from "./exchangeStyles";
 
 import { useModal } from 'context/modal/ModalContext'
-import { useExchange, useUpdateExchange } from "context/ExchangeContext";
+import { useExchange } from "context/ExchangeContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
-import TransactionCompletedModal from "components/Modals/components/TransactionCompletedModal";
 import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
 import PendingModal from "components/Modals/components/PendingModal";
 import ExchangeQuote from "./ExchangeQuote";
@@ -26,23 +25,13 @@ export default function Exchange() {
   } = useExchange();
   
   const { 
-    setBidDenom,
-  } = useUpdateExchange();
-
-  const { 
-    bondContract,  
-    NOMcontract, 
-    weakBalance, 
-    pendingTx 
+    bondContract
   } = useChain();
   
   const { setPendingTx } = useUpdateChain();
   
-  const [completedAmount, setCompletedAmount] = useState(null);
-  const [completedResult, setCompletedResult] = useState(null);
-  
-  const [previousTx, setPreviousTx] = useState(null);
-
+  const [setCompletedAmount] = useState(null);
+  const [setCompletedResult] = useState(null);
   
   const submitTrans = useCallback(
     async () => {
@@ -54,13 +43,11 @@ export default function Exchange() {
             // Preparing for many tokens / coins
             switch (pair[0]) {
               case 'ETH':
-                {
-                  tx = await bondContract.buyNOM(
-                    askAmount.toFixed(0),
-                    slippage * 100,
-                    { value: bidAmount.toFixed(0) }
+                tx = await bondContract.buyNOM(
+                  askAmount.toFixed(0),
+                  slippage * 100,
+                  { value: bidAmount.toFixed(0) }
                   )
-                }
               break
 
               default:
@@ -71,13 +58,11 @@ export default function Exchange() {
           case 'weak':
             switch (pair[1]) {
               case 'wNOM':
-                {
-                  tx = await bondContract.sellNOM(
-                    bidAmount.toFixed(0),
-                    askAmount.toFixed(0),
-                    slippage * 100,
-                  )
-                }
+                tx = await bondContract.sellNOM(
+                  bidAmount.toFixed(0),
+                  askAmount.toFixed(0),
+                  slippage * 100,
+                )
                 break
               default:
                 {}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useContext, useCallback } from 'react'
-import { ApolloProvider } from '@apollo/client'
+// import { ApolloProvider } from '@apollo/client'
 
 import { NOMCont, BondingCont } from './contracts'
 import addrs from 'context/chain/NOMAddrs.json';
@@ -114,7 +114,9 @@ function ContractProvider({ theme, children }) {
 
         blocker()
     },[
-        blockNumber
+        blockNumber,
+        getContractData,
+        updateContractData
     ])
 
     const contextValue = {

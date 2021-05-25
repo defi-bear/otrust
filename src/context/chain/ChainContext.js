@@ -32,7 +32,7 @@ function ChainProvider({ theme, children }) {
                 setBlockNumber(number) 
             }
         },
-    [blockNumber, setBlockNumber, library])
+    [blockNumber, setBlockNumber])
     
     useEffect(() => {
             library.on('block', (number) => {
@@ -43,7 +43,7 @@ function ChainProvider({ theme, children }) {
             return () => {
                 library.removeAllListeners('block')
             }
-    },[library, postBlockNumber])
+    },[blockNumber, library, postBlockNumber])
     
 
     const contextValue = {

@@ -7,7 +7,6 @@ import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
-import { useExchange } from 'context/ExchangeContext'
 import { Close, Metamask } from "components/Modals/Icons";
 import * as Modal from "components/Modals/styles";
 import 'components/Modals/loadingBar.css';
@@ -133,7 +132,6 @@ export default function ConfirmTransactionModal({ closeModal, askAmount, bidAmou
     }
   }
 
-  
   useInterval(increaseCount, delay);
   
   return (

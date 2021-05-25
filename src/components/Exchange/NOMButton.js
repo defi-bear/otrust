@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 
 import { useContract } from 'context/chain/ContractContext'
 import { useUpdateChain } from 'context/chain/ChainContext'

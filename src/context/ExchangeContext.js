@@ -1,7 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from 'react'
-import { BigNumber } from 'bignumber.js'
-import { format18, parse18, isNumber } from 'utils/math'
-import { useChain } from 'context/chain/ChainContext'
+import React, { useState, createContext, useContext } from 'react'
 
 export const ExchangeContext = createContext()
 export const useExchange = () => useContext(ExchangeContext)
@@ -10,7 +7,7 @@ export const UpdateExchangeContext = createContext()
 export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
-    
+
     const [bidDenom, setBidDenom] = useState('strong')
     const [bidAmount, setBidAmount] = useState('')
     const [askAmount, setAskAmount] = useState('')
