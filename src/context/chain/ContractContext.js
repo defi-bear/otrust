@@ -6,16 +6,7 @@ import addrs from 'context/chain/NOMAddrs.json';
 import { BigNumber } from 'bignumber.js';
 
 import { useChain } from 'context/chain/ChainContext'
-
-const initialState = {
-    currentETHPrice: '',
-    currentNOMPrice: '',
-    NOMallowance: '',
-    pending: false,
-    strongBalance: '',
-    supplyNOM: '',
-    weakBalance: '',
-}
+import { useWeb3React } from '@web3-react/core';
 
 function reducer(state, action) {
     switch (action.type) {
@@ -133,17 +124,28 @@ export const useUpdateContract = () => useContext(UpdateContractContext)
 
 function ContractProvider({ theme, children }) {
     const {
-        account,
     //    ETHUSD,
         blockNumber,
-        library,
     } = useChain()
+
+    const initialState = {
+        block: '',
+        currentETHPrice: '',
+        currentNOMPrice: '',
+        NOMallowance: '',
+        pending: false,
+        strongBalance: '',
+        supplyNOM: '',
+        weakBalance: '',
+    }
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
+    
+    const { account, library } = useWeb3React()
     const bondContract = BondingCont(library)
     const NOMcontract = NOMCont(library)
-    
+
     const getContractData = useCallback(
         async () => {
             var values = await Promise.all(
@@ -173,11 +175,12 @@ function ContractProvider({ theme, children }) {
             if (state.pendingBlock === blockNumber) {
                 return 
             } else {
-                console.log("Blocknumber Contract State: ", blockNumber)
-                console.log("Pending Block: ", state.pendingBlock)
-                console.log("Pending: ", state.pending)
+                
                 // listen for changes on an Ethereum address
                 try {
+                    console.log("Blocknumber Contract State: ", blockNumber)
+                    console.log("Pending Block: ", state.block)
+
                     dispatch({type: 'pending', value: blockNumber})
                     await getContractData()
                         .then((values) => {
@@ -185,6 +188,7 @@ function ContractProvider({ theme, children }) {
                             dispatch({type: 'pending', value: ''})
                     }).catch((err) => { 
                         console.log(err)
+                        dispatch({type: 'pending', value: ''})
                     })
                 } catch (e) {
                     console.log(e)
