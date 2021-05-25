@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext, useCallback } from 'react'
+import React, { useReducer, useEffect, createContext, useContext, useCallback } from 'react'
 import { useWeb3React } from "@web3-react/core"
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
@@ -9,9 +9,24 @@ export const useChain = () => useContext(ChainContext)
 export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
+function reducer(state, action) {
+    console.log("Block Number State: ", state.blockNumber)
+    console.log("Block Number Update: ", action.blockNumber)
+    switch (action.type) {
+        case 'blockNumber':
+            return {blockNumber: action.blockNumber}
+        default:
+            throw new Error();
+    }
+}
+
 function ChainProvider({ theme, children }) {
     const { account, library } = useWeb3React()
-    const [blockNumber, setBlockNumber] = useState()
+    const initialState = { blockNumber: 0 }
+
+    const [state, dispatch] = useReducer(reducer, initialState)
+
+    // const [blockNumber, setBlockNumber] = useState()
     
     if (!process.env.REACT_APP_GRAPHQL_ENDPOINT) {
         throw new Error('REACT_APP_GRAPHQL_ENDPOINT environment variable not defined')
@@ -25,20 +40,16 @@ function ChainProvider({ theme, children }) {
     const postBlockNumber = useCallback(
         (number) => { 
             if (number) {
-                if (blockNumber) {
-                    if (number.toString() !== blockNumber.toString()) {
-                        console.log("Block Number", number)
-                        console.log("Block Number State: ", blockNumber)
-                        if (number.toString() !== blockNumber.toString()) {
-                            setBlockNumber(number)
+                if (state.blockNumber == 0) {
+                    dispatch({type: 'blockNumber', blockNumber: number})
+                } else {
+                    if (number.toString() !== state.blockNumber.toString()) {
+                            dispatch({type: 'blockNumber', blockNumber: number})
                         } 
                     }
-                } else {
-                    setBlockNumber(number)
                 }
-            }
-        },
-    [blockNumber, setBlockNumber])
+        },[state, dispatch]
+    )
     
     useEffect(() => {
             library.on('block', (number) => {
@@ -48,23 +59,15 @@ function ChainProvider({ theme, children }) {
                 library.removeAllListeners('block')
             }
     },[library, postBlockNumber])
-    
 
     const contextValue = {
-        account,
-        blockNumber,
-    //    ETHUSD,
-        library,
-        theme
-    }
-
-    const updateValue = {
-        
+        state,
+        library
     }
 
     return (
         <ApolloProvider client={client}>
-            <UpdateChainContext.Provider value={updateValue}>
+            <UpdateChainContext.Provider value={dispatch}>
                 <ChainContext.Provider value={contextValue} >
                     {children}
                 </ChainContext.Provider>
