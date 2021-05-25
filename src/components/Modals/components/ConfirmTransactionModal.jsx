@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
-import { useWeb3React } from "@web3-react/core";
 import useInterval from '@use-it/interval';
 import LoadingBar from 'components/Modals/LoadingBar'
 import { BigNumber } from 'bignumber.js'
@@ -116,14 +115,12 @@ const limitOptions = [
   },
 ];
 
-export default function ConfirmTransactionModal({ closeModal, type, amount, result, onConfirm, slippage, setSlippage }) {
+export default function ConfirmTransactionModal({ closeModal, askAmount, bidAmount, bidDenom, onConfirm, pair, slippage, setSlippage }) {
   // const [limit, setLimit] = useState(0);
-  console.log("Amount: ", amount.toString())
-  console.log("Result: ", result.toString())
+  console.log("Amount: ", bidAmount.toString())
+  console.log("Result: ", askAmount.toString())
   console.log("Slippage: ", slippage.toString())
-  const { account } = useWeb3React();
-  const { currentETHPrice, currentNOMPrice } = useChain()
-  const { bidDenom, pair } = useExchange()
+  const { account, currentETHPrice, currentNOMPrice } = useChain()
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
 
@@ -151,25 +148,27 @@ export default function ConfirmTransactionModal({ closeModal, type, amount, resu
 
         <Modal.ExchangeResult>
           <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>
-          ~ {BigNumber.isBigNumber(result) ? format18(result).toFixed(6) : ""} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
+          ~ {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ""} <sup>{bidDenom === 'ETH' ? 'NOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
           <span>Current Exchange Rate</span>
-
           <strong>
-            1 {bidDenom} = {
+            {
+              (bidDenom) ?
+              <>1 {bidDenom} = {
                 (bidDenom === pair[0]) ? 
                 (BigNumber.isBigNumber(currentETHPrice) ? format18(currentETHPrice).fixed(6) : "Loading") :
                 (BigNumber.isBigNumber(currentNOMPrice) ? format18(currentNOMPrice).fixed(6) : 'Loading')
-              } 
-            {type === 'ETH' ? 'NOM' : 'ETH'}
+              }</> : (<></>)
+            }
+            {bidDenom === 'ETH' ? 'NOM' : 'ETH'}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
 
-          <strong>{format18(amount).toFixed(6)} {type}</strong>
+          <strong>{format18(bidAmount).toFixed(6)} {bidDenom}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <div>

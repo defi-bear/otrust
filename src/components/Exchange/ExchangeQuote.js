@@ -59,12 +59,13 @@ export default function ExchangeQuote({strength, onSubmit}) {
       handleModal(
           <ConfirmTransactionModal
             closeModal={() => handleModal()}
-            type={bidDenom}
-            amount={bidAmount}
-            result={askAmount}
+            bidDenom={bidDenom}
+            bidAmount={bidAmount}
+            askAmount={askAmount}
             onConfirm={() => 
               onSubmit(bidDenom)
             }
+            pair={pair}
             setSlippage={setSlippage}
             slippage={slippage}
           />
@@ -80,10 +81,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
   useEffect(() => {
     console.log("Output: ", output)
   },[output])
-
-  useEffect(() => {
-    
-  },[])
 
   const onTextChange = useCallback(
     async (evt) => {
@@ -188,13 +185,13 @@ const exchAmount = useCallback( async (amount) => {
                   onChange={onTextChange}
                   value={(bidDenom === strength) ? input : ''}
               />
-              {(bidDenom === strength) ? pair[0] : pair[1]}
+              {(strength === 'strong') ? pair[0] : pair[1]}
               <MaxBtn onClick={() => onMax()}>Max</MaxBtn>
           </Sending>
             <Receiving>
                 <strong>I'm asking</strong>
                 <ReceivingValue>
-                    {(bidDenom === strength) ? output : ''}
+                    {(strength === bidDenom) ? output : ''}
                     {' '}
                     {(strength === 'strong') ? pair[1] : pair[0]}
                 </ReceivingValue>

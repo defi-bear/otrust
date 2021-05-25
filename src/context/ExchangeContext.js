@@ -10,8 +10,7 @@ export const UpdateExchangeContext = createContext()
 export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
-    const { supplyNOM } = useChain()
-    const { bondContract } = useChain()
+    
     const [bidDenom, setBidDenom] = useState('strong')
     const [bidAmount, setBidAmount] = useState('')
     const [askAmount, setAskAmount] = useState('')
