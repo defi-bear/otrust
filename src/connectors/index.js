@@ -32,7 +32,7 @@ export const walletconnect = new WalletConnectConnector({
   rpc: { 1: NETWORK_URL },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
-  pollingInterval: 1000
+  pollingInterval: 5000
 })
 
 export const walletlink = new WalletLinkConnector({

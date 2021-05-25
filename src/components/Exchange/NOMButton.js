@@ -88,10 +88,13 @@ export default function NOMButton(onBid) {
               </SellBtn>) : 
               (
                 (bidDenom === 'weak') ?
-                <SellBtn>Not enough {pair[1]}</SellBtn> : 
-                <SellBtn>Input Value</SellBtn>
-              )
-            )
+                  (bidAmount === '' ? 
+                      <SellBtn>Input Value</SellBtn> :
+                    < SellBtn>Not enough {pair[1]}</SellBtn>
+                  ) : <SellBtn>Input Value</SellBtn>
+                  
+              )    
+            )   
         }
       </>
     )

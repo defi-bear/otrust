@@ -107,7 +107,8 @@ export default function ExchangeQuote({strength, onSubmit}) {
                 setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
             }
         } catch (err) {
-            console.log("Error Quote: ", err)    
+            console.log("Error Quote: ", err)
+            setOutput('')   
         }
     } else {
       if (amount === '') {
