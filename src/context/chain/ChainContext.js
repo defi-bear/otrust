@@ -23,27 +23,31 @@ function ChainProvider({ theme, children }) {
     })
 
     const postBlockNumber = useCallback(
-        (number) => {
-            if (blockNumber) {
-                if (number.toString() !== blockNumber.toString()) {
+        (number) => { 
+            if (number) {
+                if (blockNumber) {
+                    if (number.toString() !== blockNumber.toString()) {
+                        console.log("Block Number", number)
+                        console.log("Block Number State: ", blockNumber)
+                        if (number.toString() !== blockNumber.toString()) {
+                            setBlockNumber(number)
+                        } 
+                    }
+                } else {
                     setBlockNumber(number)
-                } 
-            } else {
-                setBlockNumber(number) 
+                }
             }
         },
     [blockNumber, setBlockNumber])
     
     useEffect(() => {
             library.on('block', (number) => {
-                if (number !== blockNumber)
                 postBlockNumber(number)
             })
-
             return () => {
                 library.removeAllListeners('block')
             }
-    },[blockNumber, library, postBlockNumber])
+    },[library, postBlockNumber])
     
 
     const contextValue = {
