@@ -7,7 +7,6 @@ import { AutoLogin } from 'context/AutoLogin'
 import ChainProvider from 'context/chain/ChainContext'
 import ModalProvider from 'context/modal/ModalContext'
 import BondingCurve from 'pages/BondingCurve'
-import ContractProvider from 'context/chain/ContractContext'
 
 
 function App() {
@@ -15,13 +14,11 @@ function App() {
     <ThemeProvider theme={darkNew}>
       <AutoLogin>
         <ChainProvider theme={darkNew}>
-          <ContractProvider>
             <ModalProvider>
               <GlobalStyle />
               <MainHeader />
               <BondingCurve />
             </ModalProvider >
-          </ContractProvider>
         </ChainProvider>
       </AutoLogin>
     </ThemeProvider>

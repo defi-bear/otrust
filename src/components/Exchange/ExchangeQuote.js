@@ -2,12 +2,14 @@ import React, { useCallback, useEffect } from "react";
 
 import { BigNumber } from 'bignumber.js'
 
+import { useChain } from 'context/chain/ChainContext'
+
+import { BondingCont } from 'context/chain/contracts'
+
 import { 
     useExchange, 
     useUpdateExchange 
 } from 'context/ExchangeContext'
-
-import { useContract } from 'context/chain/ContractContext'
 
 import {
     ExchangeItem,
@@ -24,11 +26,14 @@ import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransac
 
 import NOMButton from 'components/Exchange/NOMButton'
 import { format18, isNumber, parse18 } from 'utils/math'
+import { useWeb3React } from "@web3-react/core";
 
 
 export default function ExchangeQuote({strength, onSubmit}) {
   let { handleModal } = useModal()
-  let { bondContract, strongBalance, weakBalance, supplyNOM } = useContract()
+  let { strongBalance, weakBalance, supplyNOM } = useChain()
+  const { library } = useWeb3React()
+  const bondContract = BondingCont(library)
 
   const { 
     bidAmount,

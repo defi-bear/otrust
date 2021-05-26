@@ -1,9 +1,11 @@
 import React from "react";
 
-import { useContract } from 'context/chain/ContractContext'
-import { useUpdateChain } from 'context/chain/ChainContext'
+import { useWeb3React } from "@web3-react/core"
 import { useExchange, useUpdateExchange } from 'context/ExchangeContext'
 import { useModal } from 'context/modal/ModalContext'
+import { useChain } from 'context/chain/ChainContext'
+
+import { BondingCont, NOMCont } from 'context/chain/contracts'
 
 import OnomyConfirmationModal from 'components/Modals/components/OnomyConfirmationModal'
 
@@ -17,9 +19,11 @@ import PendingModal from "components/Modals/components/PendingModal";
 
 
 export default function NOMButton(onBid) {
-
-  let { handleModal } = useModal()
-  const { setPendingTx } = useUpdateChain();
+    const { weakBalance } = useChain()
+    const { handleModal } = useModal()
+    const { library } = useWeb3React()
+    const bondContract = BondingCont(library)
+    const NOMcontract = NOMCont(library)
 
     const { 
       bidAmount, 
@@ -31,12 +35,6 @@ export default function NOMButton(onBid) {
     const {
       setBidDenom
     } = useUpdateExchange()
-  
-    const {
-      weakBalance,
-      NOMcontract,
-      bondContract
-    } = useContract()
 
     const onApprove = async (value) => {
       if(value <= weakBalance) {
@@ -49,7 +47,7 @@ export default function NOMButton(onBid) {
             bondContract.address,
             value.toFixed(0)
           );
-          setPendingTx(tx);
+          handleModal()
         } catch (e) {
           // eslint-disable-next-line no-console
           // console.error(e.code, e.message.message);
