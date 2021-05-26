@@ -1,14 +1,4 @@
-import { isBigNumber } from 'bignumber.js'
-
-export const initialState = { 
-    blockNumber: '',
-    currentETHPrice: '',
-    currentNOMPrice: '',
-    NOMbalance: '',
-    strongBalance: '',
-    supplyNOM: '',
-    weakBalance: ''
-}
+import BigNumber, { isBigNumber } from 'bignumber.js'
 
 function reducerCallback(state, key, value, update) {
     switch (state[key]) {
@@ -31,96 +21,101 @@ export function reducer(state, action) {
             blockNumber: action.value
         }
         case 'pending': return {
-                block: action.value
+                pending: action.value
             }
         case 'updateAll':
             var update
             console.log("Action Value: ", action.value)
             Object.keys(action.value).forEach((key) => {
-                console.log(key)
-                switch (key.toString()) {
-                    case 'currentETHPrice':
-                        try {
-                            update = reducerCallback(
-                                state[key], 
-                                key, 
-                                action.value[key], 
-                                update
-                            )
-                        } catch(e) {
-                            console.log(e)
-                        }
-                        break
+                if(state[key]) { 
+                    console.log(key)
+                    switch (key) {
+                        case 'currentETHPrice':
+                            console.log("current ETH price reducer")
+                            try { 
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    action.value[key], 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
 
-                    case 'currentNOMPrice':
-                        try {
-                            update = reducerCallback(
-                                state[key], 
-                                key, 
-                                action.value[key], 
-                                update
-                            )
-                        } catch(e) {
-                            console.log(e)
-                        }
-                        break
-                    case 'NOMallowance':
-                        try {
-                            update = reducerCallback(
-                                state[key], 
-                                key, 
-                                action.value[key], 
-                                update
-                            )
-                        } catch(e) {
-                            console.log(e)
-                        }
-                        break
-                    case 'strongBalance':
-                        try {
-                            update = reducerCallback(
-                                state[key], 
-                                key, 
-                                action.value[key], 
-                                update
-                            )
-                        } catch(e) {
-                            console.log(e)
-                        }
-                        break
-                    case 'supplyNOM':
-                        try {
-                            update = reducerCallback(
-                                state[key], 
-                                key, 
-                                action.value[key], 
-                                update
-                            )
-                        } catch(e) {
-                            console.log(e)
-                        }
-                        break
-                    case 'weakBalance':
-                        try {
-                            update = reducerCallback(
-                                state[key], 
-                                key, 
-                                action.value[key], 
-                                update
-                            )
-                        } catch(e) {
-                            console.log(e)
-                        }
-                        break
-                    default:
-                        throw new Error();
-                }
-                
+                        case 'currentNOMPrice':
+                            try {
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    action.value[key], 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'NOMallowance':
+                            try {
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    action.value[key], 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'strongBalance':
+                            try {
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    action.value[key], 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'supplyNOM':
+                            try {
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    action.value[key], 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'weakBalance':
+                            try {
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    action.value[key], 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        default:
+                            throw new Error();
+                    }    
+                }   
             })
             console.log("Update: ", update)
-            return {
-                ...update
+            if (update) {
+                return {
+                    ...update
+                }
             }
+            
         default:
             throw new Error();
     }
