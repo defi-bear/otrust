@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useWeb3React } from "@web3-react/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -354,6 +354,10 @@ export default function AcctDash() {
   const { active, error, chainId, account } = useWeb3React()
   const { blockNumber, strongBalance, weakBalance } = useChain()
   const { pair } = useExchange()
+
+  useEffect(() => {
+    console.log(strongBalance)
+  },[strongBalance])
   
   return (
     <Panel>

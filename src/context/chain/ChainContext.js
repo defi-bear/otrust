@@ -6,130 +6,7 @@ import { BondingCont, NOMCont, contAddrs } from 'context/chain/contracts'
 import { BigNumber } from 'bignumber.js'
 
 
-function reducer(state, action) {
-    switch (action.type) {
-        case 'blockNumber': return {
-            blockNumber: action.value
-        }
-        case 'pending': return {
-                block: action.value
-            }
-        case 'updateAll':
-            var update
-            for (let i = 0; i < action.value.length; i++) {
-                switch (i) {
-                    case 0:
-                        const NOMprice = (new BigNumber('1')).div((state.currentNOMPrice))
-                        switch (true) {
-                            case (!state.currentETHPrice):
-                                update = {
-                                    currentETHPrice: new BigNumber(action.value[i].toString()),
-                                    currentNOMPrice: NOMprice,
-                                    ...update
-                                }
-                                break
-                            case (action.value[i].toString() === state.currentETHPrice.toString()) &&
-                                (NOMprice === state.currentNOMPrice): break
-                            case (NOMprice === state.currentNOMPrice):
-                                update = {
-                                    currentETHPrice: new BigNumber(action.value[i].toString()),
-                                    ...update
-                                }
-                                break
-                            case (action.value[i].toString() === state.currentETHPrice.toString()):
-                                update = {
-                                    currentNOMPrice: NOMprice,
-                                    ...update
-                                }
-                                break
-                            default: {}
-                        }
-                        break
-                    case 1:
-                        switch (true) {
-                            case (!state.NOMallowance): update = {
-                                    NOMallowance: (new BigNumber(action.value[i].toString())),
-                                    ...update
-                                }
-                                break
 
-                            case (action.value[i].toString() === state.NOMallowance.toString()) : break
-                            default: update = {
-                                NOMallowance: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                        }
-                        break
-                    case 2:
-                        switch (true) {
-                            case (!state.strongBalance): update = {
-                                strongBalance: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                            break
-
-                            case (action.value[i].toString() === state.strongBalance.toString()) : break
-                            default: update = {
-                                strongBalance: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                        }
-                        break
-                    case 3:
-                        switch (true) {
-                            case (!state.supplyNOM): update = {
-                                supplyNOM: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                            break
-
-                            case (action.value[i].toString() === state.supplyNOM.toString()) : break
-                            default: update = {
-                                supplyNOM: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                        }
-                        break
-                    case 4:
-                        switch (true) {
-                            case (!state.weakBalance): update = {
-                                weakBalance: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                            break
-                            case (action.value[i].toString() === state.weakBalance.toString()) : break
-                            default: update = {
-                                weakBalance: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                        }
-                        break
-                    case 5:
-                        switch (true) {
-                            case (!state.blockNumber): update = {
-                                blockNumber: action.value[i],
-                                ...update
-                            }
-                            break
-                            case (action.value[i].toString() === state.blockNumber.toString()) : break
-                            default: update = {
-                                blockNumber: (new BigNumber(action.value[i].toString())),
-                                ...update
-                            }
-                        }
-                        break
-                    default:
-                        throw new Error();
-                }
-                
-            } 
-            return {
-                ...update
-            }
-        default:
-            throw new Error();
-    }
-}
 
 export const ChainContext = createContext()
 export const useChain = () => useContext(ChainContext)
@@ -138,10 +15,141 @@ export const UpdateChainContext = createContext()
 export const useUpdateChain = () => useContext(UpdateChainContext)
 
 function ChainProvider({ theme, children }) {
-    const initialState = { blockNumber: 0 }
+    const initialState = { 
+        blockNumber: '',
+        currentETHPrice: '',
+        currentNOMPrice: '',
+        NOMbalance: '',
+        strongBalance: '',
+        supplyNOM: '',
+        weakBalance: ''
+    }
     const { account, library } = useWeb3React()
     const bondContract = BondingCont(library)
     const NOMContract = NOMCont(library)
+
+    function reducer(state, action) {
+        switch (action.type) {
+            case 'blockNumber': return {
+                blockNumber: action.value
+            }
+            case 'pending': return {
+                    block: action.value
+                }
+            case 'updateAll':
+                var update
+                console.log("Action Value: ", action.value)
+                for (const [key, value] of action.value) {
+                    switch (key) {
+                        case 'currentETHPrice':
+                            switch (state.currentETHPrice) {
+                                case value : break
+                                default: isBigNumber(value) ? update = {
+                                    currentETHPrice: value,
+                                    ...update
+                                } : break
+                            }
+
+                        case 'currentNOMPrice':
+                            switch (state.currentNOMPrice) {
+    
+                                case (new BigNumber(action.value[i].toString()) === state.currentETHPrice.toString()):
+                                    console.log("0")
+                                    update = {
+                                        currentNOMPrice: (new BigNumber('1')).div(new BigNumber(action.value[i].toString())),
+                                        ...update
+                                    }
+                                    break
+                                case value : break 
+                                default: console.log("Default: ", action.value)
+                            }
+                            break
+                        case 1:
+                            switch (true) {
+                                case (state.NOMallowance === ''): update = {
+                                        NOMallowance: (new BigNumber(action.value[i].toString())),
+                                        ...update
+                                    }
+                                    break
+    
+                                case (new BigNumber(action.value[i].toString()) === state.NOMallowance.toString()) : break
+                                default: update = {
+                                    NOMallowance: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                            }
+                            break
+                        case 2:
+                            switch (true) {
+                                case (state.strongBalance === ''): update = {
+                                    strongBalance: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                                break
+    
+                                case (action.value[i].toString() === state.strongBalance.toString()) : break
+                                default: update = {
+                                    strongBalance: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                            }
+                            break
+                        case 3:
+                            switch (true) {
+                                case (!state.supplyNOM): update = {
+                                    supplyNOM: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                                break
+    
+                                case (action.value[i].toString() === state.supplyNOM.toString()) : break
+                                default: update = {
+                                    supplyNOM: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                            }
+                            break
+                        case 4:
+                            switch (true) {
+                                case (!state.weakBalance): update = {
+                                    weakBalance: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                                break
+                                case (action.value[i].toString() === state.weakBalance.toString()) : break
+                                default: update = {
+                                    weakBalance: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                            }
+                            break
+                        case 5:
+                            switch (true) {
+                                case (!state.blockNumber): update = {
+                                    blockNumber: action.value[i],
+                                    ...update
+                                }
+                                break
+                                case (action.value[i].toString() === state.blockNumber.toString()) : break
+                                default: update = {
+                                    blockNumber: (new BigNumber(action.value[i].toString())),
+                                    ...update
+                                }
+                            }
+                            break
+                        default:
+                            throw new Error();
+                    }
+                    
+                }
+                console.log("Update: ", update)
+                return {
+                    ...update
+                }
+            default:
+                throw new Error();
+        }
+    }
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -160,9 +168,10 @@ function ChainProvider({ theme, children }) {
         // listen for changes on an Ethereum address
         library.on('block', async (number) => {
             console.log('update block...')
-            
-            await Promise.all(
-                [
+            var values
+            try {
+                await Promise.all(
+                    [
                         // Current ETH Price & Current NOM Price
                         bondContract.buyQuoteETH((10**18).toString()),
                         // NOM Allowance
@@ -176,26 +185,40 @@ function ChainProvider({ theme, children }) {
                         number
                         // UniSwap Pricing
                         // UniSwapCont.getReserves(),
-                ]
-            ).then((values) => {
-                dispatch({type: 'updateAll', value: values})
-            }).catch((err) => { 
+                    ]
+                ).then (values) (
+                    dispatch({type: 'updateAll', value: 
+                        new Map(
+                            [
+                                ['currentETHPrice', new BigNumber(values[0].toString(),
+                                ['currentNOMPrice', (new BigNumber('1')).div(new BigNumber(action.values[0].toString()))],
+                                ['NOMallowance', new BigNumber(values[1].toString())],
+                                ['strongBalance', new BigNumber(values[2].toString())],
+                                ['supplyNOM', new BigNumber(values[3].toString())],
+                                ['weakBalance', new BigNumber(values[4].toString())],
+                                ['blockNumber', new BigNumber(values[5].toString())]
+                            ]
+                        )
+                    }
+
+                )
+                console.log("Dispatch Chain Context")
+                dispatch({type: 'updateAll', value: { ...values}})
+                console.log("Dispatch complete", values)
+            } catch(err) {
                 console.log(err)
-            })
+            }
             dispatch({type: 'blockNumber', value: number})
-            
         })
         // remove listener when the component is unmounted
         return () => {
           library.removeAllListeners('block')
         }
         // trigger the effect only on component mount
-    })
+    },[])
     
 
     const contextValue = {
-        account,
-        library,
         ...state
     }
 

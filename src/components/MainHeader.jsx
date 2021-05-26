@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import logo from "assets/logo.svg";
@@ -166,6 +166,11 @@ const Details = styled.span`
 
 export default function MainHeader(props) {
   const { supplyNOM, currentETHPrice } = useChain()
+
+  useEffect(() => {
+    console.log("Current ETH Price Main Header", currentETHPrice)
+  },[currentETHPrice])
+
   return (
     <header>
       <Container>
@@ -194,7 +199,7 @@ export default function MainHeader(props) {
                   <span>
                     {
                       BigNumber.isBigNumber(currentETHPrice)
-                        ? `${Math.round(format18(currentETHPrice))}`
+                        ? `${Math.round(format18(currentETHPrice).toNumber())}`
                         : "Loading"
                     }
                   </span>
@@ -210,7 +215,7 @@ export default function MainHeader(props) {
                     <span>
                       {
                         BigNumber.isBigNumber(supplyNOM)
-                          ? `${Math.round(format18(supplyNOM))}`
+                          ? `${Math.round(format18(supplyNOM).toNumber())}`
                           : "Loading"
                       }
                     </span>
