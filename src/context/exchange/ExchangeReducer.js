@@ -11,13 +11,86 @@ export const bnInitialState = {
 export const stringInitialState = {
     input = '',
     output = '',
-    pair = ['ETH', 'wNOM']
+    strong = 'ETH',
+    weak = 'wNOM'
+}
+
+
+export function ExchStringReducer(state, action) {
+    switch (action.type) {
+        case 'updateAll':
+            var update
+            for (let [key, value] of action.value.entries()) {
+                if(state[key]) { 
+                    switch (key) {
+                        case 'input':
+                            try { 
+                                update = stringReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+
+                        case 'output':
+                            try {
+                                update = stringReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'strong':
+                            try {
+                                update = stringReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'weak':
+                            try {
+                                update = stringReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        default:
+                            throw new Error();
+                    }    
+                }   
+            }
+            if (update) {
+                return {
+                    ...update
+                }
+            }
+            break
+        default:
+            throw new Error();
+    }
 }
 
 
 
-
-export function ExchAmountReducer(state, action) {
+export function ExchBNReducer(state, action) {
     switch (action.type) {
         case 'updateAll':
             var update
@@ -49,57 +122,9 @@ export function ExchAmountReducer(state, action) {
                                 console.log(e)
                             }
                             break
-                        case 'NOMallowance':
+                        case 'slippage':
                             try {
-                                update = reducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'strongBalance':
-                            try {
-                                update = reducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'supplyNOM':
-                            try {
-                                update = reducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'weakBalance':
-                            try {
-                                update = reducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'blockNumber':
-                            try {
-                                update = reducerCallback(
+                                update = bnReducerCallback(
                                     state[key], 
                                     key, 
                                     value, 

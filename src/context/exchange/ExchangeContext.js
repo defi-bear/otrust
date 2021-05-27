@@ -7,37 +7,28 @@ export const UpdateExchangeContext = createContext()
 export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
-
-    const [bidDenom, setBidDenom] = useState('strong')
-    const [bidAmount, setBidAmount] = useState('')
-    const [askAmount, setAskAmount] = useState('')
-    const [input, setInput] = useState('')
-    const [output, setOutput] = useState('')
-    const [slippage, setSlippage] = useState(1);
     
-    // This would be set by user, but for Bonding Curve is static
-    // Strong (left): pair[0]
-    // Weak (right): pair[1]
-    const [pair, setPair] = useState(['ETH', 'wNOM'])
+    const [bnState, bnDispatch] = useReducer({
+        bidAmount = new BigNumber(0),
+        askAmount = new BigNumber(0),
+        slippage = new BigNumber(0)
+    })
+
+    const [strState, strDispatch] = useReducer({
+        input = '',
+        output = '',
+        strong = 'ETH',
+        weak = 'wNOM'
+    })
 
     const contextValue = {
-        bidAmount,
-        askAmount,
-        input,
-        output,
-        bidDenom,
-        pair,
-        slippage
+        ...bnState,
+        ...strState
     }
 
     const updateValue = {
-        setBidAmount,
-        setAskAmount,
-        setInput,
-        setOutput,
-        setBidDenom,
-        setPair,
-        setSlippage
+        bnDispatch,
+        strDispatch
     }
 
     return (
