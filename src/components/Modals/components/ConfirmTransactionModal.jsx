@@ -154,19 +154,19 @@ export default function ConfirmTransactionModal({ closeModal, askAmount, bidAmou
           <strong>
             {
               (bidDenom) ?
-              <>1 {bidDenom} = {
+              <>1 {bidDenom === 'strong' ? pair[0] : pair[1]} = {
                 (bidDenom === pair[0]) ? 
-                (BigNumber.isBigNumber(currentETHPrice) ? format18(currentETHPrice).fixed(6) : "Loading") :
-                (BigNumber.isBigNumber(currentNOMPrice) ? format18(currentNOMPrice).fixed(6) : 'Loading')
+                (BigNumber.isBigNumber(currentETHPrice) ? format18(currentETHPrice).toFixed(6) : "Loading") :
+                (BigNumber.isBigNumber(currentNOMPrice) ? format18(currentNOMPrice).toFixed(6) : 'Loading')
               }</> : (<></>)
             }
-            {bidDenom === 'ETH' ? 'NOM' : 'ETH'}
+            {' '} {bidDenom === 'strong' ? pair[1] : pair[0]}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
 
-          <strong>{format18(bidAmount).toFixed(6)} {bidDenom}</strong>
+          <strong>{format18(bidAmount).toFixed(6)}{' '}{bidDenom}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <div>

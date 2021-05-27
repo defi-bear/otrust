@@ -18,7 +18,7 @@ function ChainProvider({ theme, children }) {
     const bondContract = BondingCont(library)
     const NOMContract = NOMCont(library)
     const [state, dispatch] = useReducer(reducer, { 
-        blockNumber: 0,
+        blockNumber: new BigNumber(0),
         currentETHPrice: new BigNumber(0),
         currentNOMPrice: new BigNumber(0),
         NOMbalance: new BigNumber(0),
@@ -39,7 +39,6 @@ function ChainProvider({ theme, children }) {
     useEffect(() => {
         // listen for changes on an Ethereum address
         library.on('block', async (number) => {
-            console.log('update block: ', number)
             if (state.blocknumber !== number) {
                 try {
                     await Promise.all(
@@ -53,7 +52,8 @@ function ChainProvider({ theme, children }) {
                             // Supply NOM
                             bondContract.getSupplyNOM(),
                             // Weak Balance (May need to move these to Exchange)
-                            NOMContract.balanceOf(account)
+                            NOMContract.balanceOf(account),
+                            number
                             // UniSwap Pricing
                             // UniSwapCont.getReserves(),
                         ]
@@ -71,45 +71,46 @@ function ChainProvider({ theme, children }) {
                                         'currentNOMPrice', 
                                         (new BigNumber(1)).div(new BigNumber(values[0].toString()))
                                     )
-                                break
+                                    break
 
                                 case 1: 
                                     update = update.set(
                                         'NOMallowance', 
                                         new BigNumber(values[1].toString())
                                     )
-                                break
+                                    break
 
                                 case 2: 
                                     update = update.set(
                                         'strongBalance',
                                         new BigNumber(values[2].toString())
                                     )
-                                break
+                                    break
 
                                 case 3: 
                                     update = update.set(
                                         'supplyNOM', 
                                         new BigNumber(values[3].toString())
                                     )
-                                break
+                                    break
 
                                 case 4: 
                                     update = update.set(
                                         'weakBalance', 
                                         new BigNumber(values[4].toString())
                                     )
-                                break
+                                    break
 
+                                case 5:
+                                    update = update.set(
+                                        'blockNumber', 
+                                        new BigNumber(number.toString())
+                                    )
+                                    break
                                 default: break
                             }
-                            update = update.set(
-                                'blockNumber', number
-                            )
                         }
                         dispatch({type: 'updateAll', value: update})
-                        console.log("Dispatch updateAll: ", update)
-                        
                     })
                 } catch {
                     console.log("Failed Chain Promise")

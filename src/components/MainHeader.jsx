@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import logo from "assets/logo.svg";
@@ -166,10 +166,6 @@ const Details = styled.span`
 
 export default function MainHeader(props) {
   const { supplyNOM, currentETHPrice } = useChain()
-
-  useEffect(() => {
-    console.log("Current ETH Price Main Header", currentETHPrice)
-  },[currentETHPrice])
 
   return (
     <header>

@@ -1,43 +1,27 @@
-import BigNumber, { isBigNumber } from 'bignumber.js'
+import { isBigNumber } from 'bignumber.js'
 
 function reducerCallback(state, key, value, update) {
     switch (state[key]) {
         case value: break
-        default: 
-            switch (key) {
-                case 'blockNumber':
+        default:    
+            switch (true) {
+                case (isBigNumber(value)):
                     return {
                         [key]: value,
                         ...update
                     }
-                default: 
-                    switch (true) {
-                        case (isBigNumber(value)):
-                            return {
-                                [key]: value,
-                                ...update
-                            }
-                        default: throw new Error() 
-                    }
-            } 
-    }
+                default: throw new Error() 
+        }
+    } 
 }
+
 
 export function reducer(state, action) {
     switch (action.type) {
-        case 'blockNumber': return {
-            blockNumber: action.value
-        }
-        case 'pending': return {
-                pending: action.value
-            }
         case 'updateAll':
             var update
-            console.log("Update All Action Value: ", action.value)
             for (let [key, value] of action.value.entries()) {
-                console.log("State: ", state[key])
                 if(state[key]) { 
-                    console.log(key)
                     switch (key) {
                         case 'currentETHPrice':
                             try { 
@@ -113,7 +97,17 @@ export function reducer(state, action) {
                             }
                             break
                         case 'blockNumber':
-
+                            try {
+                                update = reducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
                         default:
                             throw new Error();
                     }    
@@ -124,7 +118,7 @@ export function reducer(state, action) {
                     ...update
                 }
             }
-            
+            break
         default:
             throw new Error();
     }

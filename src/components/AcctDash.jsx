@@ -351,13 +351,9 @@ const SocialBtn = styled.a`
 `;
 
 export default function AcctDash() {
-  const { active, error, chainId, account } = useWeb3React()
+  const { active, error, chainId, account, library } = useWeb3React()
   const { blockNumber, strongBalance, weakBalance } = useChain()
   const { pair } = useExchange()
-
-  useEffect(() => {
-    console.log(strongBalance)
-  },[strongBalance])
   
   return (
     <Panel>
@@ -419,7 +415,7 @@ export default function AcctDash() {
           </ConnectionRow>
           <ConnectionRow>
             <strong>Block Number</strong>
-            <span>{blockNumber === null ? "Error" : blockNumber ?? ""}</span>
+            <span>{(blockNumber) ? blockNumber.toFixed(0) : ''}</span>
           </ConnectionRow>
         </Connection>
         <Info>

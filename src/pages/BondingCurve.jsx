@@ -61,7 +61,7 @@ export default function BondingCurve() {
       <ExchangeProvider>
         <BondingCurveLayout>
           <AcctDash />
-          
+          <Bonding />
         </BondingCurveLayout>
       </ExchangeProvider>
     </Container>
