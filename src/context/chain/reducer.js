@@ -4,13 +4,21 @@ function reducerCallback(state, key, value, update) {
     switch (state[key]) {
         case value: break
         default: 
-            switch (true) {
-                case (isBigNumber(value)):
+            switch (key) {
+                case 'blockNumber':
                     return {
                         [key]: value,
                         ...update
                     }
-                default: break
+                default: 
+                    switch (true) {
+                        case (isBigNumber(value)):
+                            return {
+                                [key]: value,
+                                ...update
+                            }
+                        default: throw new Error() 
+                    }
             } 
     }
 }
@@ -25,18 +33,18 @@ export function reducer(state, action) {
             }
         case 'updateAll':
             var update
-            console.log("Action Value: ", action.value)
-            Object.keys(action.value).forEach((key) => {
+            console.log("Update All Action Value: ", action.value)
+            for (let [key, value] of action.value.entries()) {
+                console.log("State: ", state[key])
                 if(state[key]) { 
                     console.log(key)
                     switch (key) {
                         case 'currentETHPrice':
-                            console.log("current ETH price reducer")
                             try { 
                                 update = reducerCallback(
                                     state[key], 
                                     key, 
-                                    action.value[key], 
+                                    value, 
                                     update
                                 )
                             } catch(e) {
@@ -49,7 +57,7 @@ export function reducer(state, action) {
                                 update = reducerCallback(
                                     state[key], 
                                     key, 
-                                    action.value[key], 
+                                    value, 
                                     update
                                 )
                             } catch(e) {
@@ -61,7 +69,7 @@ export function reducer(state, action) {
                                 update = reducerCallback(
                                     state[key], 
                                     key, 
-                                    action.value[key], 
+                                    value, 
                                     update
                                 )
                             } catch(e) {
@@ -73,7 +81,7 @@ export function reducer(state, action) {
                                 update = reducerCallback(
                                     state[key], 
                                     key, 
-                                    action.value[key], 
+                                    value, 
                                     update
                                 )
                             } catch(e) {
@@ -85,7 +93,7 @@ export function reducer(state, action) {
                                 update = reducerCallback(
                                     state[key], 
                                     key, 
-                                    action.value[key], 
+                                    value, 
                                     update
                                 )
                             } catch(e) {
@@ -97,19 +105,20 @@ export function reducer(state, action) {
                                 update = reducerCallback(
                                     state[key], 
                                     key, 
-                                    action.value[key], 
+                                    value, 
                                     update
                                 )
                             } catch(e) {
                                 console.log(e)
                             }
                             break
+                        case 'blockNumber':
+
                         default:
                             throw new Error();
                     }    
                 }   
-            })
-            console.log("Update: ", update)
+            }
             if (update) {
                 return {
                     ...update

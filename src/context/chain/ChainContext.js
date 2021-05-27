@@ -19,7 +19,6 @@ function ChainProvider({ theme, children }) {
     const NOMContract = NOMCont(library)
     const [state, dispatch] = useReducer(reducer, { 
         blockNumber: 0,
-        pendingUpdate: false,
         currentETHPrice: new BigNumber(0),
         currentNOMPrice: new BigNumber(0),
         NOMbalance: new BigNumber(0),
@@ -40,12 +39,8 @@ function ChainProvider({ theme, children }) {
     useEffect(() => {
         // listen for changes on an Ethereum address
         library.on('block', async (number) => {
-            console.log('update block...')
-            console.log('Pending State: ', state.pending)
-            var values
-            dispatch({type: 'blockNumber', value: number})
-            if (state.pending === false) {
-                dispatch({type: 'pending', value: true})
+            console.log('update block: ', number)
+            if (state.blocknumber !== number) {
                 try {
                     await Promise.all(
                         [
@@ -63,55 +58,63 @@ function ChainProvider({ theme, children }) {
                             // UniSwapCont.getReserves(),
                         ]
                     ).then(values => {
-                        var update
+                        let update = new Map()
                         for (let i = 0; i < values.length; i++) {
                             switch (i) {
                                 case 0: 
-                                    update = {
-                                        'currentETHPrice': new BigNumber(values[0].toString()),
-                                        'currentNOMPrice': (new BigNumber(1)).div(new BigNumber(values[0].toString())),
-                                        ...update
-                                    }
+                                    update = update.set(
+                                        'currentETHPrice', 
+                                        new BigNumber(values[0].toString())
+                                    )
+
+                                    update = update.set(
+                                        'currentNOMPrice', 
+                                        (new BigNumber(1)).div(new BigNumber(values[0].toString()))
+                                    )
                                 break
 
                                 case 1: 
-                                    update = {
-                                        'NOMallowance': new BigNumber(values[1].toString()),
-                                        ...update
-                                    }
+                                    update = update.set(
+                                        'NOMallowance', 
+                                        new BigNumber(values[1].toString())
+                                    )
                                 break
 
                                 case 2: 
-                                    update = {
-                                        'strongBalance': new BigNumber(values[2].toString()),
-                                        ...update
-                                    }
+                                    update = update.set(
+                                        'strongBalance',
+                                        new BigNumber(values[2].toString())
+                                    )
                                 break
 
                                 case 3: 
-                                    update = {
-                                        'supplyNOM': new BigNumber(values[3].toString()),
-                                        ...update
-                                    }
+                                    update = update.set(
+                                        'supplyNOM', 
+                                        new BigNumber(values[3].toString())
+                                    )
                                 break
 
                                 case 4: 
-                                    update = {
-                                        'weakBalance': new BigNumber(values[4].toString()),
-                                        ...update
-                                    }
+                                    update = update.set(
+                                        'weakBalance', 
+                                        new BigNumber(values[4].toString())
+                                    )
                                 break
 
                                 default: break
-                            } 
+                            }
+                            update = update.set(
+                                'blockNumber', number
+                            )
                         }
-                        console.log("Dispatch updateAll: ", values)
+                        dispatch({type: 'updateAll', value: update})
+                        console.log("Dispatch updateAll: ", update)
+                        
                     })
                 } catch {
                     console.log("Failed Chain Promise")
                 }
             }
-            dispatch({type: 'pending', value: false})
         })
         // remove listener when the component is unmounted
         return () => {
