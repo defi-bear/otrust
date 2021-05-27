@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ExchangeProvider from "context/ExchangeContext";
+import ExchangeProvider from "context/exchange/ExchangeContext";
 
 // Components
 import AcctDash from "components/AcctDash";

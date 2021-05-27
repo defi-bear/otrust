@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useWeb3React } from "@web3-react/core"
-import { useExchange, useUpdateExchange } from 'context/ExchangeContext'
+import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext'
 import { useModal } from 'context/modal/ModalContext'
 import { useChain } from 'context/chain/ChainContext'
 

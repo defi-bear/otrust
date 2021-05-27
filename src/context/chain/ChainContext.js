@@ -4,7 +4,7 @@ import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/client'
 import { BondingCont, NOMCont, contAddrs } from 'context/chain/contracts'
 import { BigNumber } from 'bignumber.js'
-import { reducer } from 'context/chain/reducer'
+import { reducer } from 'context/chain/ChainReducer'
 
 export const ChainContext = createContext()
 export const useChain = () => useContext(ChainContext)

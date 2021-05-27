@@ -9,7 +9,7 @@ import { BondingCont } from 'context/chain/contracts'
 import { 
     useExchange, 
     useUpdateExchange 
-} from 'context/ExchangeContext'
+} from 'context/exchange/ExchangeContext'
 
 import {
     ExchangeItem,

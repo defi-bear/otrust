@@ -6,7 +6,7 @@ import {
 } from "./exchangeStyles";
 
 import { useModal } from 'context/modal/ModalContext'
-import { useExchange } from "context/ExchangeContext";
+import { useExchange } from "context/exchange/ExchangeContext";
 import { useChain, useUpdateChain } from "context/chain/ChainContext";
 
 import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";

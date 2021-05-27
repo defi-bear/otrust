@@ -7,7 +7,7 @@ import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 import { Panel } from "components/UI";
 import { useChain } from "context/chain/ChainContext"
-import { useExchange } from "context/ExchangeContext"
+import { useExchange } from "context/exchange/ExchangeContext"
 import { responsive } from "theme/constants";
 import { format18 } from "utils/math"
 import BigNumber from "bignumber.js";

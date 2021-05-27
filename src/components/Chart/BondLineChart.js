@@ -15,7 +15,7 @@ import {
 } from "d3";
 
 import { ChainContext, useChain } from 'context/chain/ChainContext'
-import { useExchange } from "context/ExchangeContext";
+import { useExchange } from "context/exchange/ExchangeContext";
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 
 import { useResizeObserver } from "./utils";
