@@ -167,7 +167,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
         })
       }
 
-      setInput(evt.target.value)
+      strDispatch({type: 'input', value: evt.target.value})
 
       if (isNumber(parseFloat(evt.target.value))) {
         try {
@@ -180,20 +180,30 @@ export default function ExchangeQuote({strength, onSubmit}) {
           console.log("Bid Amount Update", bidAmountUpdate.toString())
           if (bidAmount !== bidAmountUpdate) {
             console.log("Update Bid Amount")
-            setBidAmount(
-              bidAmountUpdate
-            )
+            bnDispatch({
+              type: 'bidAmount',
+              value: bidAmountUpdate
+            })
             exchAmount(parse18(new BigNumber(evt.target.value)))
           }
         } catch (e) {
           console.log(e)
           if (input !== '') {
-            setOutput("Invalid Input")
-            setBidAmount('')
+            strDispatch({
+              type: 'output', 
+              value: "Invalid Input"
+            })
+            bnDispatch({
+              type: 'bidAmount',
+              value: new BigNumber(0)
+            })
           }  
         }
     } else {
-        setOutput('')
+        strDispatch({
+          type: 'output',
+          value: ''
+        })
     }
   },
   [ 
@@ -201,11 +211,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
     bidDenom,
     exchAmount,
     input,
-    pair,
-    setBidAmount,
-    setBidDenom,
-    setOutput, 
-    setInput,
     strength
   ]
 );

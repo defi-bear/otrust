@@ -2,6 +2,8 @@ import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallbac
 
 
 export function exchStringReducer(state, action) {
+    console.log("Exchange Reducer State: ", state)
+    var update = state
     switch (action.type) {
         case 'bidDenom':
             try { 
@@ -149,6 +151,7 @@ export function exchStringReducer(state, action) {
 
 
 export function exchBnReducer(state, action) {
+    console.log("Exchange BN Reducer State: ", state)
     var update = state
 
     switch (action.type) {

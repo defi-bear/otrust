@@ -351,9 +351,9 @@ const SocialBtn = styled.a`
 `;
 
 export default function AcctDash() {
-  const { active, error, chainId, account, library } = useWeb3React()
+  const { active, error, chainId, account } = useWeb3React()
   const { blockNumber, strongBalance, weakBalance } = useChain()
-  const { pair } = useExchange()
+  const { strong, weak } = useExchange()
   
   return (
     <Panel>
@@ -381,7 +381,7 @@ export default function AcctDash() {
         </Header>
         <Balances>
           <div>
-            <strong>{pair[0]} Balance</strong>
+            <strong>{strong} Balance</strong>
             <span>
               {
                 BigNumber.isBigNumber(strongBalance)
@@ -391,7 +391,7 @@ export default function AcctDash() {
             </span>
           </div>
           <div>
-            <strong>{pair[1]} Balance</strong>
+            <strong>{weak} Balance</strong>
             <span>
               {
                 BigNumber.isBigNumber(weakBalance)

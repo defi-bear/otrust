@@ -1,5 +1,7 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useReducer } from 'react'
 import { exchStringReducer, exchBnReducer } from 'context/exchange/ExchangeReducer'
+
+import { BigNumber } from 'bignumber.js'
 
 export const ExchangeContext = createContext()
 export const useExchange = () => useContext(ExchangeContext)
