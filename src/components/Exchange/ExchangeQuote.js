@@ -64,7 +64,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
               onSubmit(bidDenom)
             }
             pair={[strong, weak]}
-            setSlippage={setSlippage}
+            bnDispatch = {bnDispatch}
             slippage={slippage}
           />
       )

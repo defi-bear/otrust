@@ -1,4 +1,5 @@
-import React, { useState, createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react'
+import { exchStringReducer, exchBnReducer } from 'context/exchange/ExchangeReducer'
 
 export const ExchangeContext = createContext()
 export const useExchange = () => useContext(ExchangeContext)
@@ -8,18 +9,24 @@ export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
     
-    const [bnState, bnDispatch] = useReducer({
-        bidAmount = new BigNumber(0),
-        askAmount = new BigNumber(0),
-        slippage = new BigNumber(0)
-    })
+    const [bnState, bnDispatch] = useReducer(
+        exchBnReducer,
+        {
+            bidAmount = new BigNumber(0),
+            askAmount = new BigNumber(0),
+            slippage = new BigNumber(0)}
+        )
 
-    const [strState, strDispatch] = useReducer({
-        input = '',
-        output = '',
-        strong = 'ETH',
-        weak = 'wNOM'
-    })
+    const [strState, strDispatch] = useReducer(
+        exchStringReducer,
+        {   
+            bidDenom = 'strong',
+            input = '',
+            output = '',
+            strong = 'ETH',
+            weak = 'wNOM'
+        }
+    )
 
     const contextValue = {
         ...bnState,

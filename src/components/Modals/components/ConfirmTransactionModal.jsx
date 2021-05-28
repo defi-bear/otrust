@@ -10,6 +10,7 @@ import { useChain } from 'context/chain/ChainContext'
 import { Close, Metamask } from "components/Modals/Icons";
 import * as Modal from "components/Modals/styles";
 import 'components/Modals/loadingBar.css';
+import { useWeb3React } from "@web3-react/core";
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -114,12 +115,13 @@ const limitOptions = [
   },
 ];
 
-export default function ConfirmTransactionModal({ closeModal, askAmount, bidAmount, bidDenom, onConfirm, pair, slippage, setSlippage }) {
+export default function ConfirmTransactionModal({ bnDispatch, closeModal, askAmount, bidAmount, bidDenom, onConfirm, pair, slippage }) {
   // const [limit, setLimit] = useState(0);
   console.log("Amount: ", bidAmount.toString())
   console.log("Result: ", askAmount.toString())
   console.log("Slippage: ", slippage.toString())
-  const { account, currentETHPrice, currentNOMPrice } = useChain()
+  const { account } = useWeb3React()
+  const { currentETHPrice, currentNOMPrice } = useChain()
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
 
@@ -197,7 +199,7 @@ export default function ConfirmTransactionModal({ closeModal, askAmount, bidAmou
             <LimitBtn
               active={l.value === slippage}
               key={l.id}
-              onClick={() => setSlippage(l.value)}
+              onClick={() => bnDispatch({type: 'slippage', value: l.value})}
             >
               {l.text}
             </LimitBtn>

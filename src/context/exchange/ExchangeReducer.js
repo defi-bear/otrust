@@ -2,27 +2,26 @@ import { BigNumber } from 'bignumber.js'
 import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallback'
 
 
-export const bnInitialState = {
-    bidAmount = new BigNumber(0),
-    askAmount = new BigNumber(0),
-    slippage = new BigNumber(0)
-}
-
-export const stringInitialState = {
-    input = '',
-    output = '',
-    strong = 'ETH',
-    weak = 'wNOM'
-}
-
-
 export function ExchStringReducer(state, action) {
     switch (action.type) {
         case 'updateAll':
-            var update
+            var update = state
             for (let [key, value] of action.value.entries()) {
                 if(state[key]) { 
                     switch (key) {
+                        case 'bidDenom':
+                            try { 
+                                update = stringReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+
                         case 'input':
                             try { 
                                 update = stringReducerCallback(
@@ -90,7 +89,7 @@ export function ExchStringReducer(state, action) {
 
 
 
-export function ExchBNReducer(state, action) {
+export function ExchBnReducer(state, action) {
     switch (action.type) {
         case 'updateAll':
             var update

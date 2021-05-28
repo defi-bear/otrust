@@ -7,7 +7,7 @@ import {
 
 import { useModal } from 'context/modal/ModalContext'
 import { useExchange } from "context/exchange/ExchangeContext";
-import { useChain, useUpdateChain } from "context/chain/ChainContext";
+import { useChain } from "context/chain/ChainContext";
 
 import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
 import PendingModal from "components/Modals/components/PendingModal";
@@ -28,7 +28,7 @@ export default function Exchange() {
     bondContract
   } = useChain();
   
-  const { setPendingTx } = useUpdateChain();
+  const [pendingTx, setPendingTx] = useState();
   
   const [setCompletedAmount] = useState(null);
   const [setCompletedResult] = useState(null);
@@ -41,12 +41,13 @@ export default function Exchange() {
         switch (bidDenom) {
           case 'strong':
             // Preparing for many tokens / coins
-            switch (pair[0]) {
+            switch (strong) {
               case 'ETH':
                 tx = await bondContract.buyNOM(
                   askAmount.toFixed(0),
                   slippage * 100,
-                  { value: bidAmount.toFixed(0) }
+                  { 
+                    value: bidAmount.toFixed(0) }
                   )
               break
 
@@ -56,7 +57,7 @@ export default function Exchange() {
             break
           
           case 'weak':
-            switch (pair[1]) {
+            switch (weak) {
               case 'wNOM':
                 tx = await bondContract.sellNOM(
                   bidAmount.toFixed(0),
@@ -77,7 +78,7 @@ export default function Exchange() {
         setCompletedAmount(bidAmount);
         setCompletedResult(askAmount);
         handleModal(
-          <PendingModal />
+          <PendingModal tx = {tx} setPendingTx = {() => setPendingTx}/>
         )
         bidAmount("");
       } catch (e) {
