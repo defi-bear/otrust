@@ -1,10 +1,69 @@
-import { BigNumber } from 'bignumber.js'
 import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallback'
 
 
-export function ExchStringReducer(state, action) {
+export function exchStringReducer(state, action) {
     switch (action.type) {
-        case 'updateAll':
+        case 'bidDenom':
+            try { 
+                update = stringReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'input':
+            try { 
+                update = stringReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'output':
+            try { 
+                update = stringReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'strong':
+            try { 
+                update = stringReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'weak':
+            try { 
+                update = stringReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'update':
             var update = state
             for (let [key, value] of action.value.entries()) {
                 if(state[key]) { 
@@ -89,10 +148,47 @@ export function ExchStringReducer(state, action) {
 
 
 
-export function ExchBnReducer(state, action) {
+export function exchBnReducer(state, action) {
+    var update = state
+
     switch (action.type) {
-        case 'updateAll':
-            var update
+        case 'askAmount':
+            try { 
+                update = bnReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'bidAmount':
+            try { 
+                update = bnReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'slippage':
+            try { 
+                update = bnReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'update':
             for (let [key, value] of action.value.entries()) {
                 if(state[key]) { 
                     switch (key) {

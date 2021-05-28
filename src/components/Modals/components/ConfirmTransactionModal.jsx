@@ -7,6 +7,7 @@ import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import { useChain } from 'context/chain/ChainContext'
+import { useModal } from 'context/modal/ModalContext'
 import { Close, Metamask } from "components/Modals/Icons";
 import * as Modal from "components/Modals/styles";
 import 'components/Modals/loadingBar.css';
@@ -115,7 +116,7 @@ const limitOptions = [
   },
 ];
 
-export default function ConfirmTransactionModal({ bnDispatch, closeModal, askAmount, bidAmount, bidDenom, onConfirm, pair, slippage }) {
+export default function ConfirmTransactionModal({ bnDispatch, askAmount, bidAmount, bidDenom, onConfirm, pair, slippage }) {
   // const [limit, setLimit] = useState(0);
   console.log("Amount: ", bidAmount.toString())
   console.log("Result: ", askAmount.toString())
@@ -124,11 +125,13 @@ export default function ConfirmTransactionModal({ bnDispatch, closeModal, askAmo
   const { currentETHPrice, currentNOMPrice } = useChain()
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
+  const { handleModal } = useModal()
+
 
   const increaseCount = () => {
     if(count === 0) {
       setDelay(null);
-      closeModal();
+      handleModal();
     } else {
       setCount(count - 1);
     }
@@ -139,7 +142,7 @@ export default function ConfirmTransactionModal({ bnDispatch, closeModal, askAmo
   return (
     <Modal.Wrapper>
       <LoadingBar progress={(60 - count) / 60 * 100} color='#dddae8' className="loadingBar" />
-      <Modal.CloseIcon onClick={closeModal}>
+      <Modal.CloseIcon onClick={() => handleModal()}>
         <Close />
       </Modal.CloseIcon>
 
@@ -213,7 +216,7 @@ export default function ConfirmTransactionModal({ bnDispatch, closeModal, askAmo
       </SlippageWrapper>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => closeModal()}>Cancel</Modal.SecondaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
           <Modal.PrimaryButton onClick={() => onConfirm()}>Confirm ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>

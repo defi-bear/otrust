@@ -11,20 +11,20 @@ function ExchangeProvider({ children }) {
     
     const [bnState, bnDispatch] = useReducer(
         exchBnReducer,
-        {
-            bidAmount = new BigNumber(0),
-            askAmount = new BigNumber(0),
-            slippage = new BigNumber(0)}
+        {   
+            askAmount: new BigNumber(0),
+            bidAmount: new BigNumber(0),
+            slippage: new BigNumber(0)}
         )
 
     const [strState, strDispatch] = useReducer(
         exchStringReducer,
         {   
-            bidDenom = 'strong',
-            input = '',
-            output = '',
-            strong = 'ETH',
-            weak = 'wNOM'
+            bidDenom: 'strong',
+            input: '',
+            output: '',
+            strong: 'ETH',
+            weak: 'wNOM'
         }
     )
 

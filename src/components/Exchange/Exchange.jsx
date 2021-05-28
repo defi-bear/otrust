@@ -20,8 +20,9 @@ export default function Exchange() {
     bidAmount,
     askAmount,
     bidDenom,
-    pair,
-    slippage
+    slippage,
+    strong,
+    weak
   } = useExchange();
   
   const { 
@@ -98,7 +99,6 @@ export default function Exchange() {
       bidDenom,
       bondContract,
       handleModal,
-      pair,
       setPendingTx,
       setCompletedAmount,
       setCompletedResult,

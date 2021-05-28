@@ -30,18 +30,21 @@ import { useWeb3React } from "@web3-react/core";
 
 
 export default function ExchangeQuote({strength, onSubmit}) {
-  let { handleModal } = useModal()
-  let { strongBalance, weakBalance, supplyNOM } = useChain()
+  const { strongBalance, weakBalance, supplyNOM } = useChain()
+  const { handleModal } = useModal()
   const { library } = useWeb3React()
+  
   const bondContract = BondingCont(library)
 
   const { 
-    bidAmount,
     askAmount,
+    bidAmount,
+    bidDenom,
     input,
     output,
-    bidDenom,
-    slippage
+    slippage,
+    strong,
+    weak
   } = useExchange();
   
   const { 
@@ -51,7 +54,10 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   const onBid = () => {
       if (bidDenom !== strength) {
-        setBidDenom(strength);
+        strDispatch({
+          type: 'bidDenom',
+          value: strength
+        })
       }
       
       handleModal(
@@ -72,8 +78,14 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   const onMax = () => {
       (strength === 'strong') ? 
-          setInput(format18(strongBalance).toString()) :
-          setInput(format18(weakBalance).toString())
+          strDispatch({
+            type: 'input',
+            value: format18(strongBalance).toString()
+          }) : 
+          strDispatch({
+            type: 'input',
+            value: format18(weakBalance).toString()
+          })
   }
 
   useEffect(() => {
@@ -103,27 +115,43 @@ export default function ExchangeQuote({strength, onSubmit}) {
                     console.error("Denom not set");
             }  
             if (askAmount !== askAmountUpdate) {
-                setAskAmount(new BigNumber(askAmountUpdate.toString()))
-                setOutput(format18(new BigNumber(askAmountUpdate.toString())).toFixed(8))
+                bnDispatch({
+                  type: 'askAmount', 
+                  value: new BigNumber(askAmountUpdate.toString())
+                })
+                
+                strDispatch({
+                  type: 'output', 
+                  value: format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
+                })
             }
         } catch (err) {
             console.log("Error Quote: ", err)
-            setOutput('')   
+            strDispatch({
+              type: 'output', 
+              value: ''
+            })
         }
     } else {
       if (amount === '') {
-        setOutput('')
+        strDispatch({
+          type: 'output',
+          value: ''
+        })
       } else {
-        setOutput('Invalid Value')
-        setBidAmount('')
+        strDispatch({
+          type: 'output',
+          value: 'Invalid Value'
+        })
+        bnDispatch({
+          type: 'bidAmount',
+          value: new BigNumber(0)
+        })
       }
     }
   }, [
     askAmount,
     bondContract,
-    setAskAmount,
-    setBidAmount,
-    setOutput,
     strength,
     supplyNOM,
   ])
@@ -131,10 +159,12 @@ export default function ExchangeQuote({strength, onSubmit}) {
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
-      console.log("Pair :", pair[0])
 
       if (bidDenom !== strength) {
-        setBidDenom(strength)
+        strDispatch({
+          type: 'bidDenom',
+          value: strength
+        })
       }
 
       setInput(evt.target.value)
@@ -182,7 +212,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   return(
       <ExchangeItem>
-          <strong>Bid {(strength === 'strong') ? pair[0] : pair[1]}</strong>
+          <strong>Bid {(strength === 'strong') ? strong : weak}</strong>
           <Sending>
               <strong>I'm bidding</strong>
               <ExchangeInput
@@ -190,7 +220,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
                   onChange={onTextChange}
                   value={(bidDenom === strength) ? input : ''}
               />
-              {(strength === 'strong') ? pair[0] : pair[1]}
+              {(strength === 'strong') ? strong : weak}
               <MaxBtn onClick={() => onMax()}>Max</MaxBtn>
           </Sending>
             <Receiving>
@@ -198,13 +228,13 @@ export default function ExchangeQuote({strength, onSubmit}) {
                 <ReceivingValue>
                     {(strength === bidDenom) ? output : ''}
                     {' '}
-                    {(strength === 'strong') ? pair[1] : pair[0]}
+                    {(strength === 'strong') ? weak : strong}
                 </ReceivingValue>
             </Receiving>
             { 
               (strength === 'strong') ? 
               (<ExchangeButton onClick={onBid}>
-                  Buy {(strength === 'strong') ? pair[1] : pair[0]}
+                  Buy {(strength === 'strong') ? weak : strong}
               </ExchangeButton>) :
               (<NOMButton 
                 onBid={onBid}
