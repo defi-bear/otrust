@@ -159,15 +159,15 @@ export default function ExchangeQuote({strength, onSubmit}) {
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
-
+      console.log("Dispatch String: ", evt.target.value)
+      strDispatch({type: 'input', value: evt.target.value})
+      
       if (bidDenom !== strength) {
         strDispatch({
           type: 'bidDenom',
           value: strength
         })
       }
-
-      strDispatch({type: 'input', value: evt.target.value})
 
       if (isNumber(parseFloat(evt.target.value))) {
         try {

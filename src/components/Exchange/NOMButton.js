@@ -29,7 +29,7 @@ export default function NOMButton(onBid) {
       bidAmount, 
       bidDenom,
       NOMallowance,
-      pair
+      weak
     } = useExchange()
 
     const {
@@ -63,7 +63,7 @@ export default function NOMButton(onBid) {
         handleModal(
               <TransactionFailedModal
                 closeModal={() => handleModal()}
-                error={`${pair[1]} Balance too low`}
+                error={`${weak} Balance too low`}
               />
         )
       }
@@ -73,7 +73,7 @@ export default function NOMButton(onBid) {
       <> 
         {
           (NOMallowance > bidAmount && bidDenom === 'weak' && weakBalance > bidAmount) ? 
-            (<SellBtn onClick={onBid}>Sell {pair[1]}</SellBtn>) : 
+            (<SellBtn onClick={onBid}>Sell {weak}</SellBtn>) : 
             ((weakBalance > bidAmount) ? 
               (<SellBtn 
                 onClick={() => handleModal(
@@ -88,7 +88,7 @@ export default function NOMButton(onBid) {
                 (bidDenom === 'weak') ?
                   (bidAmount === '' ? 
                       <SellBtn>Input Value</SellBtn> :
-                    < SellBtn>Not enough {pair[1]}</SellBtn>
+                    < SellBtn>Not enough {weak}</SellBtn>
                   ) : <SellBtn>Input Value</SellBtn>
                   
               )    

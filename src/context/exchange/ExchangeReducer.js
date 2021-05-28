@@ -2,7 +2,8 @@ import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallbac
 
 
 export function exchStringReducer(state, action) {
-    console.log("Exchange Reducer State: ", state)
+    console.log("Exchange String Reducer State: ", state)
+    console.log("Exchange String Reducer Action: ", action)
     var update = state
     switch (action.type) {
         case 'bidDenom':
@@ -18,16 +19,15 @@ export function exchStringReducer(state, action) {
             }
             break
         case 'input':
-            try { 
+             
                 update = stringReducerCallback(
                     state[action.type], 
                     action.type, 
                     action.value, 
                     update
                 )
-            } catch(e) {
-                console.log(e)
-            }
+            
+            console.log("Input triggered: ", update)
             break
         case 'output':
             try { 
@@ -137,21 +137,23 @@ export function exchStringReducer(state, action) {
                     }    
                 }   
             }
-            if (update) {
-                return {
-                    ...update
-                }
-            }
-            break
+            
         default:
             throw new Error();
+    }
+    if (update) {
+        console.log("Exchange String Update: ", update)
+        return {
+            ...update
+        }
     }
 }
 
 
 
 export function exchBnReducer(state, action) {
-    console.log("Exchange BN Reducer State: ", state)
+    // console.log("Exchange BN Reducer State: ", state)
+    // console.log("Exchange BN Reducer State Action: ", action)
     var update = state
 
     switch (action.type) {
@@ -166,6 +168,8 @@ export function exchBnReducer(state, action) {
             } catch(e) {
                 console.log(e)
             }
+            console.log("AskAmount Update", action.value)
+            console.log()
             break
         case 'bidAmount':
             try { 
@@ -237,13 +241,15 @@ export function exchBnReducer(state, action) {
                     }    
                 }   
             }
-            if (update) {
-                return {
-                    ...update
-                }
-            }
-            break
+            
         default:
             throw new Error();
+    }
+    
+    if (update) {
+        // console.log("Exchange BN Reducer Update: ", update)
+        return {
+            ...update
+        }
     }
 }
