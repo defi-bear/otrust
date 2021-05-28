@@ -41,17 +41,12 @@ export default function ExchangeQuote({strength, onSubmit}) {
     input,
     output,
     bidDenom,
-    pair,
     slippage
   } = useExchange();
   
   const { 
-    setBidAmount,
-    setBidDenom,
-    setAskAmount,
-    setInput,
-    setOutput,
-    setSlippage
+    bnDispatch,
+    strDispatch
   } = useUpdateExchange();
 
   const onBid = () => {
@@ -68,7 +63,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
             onConfirm={() => 
               onSubmit(bidDenom)
             }
-            pair={pair}
+            pair={[strong, weak]}
             setSlippage={setSlippage}
             slippage={slippage}
           />
