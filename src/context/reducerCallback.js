@@ -6,7 +6,7 @@ export function stringReducerCallback(state, key, value, update) {
     console.log("String Callback State: ", state)
     console.log("String Callback Update: ", update)
     switch (state) {
-        case value: console.log("Catches Value: ", value)
+        case value: break
         default:
             console.log("Key: ", key)
             console.log("Value: ", value)

@@ -98,14 +98,13 @@ export default function ExchangeQuote({strength, onSubmit}) {
             var askAmountUpdate
             switch (strength) {
                 case 'strong':
-                    console.log("Ask Amount Update")
                     askAmountUpdate = await bondContract.buyQuoteETH(
                         amount.toFixed(0)
                     )
-                    console.log("Ask Amount Update", askAmountUpdate.toString())
                     break
   
                 case 'weak':
+                    console.log("Weak Update")
                     askAmountUpdate = await bondContract.sellQuoteNOM(
                         amount.toFixed(0)
                     )
@@ -127,10 +126,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
             }
         } catch (err) {
             console.log("Error Quote: ", err)
-            strDispatch({
-              type: 'output', 
-              value: ''
-            })
         }
     } else {
       if (amount === '') {
@@ -151,7 +146,9 @@ export default function ExchangeQuote({strength, onSubmit}) {
     }
   }, [
     askAmount,
+    bnDispatch,
     bondContract,
+    strDispatch,
     strength,
     supplyNOM,
   ])
@@ -209,8 +206,10 @@ export default function ExchangeQuote({strength, onSubmit}) {
   [ 
     bidAmount,
     bidDenom,
+    bnDispatch,
     exchAmount,
     input,
+    strDispatch,
     strength
   ]
 );

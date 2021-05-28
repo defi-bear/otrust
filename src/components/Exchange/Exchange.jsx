@@ -102,7 +102,9 @@ export default function Exchange() {
       setPendingTx,
       setCompletedAmount,
       setCompletedResult,
-      slippage
+      strong,
+      slippage,
+      weak
     ]
   )
   

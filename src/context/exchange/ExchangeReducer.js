@@ -19,14 +19,12 @@ export function exchStringReducer(state, action) {
             }
             break
         case 'input':
-             
                 update = stringReducerCallback(
                     state[action.type], 
                     action.type, 
                     action.value, 
                     update
                 )
-            
             console.log("Input triggered: ", update)
             break
         case 'output':
@@ -66,7 +64,6 @@ export function exchStringReducer(state, action) {
             }
             break
         case 'update':
-            var update = state
             for (let [key, value] of action.value.entries()) {
                 if(state[key]) { 
                     switch (key) {
@@ -137,7 +134,7 @@ export function exchStringReducer(state, action) {
                     }    
                 }   
             }
-            
+            break
         default:
             throw new Error();
     }
@@ -241,7 +238,7 @@ export function exchBnReducer(state, action) {
                     }    
                 }   
             }
-            
+            break
         default:
             throw new Error();
     }
