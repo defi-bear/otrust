@@ -29,11 +29,12 @@ export default function NOMButton(onBid) {
       bidAmount, 
       bidDenom,
       NOMallowance,
+      status,
       weak
     } = useExchange()
 
     const {
-      setBidDenom
+      strDispatch
     } = useUpdateExchange()
 
     const onApprove = async (value) => {
@@ -42,7 +43,10 @@ export default function NOMButton(onBid) {
           handleModal(
             <PendingModal />
           );
-          setBidDenom('APPROVE')
+          strDispatch({
+            type: 'status', 
+            value: 'APPROVE'
+          })
           let tx = await NOMcontract.increaseAllowance(
             bondContract.address,
             value.toFixed(0)

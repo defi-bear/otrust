@@ -2,8 +2,8 @@ import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallbac
 
 
 export function exchStringReducer(state, action) {
-    console.log("Exchange String Reducer State: ", state)
-    console.log("Exchange String Reducer Action: ", action)
+    // console.log("Exchange String Reducer State: ", state)
+    // console.log("Exchange String Reducer Action: ", action)
     var update = state
     switch (action.type) {
         case 'bidDenom':
@@ -28,6 +28,18 @@ export function exchStringReducer(state, action) {
             console.log("Input triggered: ", update)
             break
         case 'output':
+            try { 
+                update = stringReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'status':
             try { 
                 update = stringReducerCallback(
                     state[action.type], 
@@ -149,8 +161,8 @@ export function exchStringReducer(state, action) {
 
 
 export function exchBnReducer(state, action) {
-    // console.log("Exchange BN Reducer State: ", state)
-    // console.log("Exchange BN Reducer State Action: ", action)
+    console.log("Exchange BN Reducer State: ", state)
+    console.log("Exchange BN Reducer State Action: ", action)
     var update = state
 
     switch (action.type) {
@@ -166,7 +178,6 @@ export function exchBnReducer(state, action) {
                 console.log(e)
             }
             console.log("AskAmount Update", action.value)
-            console.log()
             break
         case 'bidAmount':
             try { 
@@ -244,7 +255,7 @@ export function exchBnReducer(state, action) {
     }
     
     if (update) {
-        // console.log("Exchange BN Reducer Update: ", update)
+        console.log("Exchange BN Reducer Update: ", update)
         return {
             ...update
         }

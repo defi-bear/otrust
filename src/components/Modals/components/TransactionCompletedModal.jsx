@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { useChain } from 'context/chain/ChainContext'
+import { useExchange } from 'context/exchange/ExchangeContext'
 import { Caret, Close, Success } from "../Icons";
 import * as Modal from "../styles";
 
@@ -12,9 +13,10 @@ export const ExplorerButton = styled(Modal.SecondaryButton)`
 
 const networks = {1: '', 4: 'rinkeby.'}
 
-export default function TransactionCompletedModal({ type, amount, result, closeModal, previousTx }) {
+export default function TransactionCompletedModal({ amount, result, closeModal, previousTx }) {
   const [detailsActive, setDetailsActive] = useState(false);
   const { currentETHPrice, currentNOMPrice } = useChain()
+  const { bidDenom, status } = useExchange()
 
   const shortten = addr => {
     return addr.slice(0,15) + '...' + addr.slice(addr.length - 3)
@@ -36,7 +38,7 @@ export default function TransactionCompletedModal({ type, amount, result, closeM
         </Modal.ModalIconWrapper>
         <Modal.Caption>Transaction Completed!</Modal.Caption>
         {
-          type !== 'APPROVE' ? (
+          status !== 'APPROVE' ? (
             <>
       
               {/* BUY */}
@@ -46,16 +48,16 @@ export default function TransactionCompletedModal({ type, amount, result, closeM
       
               {/* SELL */}
               <Modal.ExchangeResult>
-                + {parseFloat(result).toFixed(8)} <sup>{type === 'ETH' ? 'NOM' : 'ETH'}</sup>
+                + {parseFloat(result).toFixed(8)} <sup>{bidDenom === 'weak' ? weak : strong}</sup>
                 <Modal.Spent>
-                  - {parseFloat(amount).toFixed(8)} <sup>{type}</sup>
+                  - {parseFloat(amount).toFixed(8)} <sup>{bidDenom}</sup>
                 </Modal.Spent>
               </Modal.ExchangeResult>
       
               <Modal.ExchangeRateWrapper>
                 <span>Exchange Rate</span>
       
-                <strong>1 {type === 'ETH' ? 'NOM' : 'ETH'} = {type === 'ETH' ? parseFloat(currentNOMPrice).toFixed(8) : parseFloat(currentETHPrice).toFixed(8)} {type}</strong>
+                <strong>1 {bidDenom === strong ? weak : strong} = {bidDenom === 'strong' ? parseFloat(currentNOMPrice).toFixed(8) : parseFloat(currentETHPrice).toFixed(8)} {bidDenom}</strong>
               </Modal.ExchangeRateWrapper>
             </>
           ) : (

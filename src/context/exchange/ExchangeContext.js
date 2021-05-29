@@ -25,6 +25,7 @@ function ExchangeProvider({ children }) {
             bidDenom: 'strong',
             input: '',
             output: '',
+            status: '',
             strong: 'ETH',
             weak: 'wNOM'
         }

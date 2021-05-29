@@ -93,47 +93,52 @@ export default function ExchangeQuote({strength, onSubmit}) {
   },[output])
 
   const exchAmount = useCallback( async (amount) => {
-    if (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0) {
-        try {
-            var askAmountUpdate
-            switch (strength) {
-                case 'strong':
-                    askAmountUpdate = await bondContract.buyQuoteETH(
-                        amount.toFixed(0)
-                    )
-                    break
-  
-                case 'weak':
-                    console.log("Weak Update")
-                    askAmountUpdate = await bondContract.sellQuoteNOM(
-                        amount.toFixed(0)
-                    )
-                    break
-  
-                default:
-                    console.error("Denom not set");
-            }  
-            if (askAmount !== askAmountUpdate) {
-                bnDispatch({
-                  type: 'askAmount', 
-                  value: new BigNumber(askAmountUpdate.toString())
-                })
-                
-                strDispatch({
-                  type: 'output', 
-                  value: format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
-                })
-            }
-        } catch (err) {
-            console.log("Error Quote: ", err)
-        }
-    } else {
-      if (amount === '') {
+    switch (amount) {
+      case '': 
         strDispatch({
           type: 'output',
           value: ''
         })
-      } else {
+        break
+      case (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0):
+        try {
+          console.log("ExchAmount: ", amount.toString())
+          var askAmountUpdate
+          switch (strength) {
+              case 'strong':
+                  askAmountUpdate = await bondContract.buyQuoteETH(
+                      amount.toFixed(0)
+                  )
+                  break
+
+              case 'weak':
+                  console.log("Weak Update")
+                  askAmountUpdate = await bondContract.sellQuoteNOM(
+                      amount.toFixed(0)
+                  )
+                  break
+
+              default:
+                  console.error("Denom not set");
+          }
+
+          if (askAmount !== askAmountUpdate) {
+            console.log("Ask Amount Update: ", askAmountUpdate.toString())
+            bnDispatch({
+              type: 'askAmount', 
+              value: new BigNumber(askAmountUpdate.toString())
+            })
+            
+            strDispatch({
+              type: 'output', 
+              value: format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
+            })
+          }
+        } catch (err) {
+          console.log("Error Quote: ", err)
+        } break
+      
+      default: 
         strDispatch({
           type: 'output',
           value: 'Invalid Value'
@@ -142,7 +147,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
           type: 'bidAmount',
           value: new BigNumber(0)
         })
-      }
     }
   }, [
     askAmount,
