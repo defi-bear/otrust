@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 
 import { BigNumber } from 'bignumber.js'
 
@@ -88,10 +88,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
           })
   }
 
-  useEffect(() => {
-    console.log("Output: ", output)
-  },[output])
-
   const exchAmount = useCallback( async (amount) => {
     switch (amount) {
       case '': 
@@ -102,7 +98,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
         break
       case (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0):
         try {
-          console.log("ExchAmount: ", amount.toString())
           var askAmountUpdate
           switch (strength) {
               case 'strong':
@@ -112,7 +107,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
                   break
 
               case 'weak':
-                  console.log("Weak Update")
                   askAmountUpdate = await bondContract.sellQuoteNOM(
                       amount.toFixed(0)
                   )
@@ -122,8 +116,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
                   console.error("Denom not set");
           }
 
-          if (askAmount !== askAmountUpdate) {
-            console.log("Ask Amount Update: ", askAmountUpdate.toString())
+          if (askAmount !== new BigNumber(askAmountUpdate.toString())) {
             bnDispatch({
               type: 'askAmount', 
               value: new BigNumber(askAmountUpdate.toString())
@@ -160,7 +153,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
-      console.log("Dispatch String: ", evt.target.value)
       strDispatch({type: 'input', value: evt.target.value})
       
       if (bidDenom !== strength) {
@@ -177,8 +169,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
               parseFloat(evt.target.value).toString()
             )
           )
-          console.log("Input: ", evt.target.value)
-          console.log("Bid Amount Update", bidAmountUpdate.toString())
           if (bidAmount !== bidAmountUpdate) {
             console.log("Update Bid Amount")
             bnDispatch({

@@ -25,7 +25,6 @@ export function exchStringReducer(state, action) {
                     action.value, 
                     update
                 )
-            console.log("Input triggered: ", update)
             break
         case 'output':
             try { 

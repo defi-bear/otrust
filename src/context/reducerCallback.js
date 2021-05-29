@@ -1,16 +1,9 @@
 import { isBigNumber } from 'bignumber.js'
 
 export function stringReducerCallback(state, key, value, update) {
-    console.log("String Callback Key: ", key)
-    console.log("String Callback Value: ", value)
-    console.log("String Callback State: ", state)
-    console.log("String Callback Update: ", update)
     switch (state) {
         case value: break
         default:
-            console.log("Key: ", key)
-            console.log("Value: ", value)
-            console.log("Update Before: ", update)
             update = {
                 ...update,
                 [key]: value
