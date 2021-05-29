@@ -22,7 +22,9 @@ import {
 } from "./exchangeStyles"
 
 import { useModal } from 'context/modal/ModalContext'
+
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal'
+import RequestFailedModal from 'components/Modals/components/RequestFailedModal'
 
 import NOMButton from 'components/Exchange/NOMButton'
 import { format18, isNumber, parse18 } from 'utils/math'
@@ -88,7 +90,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
           })
   }
 
-  const exchAmount = useCallback( async (amount) => {
+  const exchAmount = useCallback(async (amount) => {
     console.log('Gets here!')
     console.log('Supply NOM: ',supplyNOM)
     console.log('Amount: ', amount)
@@ -99,12 +101,13 @@ export default function ExchangeQuote({strength, onSubmit}) {
           value: ''
         })
         break
-      case (supplyNOM >= amount):
+      case (BigNumber.isBigNumber(amount)):
         try {
           var askAmountUpdate = askAmount
           console.log("Passes Test")
           switch (strength) {
               case 'strong':
+                  console.log('Strong: ', amount.toFixed(0))
                   askAmountUpdate = await bondContract.buyQuoteETH(
                       amount.toFixed(0)
                   )
@@ -133,17 +136,21 @@ export default function ExchangeQuote({strength, onSubmit}) {
             })
           }
         } catch (err) {
-          console.log("Error Quote: ", err)
           strDispatch({
             type: 'output',
             value: 'Invalid Input'
           })
+          strDispatch({
+            type: 'input',
+            value: ''
+          })
+          handleModal(
+            <RequestFailedModal
+              error = {err.error.message}
+            />
+          )
         } break
-      case (supplyNOM < amount):
-        strDispatch({
-          type: 'output',
-          value: 'wNOM supply insufficient'
-        })
+      
       default: 
         console.log("Defaulting")
         strDispatch({
@@ -172,39 +179,44 @@ export default function ExchangeQuote({strength, onSubmit}) {
         })
       }
 
-      if (isNumber(parseFloat(evt.target.value))) {
-        try {
-          const bidAmountUpdate = parse18(
-            new BigNumber(
-              parseFloat(evt.target.value).toString()
+      switch (true) {
+        case isNumber(parseFloat(evt.target.value)):
+          try {
+            var askAmountUpdate = new BigNumber(0)
+            const bidAmountUpdate = parse18(
+              new BigNumber(
+                parseFloat(evt.target.value).toString()
+              )
             )
-          )
-          if (bidAmount !== bidAmountUpdate) {
-            bnDispatch({
-              type: 'bidAmount',
-              value: bidAmountUpdate
-            })
-            exchAmount(bidAmountUpdate)
+
+            if (bidAmount !== bidAmountUpdate) {
+              bnDispatch({
+                type: 'bidAmount',
+                value: bidAmountUpdate
+              })
+              askAmountUpdate = exchAmount(bidAmountUpdate)
+            }
+          } catch (e) {
+            console.log(e)
+            if (input !== '') {
+              strDispatch({
+                type: 'output', 
+                value: "Invalid Input"
+              })
+              bnDispatch({
+                type: 'bidAmount',
+                value: new BigNumber(0)
+              })
+            }  
           }
-        } catch (e) {
-          console.log(e)
-          if (input !== '') {
-            strDispatch({
-              type: 'output', 
-              value: "Invalid Input"
-            })
-            bnDispatch({
-              type: 'bidAmount',
-              value: new BigNumber(0)
-            })
-          }  
-        }
-    } else {
-        strDispatch({
-          type: 'output',
-          value: ''
-        })
-    }
+          break
+
+        default:
+          strDispatch({
+            type: 'output',
+            value: ''
+          })
+      }
   },
   [ 
     bidAmount,
