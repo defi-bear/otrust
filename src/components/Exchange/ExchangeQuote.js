@@ -95,62 +95,93 @@ export default function ExchangeQuote({strength, onSubmit}) {
     console.log('Supply NOM: ',supplyNOM)
     console.log('Amount: ', amount)
     switch (true) {
-      case (amount === ''): 
-        strDispatch({
-          type: 'output',
-          value: ''
-        })
-        break
-      case (BigNumber.isBigNumber(amount)):
-        try {
-          var askAmountUpdate = askAmount
-          console.log("Passes Test")
+      case (BigNumber.isBigNumber(amount) && amount !== bidAmount):
+        var askAmountUpdate = askAmount
+        console.log("Passes Test")
+        try {  
           switch (strength) {
               case 'strong':
                   console.log('Strong: ', amount.toFixed(0))
                   askAmountUpdate = await bondContract.buyQuoteETH(
                       amount.toFixed(0)
                   )
-                  console.log('pull amount', askAmountUpdate)
+                  console.log('Pull Strong Ask Amount', askAmountUpdate)
                   break
 
               case 'weak':
                   askAmountUpdate = await bondContract.sellQuoteNOM(
                       amount.toFixed(0)
                   )
+                  console.log('Pull Weak Ask Amount', askAmountUpdate)
                   break
 
               default:
                   console.error("Denom not set");
           }
-
-          if (askAmount !== new BigNumber(askAmountUpdate.toString())) {
-            bnDispatch({
-              type: 'askAmount', 
-              value: new BigNumber(askAmountUpdate.toString())
-            })
-            
-            strDispatch({
-              type: 'output', 
-              value: format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
-            })
-          }
+          askAmountUpdate = new BigNumber(askAmountUpdate.toString())
         } catch (err) {
-          strDispatch({
-            type: 'output',
-            value: 'Invalid Input'
-          })
-          strDispatch({
-            type: 'input',
-            value: ''
-          })
-          handleModal(
-            <RequestFailedModal
-              error = {err.error.message}
-            />
+          let update = new Map()
+
+          update = update.set(
+            'input',
+            ''
           )
+          
+          update = update.set(
+            'output',
+            'Invalid Input'
+          )
+
+          strDispatch({
+            type: 'update', 
+            value: update
+          })
+
+          if (err) {
+            handleModal(
+              <RequestFailedModal
+                error = {err.error.message}
+              />
+            )
+          }
+        }
+
+        if (askAmount !== askAmountUpdate) {
+          let bnUpdate = new Map()
+
+          bnUpdate = bnUpdate.set(
+            'askAmount',
+            new BigNumber(askAmountUpdate.toString())
+          )
+          
+          bnUpdate = bnUpdate.set(
+            'bidAmount',
+            amount
+          )
+
+          bnDispatch({
+            type: 'update',
+            value: bnUpdate
+          })
+
+          let strUpdate = new Map()
+
+          strUpdate = strUpdate.set(
+            'input',
+            format18(amount).toString()
+          )
+          
+          strUpdate = strUpdate.set(
+            'output',
+            format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
+          )
+
+          strDispatch({
+            type: 'update', 
+            value: strUpdate
+          })
         } break
-      
+              
       default: 
         console.log("Defaulting")
         strDispatch({
@@ -170,7 +201,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
-      strDispatch({type: 'input', value: evt.target.value})
       
       if (bidDenom !== strength) {
         strDispatch({
@@ -178,44 +208,46 @@ export default function ExchangeQuote({strength, onSubmit}) {
           value: strength
         })
       }
+      
+      if (
+        isNumber(Number(evt.target.value)) &&
+        isNumber(parseFloat(evt.target.value))
+      ) {
+        const bidAmountUpdate = parse18(
+          new BigNumber(
+            parseFloat(evt.target.value).toString()
+          )
+        )
 
-      switch (true) {
-        case isNumber(parseFloat(evt.target.value)):
-          try {
-            var askAmountUpdate = new BigNumber(0)
-            const bidAmountUpdate = parse18(
-              new BigNumber(
-                parseFloat(evt.target.value).toString()
-              )
-            )
+        if (bidAmount !== bidAmountUpdate) {
+          await exchAmount(bidAmountUpdate)
+        }
+      } else {
+        console.log(evt.target.value === '')
+        if(evt.target.value === '') {
+          let strUpdate = new Map()
 
-            if (bidAmount !== bidAmountUpdate) {
-              bnDispatch({
-                type: 'bidAmount',
-                value: bidAmountUpdate
-              })
-              askAmountUpdate = exchAmount(bidAmountUpdate)
-            }
-          } catch (e) {
-            console.log(e)
-            if (input !== '') {
-              strDispatch({
-                type: 'output', 
-                value: "Invalid Input"
-              })
-              bnDispatch({
-                type: 'bidAmount',
-                value: new BigNumber(0)
-              })
-            }  
-          }
-          break
+          strUpdate = strUpdate.set(
+            'input',
+            ''
+          )
+          
+          strUpdate = strUpdate.set(
+            'output',
+            ''
+          )
 
-        default:
           strDispatch({
-            type: 'output',
-            value: ''
+            type: 'update', 
+            value: strUpdate
           })
+        } else {
+          handleModal(
+            <RequestFailedModal
+              error = 'Please enter numbers only'
+            />
+          )
+        }
       }
   },
   [ 

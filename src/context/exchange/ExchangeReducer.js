@@ -2,8 +2,8 @@ import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallbac
 
 
 export function exchStringReducer(state, action) {
-    // console.log("Exchange String Reducer State: ", state)
-    // console.log("Exchange String Reducer Action: ", action)
+    console.log("Exchange String Reducer State: ", state)
+    console.log("Exchange String Reducer Action: ", action)
     var update = state
     switch (action.type) {
         case 'bidDenom':
@@ -75,75 +75,75 @@ export function exchStringReducer(state, action) {
             }
             break
         case 'update':
+            console.log("Trigger Update: ", action.value)
             for (let [key, value] of action.value.entries()) {
-                if(state[key]) { 
-                    switch (key) {
-                        case 'bidDenom':
-                            try { 
-                                update = stringReducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
+                switch (key) {
+                    case 'bidDenom':
+                        try { 
+                            update = stringReducerCallback(
+                                state[key], 
+                                key, 
+                                value, 
+                                update
+                            )
+                        } catch(e) {
+                            console.log(e)
+                        }
+                        break
 
-                        case 'input':
-                            try { 
-                                update = stringReducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
+                    case 'input':
+                        console.log("Update Input: ", value)
+                        try { 
+                            update = stringReducerCallback(
+                                state[key], 
+                                key, 
+                                value, 
+                                update
+                            )
+                        } catch(e) {
+                            console.log(e)
+                        }
+                        break
 
-                        case 'output':
-                            try {
-                                update = stringReducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'strong':
-                            try {
-                                update = stringReducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'weak':
-                            try {
-                                update = stringReducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        default:
-                            throw new Error();
-                    }    
-                }   
+                    case 'output':
+                        try {
+                            update = stringReducerCallback(
+                                state[key], 
+                                key, 
+                                value, 
+                                update
+                            )
+                        } catch(e) {
+                            console.log(e)
+                        }
+                        break
+                    case 'strong':
+                        try {
+                            update = stringReducerCallback(
+                                state[key], 
+                                key, 
+                                value, 
+                                update
+                            )
+                        } catch(e) {
+                            console.log(e)
+                        }
+                        break
+                    case 'weak':
+                        try {
+                            update = stringReducerCallback(
+                                state[key], 
+                                key, 
+                                value, 
+                                update
+                            )
+                        } catch(e) {
+                            console.log(e)
+                        }
+                        break
+                    default:
+                        throw new Error();
+                }    
             }
             break
         default:
