@@ -89,21 +89,26 @@ export default function ExchangeQuote({strength, onSubmit}) {
   }
 
   const exchAmount = useCallback( async (amount) => {
-    switch (amount) {
-      case '': 
+    console.log('Gets here!')
+    console.log('Supply NOM: ',supplyNOM)
+    console.log('Amount: ', amount)
+    switch (true) {
+      case (amount === ''): 
         strDispatch({
           type: 'output',
           value: ''
         })
         break
-      case (supplyNOM && BigNumber.isBigNumber(amount) && amount.toNumber() > 0):
+      case (supplyNOM >= amount):
         try {
-          var askAmountUpdate
+          var askAmountUpdate = askAmount
+          console.log("Passes Test")
           switch (strength) {
               case 'strong':
                   askAmountUpdate = await bondContract.buyQuoteETH(
                       amount.toFixed(0)
                   )
+                  console.log('pull amount', askAmountUpdate)
                   break
 
               case 'weak':
@@ -129,16 +134,21 @@ export default function ExchangeQuote({strength, onSubmit}) {
           }
         } catch (err) {
           console.log("Error Quote: ", err)
+          strDispatch({
+            type: 'output',
+            value: 'Invalid Input'
+          })
         } break
-      
-      default: 
+      case (supplyNOM < amount):
         strDispatch({
           type: 'output',
-          value: 'Invalid Value'
+          value: 'wNOM supply insufficient'
         })
-        bnDispatch({
-          type: 'bidAmount',
-          value: new BigNumber(0)
+      default: 
+        console.log("Defaulting")
+        strDispatch({
+          type: 'output',
+          value: 'Invalid Input'
         })
     }
   }, [
@@ -170,12 +180,11 @@ export default function ExchangeQuote({strength, onSubmit}) {
             )
           )
           if (bidAmount !== bidAmountUpdate) {
-            console.log("Update Bid Amount")
             bnDispatch({
               type: 'bidAmount',
               value: bidAmountUpdate
             })
-            exchAmount(parse18(new BigNumber(evt.target.value)))
+            exchAmount(bidAmountUpdate)
           }
         } catch (e) {
           console.log(e)
