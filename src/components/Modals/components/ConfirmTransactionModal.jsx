@@ -320,7 +320,7 @@ export default function ConfirmTransactionModal({ onConfirm }) {
       <footer>
         <Modal.FooterControls>
           <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => onConfirm()}>Confirm ({count})</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => submitTrans()}>Confirm ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
