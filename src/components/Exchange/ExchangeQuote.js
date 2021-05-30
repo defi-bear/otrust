@@ -125,35 +125,27 @@ const onTextChange = useCallback(
     let strUpdate = new Map()
     switch (true) {
       case (bidDenom === strength && input === evt.target.value.toString()): break
-      case (evt.target.value.toString() === ''): 
-          
-          if(bidDenom !== strength) {
-            strUpdate = strUpdate.set(
-              'bidDenom',
-              strength
-            )
-          }
-
-          strUpdate = strUpdate.set(
-            'input',
-            ''
-          )
-          
-          strUpdate = strUpdate.set(
-            'output',
-            ''
-          )
-
-          strDispatch({
-            type: 'update', 
-            value: strUpdate
-          })
-
-      case (
-          isNumber(Number(evt.target.value)) &&
-          BigNumber.isBigNumber(new BigNumber(parseFloat(evt.target.value).toString())) 
-      ):
+      case (evt.target.value === ''):
+        strUpdate = strUpdate.set(
+          'input',
+          ''
+        )
         
+        strUpdate = strUpdate.set(
+          'output',
+          ''
+        )
+
+        strDispatch({
+          type: 'update', 
+          value: strUpdate
+        })
+        break
+      case (
+          Number(evt.target.value) > 0 &&
+          parseFloat(evt.target.value) > 0
+      ):
+        console.log("Input after test", evt.target.value)
         const bidAmountUpdate = parse18(new BigNumber(
             parseFloat(evt.target.value).toString()
           )
@@ -234,6 +226,7 @@ const onTextChange = useCallback(
 
         break
       default:
+        console.log("Event Value: ", evt.target.value)
         strUpdate = strUpdate.set(
           'input',
           evt.target.value
@@ -241,7 +234,7 @@ const onTextChange = useCallback(
         
         strUpdate = strUpdate.set(
           'output',
-          'Invalid Input'
+          'Input numbers only'
         )
 
         strDispatch({
