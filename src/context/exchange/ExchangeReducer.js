@@ -198,6 +198,7 @@ export function exchBnReducer(state, action) {
                     action.value, 
                     update
                 )
+                console.log("Slippage Updated: ", update)
             } catch(e) {
                 console.log(e)
             }

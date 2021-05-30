@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import useInterval from '@use-it/interval';
@@ -6,12 +6,19 @@ import LoadingBar from 'components/Modals/LoadingBar'
 import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
-import { useChain } from 'context/chain/ChainContext'
+import { useAsyncFn } from 'hooks/use-async-fn'
 import { useModal } from 'context/modal/ModalContext'
-import { Close, Metamask } from "components/Modals/Icons";
-import * as Modal from "components/Modals/styles";
-import 'components/Modals/loadingBar.css';
-import { useWeb3React } from "@web3-react/core";
+import { Close, Metamask } from "components/Modals/Icons"
+import * as Modal from "components/Modals/styles"
+import 'components/Modals/loadingBar.css'
+import { useWeb3React } from "@web3-react/core"
+import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext'
+
+import { BondingCont } from 'context/chain/contracts'
+
+import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
+import PendingModal from "components/Modals/components/PendingModal";
+import TransactionCompletedModal from "./TransactionCompletedModal";
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -97,36 +104,46 @@ const limitOptions = [
   {
     id: 0,
     text: "No limit",
-    value: 0,
+    value: new BigNumber(0)
   },
   {
     id: 1,
     text: "1%",
-    value: 1,
+    value: new BigNumber(100)
   },
   {
     id: 2,
     text: "2.5%",
-    value: 2.5,
+    value: new BigNumber(250)
   },
   {
     id: 3,
     text: "5%",
-    value: 5,
+    value: new BigNumber(500),
   },
 ];
 
-export default function ConfirmTransactionModal({ bnDispatch, askAmount, bidAmount, bidDenom, onConfirm, pair, slippage }) {
-  // const [limit, setLimit] = useState(0);
-  console.log("Amount: ", bidAmount.toString())
-  console.log("Result: ", askAmount.toString())
-  console.log("Slippage: ", slippage.toString())
-  const { account } = useWeb3React()
-  const { currentETHPrice, currentNOMPrice } = useChain()
+export default function ConfirmTransactionModal({ onConfirm }) {
+  const { account, library } = useWeb3React()
+  const bondContract = BondingCont(library)
+
+  const { 
+    askAmount, 
+    bidAmount, 
+    bidDenom,
+    slippage,
+    strong, 
+    weak 
+  } = useExchange()
+
+  const {
+    bnDispatch,
+    setPendingTx
+  } = useUpdateExchange()
+  
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
   const { handleModal } = useModal()
-
 
   const increaseCount = () => {
     if(count === 0) {
@@ -139,6 +156,78 @@ export default function ConfirmTransactionModal({ bnDispatch, askAmount, bidAmou
 
   useInterval(increaseCount, delay);
   
+  const submitTrans = useCallback(
+    async () => {
+      handleModal(
+        <PendingModal />
+      )
+      if (!bidAmount || !askAmount) return;
+      try {
+        let tx;
+        switch (bidDenom) {
+          case 'strong':
+            // Preparing for many tokens / coins
+            switch (strong) {
+              case 'ETH':
+                tx = await bondContract.buyNOM(
+                  askAmount.toFixed(0),
+                  slippage.toNumber() * 100,
+                  { 
+                    value: bidAmount.toFixed(0) }
+                  )
+              break
+
+              default:
+                {}
+            }
+            break
+          
+          case 'weak':
+            switch (weak) {
+              case 'wNOM':
+                tx = await bondContract.sellNOM(
+                  bidAmount.toFixed(0),
+                  askAmount.toFixed(0),
+                  slippage * 100,
+                )
+                break
+              default:
+                {}
+            }
+            break
+          
+          default:
+            console.log()
+        }
+        handleModal(
+          <TransactionCompletedModal tx = {tx} />
+        )
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e.code, e.message.message);
+        // alert(e.message)
+        handleModal(
+          <TransactionFailedModal
+            closeModal={() => handleModal()}
+            error={e.code + '\n' + e.message.slice(0,80) + '...'}
+          />
+        )
+      }
+    },[
+      askAmount,
+      bidAmount,
+      bidDenom,
+      bondContract,
+      handleModal,
+      strong,
+      slippage,
+      weak
+    ]
+  )
+  
+  
+  const [onSubmit, error] = useAsyncFn(submitTrans);
+
   return (
     <Modal.Wrapper>
       <LoadingBar progress={(60 - count) / 60 * 100} color='#dddae8' className="loadingBar" />
@@ -151,7 +240,14 @@ export default function ConfirmTransactionModal({ bnDispatch, askAmount, bidAmou
 
         <Modal.ExchangeResult>
           <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>
-          ~ {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ""} <sup>{bidDenom === 'ETH' ? 'NOM' : 'ETH'}</sup>
+          ~ {
+              BigNumber.isBigNumber(askAmount) ?
+              format18(askAmount).toFixed(6) : 
+              ""
+            } 
+            <sup>
+              {bidDenom === 'ETH' ? 'NOM' : 'ETH'}
+            </sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
@@ -159,18 +255,17 @@ export default function ConfirmTransactionModal({ bnDispatch, askAmount, bidAmou
           <strong>
             {
               (bidDenom) ?
-              <>1 {bidDenom === 'strong' ? pair[0] : pair[1]} = {
-                (bidDenom === pair[0]) ? 
-                (BigNumber.isBigNumber(currentETHPrice) ? format18(currentETHPrice).toFixed(6) : "Loading") :
-                (BigNumber.isBigNumber(currentNOMPrice) ? format18(currentNOMPrice).toFixed(6) : 'Loading')
+              <>1 {bidDenom === 'strong' ? strong : weak} = {
+                (BigNumber.isBigNumber(bidAmount)) ? 
+                format18(askAmount.div(bidAmount)).toFixed(6) : 
+                "Loading"
               }</> : (<></>)
             }
-            {' '} {bidDenom === 'strong' ? pair[1] : pair[0]}
+            {' '} {bidDenom === 'strong' ? weak : strong}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
-
           <strong>{format18(bidAmount).toFixed(6)}{' '}{bidDenom}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
@@ -200,9 +295,17 @@ export default function ConfirmTransactionModal({ bnDispatch, askAmount, bidAmou
         <SlippageValues>
           {limitOptions.map((l) => (
             <LimitBtn
-              active={l.value === slippage}
+              active={
+                new BigNumber(l.value.toString()).times(100) === 
+                slippage
+              }
               key={l.id}
-              onClick={() => bnDispatch({type: 'slippage', value: l.value})}
+              onClick={() => bnDispatch({
+                type: 'slippage', 
+                value: new BigNumber(l.value.toString()).times(
+                  new BigNumber(100)
+                )
+              })}
             >
               {l.text}
             </LimitBtn>

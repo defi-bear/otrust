@@ -7,15 +7,6 @@ import Bonding from "components/Bonding";
 import { Container } from "components/UI";
 import { responsive } from "theme/constants";
 
-// import { Dimmer } from "components/UI/Dimmer";
-// import BridgeSwapModal from "components/Modals/BridgeSwapModal";
-// import BridgeSwapMobile from "components/Modals/BridgeSwapMobile";
-// import BridgeSwapModalDisconnected from "components/Modals/BridgeSwapModalDisconnected";
-// import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
-// import TransactionFailedModal from "components/Modals/TransactionFailedModal";
-// import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
-// import ConfirmTransactionModal from "components/Modals/ConfirmTransactionModal";
-
 const BondingCurveLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 375px;
@@ -48,22 +39,10 @@ const BondingCurveLayout = styled.div`
 export default function BondingCurve() {
   return (
     <Container>
-      {/* <Dimmer>
-        <BridgeSwapModal />
-      </Dimmer> */}
-      {/* <BridgeSwapModalDisconnected /> */}
-      {/* <OnomyConfirmationModal /> */}
-      {/* <TransactionFailedModal /> */}
-      {/* <TransactionCompletedModal /> */}
-      {/* <ConfirmTransactionModal /> */}
-      {/* <BridgeSwapMobile /> */}
-
-      <ExchangeProvider>
-        <BondingCurveLayout>
-          <AcctDash />
-          <Bonding />
-        </BondingCurveLayout>
-      </ExchangeProvider>
+      <BondingCurveLayout>
+        <AcctDash />
+        <Bonding />
+      </BondingCurveLayout>
     </Container>
   );
 }

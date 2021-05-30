@@ -5,6 +5,8 @@ import { useChain } from 'context/chain/ChainContext'
 import { useExchange } from 'context/exchange/ExchangeContext'
 import { Caret, Close, Success } from "../Icons";
 import * as Modal from "../styles";
+import { useModal } from 'context/modal/ModalContext'
+import { format18 } from 'utils/math'
 
 export const ExplorerButton = styled(Modal.SecondaryButton)`
   width: 100%;
@@ -13,22 +15,30 @@ export const ExplorerButton = styled(Modal.SecondaryButton)`
 
 const networks = {1: '', 4: 'rinkeby.'}
 
-export default function TransactionCompletedModal({ amount, result, closeModal, previousTx }) {
+export default function TransactionCompletedModal({ tx }) {
   const [detailsActive, setDetailsActive] = useState(false);
-  const { currentETHPrice, currentNOMPrice } = useChain()
-  const { bidDenom, status } = useExchange()
+  const { 
+    bidDenom, 
+    askAmount, 
+    bidAmount, 
+    status,
+    strong,
+    weak
+  } = useExchange()
+
+  const { handleModal } = useModal()
 
   const shortten = addr => {
     return addr.slice(0,15) + '...' + addr.slice(addr.length - 3)
   }
 
   const onExplore = () => {
-    window.open('https://' + networks[previousTx.chainId] + 'etherscan.io/tx/' + previousTx.hash, '_blank')
+    window.open('https://' + networks[tx.chainId] + 'etherscan.io/tx/' + tx.hash, '_blank')
   }
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => closeModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()}>
         <Close />
       </Modal.CloseIcon>
 
@@ -40,24 +50,17 @@ export default function TransactionCompletedModal({ amount, result, closeModal, 
         {
           status !== 'APPROVE' ? (
             <>
-      
-              {/* BUY */}
-              {/* <Modal.ExchangeResult>
-                + 1239 <sup>NOM</sup>
-              </Modal.ExchangeResult> */}
-      
-              {/* SELL */}
               <Modal.ExchangeResult>
-                + {parseFloat(result).toFixed(8)} <sup>{bidDenom === 'weak' ? weak : strong}</sup>
+                + {format18(askAmount).toFixed(8)} <sup>{bidDenom === 'weak' ? weak : strong}</sup>
                 <Modal.Spent>
-                  - {parseFloat(amount).toFixed(8)} <sup>{bidDenom}</sup>
+                  - {format18(bidAmount).toFixed(8)} <sup>{bidDenom}</sup>
                 </Modal.Spent>
               </Modal.ExchangeResult>
       
               <Modal.ExchangeRateWrapper>
                 <span>Exchange Rate</span>
       
-                <strong>1 {bidDenom === strong ? weak : strong} = {bidDenom === 'strong' ? parseFloat(currentNOMPrice).toFixed(8) : parseFloat(currentETHPrice).toFixed(8)} {bidDenom}</strong>
+                <strong>1 {bidDenom === strong ? weak : strong} = {format18(askAmount.div(bidAmount)).toFixed(8)} {bidDenom}</strong>
               </Modal.ExchangeRateWrapper>
             </>
           ) : (
@@ -75,22 +78,22 @@ export default function TransactionCompletedModal({ amount, result, closeModal, 
           >
             View Details <Caret />
           </Modal.DetailsButton>
-          <Modal.PrimaryButton onClick={() => closeModal()}>Done</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => handleModal()}>Done</Modal.PrimaryButton>
         </Modal.FooterControls>
 
         {detailsActive && (
           <Modal.FooterDetails>
             <Modal.FooterDetailsRow>
-              <span>From</span> <strong>{shortten(previousTx.from)}</strong>
+              <span>From</span> <strong>{shortten(tx.from)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>To</span> <strong>{shortten(previousTx.to)}</strong>
+              <span>To</span> <strong>{shortten(tx.to)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>TxID</span> <strong>{shortten(previousTx.hash)}</strong>
+              <span>TxID</span> <strong>{shortten(tx.hash)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>Network Confirmations</span> <strong>{previousTx.confirmations}</strong>
+              <span>Network Confirmations</span> <strong>{tx.confirmations}</strong>
             </Modal.FooterDetailsRow>
 
             <ExplorerButton onClick={() => onExplore()}>View in Explorer</ExplorerButton>

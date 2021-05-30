@@ -10,7 +10,6 @@ export const UpdateExchangeContext = createContext()
 export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
-    
     const [bnState, bnDispatch] = useReducer(
         exchBnReducer,
         {   

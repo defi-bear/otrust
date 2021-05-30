@@ -44,7 +44,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
     bidDenom,
     input,
     output,
-    slippage,
     strong,
     weak
   } = useExchange();
@@ -64,16 +63,10 @@ export default function ExchangeQuote({strength, onSubmit}) {
       
       handleModal(
           <ConfirmTransactionModal
-            closeModal={() => handleModal()}
-            bidDenom={bidDenom}
-            bidAmount={bidAmount}
-            askAmount={askAmount}
+            strength={strength}
             onConfirm={() => 
               onSubmit(bidDenom)
             }
-            pair={[strong, weak]}
-            bnDispatch = {bnDispatch}
-            slippage={slippage}
           />
       )
   }
@@ -191,8 +184,10 @@ export default function ExchangeQuote({strength, onSubmit}) {
     }
   }, [
     askAmount,
+    bidAmount,
     bnDispatch,
     bondContract,
+    handleModal,
     strDispatch,
     strength,
     supplyNOM,
@@ -223,7 +218,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
           await exchAmount(bidAmountUpdate)
         }
       } else {
-        console.log(evt.target.value === '')
         if(evt.target.value === '') {
           let strUpdate = new Map()
 
@@ -253,9 +247,8 @@ export default function ExchangeQuote({strength, onSubmit}) {
   [ 
     bidAmount,
     bidDenom,
-    bnDispatch,
     exchAmount,
-    input,
+    handleModal,
     strDispatch,
     strength
   ]
