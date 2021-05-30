@@ -1,4 +1,4 @@
-import { bnReducerCallback, stringReducerCallback } from 'context/reducerCallback'
+import { boolReducerCallback, bnReducerCallback, objReducerCallback, stringReducerCallback  } from 'context/reducerCallback'
 
 
 export function exchStringReducer(state, action) {
@@ -7,7 +7,6 @@ export function exchStringReducer(state, action) {
     var update = state
     switch (action.type) {
         case 'bidDenom':
-            console.log("Triggers BidDenom",)
             try { 
                 update = stringReducerCallback(
                     state[action.type], 
@@ -76,7 +75,6 @@ export function exchStringReducer(state, action) {
             }
             break
         case 'update':
-            console.log("Trigger Update: ", action.value)
             for (let [key, value] of action.value.entries()) {
                 switch (key) {
                     case 'bidDenom':
@@ -93,7 +91,6 @@ export function exchStringReducer(state, action) {
                         break
 
                     case 'input':
-                        console.log("Update Input: ", value)
                         try { 
                             update = stringReducerCallback(
                                 state[key], 
@@ -107,6 +104,18 @@ export function exchStringReducer(state, action) {
                         break
 
                     case 'output':
+                        try {
+                            update = stringReducerCallback(
+                                state[key], 
+                                key, 
+                                value, 
+                                update
+                            )
+                        } catch(e) {
+                            console.log(e)
+                        }
+                        break
+                    case 'status':
                         try {
                             update = stringReducerCallback(
                                 state[key], 
@@ -160,9 +169,9 @@ export function exchStringReducer(state, action) {
 
 
 
-export function exchBnReducer(state, action) {
-    console.log("Exchange BN Reducer State: ", state)
-    console.log("Exchange BN Reducer State Action: ", action)
+export function exchObjReducer(state, action) {
+    // console.log("Exchange Obj Reducer State: ", state)
+    // console.log("Exchange Obj Reducer State Action: ", action)
     var update = state
 
     switch (action.type) {
@@ -177,11 +186,34 @@ export function exchBnReducer(state, action) {
             } catch(e) {
                 console.log(e)
             }
-            console.log("AskAmount Update", action.value)
             break
         case 'bidAmount':
             try { 
                 update = bnReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'inputPending':
+            try { 
+                update = boolReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'pendingTx':
+            try { 
+                update = objReducerCallback(
                     state[action.type], 
                     action.type, 
                     action.value, 
@@ -199,7 +231,18 @@ export function exchBnReducer(state, action) {
                     action.value, 
                     update
                 )
-                console.log("Slippage Updated: ", update)
+            } catch(e) {
+                console.log(e)
+            }
+            break
+        case 'txPending':
+            try { 
+                update = boolReducerCallback(
+                    state[action.type], 
+                    action.type, 
+                    action.value, 
+                    update
+                )
             } catch(e) {
                 console.log(e)
             }
@@ -233,6 +276,31 @@ export function exchBnReducer(state, action) {
                                 console.log(e)
                             }
                             break
+                        case 'inputPending':
+                            try { 
+                                update = boolReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
+                        case 'pendingTx':
+                            try { 
+                                update = objReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                                console.log("Pending Tx Update: ", update)
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
                         case 'slippage':
                             try {
                                 update = bnReducerCallback(
@@ -247,6 +315,18 @@ export function exchBnReducer(state, action) {
                             break
                         default:
                             throw new Error();
+                        case 'txPending':
+                            try { 
+                                update = boolReducerCallback(
+                                    state[key], 
+                                    key, 
+                                    value, 
+                                    update
+                                )
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            break
                     }    
                 }   
             }
@@ -256,7 +336,7 @@ export function exchBnReducer(state, action) {
     }
     
     if (update) {
-        console.log("Exchange BN Reducer Update: ", update)
+        console.log("Exchange Obj Reducer Update: ", update)
         return {
             ...update
         }

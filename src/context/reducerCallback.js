@@ -1,21 +1,5 @@
 import { isBigNumber } from 'bignumber.js'
 
-export function stringReducerCallback(state, key, value, update) {
-    switch (state) {
-        case value: break
-        default:
-            update = {
-                ...update,
-                [key]: value
-            }
-
-            console.log("Update After: ", update)
-
-            return update
-        
-    } 
-}
-
 export function bnReducerCallback(state, key, value, update) {
     switch (state) {
         case value: break
@@ -28,5 +12,42 @@ export function bnReducerCallback(state, key, value, update) {
                     }
                 default: throw new Error() 
         }
+    } 
+}
+
+export function boolReducerCallback(state, key, value, update) {
+    switch (state) {
+        case value: break
+        default:
+            console.log("Update Bool")
+            update = {
+                ...update,
+                [key]: value
+            }
+            return update
+    } 
+}
+
+export function objReducerCallback(state, key, value, update) {
+    switch (state) {
+        case value: break
+        default:
+            update = {
+                ...update,
+                [key]: value
+            }
+            return update
+    } 
+}
+
+export function stringReducerCallback(state, key, value, update) {
+    switch (state) {
+        case value: break
+        default:
+            update = {
+                ...update,
+                [key]: value
+            }
+            return update
     } 
 }

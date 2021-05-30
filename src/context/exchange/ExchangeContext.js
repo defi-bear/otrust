@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react'
-import { exchStringReducer, exchBnReducer } from 'context/exchange/ExchangeReducer'
+import { exchStringReducer, exchObjReducer } from 'context/exchange/ExchangeReducer'
 
 import { BigNumber } from 'bignumber.js'
 
@@ -10,13 +10,17 @@ export const UpdateExchangeContext = createContext()
 export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
-    const [bnState, bnDispatch] = useReducer(
-        exchBnReducer,
+    const [objState, objDispatch] = useReducer(
+        exchObjReducer,
         {   
             askAmount: new BigNumber(0),
             bidAmount: new BigNumber(0),
-            slippage: new BigNumber(0)}
-        )
+            inputPending: false,
+            pendingTx: null,
+            slippage: new BigNumber(0),
+            txPending: false
+        }
+    )
 
     const [strState, strDispatch] = useReducer(
         exchStringReducer,
@@ -29,14 +33,14 @@ function ExchangeProvider({ children }) {
             weak: 'wNOM'
         }
     )
-
+    
     const contextValue = {
-        ...bnState,
+        ...objState,
         ...strState
     }
 
     const updateValue = {
-        bnDispatch,
+        objDispatch,
         strDispatch
     }
 

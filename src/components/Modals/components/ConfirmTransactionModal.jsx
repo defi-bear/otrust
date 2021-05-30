@@ -137,7 +137,7 @@ export default function ConfirmTransactionModal({ onConfirm }) {
   } = useExchange()
 
   const {
-    bnDispatch,
+    objDispatch,
     setPendingTx
   } = useUpdateExchange()
   
@@ -300,7 +300,7 @@ export default function ConfirmTransactionModal({ onConfirm }) {
                 slippage
               }
               key={l.id}
-              onClick={() => bnDispatch({
+              onClick={() => objDispatch({
                 type: 'slippage', 
                 value: new BigNumber(l.value.toString()).times(
                   new BigNumber(100)
