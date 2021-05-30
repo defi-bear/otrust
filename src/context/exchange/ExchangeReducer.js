@@ -75,7 +75,7 @@ export function exchStringReducer(state, action) {
             }
             break
         case 'update':
-            for (let [key, value] of action.value.entries()) {
+            for (let [key, value] of action.value.entries()) {    
                 switch (key) {
                     case 'bidDenom':
                         try { 
@@ -95,7 +95,7 @@ export function exchStringReducer(state, action) {
                             update = stringReducerCallback(
                                 state[key], 
                                 key, 
-                                value, 
+                                value.toString(), 
                                 update
                             )
                         } catch(e) {

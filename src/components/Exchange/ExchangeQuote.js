@@ -115,11 +115,53 @@ export default function ExchangeQuote({strength, onSubmit}) {
     return new BigNumber(askAmountUpdate.toString())
   }
 
-  const validateText = useCallback(
-    async (askAmountState, bidAmountState, bidAmountText, textStrength) => {
-      let strUpdate = new Map()
-      switch (true) {
-        case (bidAmountText === '' || !bidAmountText):
+
+const onTextChange = useCallback(
+  async (evt, textStrength) => {
+    evt.preventDefault()
+    console.log("Component Strength: ", strength)
+    console.log("Text Strength: ", textStrength)
+    console.log("Bid Denom: ", bidDenom)
+
+    switch (true) {
+      case (bidDenom === strength && input === evt.target.value.toString()): break
+      case (inputPending === true):
+        handleModal(
+          <RequestFailedModal
+              error = 'Network Updating. Please try again.'
+          />
+        )
+        break
+      case (
+        BigNumber.isBigNumber(new BigNumber(Number(evt.target.value).toString())) &&
+        BigNumber.isBigNumber(new BigNumber(parseFloat(evt.target.value).toString()))
+      ):
+        
+        objDispatch({
+          type: 'inputPending',
+          value: true
+        })
+
+        const bidAmountUpdate = parse18(new BigNumber(
+            parseFloat(evt.target.value).toString()
+          )
+        )
+        
+        let strUpdate = new Map()
+        
+        if (bidDenom !== strength) {
+          strUpdate = strUpdate.set(
+            'bidDenom',
+            strength          
+          )
+        }
+
+        var askAmountUpdate
+
+        try {
+          askAmountUpdate = await getAskAmount(askAmount, bidAmountUpdate, textStrength)
+        } catch(err) {
+          
           strUpdate = strUpdate.set(
             'input',
             ''
@@ -127,7 +169,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
           
           strUpdate = strUpdate.set(
             'output',
-            ''
+            'Invalid Input'
           )
 
           strDispatch({
@@ -135,142 +177,76 @@ export default function ExchangeQuote({strength, onSubmit}) {
             value: strUpdate
           })
 
-          break
-
-        case (
-          BigNumber.isBigNumber(new BigNumber(Number(bidAmountText).toString())) &&
-          BigNumber.isBigNumber(new BigNumber(parseFloat(bidAmountText).toString())) &&
-          BigNumber.isBigNumber(new BigNumber(parseFloat(bidAmountText).toString())) !== bidAmountState
-        ):
-          console.log("Is BigNumber: ", )
-          
-          objDispatch({
-            type: 'inputPending',
-            value: true
-          })
-
-          const bidAmountUpdate = parse18(new BigNumber(
-              parseFloat(bidAmountText).toString()
+          if (err) {
+            console.log(err)
+            handleModal(
+              <RequestFailedModal
+                error = {err}
+              />
             )
-          )
-          
-          var askAmountUpdate
-
-          try {
-            askAmountUpdate = await getAskAmount(askAmountState, bidAmountUpdate, textStrength)
-          } catch(err) {
-            
-            strUpdate = strUpdate.set(
-              'input',
-              ''
-            )
-            
-            strUpdate = strUpdate.set(
-              'output',
-              'Invalid Input'
-            )
-  
-            strDispatch({
-              type: 'update', 
-              value: strUpdate
-            })
-
-            if (err) {
-              console.log(err)
-              handleModal(
-                <RequestFailedModal
-                  error = {err}
-                />
-              )
-            }
-
-            objDispatch({
-              type: 'inputPending',
-              value: false
-            })
           }
-
-          let objUpdate = new Map()
-
-          objUpdate = objUpdate.set(
-            'askAmount',
-            new BigNumber(askAmountUpdate.toString())
-          )
-          
-          objUpdate = objUpdate.set(
-            'bidAmount',
-            bidAmountUpdate
-          )
-
-          objDispatch({
-            type: 'update',
-            value: objUpdate
-          })
-          
-          console.log("Set Input: ", format18(bidAmountUpdate).toString())
-          strUpdate = strUpdate.set(
-            'input',
-            format18(bidAmountUpdate).toString()
-          )
-          
-          strUpdate = strUpdate.set(
-            'output',
-            format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
-          )
-
-          strDispatch({
-            type: 'update', 
-            value: strUpdate
-          })
 
           objDispatch({
             type: 'inputPending',
             value: false
           })
 
-          break
-        default: 
-          handleModal(
-            <RequestFailedModal
-              error = 'Please enter numbers only'
-            />
-          )
-      }
-  },[getAskAmount, handleModal, inputPending, objDispatch, strDispatch])
+          return
+        }
 
-  const onTextChange = useCallback(
-    async (evt) => {
-      evt.preventDefault()
-      console.log("Input Pending", inputPending)
-      if (inputPending === true) {
+        let objUpdate = new Map()
+
+        objUpdate = objUpdate.set(
+          'askAmount',
+          new BigNumber(askAmountUpdate.toString())
+        )
+        
+        objUpdate = objUpdate.set(
+          'bidAmount',
+          bidAmountUpdate
+        )
+
+        objDispatch({
+          type: 'update',
+          value: objUpdate
+        })
+
+        strUpdate = strUpdate.set(
+          'input',
+          format18(bidAmountUpdate).toString()
+        )
+        
+        strUpdate = strUpdate.set(
+          'output',
+          format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
+        )
+
+        strDispatch({
+          type: 'update', 
+          value: strUpdate
+        })
+
+        objDispatch({
+          type: 'inputPending',
+          value: false
+        })
+        
+        break
+      default:
         handleModal(
           <RequestFailedModal
-              error = 'Network Updating. Please try again.'
+              error = 'Invalid Input'
           />
         )
-      } else {
-        if (bidDenom !== strength) {
-          strDispatch({
-            type: 'bidDenom',
-            value: strength
-          })
-          await validateText(askAmount, bidAmount, evt.target.value, strength)
-        }
-        
-        if (evt.target.value === input) {
-          return
-        } else {
-          await validateText(askAmount, bidAmount, evt.target.value, strength)
-        }
-      }
-  },
-  [ 
-    bidDenom,
-    input,
-    strDispatch,
-    strength,
-    validateText
-  ]
+        break
+    }
+},
+[ 
+  bidDenom,
+  input,
+  strDispatch,
+  strength
+]
 );
 
   return(
@@ -280,7 +256,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
               <strong>I'm bidding</strong>
               <ExchangeInput
                   type="text"
-                  onChange={onTextChange}
+                  onChange={(evt) => onTextChange(evt, strength)}
                   value={(bidDenom === strength) ? input : ''}
               />
               {(strength === 'strong') ? strong : weak}
