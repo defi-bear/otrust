@@ -91,17 +91,18 @@ export default function ExchangeQuote({strength, onSubmit}) {
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
-      
+      if (bidDenom !== strength) {
+        strDispatch({
+          type: 'bidDenom',
+          value: strength
+        })
+      }
+
       if (
         !BigNumber.isBigNumber(new BigNumber(parseFloat(evt.target.value).toString()))
       ) {
         if(evt.target.value === '') {
           let strUpdate = new Map()
-
-          strUpdate = strUpdate.set(
-            'bidDenom',
-            strength
-          )
 
           strUpdate = strUpdate.set(
             'input',
@@ -159,11 +160,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
               let strUpdate = new Map()
     
               strUpdate = strUpdate.set(
-                'bidDenom',
-                strength
-              )
-    
-              strUpdate = strUpdate.set(
                 'input',
                 ''
               )
@@ -181,7 +177,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
               if (err) {
                 handleModal(
                   <RequestFailedModal
-                    error = {err.error.message}
+                    error = {err.message}
                   />
                 )
               }
@@ -206,15 +202,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
               })
     
               let strUpdate = new Map()
-    
-              if (bidDenom !== strength) {
-                strUpdate = strUpdate.set(
-                  'bidDenom',
-                  strength
-                )
-              }
               
-    
               strUpdate = strUpdate.set(
                 'input',
                 format18(bidAmountUpdate).toString()
