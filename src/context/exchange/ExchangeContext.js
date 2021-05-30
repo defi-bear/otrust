@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, useContext, useReducer, useState } from 'react'
 import { exchStringReducer, exchObjReducer } from 'context/exchange/ExchangeReducer'
 
 import { BigNumber } from 'bignumber.js'
@@ -10,12 +10,13 @@ export const UpdateExchangeContext = createContext()
 export const useUpdateExchange = () => useContext(UpdateExchangeContext)
 
 function ExchangeProvider({ children }) {
+    const [inputPending, setInputPending] = useState(false) 
+
     const [objState, objDispatch] = useReducer(
         exchObjReducer,
         {   
             askAmount: new BigNumber(0),
             bidAmount: new BigNumber(0),
-            inputPending: false,
             pendingTx: null,
             slippage: new BigNumber(0),
             txPending: false
@@ -36,12 +37,14 @@ function ExchangeProvider({ children }) {
     
     const contextValue = {
         ...objState,
-        ...strState
+        ...strState,
+        inputPending
     }
 
     const updateValue = {
         objDispatch,
-        strDispatch
+        strDispatch,
+        setInputPending
     }
 
     return (

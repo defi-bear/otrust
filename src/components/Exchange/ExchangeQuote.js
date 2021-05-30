@@ -6,6 +6,8 @@ import { useChain } from 'context/chain/ChainContext'
 
 import { BondingCont } from 'context/chain/contracts'
 
+import { isNumber } from 'utils/math'
+
 import { 
     useExchange, 
     useUpdateExchange 
@@ -41,10 +43,8 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   const { 
     askAmount,
-    bidAmount,
     bidDenom,
     input,
-    inputPending,
     output,
     strong,
     weak
@@ -57,7 +57,8 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   const { 
     objDispatch,
-    strDispatch
+    strDispatch,
+    setInputPending
   } = useUpdateExchange();
 
   const onBid = () => {
@@ -113,8 +114,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
             console.error("Denom not set");
     }
     return new BigNumber(askAmountUpdate.toString())
-  }
-
+}
 
 const onTextChange = useCallback(
   async (evt, textStrength) => {
@@ -122,32 +122,44 @@ const onTextChange = useCallback(
     console.log("Component Strength: ", strength)
     console.log("Text Strength: ", textStrength)
     console.log("Bid Denom: ", bidDenom)
-
+    let strUpdate = new Map()
     switch (true) {
       case (bidDenom === strength && input === evt.target.value.toString()): break
-      case (inputPending === true):
-        handleModal(
-          <RequestFailedModal
-              error = 'Network Updating. Please try again.'
-          />
-        )
-        break
+      case (evt.target.value.toString() === ''): 
+          
+          if(bidDenom !== strength) {
+            strUpdate = strUpdate.set(
+              'bidDenom',
+              strength
+            )
+          }
+
+          strUpdate = strUpdate.set(
+            'input',
+            ''
+          )
+          
+          strUpdate = strUpdate.set(
+            'output',
+            ''
+          )
+
+          strDispatch({
+            type: 'update', 
+            value: strUpdate
+          })
+
       case (
-        BigNumber.isBigNumber(new BigNumber(Number(evt.target.value).toString())) &&
-        BigNumber.isBigNumber(new BigNumber(parseFloat(evt.target.value).toString()))
+          isNumber(Number(evt.target.value)) &&
+          BigNumber.isBigNumber(new BigNumber(parseFloat(evt.target.value).toString())) 
       ):
         
-        objDispatch({
-          type: 'inputPending',
-          value: true
-        })
-
         const bidAmountUpdate = parse18(new BigNumber(
             parseFloat(evt.target.value).toString()
           )
         )
-        
-        let strUpdate = new Map()
+
+        const inputUpdate = evt.target.value.toString()
         
         if (bidDenom !== strength) {
           strUpdate = strUpdate.set(
@@ -185,13 +197,7 @@ const onTextChange = useCallback(
               />
             )
           }
-
-          objDispatch({
-            type: 'inputPending',
-            value: false
-          })
-
-          return
+          break
         }
 
         let objUpdate = new Map()
@@ -213,7 +219,7 @@ const onTextChange = useCallback(
 
         strUpdate = strUpdate.set(
           'input',
-          format18(bidAmountUpdate).toString()
+          inputUpdate
         )
         
         strUpdate = strUpdate.set(
@@ -226,19 +232,22 @@ const onTextChange = useCallback(
           value: strUpdate
         })
 
-        objDispatch({
-          type: 'inputPending',
-          value: false
-        })
-        
         break
       default:
-        handleModal(
-          <RequestFailedModal
-              error = 'Invalid Input'
-          />
+        strUpdate = strUpdate.set(
+          'input',
+          evt.target.value
         )
-        break
+        
+        strUpdate = strUpdate.set(
+          'output',
+          'Invalid Input'
+        )
+
+        strDispatch({
+          type: 'update', 
+          value: strUpdate
+        })
     }
 },
 [ 

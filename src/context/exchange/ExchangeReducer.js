@@ -199,18 +199,6 @@ export function exchObjReducer(state, action) {
                 console.log(e)
             }
             break
-        case 'inputPending':
-            try { 
-                update = boolReducerCallback(
-                    state[action.type], 
-                    action.type, 
-                    action.value, 
-                    update
-                )
-            } catch(e) {
-                console.log(e)
-            }
-            break
         case 'pendingTx':
             try { 
                 update = objReducerCallback(
@@ -267,18 +255,6 @@ export function exchObjReducer(state, action) {
                         case 'bidAmount':
                             try {
                                 update = bnReducerCallback(
-                                    state[key], 
-                                    key, 
-                                    value, 
-                                    update
-                                )
-                            } catch(e) {
-                                console.log(e)
-                            }
-                            break
-                        case 'inputPending':
-                            try { 
-                                update = boolReducerCallback(
                                     state[key], 
                                     key, 
                                     value, 
