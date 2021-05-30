@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { BigNumber } from 'bignumber.js'
 
@@ -27,12 +27,12 @@ import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransac
 import RequestFailedModal from 'components/Modals/components/RequestFailedModal'
 
 import NOMButton from 'components/Exchange/NOMButton'
-import { format18, isNumber, parse18 } from 'utils/math'
+import { format18, parse18 } from 'utils/math'
 import { useWeb3React } from "@web3-react/core";
 
 
 export default function ExchangeQuote({strength, onSubmit}) {
-  const { strongBalance, weakBalance, supplyNOM } = useChain()
+  const { strongBalance, weakBalance } = useChain()
   const { handleModal } = useModal()
   const { library } = useWeb3React()
   
@@ -48,6 +48,11 @@ export default function ExchangeQuote({strength, onSubmit}) {
     weak
   } = useExchange();
   
+  useEffect(() => {
+    console.log("Input: ", input)
+    console.log("Output: ", output)
+  })
+
   const { 
     bnDispatch,
     strDispatch
@@ -83,143 +88,20 @@ export default function ExchangeQuote({strength, onSubmit}) {
           })
   }
 
-  const exchAmount = useCallback(async (amount) => {
-    console.log('Gets here!')
-    console.log('Supply NOM: ',supplyNOM)
-    console.log('Amount: ', amount)
-    switch (true) {
-      case (BigNumber.isBigNumber(amount) && amount !== bidAmount):
-        var askAmountUpdate = askAmount
-        console.log("Passes Test")
-        try {  
-          switch (strength) {
-              case 'strong':
-                  console.log('Strong: ', amount.toFixed(0))
-                  askAmountUpdate = await bondContract.buyQuoteETH(
-                      amount.toFixed(0)
-                  )
-                  console.log('Pull Strong Ask Amount', askAmountUpdate)
-                  break
-
-              case 'weak':
-                  askAmountUpdate = await bondContract.sellQuoteNOM(
-                      amount.toFixed(0)
-                  )
-                  console.log('Pull Weak Ask Amount', askAmountUpdate)
-                  break
-
-              default:
-                  console.error("Denom not set");
-          }
-          askAmountUpdate = new BigNumber(askAmountUpdate.toString())
-        } catch (err) {
-          let update = new Map()
-
-          update = update.set(
-            'input',
-            ''
-          )
-          
-          update = update.set(
-            'output',
-            'Invalid Input'
-          )
-
-          strDispatch({
-            type: 'update', 
-            value: update
-          })
-
-          if (err) {
-            handleModal(
-              <RequestFailedModal
-                error = {err.error.message}
-              />
-            )
-          }
-        }
-
-        if (askAmount !== askAmountUpdate) {
-          let bnUpdate = new Map()
-
-          bnUpdate = bnUpdate.set(
-            'askAmount',
-            new BigNumber(askAmountUpdate.toString())
-          )
-          
-          bnUpdate = bnUpdate.set(
-            'bidAmount',
-            amount
-          )
-
-          bnDispatch({
-            type: 'update',
-            value: bnUpdate
-          })
-
-          let strUpdate = new Map()
-
-          strUpdate = strUpdate.set(
-            'input',
-            format18(amount).toString()
-          )
-          
-          strUpdate = strUpdate.set(
-            'output',
-            format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
-          )
-
-          strDispatch({
-            type: 'update', 
-            value: strUpdate
-          })
-        } break
-              
-      default: 
-        console.log("Defaulting")
-        strDispatch({
-          type: 'output',
-          value: 'Invalid Input'
-        })
-    }
-  }, [
-    askAmount,
-    bidAmount,
-    bnDispatch,
-    bondContract,
-    handleModal,
-    strDispatch,
-    strength,
-    supplyNOM,
-  ])
-
   const onTextChange = useCallback(
     async (evt) => {
       evt.preventDefault()
       
-      if (bidDenom !== strength) {
-        strDispatch({
-          type: 'bidDenom',
-          value: strength
-        })
-      }
-      
       if (
-        isNumber(Number(evt.target.value)) &&
-        isNumber(parseFloat(evt.target.value))
+        !BigNumber.isBigNumber(new BigNumber(parseFloat(evt.target.value).toString()))
       ) {
-        const bidAmountUpdate = parse18(
-          new BigNumber(
-            parseFloat(evt.target.value).toString()
-          )
-        )
-
-        if (bidAmount !== bidAmountUpdate) {
-          await exchAmount(bidAmountUpdate)
-        }
-      } else {
         if(evt.target.value === '') {
           let strUpdate = new Map()
+
+          strUpdate = strUpdate.set(
+            'bidDenom',
+            strength
+          )
 
           strUpdate = strUpdate.set(
             'input',
@@ -242,12 +124,128 @@ export default function ExchangeQuote({strength, onSubmit}) {
             />
           )
         }
+      } else {
+        const bidAmountUpdate = parse18(
+          new BigNumber(
+            parseFloat(evt.target.value).toString()
+          )
+        )
+
+        switch (true) {
+          case (bidAmountUpdate !== bidAmount):
+            var askAmountUpdate = askAmount
+            try {  
+              switch (strength) {
+                  case 'strong':
+                      console.log('Strong: ', bidAmountUpdate.toFixed(0))
+                      askAmountUpdate = await bondContract.buyQuoteETH(
+                          bidAmountUpdate.toFixed(0)
+                      )
+                      console.log('Pull Strong Ask Amount', askAmountUpdate)
+                      break
+    
+                  case 'weak':
+                      askAmountUpdate = await bondContract.sellQuoteNOM(
+                          bidAmountUpdate.toFixed(0)
+                      )
+                      console.log('Pull Weak Ask Amount', askAmountUpdate)
+                      break
+    
+                  default:
+                      console.error("Denom not set");
+              }
+              askAmountUpdate = new BigNumber(askAmountUpdate.toString())
+            } catch (err) {
+              let strUpdate = new Map()
+    
+              strUpdate = strUpdate.set(
+                'bidDenom',
+                strength
+              )
+    
+              strUpdate = strUpdate.set(
+                'input',
+                ''
+              )
+              
+              strUpdate = strUpdate.set(
+                'output',
+                'Invalid Input'
+              )
+    
+              strDispatch({
+                type: 'update', 
+                value: strUpdate
+              })
+    
+              if (err) {
+                handleModal(
+                  <RequestFailedModal
+                    error = {err.error.message}
+                  />
+                )
+              }
+            }
+      
+            if (askAmount !== askAmountUpdate) {
+              let bnUpdate = new Map()
+    
+              bnUpdate = bnUpdate.set(
+                'askAmount',
+                new BigNumber(askAmountUpdate.toString())
+              )
+              
+              bnUpdate = bnUpdate.set(
+                'bidAmount',
+                bidAmountUpdate
+              )
+    
+              bnDispatch({
+                type: 'update',
+                value: bnUpdate
+              })
+    
+              let strUpdate = new Map()
+    
+              if (bidDenom !== strength) {
+                strUpdate = strUpdate.set(
+                  'bidDenom',
+                  strength
+                )
+              }
+              
+    
+              strUpdate = strUpdate.set(
+                'input',
+                format18(bidAmountUpdate).toString()
+              )
+              
+              strUpdate = strUpdate.set(
+                'output',
+                format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
+              )
+    
+              strDispatch({
+                type: 'update', 
+                value: strUpdate
+              })
+            } break
+                    
+            default: 
+              console.log("Defaulting")
+              strDispatch({
+                type: 'output',
+                value: 'Invalid Input'
+              })
+        } 
       }
   },
   [ 
+    askAmount,
     bidAmount,
     bidDenom,
-    exchAmount,
+    bondContract,
+    bnDispatch,
     handleModal,
     strDispatch,
     strength

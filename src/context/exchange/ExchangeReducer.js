@@ -7,6 +7,7 @@ export function exchStringReducer(state, action) {
     var update = state
     switch (action.type) {
         case 'bidDenom':
+            console.log("Triggers BidDenom",)
             try { 
                 update = stringReducerCallback(
                     state[action.type], 
