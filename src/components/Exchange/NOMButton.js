@@ -7,71 +7,23 @@ import { useChain } from 'context/chain/ChainContext'
 
 import { BondingCont, NOMCont } from 'context/chain/contracts'
 
-import OnomyConfirmationModal from 'components/Modals/components/OnomyConfirmationModal'
+import ApproveModal from 'components/Modals/components/ApproveModal'
 
 import {
   SellBtn
 } from "./exchangeStyles"
 
-import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
-import PendingModal from "components/Modals/components/PendingModal";
-
-
 
 export default function NOMButton(onBid) {
     const { weakBalance } = useChain()
     const { handleModal } = useModal()
-    const { library } = useWeb3React()
-    const bondContract = BondingCont(library)
-    const NOMcontract = NOMCont(library)
 
     const { 
       bidAmount, 
       bidDenom,
       NOMallowance,
-      status,
       weak
     } = useExchange()
-
-    const {
-      strDispatch
-    } = useUpdateExchange()
-
-    const onApprove = async (value) => {
-      if(value <= weakBalance) {
-        try {
-          handleModal(
-            <PendingModal />
-          );
-          strDispatch({
-            type: 'status', 
-            value: 'APPROVE'
-          })
-          let tx = await NOMcontract.increaseAllowance(
-            bondContract.address,
-            value.toFixed(0)
-          );
-          handleModal()
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          // console.error(e.code, e.message.message);
-          // alert(e.message)
-          handleModal(
-            <TransactionFailedModal
-              closeModal={() => handleModal()}
-              error={e.code + '\n' + e.message.slice(0,80) + '...'}
-            />
-          )
-        }    
-      } else {
-        handleModal(
-              <TransactionFailedModal
-                closeModal={() => handleModal()}
-                error={`${weak} Balance too low`}
-              />
-        )
-      }
-    }
     
     return (
       <> 
@@ -81,10 +33,7 @@ export default function NOMButton(onBid) {
             ((weakBalance > bidAmount) ? 
               (<SellBtn 
                 onClick={() => handleModal(
-                  <OnomyConfirmationModal
-                    closeModal={() => handleModal()}
-                    onConfirm={() => onApprove(bidAmount)}
-                  />
+                  <ApproveModal />
               )}>
                 Approve
               </SellBtn>) : 

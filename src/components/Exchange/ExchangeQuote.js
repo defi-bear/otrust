@@ -6,8 +6,6 @@ import { useChain } from 'context/chain/ChainContext'
 
 import { BondingCont } from 'context/chain/contracts'
 
-import { isNumber } from 'utils/math'
-
 import { 
     useExchange, 
     useUpdateExchange 
@@ -57,16 +55,14 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   const { 
     objDispatch,
-    strDispatch,
-    setInputPending
+    strDispatch
   } = useUpdateExchange();
 
   const onBid = () => {
       if (bidDenom !== strength) {
-        strDispatch({
-          type: 'bidDenom',
-          value: strength
-        })
+        <RequestFailedModal
+          error = "Please enter amount"
+        />
       }
       
       handleModal(
@@ -114,58 +110,18 @@ export default function ExchangeQuote({strength, onSubmit}) {
             console.error("Denom not set");
     }
     return new BigNumber(askAmountUpdate.toString())
-}
+  }
 
-const onTextChange = useCallback(
-  async (evt, textStrength) => {
-    evt.preventDefault()
-    console.log("Component Strength: ", strength)
-    console.log("Text Strength: ", textStrength)
-    console.log("Bid Denom: ", bidDenom)
-    let strUpdate = new Map()
-    switch (true) {
-      case (bidDenom === strength && input === evt.target.value.toString()): break
-      case (evt.target.value === ''):
-        strUpdate = strUpdate.set(
-          'input',
-          ''
-        )
-        
-        strUpdate = strUpdate.set(
-          'output',
-          ''
-        )
-
-        strDispatch({
-          type: 'update', 
-          value: strUpdate
-        })
-        break
-      case (
-          Number(evt.target.value) > 0 &&
-          parseFloat(evt.target.value) > 0
-      ):
-        console.log("Input after test", evt.target.value)
-        const bidAmountUpdate = parse18(new BigNumber(
-            parseFloat(evt.target.value).toString()
-          )
-        )
-
-        const inputUpdate = evt.target.value.toString()
-        
-        if (bidDenom !== strength) {
-          strUpdate = strUpdate.set(
-            'bidDenom',
-            strength          
-          )
-        }
-
-        var askAmountUpdate
-
-        try {
-          askAmountUpdate = await getAskAmount(askAmount, bidAmountUpdate, textStrength)
-        } catch(err) {
-          
+  const onTextChange = useCallback(
+    async (evt, textStrength) => {
+      evt.preventDefault()
+      console.log("Component Strength: ", strength)
+      console.log("Text Strength: ", textStrength)
+      console.log("Bid Denom: ", bidDenom)
+      let strUpdate = new Map()
+      switch (true) {
+        case (bidDenom === strength && input === evt.target.value.toString()): break
+        case (evt.target.value === ''):
           strUpdate = strUpdate.set(
             'input',
             ''
@@ -173,7 +129,90 @@ const onTextChange = useCallback(
           
           strUpdate = strUpdate.set(
             'output',
-            'Invalid Input'
+            ''
+          )
+
+          strDispatch({
+            type: 'update', 
+            value: strUpdate
+          })
+          break
+        case (
+            Number(evt.target.value) > 0 &&
+            parseFloat(evt.target.value) > 0
+        ):
+          console.log("Input after test", evt.target.value)
+          const bidAmountUpdate = parse18(new BigNumber(
+              parseFloat(evt.target.value).toString()
+            )
+          )
+
+          const inputUpdate = evt.target.value.toString()
+          
+          if (bidDenom !== strength) {
+            strUpdate = strUpdate.set(
+              'bidDenom',
+              strength          
+            )
+          }
+
+          var askAmountUpdate
+
+          try {
+            askAmountUpdate = await getAskAmount(askAmount, bidAmountUpdate, textStrength)
+          } catch(err) {
+            
+            strUpdate = strUpdate.set(
+              'input',
+              ''
+            )
+            
+            strUpdate = strUpdate.set(
+              'output',
+              'Invalid Input'
+            )
+
+            strDispatch({
+              type: 'update', 
+              value: strUpdate
+            })
+
+            if (err) {
+              console.log(err)
+              handleModal(
+                <RequestFailedModal
+                  error = {err}
+                />
+              )
+            }
+            break
+          }
+
+          let objUpdate = new Map()
+
+          objUpdate = objUpdate.set(
+            'askAmount',
+            new BigNumber(askAmountUpdate.toString())
+          )
+          
+          objUpdate = objUpdate.set(
+            'bidAmount',
+            bidAmountUpdate
+          )
+
+          objDispatch({
+            type: 'update',
+            value: objUpdate
+          })
+
+          strUpdate = strUpdate.set(
+            'input',
+            inputUpdate
+          )
+          
+          strUpdate = strUpdate.set(
+            'output',
+            format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
           )
 
           strDispatch({
@@ -181,75 +220,22 @@ const onTextChange = useCallback(
             value: strUpdate
           })
 
-          if (err) {
-            console.log(err)
-            handleModal(
-              <RequestFailedModal
-                error = {err}
-              />
-            )
-          }
           break
-        }
-
-        let objUpdate = new Map()
-
-        objUpdate = objUpdate.set(
-          'askAmount',
-          new BigNumber(askAmountUpdate.toString())
-        )
-        
-        objUpdate = objUpdate.set(
-          'bidAmount',
-          bidAmountUpdate
-        )
-
-        objDispatch({
-          type: 'update',
-          value: objUpdate
-        })
-
-        strUpdate = strUpdate.set(
-          'input',
-          inputUpdate
-        )
-        
-        strUpdate = strUpdate.set(
-          'output',
-          format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
-        )
-
-        strDispatch({
-          type: 'update', 
-          value: strUpdate
-        })
-
-        break
-      default:
-        console.log("Event Value: ", evt.target.value)
-        strUpdate = strUpdate.set(
-          'input',
-          evt.target.value
-        )
-        
-        strUpdate = strUpdate.set(
-          'output',
-          'Input numbers only'
-        )
-
-        strDispatch({
-          type: 'update', 
-          value: strUpdate
-        })
-    }
-},
-[ 
-  bidDenom,
-  input,
-  strDispatch,
-  strength
-]
-);
+        default:
+          handleModal(
+            <RequestFailedModal
+              error = "Please enter numbers only. Thank you!"
+            />
+          )
+      }
+  },
+  [ 
+    bidDenom,
+    input,
+    strDispatch,
+    strength
+  ]
+  );
 
   return(
       <ExchangeItem>
