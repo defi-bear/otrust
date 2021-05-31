@@ -123,7 +123,7 @@ const limitOptions = [
   },
 ];
 
-export default function ConfirmTransactionModal({ onConfirm }) {
+export default function ConfirmTransactionModal({ handleModal }) {
   const { account, library } = useWeb3React()
   const bondContract = BondingCont(library)
 
@@ -138,12 +138,11 @@ export default function ConfirmTransactionModal({ onConfirm }) {
 
   const {
     objDispatch,
-    setPendingTx
   } = useUpdateExchange()
   
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
-  const { handleModal } = useModal()
+  
 
   const increaseCount = () => {
     if(count === 0) {
@@ -175,6 +174,14 @@ export default function ConfirmTransactionModal({ onConfirm }) {
                   { 
                     value: bidAmount.toFixed(0) }
                   )
+
+                  tx.wait().then(() => {
+                    handleModal(
+                      <TransactionCompletedModal
+                        tx = {tx}
+                      />
+                    )
+                  })
               break
 
               default:
@@ -190,6 +197,14 @@ export default function ConfirmTransactionModal({ onConfirm }) {
                   askAmount.toFixed(0),
                   slippage * 100,
                 )
+
+                tx.wait().then(() => {
+                  handleModal(
+                    <TransactionCompletedModal
+                      tx = {tx}
+                    />
+                  )
+                })
                 break
               default:
                 {}
@@ -199,16 +214,12 @@ export default function ConfirmTransactionModal({ onConfirm }) {
           default:
             console.log()
         }
-        handleModal(
-          <TransactionCompletedModal tx = {tx} />
-        )
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e.code, e.message.message);
         // alert(e.message)
         handleModal(
           <TransactionFailedModal
-            closeModal={() => handleModal()}
             error={e.code + '\n' + e.message.slice(0,80) + '...'}
           />
         )

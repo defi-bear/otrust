@@ -60,7 +60,7 @@ export default function TransactionCompletedModal({ tx }) {
               <Modal.ExchangeRateWrapper>
                 <span>Exchange Rate</span>
       
-                <strong>1 {bidDenom === strong ? weak : strong} = {format18(askAmount.div(bidAmount)).toFixed(8)} {bidDenom}</strong>
+                <strong>1 {bidDenom === strong ? weak : strong} = {askAmount.div(bidAmount).toFixed(8)} {bidDenom}</strong>
               </Modal.ExchangeRateWrapper>
             </>
           ) : (

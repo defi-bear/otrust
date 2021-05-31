@@ -67,10 +67,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
       
       handleModal(
           <ConfirmTransactionModal
-            strength={strength}
-            onConfirm={() => 
-              onSubmit(bidDenom)
-            }
+            handleModal = { handleModal }
           />
       )
   }

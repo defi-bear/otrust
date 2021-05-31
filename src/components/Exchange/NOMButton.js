@@ -1,11 +1,8 @@
 import React from "react";
 
-import { useWeb3React } from "@web3-react/core"
-import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext'
+import { useExchange } from 'context/exchange/ExchangeContext'
 import { useModal } from 'context/modal/ModalContext'
 import { useChain } from 'context/chain/ChainContext'
-
-import { BondingCont, NOMCont } from 'context/chain/contracts'
 
 import ApproveModal from 'components/Modals/components/ApproveModal'
 
@@ -33,7 +30,9 @@ export default function NOMButton(onBid) {
             ((weakBalance > bidAmount) ? 
               (<SellBtn 
                 onClick={() => handleModal(
-                  <ApproveModal />
+                  <ApproveModal
+                    handleModal = {handleModal}
+                  />
               )}>
                 Approve
               </SellBtn>) : 

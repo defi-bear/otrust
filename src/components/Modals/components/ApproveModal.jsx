@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useInterval from '@use-it/interval';
+import BigNumber from 'bignumber.js'
+
+import { parse18 } from 'utils/math'
+
 
 import { Close } from "../Icons"
 import * as Modal from "../styles"
@@ -14,6 +18,7 @@ import { BondingCont, NOMCont } from 'context/chain/contracts'
 import RequestFailedModal from 'components/Modals/components/RequestFailedModal'
 import PendingModal from 'components/Modals/components/PendingModal'
 import TransactionFailedModal from 'components/Modals/components/TransactionFailedModal'
+import TransactionCompletedModal from "./TransactionCompletedModal";
 
 const Message = styled.div`
   margin: 32px 0 0;
@@ -29,10 +34,9 @@ const Caption = styled(Modal.Caption)`
   text-align: left;
 `;
 
-export default function ApproveModal() {
+export default function ApproveModal({handleModal}) {
   const [count, setCount] = useState(60)
   const [delay, setDelay] = useState(1000)
-  const { handleModal } = useModal()
 
   const {
     weakBalance
@@ -65,35 +69,53 @@ export default function ApproveModal() {
 
   useInterval(increaseCount, delay);
 
-  const onApprove = async (value) => {
+  const onApprove = async (amount) => {
       
     if (bidDenom !== strength) {
-      <RequestFailedModal
-        error = "Please enter amount"
-      />
+      handleModal(
+        <RequestFailedModal
+          error = "Please enter amount"
+        />
+      )
     }
     
-    if(value <= weakBalance) {
+    if(bidAmount <= weakBalance) {
+      console.log("Gets here approve: ", amount)
+      handleModal(
+        <PendingModal />
+      );
+      
       try {
-        handleModal(
-          <PendingModal />
-        );
+        
         strDispatch({
           type: 'status', 
           value: 'APPROVE'
         })
+        
         let tx = await NOMcontract.increaseAllowance(
           bondContract.address,
-          value.toFixed(0)
+          amount.toFixed(0)
         );
-        handleModal()
+
+        tx.wait().then(() => {
+          handleModal(
+            <TransactionCompletedModal
+              tx = {tx}
+            />
+          )
+        })
+
+        strDispatch({
+            type: 'status',
+            value: ''
+        })
+
       } catch (e) {
         // eslint-disable-next-line no-console
         // console.error(e.code, e.message.message);
         // alert(e.message)
         handleModal(
           <TransactionFailedModal
-            closeModal={() => handleModal()}
             error={e.code + '\n' + e.message.slice(0,80) + '...'}
           />
         )
@@ -101,7 +123,6 @@ export default function ApproveModal() {
     } else {
       handleModal(
             <TransactionFailedModal
-              closeModal={() => handleModal()}
               error={`${weak} Balance too low`}
             />
       )
