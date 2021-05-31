@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import useInterval from '@use-it/interval';
-import LoadingBar from 'components/Modals/LoadingBar'
+// import LoadingBar from 'components/Modals/LoadingBar'
 import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
@@ -13,12 +13,6 @@ import * as Modal from "components/Modals/styles"
 import 'components/Modals/loadingBar.css'
 import { useWeb3React } from "@web3-react/core"
 import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext'
-
-import { BondingCont } from 'context/chain/contracts'
-
-import TransactionFailedModal from "components/Modals/components/TransactionFailedModal";
-import PendingModal from "components/Modals/components/PendingModal";
-import TransactionCompletedModal from "./TransactionCompletedModal";
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -98,6 +92,11 @@ const LimitBtn = styled.button`
     background-color: ${(props) =>
       lighten(0.1, props.theme.colors.bgHighlightBorder)};
   }
+
+  &:active {
+    background-color: ${(props) =>
+      lighten(0.1, props.theme.colors.bgHighlightBorder)};
+  }
 `;
 
 const limitOptions = [
@@ -123,27 +122,22 @@ const limitOptions = [
   },
 ];
 
-export default function ConfirmTransactionModal({ handleModal }) {
-  const { account, library } = useWeb3React()
-  const bondContract = BondingCont(library)
-
+export default function ConfirmTransactionModal({ submitTrans }) {
+  const [ slippage, setSlippage ] = useState()
+  const { handleModal } = useModal()
+  const { account } = useWeb3React()
+  
   const { 
     askAmount, 
     bidAmount, 
     bidDenom,
-    slippage,
     strong, 
     weak 
   } = useExchange()
-
-  const {
-    objDispatch,
-  } = useUpdateExchange()
   
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
   
-
   const increaseCount = () => {
     if(count === 0) {
       setDelay(null);
@@ -154,94 +148,11 @@ export default function ConfirmTransactionModal({ handleModal }) {
   }
 
   useInterval(increaseCount, delay);
-  
-  const submitTrans = useCallback(
-    async () => {
-      handleModal(
-        <PendingModal />
-      )
-      if (!bidAmount || !askAmount) return;
-      try {
-        let tx;
-        switch (bidDenom) {
-          case 'strong':
-            // Preparing for many tokens / coins
-            switch (strong) {
-              case 'ETH':
-                tx = await bondContract.buyNOM(
-                  askAmount.toFixed(0),
-                  slippage.toNumber() * 100,
-                  { 
-                    value: bidAmount.toFixed(0) }
-                  )
 
-                  tx.wait().then(() => {
-                    handleModal(
-                      <TransactionCompletedModal
-                        tx = {tx}
-                      />
-                    )
-                  })
-              break
-
-              default:
-                {}
-            }
-            break
-          
-          case 'weak':
-            switch (weak) {
-              case 'wNOM':
-                tx = await bondContract.sellNOM(
-                  bidAmount.toFixed(0),
-                  askAmount.toFixed(0),
-                  slippage * 100,
-                )
-
-                tx.wait().then(() => {
-                  handleModal(
-                    <TransactionCompletedModal
-                      tx = {tx}
-                    />
-                  )
-                })
-                break
-              default:
-                {}
-            }
-            break
-          
-          default:
-            console.log()
-        }
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e.code, e.message.message);
-        // alert(e.message)
-        handleModal(
-          <TransactionFailedModal
-            error={e.code + '\n' + e.message.slice(0,80) + '...'}
-          />
-        )
-      }
-    },[
-      askAmount,
-      bidAmount,
-      bidDenom,
-      bondContract,
-      handleModal,
-      strong,
-      slippage,
-      weak
-    ]
-  )
-  
-  
   const [onSubmit, error] = useAsyncFn(submitTrans);
 
   return (
     <Modal.Wrapper>
-      <LoadingBar progress={(60 - count) / 60 * 100} color='#dddae8' className="loadingBar" />
       <Modal.CloseIcon onClick={() => handleModal()}>
         <Close />
       </Modal.CloseIcon>
@@ -257,7 +168,7 @@ export default function ConfirmTransactionModal({ handleModal }) {
               ""
             } 
             <sup>
-              {bidDenom === 'ETH' ? 'NOM' : 'ETH'}
+              {bidDenom === 'strong' ? 'NOM' : 'ETH'}
             </sup>
         </Modal.ExchangeResult>
 
@@ -277,7 +188,7 @@ export default function ConfirmTransactionModal({ handleModal }) {
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
-          <strong>{format18(bidAmount).toFixed(6)}{' '}{bidDenom}</strong>
+          <strong>{format18(bidAmount).toFixed(6)}{' '}{bidDenom === 'strong' ? strong : weak}</strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <div>
@@ -306,17 +217,9 @@ export default function ConfirmTransactionModal({ handleModal }) {
         <SlippageValues>
           {limitOptions.map((l) => (
             <LimitBtn
-              active={
-                new BigNumber(l.value.toString()).times(100) === 
-                slippage
-              }
+              active={slippage === l.id}
               key={l.id}
-              onClick={() => objDispatch({
-                type: 'slippage', 
-                value: new BigNumber(l.value.toString()).times(
-                  new BigNumber(100)
-                )
-              })}
+              onClick={() => setSlippage(l.id)}
             >
               {l.text}
             </LimitBtn>
@@ -331,7 +234,7 @@ export default function ConfirmTransactionModal({ handleModal }) {
       <footer>
         <Modal.FooterControls>
           <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => onSubmit()}>Confirm ({count})</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => onSubmit(slippage)}>Confirm ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>

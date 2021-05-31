@@ -59,6 +59,7 @@ export function reducer(state, action) {
                             } catch(e) {
                                 console.log(e)
                             }
+                            console.log("Update NOM Allowance: ", update)
                             break
                         case 'strongBalance':
                             try {
@@ -113,6 +114,7 @@ export function reducer(state, action) {
                     }    
                 }   
             }
+            console.log("ChainReducer Update: ", update)
             if (update) {
                 return {
                     ...update

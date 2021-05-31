@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { BigNumber } from 'bignumber.js'
 
 import { useChain } from 'context/chain/ChainContext'
 
-import { BondingCont } from 'context/chain/contracts'
+import { BondingCont, NOMCont } from 'context/chain/contracts'
 
 import { 
     useExchange, 
@@ -24,7 +24,10 @@ import {
 import { useModal } from 'context/modal/ModalContext'
 
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal'
+import PendingModal from 'components/Modals/components/PendingModal'
 import RequestFailedModal from 'components/Modals/components/RequestFailedModal'
+import TransactionCompletedModal from 'components/Modals/components/TransactionCompletedModal'
+import TransactionFailedModal from 'components/Modals/components/TransactionFailedModal'
 
 import NOMButton from 'components/Exchange/NOMButton'
 import { format18, parse18 } from 'utils/math'
@@ -32,12 +35,14 @@ import { useWeb3React } from "@web3-react/core";
 // import { validate } from "graphql";
 
 
-export default function ExchangeQuote({strength, onSubmit}) {
+export default function ExchangeQuote({strength}) {
+  
   const { strongBalance, weakBalance } = useChain()
   const { handleModal } = useModal()
   const { library } = useWeb3React()
   
   const bondContract = BondingCont(library)
+  const NOMcontract = NOMCont(library)
 
   const { 
     askAmount,
@@ -58,38 +63,6 @@ export default function ExchangeQuote({strength, onSubmit}) {
     objDispatch,
     strDispatch
   } = useUpdateExchange();
-
-  const onBid = () => {
-      switch (true) {
-        case (bidDenom !== strength):
-          handleModal(
-            <RequestFailedModal
-              error = "Please enter amount"
-            />  
-          )
-          break
-        case (strength === 'strong' && strongBalance.gte(bidAmount)):
-          handleModal(
-            <ConfirmTransactionModal
-              handleModal = { handleModal }
-            />
-          )
-          break
-        case (strength === 'weak' && weakBalance.gte(bidAmount)):
-          handleModal(
-            <ConfirmTransactionModal
-              handleModal = { handleModal }
-            />
-          )
-          break
-        default:
-          handleModal(
-            <RequestFailedModal
-              error = 'Insufficient funds'
-            />
-          )
-      }
-  }
 
   const onMax = () => {
       (strength === 'strong') ? 
@@ -128,6 +101,168 @@ export default function ExchangeQuote({strength, onSubmit}) {
     return new BigNumber(askAmountUpdate.toString())
   }
 
+  const onApprove = async () => {
+    if(bidAmount <= weakBalance) {
+      handleModal(
+        <PendingModal />
+      );
+      
+      try {
+        
+        strDispatch({
+          type: 'status', 
+          value: 'APPROVE'
+        })
+
+        let tx = await NOMcontract.increaseAllowance(
+          bondContract.address,
+          bidAmount.toFixed(0)
+        );
+
+        tx.wait().then(() => {
+          handleModal(
+            <TransactionCompletedModal
+              tx = {tx}
+            />
+          )
+        })
+
+        strDispatch({
+            type: 'status',
+            value: ''
+        })
+
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        // console.error(e.code, e.message.message);
+        // alert(e.message)
+        handleModal(
+          <TransactionFailedModal
+            error={e.code + '\n' + e.message.slice(0,80) + '...'}
+          />
+        )
+      }    
+    } else {
+      handleModal(
+            <TransactionFailedModal
+              error={`${weak} Balance too low`}
+            />
+      )
+    }
+  }
+
+  const submitTrans = useCallback(
+    async (slippage) => {
+      handleModal(
+        <PendingModal />
+      )
+      if (!bidAmount || !askAmount) return;
+      try {
+        let tx;
+        switch (bidDenom) {
+          case 'strong':
+            // Preparing for many tokens / coins
+            switch (strong) {
+              case 'ETH':
+                tx = await bondContract.buyNOM(
+                  askAmount.toFixed(0),
+                  slippage.toFixed(0),
+                  { 
+                    value: bidAmount.toFixed(0) }
+                  )
+
+                  tx.wait().then(() => {
+                    handleModal(
+                      <TransactionCompletedModal
+                        tx = {tx}
+                      />
+                    )
+                  })
+              break
+
+              default:
+                {}
+            }
+            break
+          
+          case 'weak':
+            switch (weak) {
+              case 'wNOM':
+                tx = await bondContract.sellNOM(
+                  bidAmount.toFixed(0),
+                  askAmount.toFixed(0),
+                  slippage.toFixed(0),
+                )
+
+                tx.wait().then(() => {
+                  handleModal(
+                    <TransactionCompletedModal
+                      tx = {tx}
+                    />
+                  )
+                })
+                break
+              default:
+                {}
+            }
+            break
+          
+          default:
+            console.log()
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e.code, e.message.message);
+        // alert(e.message)
+        handleModal(
+          <TransactionFailedModal
+            error={e.code + '\n' + e.message.slice(0,80) + '...'}
+          />
+        )
+      }
+    },[
+      askAmount,
+      bidAmount,
+      bidDenom,
+      bondContract,
+      handleModal,
+      strong,
+      weak
+    ]
+  )
+
+  const onBid = () => {
+    switch (true) {
+      case (bidDenom !== strength):
+        handleModal(
+          <RequestFailedModal
+            error = "Please enter amount"
+          />  
+        )
+        break
+      case (strength === 'strong' && strongBalance.gte(bidAmount)):
+        handleModal(
+          <ConfirmTransactionModal 
+            submitTrans = {submitTrans}
+          />
+        )
+        break
+      case (strength === 'weak' && weakBalance.gte(bidAmount)):
+        handleModal(
+          <ConfirmTransactionModal 
+            submitTrans = {submitTrans}
+          />
+        )
+        break
+      default:
+        handleModal(
+          <RequestFailedModal
+            error = 'Insufficient funds'
+          />
+        )
+    }
+  }
+
   const onTextChange = useCallback(
     async (evt, textStrength) => {
       evt.preventDefault()
@@ -138,6 +273,25 @@ export default function ExchangeQuote({strength, onSubmit}) {
       switch (true) {
         case (bidDenom === strength && input === evt.target.value.toString()): break
         case (evt.target.value === ''):
+          {
+            let objUpdate = new Map()
+
+            objUpdate = objUpdate.set(
+              'askAmount',
+              new BigNumber(0)
+            )
+            
+            objUpdate = objUpdate.set(
+              'bidAmount',
+              new BigNumber(0)
+            )
+
+            objDispatch({
+              type: 'update',
+              value: objUpdate
+            })
+          }
+          
           strUpdate = strUpdate.set(
             'input',
             ''
@@ -152,6 +306,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
             type: 'update', 
             value: strUpdate
           })
+
           break
         case (
             Number(evt.target.value) > 0 &&
@@ -276,12 +431,31 @@ export default function ExchangeQuote({strength, onSubmit}) {
             </Receiving>
             { 
               (strength === 'strong') ? 
-              (<ExchangeButton 
-                  onClick={onBid}>
-                  Buy {(strength === 'strong') ? weak : strong}
-              </ExchangeButton>) :
-              (<NOMButton 
+              (
+                bidDenom === 'weak' ?
+                  <ExchangeButton>
+                    Input Value
+                  </ExchangeButton> :
+                  (
+                    (bidAmount.lte(strongBalance)) ?
+                      (
+                        (input == '') ?
+                        <ExchangeButton>
+                          Input Value
+                        </ExchangeButton> :
+                        <ExchangeButton 
+                          onClick={onBid}>
+                          Buy {(strength === 'strong') ? weak : strong}
+                        </ExchangeButton>
+                      ) :
+                      <ExchangeButton>
+                        Low {strong} Balance
+                      </ExchangeButton>
+                  )
+              ) :
+              (<NOMButton
                 onBid={onBid}
+                onApprove={onApprove}
               />)
             }
       </ExchangeItem>

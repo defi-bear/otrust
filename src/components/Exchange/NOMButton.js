@@ -1,49 +1,50 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useExchange } from 'context/exchange/ExchangeContext'
 import { useModal } from 'context/modal/ModalContext'
 import { useChain } from 'context/chain/ChainContext'
+import { format18 } from 'utils/math'
 
 import ApproveModal from 'components/Modals/components/ApproveModal'
 
 import {
   SellBtn
 } from "./exchangeStyles"
+import BigNumber from "bignumber.js";
 
 
-export default function NOMButton(onBid) {
-    const { handleModal } = useModal() 
-    const { weakBalance } = useChain()
-    
+export default function NOMButton({ onBid, onApprove }) {
+    const { weakBalance, NOMallowance } = useChain()
+    const { handleModal } = useModal()
+
     const { 
       bidAmount, 
       bidDenom,
-      NOMallowance,
+      input,
       weak
     } = useExchange()
+
+    useEffect(() => {
+      console.log("Bid Amount: ", bidAmount)
+      console.log("NOM Allowance: ", NOMallowance)
+    }, [NOMallowance, bidAmount])
     
     return (
       <> 
-        {
-          (NOMallowance > bidAmount && bidDenom === 'weak' && weakBalance > bidAmount) ? 
-            (<SellBtn onClick={onBid}>Sell {weak}</SellBtn>) : 
-            ((weakBalance > bidAmount) ? 
-              (<SellBtn 
-                onClick={() => handleModal(
-                  <ApproveModal
-                  />
-              )}>
-                Approve
-              </SellBtn>) : 
-              (
-                (bidDenom === 'weak') ?
-                  (bidAmount === '' ? 
-                      <SellBtn>Input Value</SellBtn> :
-                    < SellBtn>Not enough {weak}</SellBtn>
-                  ) : <SellBtn>Input Value</SellBtn>
-                  
-              )    
-            )   
+        { (bidDenom === 'strong') ?
+          <SellBtn> Input Value </SellBtn> :
+          (
+            bidAmount.lte(weakBalance) ?
+            (
+              (input == '') ?
+                <SellBtn> Input Value </SellBtn> :
+                (
+                  NOMallowance.gt(bidAmount) ?
+                  <SellBtn onClick={onBid}>Sell {weak}</SellBtn> :
+                  <SellBtn onClick={onApprove}>Approve</SellBtn>
+                )
+            ) : < SellBtn> Low {weak} Balance </SellBtn> 
+          )          
         }
       </>
     )

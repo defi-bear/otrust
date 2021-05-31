@@ -21,7 +21,7 @@ function ChainProvider({ theme, children }) {
         blockNumber: new BigNumber(0),
         currentETHPrice: new BigNumber(0),
         currentNOMPrice: new BigNumber(0),
-        NOMbalance: new BigNumber(0),
+        NOMallowance: new BigNumber(0),
         strongBalance: new BigNumber(0),
         supplyNOM: new BigNumber(0),
         weakBalance: new BigNumber(0)

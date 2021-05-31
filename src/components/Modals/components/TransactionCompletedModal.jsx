@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { useChain } from 'context/chain/ChainContext'
-import { useExchange } from 'context/exchange/ExchangeContext'
+import { BigNumber } from 'bignumber.js'
+import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext'
 import { Caret, Close, Success } from "../Icons";
 import * as Modal from "../styles";
 import { useModal } from 'context/modal/ModalContext'
@@ -17,6 +17,12 @@ const networks = {1: '', 4: 'rinkeby.'}
 
 export default function TransactionCompletedModal({ tx }) {
   const [detailsActive, setDetailsActive] = useState(false);
+  
+  const {
+    objDispatch,
+    strDispatch
+  } = useUpdateExchange()
+
   const { 
     bidDenom, 
     askAmount, 
@@ -36,9 +42,47 @@ export default function TransactionCompletedModal({ tx }) {
     window.open('https://' + networks[tx.chainId] + 'etherscan.io/tx/' + tx.hash, '_blank')
   }
 
+  const closeModal = () => {
+    let objUpdate = new Map()
+
+    objUpdate = objUpdate.set(
+      'askAmount',
+      new BigNumber(0)
+    )
+    
+    objUpdate = objUpdate.set(
+      'bidAmount',
+      new BigNumber(0)
+    )
+
+    objDispatch({
+      type: 'update',
+      value: objUpdate
+    })
+
+    let strUpdate = new Map()
+
+    strUpdate = strUpdate.set(
+      'input',
+      ''
+    )
+    
+    strUpdate = strUpdate.set(
+      'output',
+      ''
+    )
+
+    strDispatch({
+      type: 'update', 
+      value: strUpdate
+    })
+
+    handleModal()
+  }
+
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => closeModal()}>
         <Close />
       </Modal.CloseIcon>
 
@@ -51,16 +95,16 @@ export default function TransactionCompletedModal({ tx }) {
           status !== 'APPROVE' ? (
             <>
               <Modal.ExchangeResult>
-                + {format18(askAmount).toFixed(8)} <sup>{bidDenom === 'weak' ? weak : strong}</sup>
+                + {format18(askAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? weak : strong}</sup>
                 <Modal.Spent>
-                  - {format18(bidAmount).toFixed(8)} <sup>{bidDenom}</sup>
+                  - {format18(bidAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? strong : weak}</sup>
                 </Modal.Spent>
               </Modal.ExchangeResult>
       
               <Modal.ExchangeRateWrapper>
                 <span>Exchange Rate</span>
       
-                <strong>1 {bidDenom === strong ? weak : strong} = {askAmount.div(bidAmount).toFixed(8)} {bidDenom}</strong>
+                <strong>1 {bidDenom === 'strong' ? weak : strong} = {askAmount.div(bidAmount).toFixed(8)} {bidDenom === 'strong' ? strong : weak}</strong>
               </Modal.ExchangeRateWrapper>
             </>
           ) : (
@@ -78,7 +122,7 @@ export default function TransactionCompletedModal({ tx }) {
           >
             View Details <Caret />
           </Modal.DetailsButton>
-          <Modal.PrimaryButton onClick={() => handleModal()}>Done</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => closeModal()}>Done</Modal.PrimaryButton>
         </Modal.FooterControls>
 
         {detailsActive && (
