@@ -41,6 +41,7 @@ export default function ExchangeQuote({strength, onSubmit}) {
 
   const { 
     askAmount,
+    bidAmount,
     bidDenom,
     input,
     output,
@@ -59,17 +60,35 @@ export default function ExchangeQuote({strength, onSubmit}) {
   } = useUpdateExchange();
 
   const onBid = () => {
-      if (bidDenom !== strength) {
-        <RequestFailedModal
-          error = "Please enter amount"
-        />
+      switch (true) {
+        case (bidDenom !== strength):
+          handleModal(
+            <RequestFailedModal
+              error = "Please enter amount"
+            />  
+          )
+          break
+        case (strength === 'strong' && strongBalance.gte(bidAmount)):
+          handleModal(
+            <ConfirmTransactionModal
+              handleModal = { handleModal }
+            />
+          )
+          break
+        case (strength === 'weak' && weakBalance.gte(bidAmount)):
+          handleModal(
+            <ConfirmTransactionModal
+              handleModal = { handleModal }
+            />
+          )
+          break
+        default:
+          handleModal(
+            <RequestFailedModal
+              error = 'Insufficient funds'
+            />
+          )
       }
-      
-      handleModal(
-          <ConfirmTransactionModal
-            handleModal = { handleModal }
-          />
-      )
   }
 
   const onMax = () => {
@@ -257,7 +276,8 @@ export default function ExchangeQuote({strength, onSubmit}) {
             </Receiving>
             { 
               (strength === 'strong') ? 
-              (<ExchangeButton onClick={onBid}>
+              (<ExchangeButton 
+                  onClick={onBid}>
                   Buy {(strength === 'strong') ? weak : strong}
               </ExchangeButton>) :
               (<NOMButton 

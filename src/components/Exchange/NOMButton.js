@@ -12,9 +12,9 @@ import {
 
 
 export default function NOMButton(onBid) {
+    const { handleModal } = useModal() 
     const { weakBalance } = useChain()
-    const { handleModal } = useModal()
-
+    
     const { 
       bidAmount, 
       bidDenom,
@@ -31,7 +31,6 @@ export default function NOMButton(onBid) {
               (<SellBtn 
                 onClick={() => handleModal(
                   <ApproveModal
-                    handleModal = {handleModal}
                   />
               )}>
                 Approve

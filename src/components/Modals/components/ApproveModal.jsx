@@ -34,9 +34,11 @@ const Caption = styled(Modal.Caption)`
   text-align: left;
 `;
 
-export default function ApproveModal({handleModal}) {
+export default function ApproveModal() {
   const [count, setCount] = useState(60)
   const [delay, setDelay] = useState(1000)
+
+  const { handleModal } = useModal()
 
   const {
     weakBalance
@@ -44,8 +46,6 @@ export default function ApproveModal({handleModal}) {
 
   const {
     bidAmount,
-    bidDenom,
-    strength,
     weak
   } = useExchange()
 
@@ -70,14 +70,6 @@ export default function ApproveModal({handleModal}) {
   useInterval(increaseCount, delay);
 
   const onApprove = async (amount) => {
-      
-    if (bidDenom !== strength) {
-      handleModal(
-        <RequestFailedModal
-          error = "Please enter amount"
-        />
-      )
-    }
     
     if(bidAmount <= weakBalance) {
       console.log("Gets here approve: ", amount)
@@ -91,7 +83,7 @@ export default function ApproveModal({handleModal}) {
           type: 'status', 
           value: 'APPROVE'
         })
-        
+
         let tx = await NOMcontract.increaseAllowance(
           bondContract.address,
           amount.toFixed(0)
