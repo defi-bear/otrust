@@ -332,27 +332,11 @@ export default function ExchangeQuote({strength}) {
           try {
             askAmountUpdate = await getAskAmount(askAmount, bidAmountUpdate, textStrength)
           } catch(err) {
-            
-            strUpdate = strUpdate.set(
-              'input',
-              ''
-            )
-            
-            strUpdate = strUpdate.set(
-              'output',
-              'Invalid Input'
-            )
-
-            strDispatch({
-              type: 'update', 
-              value: strUpdate
-            })
-
             if (err) {
-              console.log(err)
+              console.log(err.error.message)
               handleModal(
                 <RequestFailedModal
-                  error = {err}
+                  error = {err.error.message}
                 />
               )
             }
