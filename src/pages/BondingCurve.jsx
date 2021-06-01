@@ -39,8 +39,8 @@ export default function BondingCurve() {
   return (
     <Container>
       <BondingCurveLayout>
-        <AcctDash />
         <Bonding />
+        <AcctDash />
       </BondingCurveLayout>
     </Container>
   );
