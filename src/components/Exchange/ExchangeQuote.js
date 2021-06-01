@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import { BigNumber } from 'bignumber.js'
 
@@ -76,7 +76,7 @@ export default function ExchangeQuote({strength}) {
           })
   }
 
-  const getAskAmount = async (askAmountState, bidAmountUpdate, textStrength) => {
+  const getAskAmount = useCallback(async (askAmountState, bidAmountUpdate, textStrength) => {
     var askAmountUpdate = askAmountState
         
     switch (textStrength) {
@@ -99,7 +99,7 @@ export default function ExchangeQuote({strength}) {
             console.error("Denom not set");
     }
     return new BigNumber(askAmountUpdate.toString())
-  }
+  },[bondContract])
 
   const onApprove = async () => {
     if(bidAmount <= weakBalance) {
@@ -385,8 +385,12 @@ export default function ExchangeQuote({strength}) {
       }
   },
   [ 
+    askAmount,
     bidDenom,
+    getAskAmount,
+    handleModal,
     input,
+    objDispatch,
     strDispatch,
     strength
   ]
@@ -423,7 +427,7 @@ export default function ExchangeQuote({strength}) {
                   (
                     (bidAmount.lte(strongBalance)) ?
                       (
-                        (input == '') ?
+                        (input === '') ?
                         <ExchangeButton>
                           Input Value
                         </ExchangeButton> :

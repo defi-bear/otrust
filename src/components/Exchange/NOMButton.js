@@ -1,21 +1,14 @@
 import React, { useEffect } from "react";
 
 import { useExchange } from 'context/exchange/ExchangeContext'
-import { useModal } from 'context/modal/ModalContext'
 import { useChain } from 'context/chain/ChainContext'
-import { format18 } from 'utils/math'
-
-import ApproveModal from 'components/Modals/components/ApproveModal'
 
 import {
   SellBtn
 } from "./exchangeStyles"
-import BigNumber from "bignumber.js";
-
 
 export default function NOMButton({ onBid, onApprove }) {
     const { weakBalance, NOMallowance } = useChain()
-    const { handleModal } = useModal()
 
     const { 
       bidAmount, 
@@ -36,7 +29,7 @@ export default function NOMButton({ onBid, onApprove }) {
           (
             bidAmount.lte(weakBalance) ?
             (
-              (input == '') ?
+              (input === '') ?
                 <SellBtn> Input Value </SellBtn> :
                 (
                   NOMallowance.gt(bidAmount) ?

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import useInterval from '@use-it/interval';
@@ -6,13 +6,12 @@ import useInterval from '@use-it/interval';
 import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
-import { useAsyncFn } from 'hooks/use-async-fn'
 import { useModal } from 'context/modal/ModalContext'
 import { Close, Metamask } from "components/Modals/Icons"
 import * as Modal from "components/Modals/styles"
 import 'components/Modals/loadingBar.css'
 import { useWeb3React } from "@web3-react/core"
-import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext'
+import { useExchange } from 'context/exchange/ExchangeContext'
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -149,7 +148,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
 
   useInterval(increaseCount, delay);
 
-  const [onSubmit, error] = useAsyncFn(submitTrans);
+  
 
   return (
     <Modal.Wrapper>
@@ -234,7 +233,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
       <footer>
         <Modal.FooterControls>
           <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => onSubmit(slippage)}>Confirm ({count})</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => submitTrans(slippage)}>Confirm ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
