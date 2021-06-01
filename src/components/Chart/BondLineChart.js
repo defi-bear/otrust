@@ -1,6 +1,5 @@
-import React, { useRef, useEffect, useContext, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import { BigNumber } from 'bignumber.js'
 import { format18 } from 'utils/math'
 
 import {
@@ -14,7 +13,7 @@ import {
   axisLeft,
 } from "d3";
 
-import { ChainContext, useChain } from 'context/chain/ChainContext'
+import { useChain } from 'context/chain/ChainContext'
 import { useExchange } from "context/exchange/ExchangeContext";
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 
@@ -35,12 +34,13 @@ function supplyToArray([supBegin, supEnd]) {
   const dif = supEnd - supBegin;
   const n = 100;
   for (var i = 0; i < n; i++) {
-      dataArray.push({
-      x: supBegin + (dif * i) / n,
-      y: priceAtSupply(supBegin + (dif * i) / n),
-      });
+        dataArray.push({
+          x: parseFloat(supBegin + (dif * i) / n),
+          y: priceAtSupply(supBegin + (dif * i) / n),
+        });
   }
 
+  console.log("Data Array: ", dataArray)
   return dataArray;
 }
 
@@ -58,13 +58,13 @@ export function bounds(formatSupply) {
   try{
     var digitsUpper = Math.floor(
       Math.log10(
-        format18(formatSupply[1]).toFixed(8)
+        formatSupply[1]
       )
     );
     // upperBound = 10**(digitsUpper + 1)
     upperBound =
       (Math.round(
-        format18(formatSupply[1]).toFixed(8) / 
+        formatSupply[1] / 
         10 ** digitsUpper) + 1) * 10 ** digitsUpper
     lowerBound = 0;
   } catch (err) {
@@ -85,52 +85,36 @@ function LineChart({ id = "bondingChart" }) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const [data, setData] = useState(supplyToArray(0, 100000000))
-  const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
-  const [labelData, setLabelData] = useState('') 
-
-  const { theme } = useContext(ChainContext);
-  const { supplyNOM } = useChain()
+  const { supplyNOM, theme } = useChain()
   const { askAmount, bidAmount, bidDenom } = useExchange();
 
-  useEffect(() => {
-    if(bidAmount) {
-      var supplyTop = supplyNOM
-      var supplyBot = supplyNOM
+  var supplyTop = supplyNOM
+  var supplyBot = supplyNOM
 
-      switch (bidDenom) {
-        case 'strong':
-          supplyTop = supplyNOM.plus(new BigNumber(askAmount.toString()))
-          break
-        case 'weak':
-          supplyBot = supplyBot = supplyNOM.minus(new BigNumber(bidAmount.toString()))
-          break
-        default:
-          {}
-      }
+ switch (bidDenom) {
+  case 'strong':
+    supplyTop = supplyNOM.plus(askAmount)
+    break
+  case 'weak':
+    supplyBot = supplyNOM.minus(bidAmount)
+    break
+  default:
+    break
+}
 
-      const formatSupply = [
-        format18(supplyBot).toFixed(8),
-        format18(supplyTop).toFixed(8)
-      ]
-      
-      const { lowerBound, upperBound } = bounds(formatSupply)
-      
-      setData(supplyToArray(lowerBound, upperBound));
-      setAreaData(
-        supplyToArray(
-          formatSupply
-        )
-      )
-      setLabelData(
-        labelArray(
-          formatSupply
-        )
-      )
+  const formatSupply = [
+    format18(supplyBot).toNumber(),
+    format18(supplyTop).toNumber()
+  ]
 
-    }
-  },[askAmount, bidAmount, bidDenom, supplyNOM])
+  const { lowerBound, upperBound } = bounds(formatSupply)
 
+  const areaData = supplyToArray(formatSupply)
+
+  const data = supplyToArray([lowerBound, upperBound])
+
+  const labelData = labelArray(formatSupply)
+  
   console.log("Data: ", data)
   console.log("Area Data: ", areaData)
   

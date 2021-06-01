@@ -126,7 +126,8 @@ function ChainProvider({ theme, children }) {
     
 
     const contextValue = {
-        ...state
+        ...state,
+        theme
     }
 
     return (
