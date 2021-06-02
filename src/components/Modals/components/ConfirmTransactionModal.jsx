@@ -122,7 +122,7 @@ const limitOptions = [
 ];
 
 export default function ConfirmTransactionModal({ submitTrans }) {
-  const [ slippage, setSlippage ] = useState()
+  const [ slippage, setSlippage ] = useState(0)
   const { handleModal } = useModal()
   const { account } = useWeb3React()
   
