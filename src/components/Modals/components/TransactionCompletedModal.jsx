@@ -137,7 +137,7 @@ export default function TransactionCompletedModal({ tx }) {
               <span>TxID</span> <strong>{shortten(tx.hash)}</strong>
             </Modal.FooterDetailsRow>
             <Modal.FooterDetailsRow>
-              <span>Network Confirmations</span> <strong>{tx.confirmations}</strong>
+              <span>Network Confirmations</span> <strong>{tx.confirmations > 0 ? tx.confirmations : 1}</strong>
             </Modal.FooterDetailsRow>
 
             <ExplorerButton onClick={() => onExplore()}>View in Explorer</ExplorerButton>
