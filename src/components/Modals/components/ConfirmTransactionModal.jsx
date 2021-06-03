@@ -102,7 +102,7 @@ const limitOptions = [
   {
     id: 0,
     text: "No limit",
-    value: new BigNumber(0)
+    value: new BigNumber(1000)
   },
   {
     id: 1,
