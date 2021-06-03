@@ -272,7 +272,7 @@ export default function ExchangeQuote({strength}) {
       let strUpdate = new Map()
       switch (true) {
         case (bidDenom === strength && input === evt.target.value.toString()): break
-        case (evt.target.value === ''):
+        case (evt.target.value === '' || Number(evt.target.value) === 0) || evt.target.value === '.':
           {
             let objUpdate = new Map()
 
@@ -293,8 +293,13 @@ export default function ExchangeQuote({strength}) {
           }
           
           strUpdate = strUpdate.set(
+            'bidDenom',
+            strength
+          )
+
+          strUpdate = strUpdate.set(
             'input',
-            ''
+            evt.target.value.toString()
           )
           
           strUpdate = strUpdate.set(
