@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
-import useInterval from '@use-it/interval';
+import useInterval from "@use-it/interval";
 // import LoadingBar from 'components/Modals/LoadingBar'
-import { BigNumber } from 'bignumber.js'
-import { format18 } from 'utils/math'
+import { BigNumber } from "bignumber.js";
+import { format18 } from "utils/math";
 
-import { useModal } from 'context/modal/ModalContext'
-import { Close, Metamask } from "components/Modals/Icons"
-import * as Modal from "components/Modals/styles"
-import 'components/Modals/loadingBar.css'
-import { useWeb3React } from "@web3-react/core"
-import { useExchange } from 'context/exchange/ExchangeContext'
+import { useModal } from "context/modal/ModalContext";
+import { Close, Metamask } from "components/Modals/Icons";
+import * as Modal from "components/Modals/styles";
+import "components/Modals/loadingBar.css";
+import { useWeb3React } from "@web3-react/core";
+import { useExchange } from "context/exchange/ExchangeContext";
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -32,13 +32,13 @@ const TransactionDetailsRow = styled.div`
   }
 `;
 
-const SlippageWrapper = styled.section`
+const OptionsWrapper = styled.section`
   padding: 32px 32px;
 
   border-top: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
 `;
 
-const SlippageCaption = styled.p`
+const OptionCaption = styled.p`
   margin: 0 0 12px;
   color: ${(props) => props.theme.colors.textThirdly};
 `;
@@ -48,7 +48,7 @@ const SlippageDesc = styled.p`
   color: ${(props) => props.theme.colors.textSecondary};
 `;
 
-const SlippageValues = styled.div`
+const Options = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
@@ -72,7 +72,7 @@ const WalletIcon = styled.div`
   }
 `;
 
-const LimitBtn = styled.button`
+const OptionBtn = styled.button`
   padding: 12px 16px;
 
   background-color: ${(props) =>
@@ -102,17 +102,17 @@ const limitOptions = [
   {
     id: 0,
     text: "No limit",
-    value: new BigNumber(1000)
+    value: new BigNumber(1000),
   },
   {
     id: 1,
     text: "1%",
-    value: new BigNumber(100)
+    value: new BigNumber(100),
   },
   {
     id: 2,
     text: "2.5%",
-    value: new BigNumber(250)
+    value: new BigNumber(250),
   },
   {
     id: 3,
@@ -121,34 +121,42 @@ const limitOptions = [
   },
 ];
 
+const gasOptions = [
+  {
+    id: 0,
+    text: "21 (Standard)",
+  },
+  {
+    id: 1,
+    text: "26 (Fast)",
+  },
+  {
+    id: 2,
+    text: "31 (Instant)",
+  },
+];
+
 export default function ConfirmTransactionModal({ submitTrans }) {
-  const [ slippage, setSlippage ] = useState()
-  const { handleModal } = useModal()
-  const { account } = useWeb3React()
-  
-  const { 
-    askAmount, 
-    bidAmount, 
-    bidDenom,
-    strong, 
-    weak 
-  } = useExchange()
-  
+  const [slippage, setSlippage] = useState();
+  const [gasFee, setGasFee] = useState(0);
+  const { handleModal } = useModal();
+  const { account } = useWeb3React();
+
+  const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
+
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
-  
+
   const increaseCount = () => {
-    if(count === 0) {
+    if (count === 0) {
       setDelay(null);
       handleModal();
     } else {
       setCount(count - 1);
     }
-  }
+  };
 
   useInterval(increaseCount, delay);
-
-  
 
   return (
     <Modal.Wrapper>
@@ -160,34 +168,38 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         <Modal.Caption>Confirm Transaction</Modal.Caption>
 
         <Modal.ExchangeResult>
-          <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>
-          ~ {
-              BigNumber.isBigNumber(askAmount) ?
-              format18(askAmount).toFixed(6) : 
-              ""
-            } 
-            <sup>
-              {bidDenom === 'strong' ? 'NOM' : 'ETH'}
-            </sup>
+          <Modal.ExchangeResultDescription>
+            You're receiving
+          </Modal.ExchangeResultDescription>
+          ~{" "}
+          {BigNumber.isBigNumber(askAmount)
+            ? format18(askAmount).toFixed(6)
+            : ""}
+          <sup>{bidDenom === "strong" ? "NOM" : "ETH"}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
           <span>Current Exchange Rate</span>
           <strong>
-            {
-              (bidDenom) ?
-              <>1 {bidDenom === 'strong' ? strong : weak} = {
-                (BigNumber.isBigNumber(bidAmount)) ? 
-                format18(askAmount.div(bidAmount)).toFixed(6) : 
-                "Loading"
-              }</> : (<></>)
-            }
-            {' '} {bidDenom === 'strong' ? weak : strong}
+            {bidDenom ? (
+              <>
+                1 {bidDenom === "strong" ? strong : weak} ={" "}
+                {BigNumber.isBigNumber(bidAmount)
+                  ? format18(askAmount.div(bidAmount)).toFixed(6)
+                  : "Loading"}
+              </>
+            ) : (
+              <></>
+            )}{" "}
+            {bidDenom === "strong" ? weak : strong}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
-          <strong>{format18(bidAmount).toFixed(6)}{' '}{bidDenom === 'strong' ? strong : weak}</strong>
+          <strong>
+            {format18(bidAmount).toFixed(6)}{" "}
+            {bidDenom === "strong" ? strong : weak}
+          </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <div>
@@ -211,29 +223,45 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           </WalletIcon>
         </TransactionDetailsRow>
       </main>
-      <SlippageWrapper>
-        <SlippageCaption>Slippage Limit</SlippageCaption>
-        <SlippageValues>
-          {limitOptions.map((l) => (
-            <LimitBtn
-              active={slippage === l.id}
-              key={l.id}
-              onClick={() => setSlippage(l.id)}
+      <OptionsWrapper>
+        <OptionCaption>Gas Fee</OptionCaption>
+        <Options>
+          {gasOptions.map((gasFeeOption) => (
+            <OptionBtn
+              active={gasFee === gasFeeOption.id}
+              key={gasFeeOption.id}
+              onClick={() => setGasFee(gasFeeOption.id)}
             >
-              {l.text}
-            </LimitBtn>
+              {gasFeeOption.text}
+            </OptionBtn>
           ))}
-        </SlippageValues>
+        </Options>
+        <OptionCaption>Slippage Limit</OptionCaption>
+        <Options>
+          {limitOptions.map((slippageOption) => (
+            <OptionBtn
+              active={slippage === slippageOption.id}
+              key={slippageOption.id}
+              onClick={() => setSlippage(slippageOption.id)}
+            >
+              {slippageOption.text}
+            </OptionBtn>
+          ))}
+        </Options>
         <SlippageDesc>
           Slippage is likely in times of high demand. Quote is based on most
           recent block and does not reflect transactions ahead of you in the
           mempool
         </SlippageDesc>
-      </SlippageWrapper>
+      </OptionsWrapper>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => submitTrans(slippage)}>Confirm ({count})</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()}>
+            Cancel
+          </Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={() => submitTrans(slippage)}>
+            Confirm ({count})
+          </Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
