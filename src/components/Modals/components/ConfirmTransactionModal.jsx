@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import useInterval from "@use-it/interval";
@@ -124,15 +124,15 @@ const limitOptions = [
 const gasOptions = [
   {
     id: 0,
-    text: "21 (Standard)",
+    text: "0 (Standard)",
   },
   {
     id: 1,
-    text: "26 (Fast)",
+    text: "0 (Fast)",
   },
   {
     id: 2,
-    text: "31 (Instant)",
+    text: "0 (Instant)",
   },
 ];
 
@@ -155,6 +155,22 @@ export default function ConfirmTransactionModal({ submitTrans }) {
       setCount(count - 1);
     }
   };
+
+
+	const getGasPrices = async () => {
+		const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
+		const result = await prices.json();
+    gasOptions[0].text = result.data.standard / 1e9 + " (Standard)";
+    gasOptions[1].text = result.data.fast / 1e9 + " (Fast)";
+    gasOptions[2].text = result.data.rapid / 1e9 + " (Instant)";
+    gasOptions[0].gas = result.data.standard / 1e9;
+    gasOptions[1].gas = result.data.fast / 1e9;
+    gasOptions[2].gas = result.data.rapid / 1e9;
+	}
+
+  useEffect(() => {
+    getGasPrices();
+  }, [])
 
   useInterval(increaseCount, delay);
 
@@ -228,9 +244,9 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         <Options>
           {gasOptions.map((gasFeeOption) => (
             <OptionBtn
-              active={gasFee === gasFeeOption.id}
-              key={gasFeeOption.id}
-              onClick={() => setGasFee(gasFeeOption.id)}
+              active={gasFee === gasFeeOption.gas}
+              key={gasFeeOption.gas}
+              onClick={() => setGasFee(gasFeeOption.gas)}
             >
               {gasFeeOption.text}
             </OptionBtn>
@@ -259,7 +275,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           <Modal.SecondaryButton onClick={() => handleModal()}>
             Cancel
           </Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => submitTrans(slippage)}>
+          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasFee)}>
             Confirm ({count})
           </Modal.PrimaryButton>
         </Modal.FooterControls>

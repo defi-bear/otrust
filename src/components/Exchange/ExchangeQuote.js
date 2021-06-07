@@ -32,6 +32,7 @@ import TransactionFailedModal from 'components/Modals/components/TransactionFail
 import NOMButton from 'components/Exchange/NOMButton'
 import { format18, parse18 } from 'utils/math'
 import { useWeb3React } from "@web3-react/core";
+import { utils } from "ethers";
 // import { validate } from "graphql";
 
 
@@ -152,7 +153,7 @@ export default function ExchangeQuote({strength}) {
   }
 
   const submitTrans = useCallback(
-    async (slippage) => {
+    async (slippage, gasPrice) => {
       handleModal(
         <PendingModal />
       )
@@ -168,8 +169,9 @@ export default function ExchangeQuote({strength}) {
                   askAmount.toFixed(0),
                   slippage.toFixed(0),
                   { 
-                    value: bidAmount.toFixed(0) }
-                  )
+                    value: bidAmount.toFixed(0),
+                    gasPrice: utils.parseUnits((gasPrice || '30').toString(), 'gwei')
+                  })
 
                   tx.wait().then(() => {
                     handleModal(
@@ -192,6 +194,9 @@ export default function ExchangeQuote({strength}) {
                   bidAmount.toFixed(0),
                   askAmount.toFixed(0),
                   slippage.toFixed(0),
+                  {
+                    gasPrice: utils.parseUnits(gasPrice || '30'.toString(), 'gwei')
+                  }
                 )
 
                 tx.wait().then(() => {
