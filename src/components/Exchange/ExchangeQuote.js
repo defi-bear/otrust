@@ -32,6 +32,7 @@ import TransactionFailedModal from 'components/Modals/components/TransactionFail
 import NOMButton from 'components/Exchange/NOMButton'
 import { format18, parse18 } from 'utils/math'
 import { useWeb3React } from "@web3-react/core";
+import { utils } from "ethers";
 // import { validate } from "graphql";
 
 
@@ -63,18 +64,6 @@ export default function ExchangeQuote({strength}) {
     objDispatch,
     strDispatch
   } = useUpdateExchange();
-
-  const onMax = () => {
-      (strength === 'strong') ? 
-          strDispatch({
-            type: 'input',
-            value: format18(strongBalance).toString()
-          }) : 
-          strDispatch({
-            type: 'input',
-            value: format18(weakBalance).toString()
-          })
-  }
 
   const getAskAmount = useCallback(async (askAmountState, bidAmountUpdate, textStrength) => {
     var askAmountUpdate = askAmountState
@@ -152,7 +141,7 @@ export default function ExchangeQuote({strength}) {
   }
 
   const submitTrans = useCallback(
-    async (slippage) => {
+    async (slippage, gasPrice) => {
       handleModal(
         <PendingModal />
       )
@@ -168,8 +157,9 @@ export default function ExchangeQuote({strength}) {
                   askAmount.toFixed(0),
                   slippage.toFixed(0),
                   { 
-                    value: bidAmount.toFixed(0) }
-                  )
+                    value: bidAmount.toFixed(0),
+                    gasPrice: utils.parseUnits((gasPrice || '30').toString(), 'gwei')
+                  })
 
                   tx.wait().then(() => {
                     handleModal(
@@ -192,6 +182,9 @@ export default function ExchangeQuote({strength}) {
                   bidAmount.toFixed(0),
                   askAmount.toFixed(0),
                   slippage.toFixed(0),
+                  {
+                    gasPrice: utils.parseUnits(gasPrice || '30'.toString(), 'gwei')
+                  }
                 )
 
                 tx.wait().then(() => {
@@ -263,16 +256,58 @@ export default function ExchangeQuote({strength}) {
     }
   }
 
+  const onMax = async () => {
+    let strUpdate = new Map()
+    strUpdate.set("bidDenom", strength)
+    let bidMaxValue = strength === "strong"
+      ? format18(strongBalance).toString()
+      : format18(weakBalance).toString()
+
+    strUpdate.set(
+      "input",
+      bidMaxValue
+    );
+
+    const bidAmountUpdate = parse18(
+      new BigNumber(parseFloat(bidMaxValue).toString())
+    );
+
+    let askAmountUpdate
+
+    try {
+        askAmountUpdate = await getAskAmount(
+          askAmount,
+          bidAmountUpdate,
+          strength
+        );
+      } catch (err) {
+        if (err) {
+          handleModal(<RequestFailedModal error={err.error.message} />)
+        }
+      }
+
+    strUpdate.set(
+      "output",
+      format18(new BigNumber(askAmountUpdate.toString())).toFixed(8)
+    );
+
+    strDispatch({
+      type: "update",
+      value: strUpdate
+    })
+  }
+
   const onTextChange = useCallback(
     async (evt, textStrength) => {
       evt.preventDefault()
+      const floatRegExp = new RegExp(/(^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$)|(^\d\.$)/)
       console.log("Component Strength: ", strength)
       console.log("Text Strength: ", textStrength)
       console.log("Bid Denom: ", bidDenom)
       let strUpdate = new Map()
       switch (true) {
         case (bidDenom === strength && input === evt.target.value.toString()): break
-        case (evt.target.value === '' || Number(evt.target.value) === 0) || evt.target.value === '.':
+        case (evt.target.value === '' || evt.target.value === '.'):
           {
             let objUpdate = new Map()
 
@@ -313,10 +348,7 @@ export default function ExchangeQuote({strength}) {
           })
 
           break
-        case (
-            Number(evt.target.value) > 0 &&
-            parseFloat(evt.target.value) > 0
-        ):
+          case (floatRegExp.test(evt.target.value.toString())):
           console.log("Input after test", evt.target.value)
           const bidAmountUpdate = parse18(new BigNumber(
               parseFloat(evt.target.value).toString()
