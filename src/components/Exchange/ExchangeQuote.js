@@ -285,6 +285,23 @@ export default function ExchangeQuote({strength}) {
           handleModal(<RequestFailedModal error={err.error.message} />)
         }
       }
+    
+    let objUpdate = new Map()
+
+    objUpdate = objUpdate.set(
+      'askAmount',
+      new BigNumber(askAmountUpdate.toString())
+    )
+    
+    objUpdate = objUpdate.set(
+      'bidAmount',
+      bidAmountUpdate
+    )
+
+    objDispatch({
+      type: 'update',
+      value: objUpdate
+    })
 
     strUpdate.set(
       "output",
@@ -295,6 +312,7 @@ export default function ExchangeQuote({strength}) {
       type: "update",
       value: strUpdate
     })
+
   }
 
   const onTextChange = useCallback(
