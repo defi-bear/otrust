@@ -165,9 +165,9 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     gasOptions[0].text = (result.data.standard / 1e9).toPrecision(4) + " (Standard)";
     gasOptions[1].text = (result.data.fast / 1e9).toPrecision(4) + " (Fast)";
     gasOptions[2].text = (result.data.rapid / 1e9).toPrecision(4) + " (Instant)";
-    gasOptions[0].gas = new BigNumber((result.data.standard / 1e9).toString());
-    gasOptions[1].gas = new BigNumber((result.data.fast / 1e9).toString());
-    gasOptions[2].gas = new BigNumber((result.data.rapid / 1e9).toString());
+    gasOptions[0].gas = new BigNumber((result.data.standard).toString());
+    gasOptions[1].gas = new BigNumber((result.data.fast).toString());
+    gasOptions[2].gas = new BigNumber((result.data.rapid).toString());
     objDispatch({
       type: 'askAmount',
       value: askAmount.minus(gasOptions[2].gas)
