@@ -32,8 +32,6 @@ import TransactionFailedModal from 'components/Modals/components/TransactionFail
 import NOMButton from 'components/Exchange/NOMButton'
 import { format18, parse18 } from 'utils/math'
 import { useWeb3React } from "@web3-react/core";
-import { utils } from "ethers";
-// import { validate } from "graphql";
 
 
 export default function ExchangeQuote({strength}) {
@@ -148,28 +146,46 @@ export default function ExchangeQuote({strength}) {
       if (!bidAmount || !askAmount) return;
       try {
         let tx;
+        let gasFee;
+        
         switch (bidDenom) {
           case 'strong':
             // Preparing for many tokens / coins
             switch (strong) {
               case 'ETH':
-                tx = await bondContract.buyNOM(
+                const gasFeeRaw = await bondContract.estimateGas.buyNOM(
                   askAmount.toFixed(0),
                   slippage.toFixed(0),
                   { 
-                    value: bidAmount.toFixed(0),
-                    gasPrice: utils.parseUnits((gasPrice || '30').toString(), 'gwei')
+                    value: bidAmount.toFixed(0)
                   })
 
-                  tx.wait().then(() => {
-                    handleModal(
-                      <TransactionCompletedModal
-                        tx = {tx}
-                      />
-                    )
-                  })
+                gasFee = new BigNumber(gasFeeRaw.toString())
+                
+                const bidAmountUpdate = bidAmount.minus((gasFee).times(gasPrice))
+                const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0))
+                const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString())
+                
+                tx = await bondContract.buyNOM(
+                    askAmountUpdate.toFixed(0),
+                    slippage.toFixed(0),
+                    {
+                      value: bidAmountUpdate.toFixed(0),
+                      gasPrice: gasPrice.toFixed(0),
+                      gasLimit: gasFee.toFixed(0)
+                    }
+                )
+
+                tx.wait().then(() => {
+                  handleModal(
+                    <TransactionCompletedModal
+                      tx = {tx}
+                    />
+                  )
+                })
+                
+                
               break
-
               default:
                 {}
             }
@@ -183,7 +199,7 @@ export default function ExchangeQuote({strength}) {
                   askAmount.toFixed(0),
                   slippage.toFixed(0),
                   {
-                    gasPrice: utils.parseUnits(gasPrice || '30'.toString(), 'gwei')
+                    gasPrice: gasPrice.toFixed(0)
                   }
                 )
 
@@ -260,16 +276,12 @@ export default function ExchangeQuote({strength}) {
     let strUpdate = new Map()
     strUpdate.set("bidDenom", strength)
     let bidMaxValue = strength === "strong"
-      ? format18(strongBalance).toString()
-      : format18(weakBalance).toString()
+      ? strongBalance
+      : weakBalance
 
     strUpdate.set(
       "input",
-      bidMaxValue
-    );
-
-    const bidAmountUpdate = parse18(
-      new BigNumber(parseFloat(bidMaxValue).toString())
+      format18(bidMaxValue).toString()
     );
 
     let askAmountUpdate
@@ -277,7 +289,7 @@ export default function ExchangeQuote({strength}) {
     try {
         askAmountUpdate = await getAskAmount(
           askAmount,
-          bidAmountUpdate,
+          bidMaxValue,
           strength
         );
       } catch (err) {
@@ -285,6 +297,23 @@ export default function ExchangeQuote({strength}) {
           handleModal(<RequestFailedModal error={err.error.message} />)
         }
       }
+    
+    let objUpdate = new Map()
+
+    objUpdate = objUpdate.set(
+      'askAmount',
+      askAmountUpdate
+    )
+    
+    objUpdate = objUpdate.set(
+      'bidAmount',
+      bidMaxValue
+    )
+
+    objDispatch({
+      type: 'update',
+      value: objUpdate
+    })
 
     strUpdate.set(
       "output",
@@ -295,6 +324,7 @@ export default function ExchangeQuote({strength}) {
       type: "update",
       value: strUpdate
     })
+
   }
 
   const onTextChange = useCallback(

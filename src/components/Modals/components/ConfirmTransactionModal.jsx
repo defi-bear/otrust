@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import useInterval from "@use-it/interval";
@@ -12,6 +12,7 @@ import * as Modal from "components/Modals/styles";
 import "components/Modals/loadingBar.css";
 import { useWeb3React } from "@web3-react/core";
 import { useExchange } from "context/exchange/ExchangeContext";
+
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -138,7 +139,8 @@ const gasOptions = [
 
 export default function ConfirmTransactionModal({ submitTrans }) {
   const [slippage, setSlippage] = useState(0);
-  const [gasFee, setGasFee] = useState(0);
+  const [gasPriceChoice, setGasPriceChoice] = useState(2)
+  const [gasPrice, setGasPrice] = useState(0);
   const { handleModal } = useModal();
   const { account } = useWeb3React();
 
@@ -157,20 +159,21 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   };
 
 
-	const getGasPrices = async () => {
+	const getGasPrices = useCallback(async () => {
 		const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
 		const result = await prices.json();
-    gasOptions[0].text = result.data.standard / 1e9 + " (Standard)";
-    gasOptions[1].text = result.data.fast / 1e9 + " (Fast)";
-    gasOptions[2].text = result.data.rapid / 1e9 + " (Instant)";
-    gasOptions[0].gas = result.data.standard / 1e9;
-    gasOptions[1].gas = result.data.fast / 1e9;
-    gasOptions[2].gas = result.data.rapid / 1e9;
-	}
+    gasOptions[0].text = (result.data.standard / 1e9).toPrecision(4) + " (Standard)";
+    gasOptions[1].text = (result.data.fast / 1e9).toPrecision(4) + " (Fast)";
+    gasOptions[2].text = (result.data.rapid / 1e9).toPrecision(4) + " (Instant)";
+    gasOptions[0].gas = new BigNumber((result.data.standard).toString());
+    gasOptions[1].gas = new BigNumber((result.data.fast).toString());
+    gasOptions[2].gas = new BigNumber((result.data.rapid).toString());
+    setGasPrice(gasOptions[gasPriceChoice].gas)
+	},[gasPriceChoice])
 
   useEffect(() => {
     getGasPrices();
-  }, [])
+  }, [getGasPrices])
 
   useInterval(increaseCount, delay);
 
@@ -242,13 +245,18 @@ export default function ConfirmTransactionModal({ submitTrans }) {
       <OptionsWrapper>
         <OptionCaption>Gas Fee</OptionCaption>
         <Options>
-          {gasOptions.map((gasFeeOption) => (
+          {gasOptions.map((gasPriceOption) => (
             <OptionBtn
-              active={gasFee === gasFeeOption.gas}
-              key={gasFeeOption.gas}
-              onClick={() => setGasFee(gasFeeOption.gas)}
+              active={gasPrice === gasPriceOption.gas}
+              key={gasPriceOption.gas}
+              onClick={() => 
+                {
+                  setGasPrice(gasPriceOption.gas)
+                  setGasPriceChoice(gasPriceOption.id)
+                }
+              }
             >
-              {gasFeeOption.text}
+              {gasPriceOption.text}
             </OptionBtn>
           ))}
         </Options>
@@ -275,7 +283,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           <Modal.SecondaryButton onClick={() => handleModal()}>
             Cancel
           </Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasFee)}>
+          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasPrice)}>
             Confirm ({count})
           </Modal.PrimaryButton>
         </Modal.FooterControls>
