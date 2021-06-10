@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { lighten } from "polished";
 import useInterval from "@use-it/interval";
@@ -11,7 +11,8 @@ import { Close, Metamask } from "components/Modals/Icons";
 import * as Modal from "components/Modals/styles";
 import "components/Modals/loadingBar.css";
 import { useWeb3React } from "@web3-react/core";
-import { useExchange } from "context/exchange/ExchangeContext";
+import { useExchange, useUpdateExchange } from "context/exchange/ExchangeContext";
+
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -143,6 +144,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   const { account } = useWeb3React();
 
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
+  const { objDispatch } = useUpdateExchange();
 
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
@@ -157,20 +159,25 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   };
 
 
-	const getGasPrices = async () => {
+	const getGasPrices = useCallback(async () => {
 		const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
 		const result = await prices.json();
-    gasOptions[0].text = result.data.standard / 1e9 + " (Standard)";
-    gasOptions[1].text = result.data.fast / 1e9 + " (Fast)";
-    gasOptions[2].text = result.data.rapid / 1e9 + " (Instant)";
-    gasOptions[0].gas = result.data.standard / 1e9;
-    gasOptions[1].gas = result.data.fast / 1e9;
-    gasOptions[2].gas = result.data.rapid / 1e9;
-	}
+    gasOptions[0].text = (result.data.standard / 1e9).toPrecision(4) + " (Standard)";
+    gasOptions[1].text = (result.data.fast / 1e9).toPrecision(4) + " (Fast)";
+    gasOptions[2].text = (result.data.rapid / 1e9).toPrecision(4) + " (Instant)";
+    gasOptions[0].gas = new BigNumber((result.data.standard / 1e9).toString());
+    gasOptions[1].gas = new BigNumber((result.data.fast / 1e9).toString());
+    gasOptions[2].gas = new BigNumber((result.data.rapid / 1e9).toString());
+    objDispatch({
+      type: 'askAmount',
+      value: askAmount.minus(gasOptions[2].gas)
+    })
+    setGasFee(gasOptions[2].gas)
+	},[askAmount, objDispatch])
 
   useEffect(() => {
     getGasPrices();
-  }, [])
+  }, [getGasPrices])
 
   useInterval(increaseCount, delay);
 
