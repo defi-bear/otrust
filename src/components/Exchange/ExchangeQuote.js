@@ -260,16 +260,12 @@ export default function ExchangeQuote({strength}) {
     let strUpdate = new Map()
     strUpdate.set("bidDenom", strength)
     let bidMaxValue = strength === "strong"
-      ? format18(strongBalance).toString()
-      : format18(weakBalance).toString()
+      ? strongBalance
+      : weakBalance
 
     strUpdate.set(
       "input",
-      bidMaxValue
-    );
-
-    const bidAmountUpdate = parse18(
-      new BigNumber(parseFloat(bidMaxValue).toString())
+      format18(bidMaxValue).toString()
     );
 
     let askAmountUpdate
@@ -277,7 +273,7 @@ export default function ExchangeQuote({strength}) {
     try {
         askAmountUpdate = await getAskAmount(
           askAmount,
-          bidAmountUpdate,
+          bidMaxValue,
           strength
         );
       } catch (err) {
@@ -290,12 +286,12 @@ export default function ExchangeQuote({strength}) {
 
     objUpdate = objUpdate.set(
       'askAmount',
-      new BigNumber(askAmountUpdate.toString())
+      askAmountUpdate
     )
     
     objUpdate = objUpdate.set(
       'bidAmount',
-      bidAmountUpdate
+      bidMaxValue
     )
 
     objDispatch({
