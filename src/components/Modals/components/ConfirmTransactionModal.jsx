@@ -11,7 +11,7 @@ import { Close, Metamask } from "components/Modals/Icons";
 import * as Modal from "components/Modals/styles";
 import "components/Modals/loadingBar.css";
 import { useWeb3React } from "@web3-react/core";
-import { useExchange, useUpdateExchange } from "context/exchange/ExchangeContext";
+import { useExchange } from "context/exchange/ExchangeContext";
 
 
 const TransactionDetailsRow = styled.div`
@@ -139,13 +139,12 @@ const gasOptions = [
 
 export default function ConfirmTransactionModal({ submitTrans }) {
   const [slippage, setSlippage] = useState(0);
-  const [gasFeeChoice, setGasFeeChoice] = useState(2)
-  const [gasFee, setGasFee] = useState(0);
+  const [gasPriceChoice, setGasPriceChoice] = useState(2)
+  const [gasPrice, setGasPrice] = useState(0);
   const { handleModal } = useModal();
   const { account } = useWeb3React();
 
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
-  const { objDispatch } = useUpdateExchange();
 
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
@@ -169,12 +168,8 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     gasOptions[0].gas = new BigNumber((result.data.standard).toString());
     gasOptions[1].gas = new BigNumber((result.data.fast).toString());
     gasOptions[2].gas = new BigNumber((result.data.rapid).toString());
-    objDispatch({
-      type: 'askAmount',
-      value: askAmount.minus(gasOptions[gasFeeChoice].gas)
-    })
-    setGasFee(gasOptions[gasFeeChoice].gas)
-	},[askAmount, objDispatch, gasFeeChoice])
+    setGasPrice(gasOptions[gasPriceChoice].gas)
+	},[gasPriceChoice])
 
   useEffect(() => {
     getGasPrices();
@@ -250,18 +245,18 @@ export default function ConfirmTransactionModal({ submitTrans }) {
       <OptionsWrapper>
         <OptionCaption>Gas Fee</OptionCaption>
         <Options>
-          {gasOptions.map((gasFeeOption) => (
+          {gasOptions.map((gasPriceOption) => (
             <OptionBtn
-              active={gasFee === gasFeeOption.gas}
-              key={gasFeeOption.gas}
+              active={gasPrice === gasPriceOption.gas}
+              key={gasPriceOption.gas}
               onClick={() => 
                 {
-                  setGasFee(gasFeeOption.gas)
-                  setGasFeeChoice(gasFeeOption.id)
+                  setGasPrice(gasPriceOption.gas)
+                  setGasPriceChoice(gasPriceOption.id)
                 }
               }
             >
-              {gasFeeOption.text}
+              {gasPriceOption.text}
             </OptionBtn>
           ))}
         </Options>
@@ -288,7 +283,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           <Modal.SecondaryButton onClick={() => handleModal()}>
             Cancel
           </Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasFee)}>
+          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasPrice)}>
             Confirm ({count})
           </Modal.PrimaryButton>
         </Modal.FooterControls>
