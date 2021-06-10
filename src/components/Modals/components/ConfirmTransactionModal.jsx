@@ -139,6 +139,7 @@ const gasOptions = [
 
 export default function ConfirmTransactionModal({ submitTrans }) {
   const [slippage, setSlippage] = useState(0);
+  const [gasFeeChoice, setGasFeeChoice] = useState(2)
   const [gasFee, setGasFee] = useState(0);
   const { handleModal } = useModal();
   const { account } = useWeb3React();
@@ -170,10 +171,10 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     gasOptions[2].gas = new BigNumber((result.data.rapid).toString());
     objDispatch({
       type: 'askAmount',
-      value: askAmount.minus(gasOptions[2].gas)
+      value: askAmount.minus(gasOptions[gasFeeChoice].gas)
     })
-    setGasFee(gasOptions[2].gas)
-	},[askAmount, objDispatch])
+    setGasFee(gasOptions[gasFeeChoice].gas)
+	},[askAmount, objDispatch, gasFeeChoice])
 
   useEffect(() => {
     getGasPrices();
@@ -253,7 +254,12 @@ export default function ConfirmTransactionModal({ submitTrans }) {
             <OptionBtn
               active={gasFee === gasFeeOption.gas}
               key={gasFeeOption.gas}
-              onClick={() => setGasFee(gasFeeOption.gas)}
+              onClick={() => 
+                {
+                  setGasFee(gasFeeOption.gas)
+                  setGasFeeChoice(gasFeeOption.id)
+                }
+              }
             >
               {gasFeeOption.text}
             </OptionBtn>
