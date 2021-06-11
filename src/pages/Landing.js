@@ -11,7 +11,7 @@ import walletConnect from '../assets/images/walletConnect.png'
 import { SUPPORTED_WALLETS } from '../connectors';
 
 
-const wallets = [
+export const wallets = [
   { title: 'Metamask', img: metamask },
   { title: 'Ledger', img: ledger },
   { title: 'Wallet Connect', img: walletConnect },
@@ -20,7 +20,7 @@ const wallets = [
 
 const Wrapper = styled.div`
   text-align: center;
-` 
+`
 
 const StyledHeader = styled.header`
   background-color: ${props => props.theme.colors.bgNormal};

@@ -1,11 +1,12 @@
 # Onomy Trust (OTRUST) Bonding Curve Front-End
 
-wNOM will be continuously distributed through a bonding curve until all 100,000,000 wNOM ERC20 have been bridged. 
+wNOM will be continuously distributed through a bonding curve until all 100,000,000 wNOM ERC20 have been bridged.
 
 ## Prerequisites
-1) Ganache https://www.trufflesuite.com/docs/ganache/quickstart
-2) Truffle https://www.trufflesuite.com/docs/truffle/getting-started/installation
-3) Metamask https://metamask.io/
+
+1. Ganache https://www.trufflesuite.com/docs/ganache/quickstart
+2. Truffle https://www.trufflesuite.com/docs/truffle/getting-started/installation
+3. Metamask https://metamask.io/
 
 ## Available Scripts
 
@@ -23,6 +24,10 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm test --coverage --watchAll=false`
+
+will generate coverage folder of unit tests
 
 ### `npm run build`
 

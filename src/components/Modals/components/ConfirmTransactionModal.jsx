@@ -159,9 +159,9 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   };
 
 
-	const getGasPrices = useCallback(async () => {
-		const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
-		const result = await prices.json();
+  const getGasPrices = useCallback(async () => {
+    const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
+    const result = await prices.json();
     gasOptions[0].text = (result.data.standard / 1e9).toPrecision(4) + " (Standard)";
     gasOptions[1].text = (result.data.fast / 1e9).toPrecision(4) + " (Fast)";
     gasOptions[2].text = (result.data.rapid / 1e9).toPrecision(4) + " (Instant)";
@@ -169,7 +169,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     gasOptions[1].gas = new BigNumber((result.data.fast).toString());
     gasOptions[2].gas = new BigNumber((result.data.rapid).toString());
     setGasPrice(gasOptions[gasPriceChoice].gas)
-	},[gasPriceChoice])
+  },[gasPriceChoice])
 
   useEffect(() => {
     getGasPrices();
