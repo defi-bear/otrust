@@ -2,6 +2,26 @@
   "name": "otrust",
   "version": "0.1.0",
   "private": true,
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!./src/utils/device.js"
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "json",
+      "html",
+      "lcovonly"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
   "dependencies": {
     "@apollo/client": "^3.3.12",
     "@cosmjs/launchpad": "^0.24.1",
@@ -14,9 +34,6 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.6.3",
     "@use-it/interval": "^1.0.0",
     "@web3-react/core": "^6.1.1",
     "@web3-react/injected-connector": "^6.0.7",
@@ -46,6 +63,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/react-hooks": "^3.2.1",
+    "@testing-library/user-event": "^12.6.3"
   },
   "eslintConfig": {
     "extends": [
