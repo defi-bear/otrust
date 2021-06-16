@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken, lighten } from "polished";
 
 import { responsive } from "theme/constants";
 
@@ -57,11 +58,21 @@ export const Sending = styled.div`
   gap: 16px;
 
   width: 100%;
-  height: 50px;
-  padding: 16px;
+  height: 70px;
+  padding: 16px 8px 16px 16px;
 
-  border: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
-  border-radius: 6px;
+  background-color: ${props => props.theme.colors.bgHighlightBorder};
+  border-radius: 8px;
+  border-bottom: 2px solid ${props => props.theme.colors.bgDarken};
+
+  color: ${props => props.theme.colors.textSecondary};
+  font-size: 14px;
+  font-weight: 500;
+
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 60px;
+  }
 
   strong {
     color: ${(props) => props.theme.colors.textSecondary};
@@ -81,15 +92,15 @@ export const Receiving = styled.div`
   gap: 16px;
 
   width: 100%;
-  height: 50px;
-  padding: 16px;
+  margin-bottom: 30px;
 
-  background-color: ${(props) => props.theme.colors.bgDarken};
-  border: 1px solid ${(props) => props.theme.colors.bgDarken};
-  border-radius: 6px;
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    margin-bottom: 24px;
+  }
 
   strong {
-    color: ${(props) => props.theme.colors.textSecondary};
+    color: ${(props) => props.theme.colors.textThirdly};
     margin-right: auto;
     font-weight: 500;
 
@@ -100,15 +111,32 @@ export const Receiving = styled.div`
 `;
 
 export const MaxBtn = styled.button`
-  padding: 5px;
+  padding: 15px 20px;
+  height: 54px;
 
   border: none;
-  background: none;
+  background-color: ${props => props.theme.colors.bgNormal};
+  border-radius: 7px;
 
   color: ${(props) => props.theme.colors.highlightYellow};
   font-weight: 500;
+  font-size: 14px;
   text-transform: uppercase;
   cursor: pointer;
+
+
+  @media screen and (max-width: ${responsive.laptop}) {
+    height: 44px;
+  }
+
+  &:hover {
+    background-color: ${(props) =>
+    lighten(0.02, props.theme.colors.bgNormal)};
+  }
+
+  &:active {
+    background-color: ${(props) => darken(0.02, props.theme.colors.bgNormal)};
+  }
 `;
 
 export const ExchangeInput = styled.input`
@@ -117,8 +145,10 @@ export const ExchangeInput = styled.input`
   background: none;
   border: none;
 
+
   color: ${(props) => props.theme.colors.textPrimary};
   font-weight: 500;
+  font-size: 18px;
   text-align: right;
 
   @media screen and (max-width: ${responsive.tabletSmall}) {
@@ -136,7 +166,7 @@ export const ReceivingValue = styled.span`
   margin-left: auto;
 
   font-weight: 500;
-  color: ${(props) => props.theme.colors.textPrimary};
+  color: ${(props) => props.theme.colors.textSecondary};
 
   @media screen and (max-width: ${responsive.tabletSmall}) {
     font-size: 12px;
