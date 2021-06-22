@@ -98,6 +98,20 @@ const OptionBtn = styled.button`
   }
 `;
 
+const FeeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 16px;
+
+  color: ${(props) => props.theme.colors.textThirdly};
+
+  strong {
+    color: ${(props) => props.theme.colors.textPrimary};
+  }
+`;
+
 const limitOptions = [
   {
     id: 0,
@@ -243,6 +257,13 @@ export default function ConfirmTransactionModal({ submitTrans }) {
             <Metamask />
           </WalletIcon>
         </TransactionDetailsRow>
+
+        <FeeWrapper>
+          <span>Transaction fee</span>
+          <span>
+            <strong>$5.4</strong> (0.00032 ETH)
+          </span>
+        </FeeWrapper>
       </main>
       <OptionsWrapper>
         <OptionCaption>Gas Fee</OptionCaption>
