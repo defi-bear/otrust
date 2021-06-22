@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import useInterval from '@use-it/interval';
+import useInterval from "@use-it/interval";
 
-import { Close } from "../Icons"
-import * as Modal from "../styles"
-import { responsive } from "theme/constants"
-import { useModal } from 'context/modal/ModalContext'
+import { Close } from "../Icons";
+import * as Modal from "../styles";
+import { responsive } from "theme/constants";
+import { useModal } from "context/modal/ModalContext";
 
 const Message = styled.div`
   margin: 32px 0 0;
@@ -21,19 +21,33 @@ const Caption = styled(Modal.Caption)`
   text-align: left;
 `;
 
+const FeeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 16px;
+
+  color: ${(props) => props.theme.colors.textThirdly};
+
+  strong {
+    color: ${(props) => props.theme.colors.textPrimary};
+  }
+`;
+
 export default function ApproveModal({ onApprove }) {
-  const [count, setCount] = useState(60)
-  const [delay, setDelay] = useState(1000)
-  const { handleModal } = useModal()
+  const [count, setCount] = useState(60);
+  const [delay, setDelay] = useState(1000);
+  const { handleModal } = useModal();
 
   const increaseCount = () => {
-    if(count === 0) {
+    if (count === 0) {
       setDelay(null);
       handleModal();
     } else {
       setCount(count - 1);
     }
-  }
+  };
 
   useInterval(increaseCount, delay);
 
@@ -47,13 +61,25 @@ export default function ApproveModal({ onApprove }) {
         <Caption>Step1. Onomy confirmation</Caption>
 
         <Message>
-          Onomy blockchain requires access for selling. Please confirm you want to do it
+          Onomy blockchain requires access for selling{" "}
+          <strong>1234 wNOM</strong>. Please confirm you want to do it
         </Message>
+
+        <FeeWrapper>
+          <span>Transaction fee</span>
+          <span>
+            <strong>$5.4</strong> (0.00032 ETH)
+          </span>
+        </FeeWrapper>
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={onApprove}>Approve ({count})</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()}>
+            Cancel
+          </Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={onApprove}>
+            Approve ({count})
+          </Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
