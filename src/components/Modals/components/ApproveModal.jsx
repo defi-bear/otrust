@@ -61,7 +61,7 @@ export default function ApproveModal({ onApprove }) {
         <Caption>Step1. Onomy confirmation</Caption>
 
         <Message>
-          Onomy blockchain requires access for selling{" "}
+          Onomy blockchain requires access for selling
           <strong>1234 wNOM</strong>. Please confirm you want to do it
         </Message>
 
