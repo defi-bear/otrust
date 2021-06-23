@@ -6,7 +6,7 @@ import { responsive } from "theme/constants";
 
 import { MediumIcon, TwitterIcon } from "./SidebarIcons";
 
-const Info = styled.footer`
+const SidebarFooterWrapper = styled.footer`
   display: flex;
   align-items: center;
   gap: 16px;
@@ -19,7 +19,12 @@ const Info = styled.footer`
   }
 
   @media screen and (max-width: ${responsive.tablet}) {
+    width: 100%;
     gap: 12px;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
@@ -91,7 +96,7 @@ const SecondaryIcon = styled.a`
 
 export default function SidebarFooter() {
   return (
-    <Info>
+    <SidebarFooterWrapper>
       <Link href="https://onomy.io/" target="_blank">
         About Onomy
       </Link>
@@ -103,6 +108,6 @@ export default function SidebarFooter() {
       <SecondaryIcon href="https://twitter.com/onomyprotocol" target="_blank">
         <TwitterIcon />
       </SecondaryIcon>
-    </Info>
+    </SidebarFooterWrapper>
   );
 }
