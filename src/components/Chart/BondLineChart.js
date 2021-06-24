@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useContext, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
+import { format18 } from 'utils/math'
 
 import {
   area,
@@ -12,8 +13,8 @@ import {
   axisLeft,
 } from "d3";
 
-import { ChainContext } from 'context/chain/ChainContext'
-import { useSwap } from "context/SwapContext";
+import { useChain } from 'context/chain/ChainContext'
+import { useExchange } from "context/exchange/ExchangeContext";
 import { NOMsupplyETH, priceAtSupply, supplyAtPrice } from "utils/bonding";
 
 import { useResizeObserver } from "./utils";
@@ -24,25 +25,56 @@ const StyledSVG = styled.svg`
     height: 400px;
     overflow: visible;
 `
-function supplyToArray(supBegin, supEnd) {
+function supplyToArray([supBegin, supEnd]) {
+  
+  console.log("Supply Begin: ", supBegin)
+  console.log("Supply End: ", supEnd)
+  
   var dataArray = [];
   const dif = supEnd - supBegin;
   const n = 100;
   for (var i = 0; i < n; i++) {
-      dataArray.push({
-      x: supBegin + (dif * i) / n,
-      y: priceAtSupply(supBegin + (dif * i) / n),
-      });
+        dataArray.push({
+          x: parseFloat(supBegin + (dif * i) / n),
+          y: priceAtSupply(supBegin + (dif * i) / n),
+        });
   }
 
+  console.log("Data Array: ", dataArray)
   return dataArray;
 }
 
-export function labelArray(supBegin, supEnd) {
+export function labelArray([supBegin, supEnd]) {
   const paymentETH = NOMsupplyETH(supEnd, supBegin);
   const priceAvg = paymentETH / (supEnd - supBegin);
   const supAvg = supplyAtPrice(priceAvg);
   return { paymentETH, supAvg, priceAvg };
+}
+
+export function bounds(formatSupply) {
+  var lowerBound
+  var upperBound
+
+  try{
+    var digitsUpper = Math.floor(
+      Math.log10(
+        formatSupply[1]
+      )
+    );
+    // upperBound = 10**(digitsUpper + 1)
+    upperBound =
+      (Math.round(
+        formatSupply[1] / 
+        10 ** digitsUpper) + 1) * 10 ** digitsUpper
+    lowerBound = 0;
+  } catch (err) {
+    console.log(err)
+  }
+
+  console.log("Upper Bound: ", upperBound)
+  console.log("Lower Bound: ", lowerBound)
+  
+  return { lowerBound, upperBound }
 }
 
 /**
@@ -53,28 +85,38 @@ function LineChart({ id = "bondingChart" }) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const { theme } = useContext(ChainContext);
+  const { supplyNOM, theme } = useChain()
+  const { askAmount, bidAmount, bidDenom } = useExchange();
 
-  const [data, setData] = useState(supplyToArray(0, 100000000))
-  const [areaData, setAreaData] = useState(supplyToArray(0, 100000000))
+  var supplyTop = supplyNOM
+  var supplyBot = supplyNOM
 
-  const [labelData, setLabelData] = useState('') 
+ switch (bidDenom) {
+  case 'strong':
+    supplyTop = supplyNOM.plus(askAmount)
+    break
+  case 'weak':
+    supplyBot = supplyNOM.minus(bidAmount)
+    break
+  default:
+    break
+}
 
-  const { swapSupply } = useSwap();
+  const formatSupply = [
+    format18(supplyBot).toNumber(),
+    format18(supplyTop).toNumber()
+  ]
 
-  useEffect(() => {
-    if (swapSupply[1]) {
-      var digitsUpper = Math.floor(Math.log10(swapSupply[1]));
-      // upperBound = 10**(digitsUpper + 1)
-      const upperBound =
-        (Math.round(swapSupply[1] / 10 ** digitsUpper) + 1) * 10 ** digitsUpper;
-      const lowerBound = 0;
-      setData(supplyToArray(lowerBound, upperBound));
-      setAreaData(supplyToArray(swapSupply[0], swapSupply[1]));
-      setLabelData(labelArray(swapSupply[0], swapSupply[1]));
-    }
-    console.log("SwapSupply: ", swapSupply)
-  }, [swapSupply]);
+  const { lowerBound, upperBound } = bounds(formatSupply)
+
+  const areaData = supplyToArray(formatSupply)
+
+  const data = supplyToArray([lowerBound, upperBound])
+
+  const labelData = labelArray(formatSupply)
+  
+  console.log("Data: ", data)
+  console.log("Area Data: ", areaData)
   
   // charts and xAxis and yAxis
   useEffect(() => {
@@ -230,9 +272,6 @@ function LineChart({ id = "bondingChart" }) {
 
     yComplex.selectAll(".tick line")
       .style("color", `${theme.colors.bgNormal}`)
-    // console.log("Area Data: ", areaData);
-    // console.log("Data: ", data)
-    // console.log("Label Data: ", labelData)
   }, [areaData, data, dimensions, labelData, theme]);
 
   return (

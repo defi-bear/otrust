@@ -1,17 +1,10 @@
 import styled from "styled-components";
-import SwapProvider from "context/SwapContext";
 
 // Components
-import AcctDash from "components/AcctDash";
+import Sidebar from "components/Sidebar/Sidebar";
 import Bonding from "components/Bonding";
 import { Container } from "components/UI";
 import { responsive } from "theme/constants";
-
-// import { Dimmer } from "components/UI/Dimmer";
-// import TransactionCompletedModal from "components/Modals/TransactionCompletedModal";
-// import TransactionFailedModal from "components/Modals/TransactionFailedModal";
-// import OnomyConfirmationModal from "components/Modals/OnomyConfirmationModal";
-// import ConfirmTransactionModal from "components/Modals/ConfirmTransactionModal";
 
 const BondingCurveLayout = styled.div`
   display: grid;
@@ -45,19 +38,10 @@ const BondingCurveLayout = styled.div`
 export default function BondingCurve() {
   return (
     <Container>
-      {/* <Dimmer> */}
-      {/* <OnomyConfirmationModal /> */}
-      {/* <TransactionFailedModal /> */}
-      {/* <TransactionCompletedModal /> */}
-      {/* <ConfirmTransactionModal /> */}
-      {/* </Dimmer> */}
-
-      <SwapProvider>
-        <BondingCurveLayout>
-          <Bonding />
-          <AcctDash />
-        </BondingCurveLayout>
-      </SwapProvider>
+      <BondingCurveLayout>
+        <Bonding />
+        <Sidebar />
+      </BondingCurveLayout>
     </Container>
   );
 }

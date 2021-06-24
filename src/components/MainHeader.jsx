@@ -4,6 +4,10 @@ import styled from "styled-components";
 import logo from "assets/logo.svg";
 import { Container } from "./UI";
 import { responsive } from "theme/constants";
+import { format18 } from 'utils/math'
+import { BigNumber } from 'bignumber.js'
+
+import { useChain } from 'context/chain/ChainContext'
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -161,6 +165,8 @@ const Details = styled.span`
 `;
 
 export default function MainHeader(props) {
+  const { supplyNOM, currentETHPrice } = useChain()
+
   return (
     <header>
       <Container>
@@ -185,8 +191,15 @@ export default function MainHeader(props) {
               <HeaderInfoItem>
                 <strong>NOM / ETH</strong>
                 <HeaderInfoItemValue>
-                  <strong>0.07</strong>
-                  <Details type="decrease">32.11%</Details>
+                  <strong>
+                  <span>
+                    {
+                      BigNumber.isBigNumber(currentETHPrice)
+                        ? `${Math.round(format18(currentETHPrice).toNumber())}`
+                        : "Loading"
+                    }
+                  </span>
+                  </strong>
                 </HeaderInfoItemValue>
               </HeaderInfoItem>
             </ExchangeRate>
@@ -194,8 +207,16 @@ export default function MainHeader(props) {
               <HeaderInfoItem>
                 <strong>NOM Issued</strong>
                 <HeaderInfoItemValue>
-                  <strong>14,024,810</strong>
-                  <Details>/ 54,112,321</Details>
+                  <strong>
+                    <span>
+                      {
+                        BigNumber.isBigNumber(supplyNOM)
+                          ? `${Math.round(format18(supplyNOM).toNumber())}`
+                          : "Loading"
+                      }
+                    </span>
+                  </strong>
+                  <Details>/ 1E8</Details>
                 </HeaderInfoItemValue>
               </HeaderInfoItem>
             </Issued>
