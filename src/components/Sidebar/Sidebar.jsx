@@ -21,7 +21,7 @@ const SidebarLayout = styled.div`
 
   @media screen and (max-width: ${responsive.tablet}) {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr auto;
     grid-template-rows: 100px 100px;
     justify-content: space-between;
   }

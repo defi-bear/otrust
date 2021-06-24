@@ -42,6 +42,7 @@ const ConnectionRow = styled.div`
   > strong {
     font-weight: 400;
     color: ${(props) => props.theme.colors.textSecondary};
+    white-space: nowrap;
   }
 
   > span {
