@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import useInterval from "@use-it/interval";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import useInterval from '@use-it/interval';
 
-import { Close } from "../Icons";
-import * as Modal from "../styles";
-import { responsive } from "theme/constants";
-import { useModal } from "context/modal/ModalContext";
+import { Close } from '../Icons';
+import * as Modal from '../styles';
+import { responsive } from 'theme/constants';
+import { useModal } from 'context/modal/ModalContext';
 
 const Message = styled.div`
   margin: 32px 0 0;
 
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: ${props => props.theme.colors.textSecondary};
 
   @media screen and (max-width: ${responsive.smartphone}) {
     font-size: 14px;
@@ -28,10 +28,10 @@ const FeeWrapper = styled.div`
 
   margin-top: 16px;
 
-  color: ${(props) => props.theme.colors.textThirdly};
+  color: ${props => props.theme.colors.textThirdly};
 
   strong {
-    color: ${(props) => props.theme.colors.textPrimary};
+    color: ${props => props.theme.colors.textPrimary};
   }
 `;
 
@@ -74,12 +74,8 @@ export default function ApproveModal({ onApprove }) {
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>
-            Cancel
-          </Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={onApprove}>
-            Approve ({count})
-          </Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={onApprove}>Approve ({count})</Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
