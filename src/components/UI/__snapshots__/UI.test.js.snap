@@ -37,7 +37,7 @@ exports[`Given the Button component and width is provided in the props when the 
 exports[`Given the ConnectionStatus component when the component is rendered should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iCoGMd edYesm"
+    class="sc-iCoGMd iruQKK"
   />
 </DocumentFragment>
 `;
@@ -65,7 +65,7 @@ exports[`Given the FullBackgroundContainer component when the component is rende
 exports[`Given the InvisibleButton component when the component is rendered should match the snapshot 1`] = `
 <DocumentFragment>
   <button
-    class="sc-hKFxyN keWPab"
+    class="sc-hKFxyN kTRXmr"
   />
 </DocumentFragment>
 `;

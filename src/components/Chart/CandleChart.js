@@ -1,7 +1,11 @@
 import React from 'react';
 
-function CandelChart() {
-  return <div style={{ marginTop: '1rem', height: '400px' }}>Candel Chart</div>;
+function CandleChart() {
+  return (
+    <div style={{ marginTop: '1rem', height: '400px' }} data-testid="candle-chart">
+      Candle Chart
+    </div>
+  );
 }
 
-export default CandelChart;
+export default CandleChart;

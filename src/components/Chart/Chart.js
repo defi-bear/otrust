@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
 import { gql } from 'apollo-boost';
@@ -6,8 +6,8 @@ import { gql } from 'apollo-boost';
 import { responsive } from 'theme/constants';
 import BondLineChart from 'components/Chart/BondLineChart';
 import LineChart from 'components/Chart/HistoricalLineChart';
-import CandelChart from 'components/Chart/CandleChart';
-import { lineHeaderDefault, candelHeaderDefault } from 'components/Chart/defaultChartData';
+import CandleChart from 'components/Chart/CandleChart';
+import { lineHeaderDefault, candleHeaderDefault } from 'components/Chart/defaultChartData';
 
 const ChartWrapper = styled.div`
   padding: 20px;
@@ -70,14 +70,8 @@ export default function Chart() {
   const [lineHeaderId] = useState('1');
   const [lineHeader] = useState(lineHeaderDefault);
 
-  const [candelHeaderId] = useState('1');
-  const [candelHeader] = useState(candelHeaderDefault);
-
-  useEffect(() => {
-    console.log('Error: ', error);
-    console.log('Loading: ', loading);
-    console.log('Bond Data: ', data);
-  }, [error, loading, data]);
+  const [candleHeaderId] = useState('1');
+  const [candleHeader] = useState(candleHeaderDefault);
 
   const renderChart = type => {
     switch (type) {
@@ -92,7 +86,7 @@ export default function Chart() {
           />
         );
       case 'candleView':
-        return <CandelChart candelHeader={candelHeader} candelHeaderId={candelHeaderId} />;
+        return <CandleChart candleHeader={candleHeader} candleHeaderId={candleHeaderId} />;
       case 'bondingCurve':
       default:
         return <BondLineChart />;

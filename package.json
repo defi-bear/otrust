@@ -6,7 +6,8 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!./src/utils/device.js",
-      "!./src/theme/colors.js"
+      "!./src/theme/colors.js",
+      "!./src/components/Chart/Style.js"
     ],
     "coverageReporters": [
       "text-summary",
@@ -81,7 +82,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-testing-library": "^3.10.1",
     "prettier": "^2.3.1",
-    "react-test-renderer": "^17.0.2"
+    "react-test-renderer": "^17.0.1"
   },
   "eslintConfig": {
     "extends": [
