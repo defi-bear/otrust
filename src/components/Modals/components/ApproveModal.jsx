@@ -21,19 +21,19 @@ const Caption = styled(Modal.Caption)`
   text-align: left;
 `;
 
-const FeeWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+// const FeeWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
 
-  margin-top: 16px;
+//   margin-top: 16px;
 
-  color: ${props => props.theme.colors.textThirdly};
+//   color: ${props => props.theme.colors.textThirdly};
 
-  strong {
-    color: ${props => props.theme.colors.textPrimary};
-  }
-`;
+//   strong {
+//     color: ${props => props.theme.colors.textPrimary};
+//   }
+// `;
 
 export default function ApproveModal({ onApprove }) {
   const [count, setCount] = useState(60);
@@ -65,12 +65,12 @@ export default function ApproveModal({ onApprove }) {
           <strong>1234 wNOM</strong>. Please confirm you want to do it
         </Message>
 
-        <FeeWrapper>
+        {/* <FeeWrapper>
           <span>Transaction fee</span>
           <span>
             <strong>$5.4</strong> (0.00032 ETH)
           </span>
-        </FeeWrapper>
+        </FeeWrapper> */}
       </main>
       <footer>
         <Modal.FooterControls>
