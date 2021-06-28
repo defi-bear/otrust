@@ -365,8 +365,8 @@ function LineChart(props) {
   }
 
   return (
-    <div ref={wrapperRef} style={{ marginTop: '1rem', height: '400px' }}>
-      <StyledSVG ref={svgRef}>
+    <div ref={wrapperRef} style={{ marginTop: '1rem', height: '400px' }} data-testid="historical-line-chart">
+      <StyledSVG ref={svgRef} data-testid="historical-line-chart-svg">
         <defs>
           <clipPath id={id}>
             <rect x="0" y="0" width="100%" height="100%" />

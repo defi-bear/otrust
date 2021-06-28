@@ -10,8 +10,8 @@ export const leftHeaderDefault = [
     status: false,
   },
   {
-    id: 'CandelView',
-    text: 'Candel View',
+    id: 'CandleView',
+    text: 'Candle View',
     status: false,
   },
 ];
@@ -44,7 +44,7 @@ export const lineHeaderDefault = [
   },
 ];
 
-export const candelHeaderDefault = [
+export const candleHeaderDefault = [
   {
     id: '15m',
     text: '15m',
