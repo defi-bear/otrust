@@ -112,7 +112,8 @@ const SecondaryIcon = styled.a`
 const Approved = styled.div`
   display: inline-block;
 
-  padding: 4px 30px 4px 8px;
+  padding: 4px 8px;
+  /* padding: 4px 30px 4px 8px; */
   margin-top: 6px;
 
   position: relative;
@@ -173,7 +174,7 @@ export default function SidebarBalances({ strong, weak, strongBalance, weakBalan
             <small> = $16,208.04</small>
             <Approved>
               <span>1,042 approved</span>
-              <CloseIcon onClick={() => {}} />
+              {/* <CloseIcon onClick={() => {}} /> */}
             </Approved>
           </BalanceNumber>
         </BalancePrice>
