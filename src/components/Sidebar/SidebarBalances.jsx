@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { PrimaryButton } from 'components/Modals/styles';
 import { responsive } from 'theme/constants';
-import { CloseIcon } from './SidebarIcons';
+// import { CloseIcon } from './SidebarIcons';
 
 const Balances = styled.div`
   display: flex;
