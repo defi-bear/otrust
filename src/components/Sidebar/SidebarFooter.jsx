@@ -40,11 +40,11 @@ const Link = styled.a`
   text-decoration: none;
 
   &:hover {
-    color: ${props => props.theme.colors.textSecondary_lighten};
+    color: ${props => props.theme.colors.textPrimary};
   }
 
   &:active {
-    color: ${props => props.theme.colors.textSecondary_darken};
+    color: ${props => props.theme.colors.textThirdly};
   }
 `;
 
@@ -83,6 +83,10 @@ const SecondaryIcon = styled.a`
 
   &:hover {
     background-color: ${props => props.theme.colors.bgHighlightBorder_lighten};
+
+    svg * {
+      fill: ${props => props.theme.colors.textPrimary};
+    }
   }
 
   &:active {

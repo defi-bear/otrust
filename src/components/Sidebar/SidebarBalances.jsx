@@ -101,6 +101,7 @@ const SecondaryIcon = styled.a`
 
   &:hover {
     background-color: ${props => props.theme.colors.bgHighlightBorder_lighten};
+    color: ${props => props.theme.colors.textSecondary};
   }
 
   &:active {

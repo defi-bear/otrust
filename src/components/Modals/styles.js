@@ -79,7 +79,13 @@ export const CloseIcon = styled.button`
 
   &:hover {
     svg {
-      fill: ${props => props.theme.colors.textThirdly_lighten};
+      fill: ${props => props.theme.colors.textSecondary};
+    }
+  }
+
+  &:active {
+    svg {
+      fill: ${props => props.theme.colors.textThirdly_darken};
     }
   }
 `;
@@ -108,11 +114,11 @@ export const PrimaryButton = styled.button`
   }
 
   &:hover {
-    background-color: ${props => props.theme.colors.textPrimary_lighten};
+    background-color: #fff;
   }
 
   &:active {
-    background-color: ${props => props.theme.colors.textPrimary_darken};
+    background-color: ${props => props.theme.colors.textSecondary};
   }
 `;
 
@@ -126,7 +132,7 @@ export const SecondaryButton = styled(PrimaryButton)`
   }
 
   &:active {
-    background-color: ${props => props.theme.colors.bgHighlightBorder_darken};
+    background-color: ${props => props.theme.colors.bgNormal};
   }
 `;
 
@@ -279,11 +285,19 @@ export const DetailsButton = styled.button`
   }
 
   &:hover {
-    color: ${props => props.theme.colors.textSecondary_lighten};
+    color: ${props => props.theme.colors.textPrimary};
+
+    svg * {
+      fill: ${props => props.theme.colors.textPrimary};
+    }
   }
 
   &:active {
     color: ${props => props.theme.colors.textSecondary_darken};
+
+    svg * {
+      fill: ${props => props.theme.colors.textSecondary_darken};
+    }
   }
 `;
 

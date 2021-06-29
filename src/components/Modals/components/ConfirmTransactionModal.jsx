@@ -87,7 +87,7 @@ const OptionBtn = styled.button`
   }
 
   &:active {
-    background-color: ${props => props.theme.colors.bgHighlightBorder_lighten};
+    background-color: ${props => props.theme.colors.bgHighlightBorder_darken};
   }
 `;
 
