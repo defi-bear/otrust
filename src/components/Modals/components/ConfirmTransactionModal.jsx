@@ -204,7 +204,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
             {bidDenom ? (
               <>
                 1 {bidDenom === 'strong' ? strong : weak} ={' '}
-                {BigNumber.isBigNumber(bidAmount) ? format18(askAmount.div(bidAmount)).toFixed(6) : 'Loading'}
+                {BigNumber.isBigNumber(bidAmount) ? format18(askAmount.div(format18(bidAmount).toFixed(6))).toFixed(6) : 'Loading'}
               </>
             ) : (
               <></>
