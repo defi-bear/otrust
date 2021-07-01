@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { PrimaryButton } from 'components/Modals/styles';
@@ -69,9 +69,12 @@ const Balance = styled.div`
 `;
 
 const BalancePrice = styled.div``;
-const BalanceHint = styled.div``;
 
-const SecondaryIcon = styled.a`
+const BalanceHint = styled.div`
+  position: relative;
+`;
+
+const SecondaryIcon = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,14 +82,16 @@ const SecondaryIcon = styled.a`
   height: 40px;
   width: 40px;
 
-  background-color: ${props => props.theme.colors.bgHighlightBorder};
+  background-color: ${props => (props.active ? props.theme.colors.iconsNormal : props.theme.colors.bgHighlightBorder)};
   border-radius: 8px;
+  border: none;
 
   font-size: 20px;
   font-weight: 500;
-  color: ${props => props.theme.colors.iconsSecondary};
+  color: ${props => (props.active ? props.theme.colors.bgDarken : props.theme.colors.iconsSecondary)};
 
   cursor: pointer;
+  user-select: none;
 
   @media screen and (max-width: ${responsive.laptop}) {
     width: 32px;
@@ -122,7 +127,7 @@ const Approved = styled.div`
   border-radius: 6px;
 
   color: ${props => props.theme.colors.highlightBlue};
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   font-family: Poppins, sans-serif;
 
@@ -151,6 +156,62 @@ const WithdrawBtnWrapper = styled.div`
   }
 `;
 
+const TooltipWrapper = styled.div`
+  display: ${props => (props.active ? 'block' : 'none')};
+
+  width: 360px;
+  padding: 32px 40px;
+
+  position: absolute;
+  right: 72px;
+  top: -52px;
+
+  background-color: ${props => props.theme.colors.bgHighlightBorder};
+  border-radius: 8px;
+  box-shadow: 0 5px 50px 0 rgba(0, 0, 0, 0.36);
+
+  z-index: 1;
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    display: block;
+
+    position: absolute;
+    right: -20px;
+    top: 42px;
+
+    width: 0;
+    height: 0;
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+
+    border-left: 30px solid ${props => props.theme.colors.bgHighlightBorder};
+  }
+`;
+
+const TooltipCaption = styled.h5`
+  margin-bottom: 16px;
+
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const TooltipDesc = styled.p`
+  color: ${props => props.theme.colors.textSecondary};
+`;
+
+function Hint({ children }) {
+  const [active, setActive] = useState(false);
+
+  return (
+    <BalanceHint onClick={() => setActive(!active)}>
+      <TooltipWrapper active={active}>{children}</TooltipWrapper>
+      <SecondaryIcon active={active}>i</SecondaryIcon>
+    </BalanceHint>
+  );
+}
+
 export default function SidebarBalances({ strong, weak, strongBalance, weakBalance }) {
   return (
     <Balances>
@@ -162,9 +223,10 @@ export default function SidebarBalances({ strong, weak, strongBalance, weakBalan
             <small> = $16,208.04</small>
           </BalanceNumber>
         </BalancePrice>
-        <BalanceHint>
-          <SecondaryIcon>i</SecondaryIcon>
-        </BalanceHint>
+        <Hint>
+          <TooltipCaption>ETH Balance</TooltipCaption>
+          <TooltipDesc>This is your connected wallet Ether balance.</TooltipDesc>
+        </Hint>
       </Balance>
       <Balance>
         <BalancePrice>
@@ -178,9 +240,13 @@ export default function SidebarBalances({ strong, weak, strongBalance, weakBalan
             </Approved>
           </BalanceNumber>
         </BalancePrice>
-        <BalanceHint>
-          <SecondaryIcon>i</SecondaryIcon>
-        </BalanceHint>
+        <Hint>
+          <TooltipCaption>wNOM Balance</TooltipCaption>
+          <TooltipDesc>
+            This shows your total wNOM balance and the amount approved for selling. You must approve wNOM for selling
+            before it can be sold.
+          </TooltipDesc>
+        </Hint>
       </Balance>
 
       <WithdrawBtnWrapper>
