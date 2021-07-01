@@ -44,7 +44,7 @@ export default function RequestFailedModal({ error }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="request-failed-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -58,7 +58,9 @@ export default function RequestFailedModal({ error }) {
       </main>
       <footer>
         <FooterControls>
-          <Modal.PrimaryButton onClick={() => handleModal()}>Ok &#x1f625;</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => handleModal()} data-testid="request-failed-primary-button">
+            Ok &#x1f625;
+          </Modal.PrimaryButton>
         </FooterControls>
       </footer>
     </Modal.Wrapper>
