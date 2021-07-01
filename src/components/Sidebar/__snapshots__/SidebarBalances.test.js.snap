@@ -27,7 +27,7 @@ exports[`Given the SidebarBalances component when the component is rendered shou
         class="sc-gXfVKN"
       >
         <a
-          class="sc-cBoqAE hsnkhy"
+          class="sc-cBoqAE drvSrl"
         >
           i
         </a>
@@ -81,7 +81,7 @@ exports[`Given the SidebarBalances component when the component is rendered shou
         class="sc-gXfVKN"
       >
         <a
-          class="sc-cBoqAE hsnkhy"
+          class="sc-cBoqAE drvSrl"
         >
           i
         </a>
@@ -91,7 +91,7 @@ exports[`Given the SidebarBalances component when the component is rendered shou
       class="sc-jcwpoC jwrGsS"
     >
       <button
-        class="sc-hKFxyN hQFwnH"
+        class="sc-hKFxyN fFAwxg"
         style="width: 100%;"
       >
         Withdraw wNOM

@@ -7,7 +7,7 @@ exports[`Given the LineChart component when the component is rendered and bondDa
     style="margin-top: 1rem; height: 400px;"
   >
     <svg
-      class="sc-bdnxRM kNdflx"
+      class="sc-gtsrHT efQxDo"
       data-testid="historical-line-chart-svg"
     >
       <defs>
@@ -75,7 +75,7 @@ exports[`Given the LineChart component when the component is rendered and bondDa
     style="margin-top: 1rem; height: 400px;"
   >
     <svg
-      class="sc-bdnxRM kNdflx"
+      class="sc-gtsrHT efQxDo"
       data-testid="historical-line-chart-svg"
     >
       <defs>

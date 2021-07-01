@@ -5,10 +5,10 @@ import { Close } from '../Icons';
 import * as Modal from '../styles';
 import { responsive } from 'theme/constants';
 import { Sending, ExchangeInput, MaxBtn } from '../../Exchange/exchangeStyles';
-import oneWayBridgeImg from './assets/one-way-bridge.svg';
-import whyBridgeImg from './assets/why-bridge.svg';
-import bridgeCurveImg from './assets/icon-bridge-curve.svg';
-import walletImg from './assets/icon-onomy-wallet.svg';
+import oneWayBridgeImg from '../assets/one-way-bridge.svg';
+import whyBridgeImg from '../assets/why-bridge.svg';
+import bridgeCurveImg from '../assets/icon-bridge-curve.svg';
+import walletImg from '../assets/icon-onomy-wallet.svg';
 
 const InputWrapper = styled.div`
   margin: 0 0 25px;

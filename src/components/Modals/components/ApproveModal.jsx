@@ -53,7 +53,7 @@ export default function ApproveModal({ onApprove }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="approve-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -74,8 +74,12 @@ export default function ApproveModal({ onApprove }) {
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={onApprove}>Approve ({count})</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()} data-testid="approve-modal-secondary-button">
+            Cancel
+          </Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={onApprove} data-testid="approve-modal-primary-button">
+            Approve ({count})
+          </Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>

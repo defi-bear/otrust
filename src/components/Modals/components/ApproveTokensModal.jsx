@@ -80,7 +80,7 @@ export default function ApproveTokensModal({ onApprove }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="approve-tokens-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -102,8 +102,12 @@ export default function ApproveTokensModal({ onApprove }) {
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={onApprove}>Approve ({count})</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()} data-testid="approve-tokens-modal-secondary-button">
+            Cancel
+          </Modal.SecondaryButton>
+          <Modal.PrimaryButton onClick={onApprove} data-testid="approve-tokens-modal-primary-button">
+            Approve ({count})
+          </Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>

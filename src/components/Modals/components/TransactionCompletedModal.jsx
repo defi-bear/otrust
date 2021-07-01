@@ -60,7 +60,7 @@ export default function TransactionCompletedModal({ tx }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => closeModal()}>
+      <Modal.CloseIcon onClick={() => closeModal()} data-testid="completed-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -71,14 +71,14 @@ export default function TransactionCompletedModal({ tx }) {
         <Modal.Caption>Transaction Completed!</Modal.Caption>
         {status !== 'APPROVE' ? (
           <>
-            <Modal.ExchangeResult>
+            <Modal.ExchangeResult data-testid="completed-modal-exchange-result">
               + {format18(askAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? weak : strong}</sup>
               <Modal.Spent>
                 - {format18(bidAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? strong : weak}</sup>
               </Modal.Spent>
             </Modal.ExchangeResult>
 
-            <Modal.ExchangeRateWrapper>
+            <Modal.ExchangeRateWrapper data-testid="completed-modal-exchange-rate">
               <span>Exchange Rate</span>
 
               <strong>
@@ -88,19 +88,27 @@ export default function TransactionCompletedModal({ tx }) {
             </Modal.ExchangeRateWrapper>
           </>
         ) : (
-          <Modal.ExchangeApproveText>Onomy blockchain confirmed access for selling.</Modal.ExchangeApproveText>
+          <Modal.ExchangeApproveText data-testid="completed-exchange-approve-text">
+            Onomy blockchain confirmed access for selling.
+          </Modal.ExchangeApproveText>
         )}
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.DetailsButton active={detailsActive} onClick={() => setDetailsActive(!detailsActive)}>
+          <Modal.DetailsButton
+            active={detailsActive}
+            onClick={() => setDetailsActive(!detailsActive)}
+            data-testid="completed-modal-details-button"
+          >
             View Details <Caret />
           </Modal.DetailsButton>
-          <Modal.PrimaryButton onClick={() => closeModal()}>Done</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => closeModal()} data-testid="completed-modal-primary-button">
+            Done
+          </Modal.PrimaryButton>
         </Modal.FooterControls>
 
         {detailsActive && (
-          <Modal.FooterDetails>
+          <Modal.FooterDetails data-testid="completed-modal-footer-details">
             <Modal.FooterDetailsRow>
               <span>From</span> <strong>{shortten(tx.from)}</strong>
             </Modal.FooterDetailsRow>
@@ -114,7 +122,9 @@ export default function TransactionCompletedModal({ tx }) {
               <span>Network Confirmations</span> <strong>{tx.confirmations > 0 ? tx.confirmations : 1}</strong>
             </Modal.FooterDetailsRow>
 
-            <ExplorerButton onClick={() => onExplore()}>View in Explorer</ExplorerButton>
+            <ExplorerButton onClick={() => onExplore()} data-testid="completed-model-explorer-button">
+              View in Explorer
+            </ExplorerButton>
           </Modal.FooterDetails>
         )}
       </footer>
