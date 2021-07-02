@@ -12,6 +12,8 @@ import { useModal } from 'context/modal/ModalContext';
 import * as Modal from 'components/Modals/styles';
 import 'components/Modals/loadingBar.css';
 import { useExchange } from 'context/exchange/ExchangeContext';
+import { useChain } from 'context/chain/ChainContext';
+import { BondingCont } from 'context/chain/contracts';
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -149,9 +151,11 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   const [gasPriceChoice, setGasPriceChoice] = useState(2);
   const [gasPrice, setGasPrice] = useState(0);
   const { handleModal } = useModal();
-  const { account } = useWeb3React();
-
+  const { account, library } = useWeb3React();
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
+  const { strongBalance, weakBalance } = useChain();
+  const bondContract = BondingCont(library);
+  const [showAskAmount, setShowAskAmount] = useState(askAmount);
 
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
@@ -165,6 +169,30 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     }
   };
 
+  const getAskAmount = useCallback(
+    async (askAmountState, bidAmountUpdate, textStrength) => {
+      var askAmountUpdate = askAmountState;
+
+      switch (textStrength) {
+        case 'strong':
+          console.log('Strong: ', bidAmountUpdate.toFixed(0));
+          askAmountUpdate = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
+          console.log('Pull Strong Ask Amount', askAmountUpdate);
+          break;
+
+        case 'weak':
+          askAmountUpdate = await bondContract.sellQuoteNOM(bidAmountUpdate.toFixed(0));
+          console.log('Pull Weak Ask Amount', askAmountUpdate);
+          break;
+
+        default:
+          console.error('Denom not set');
+      }
+      return new BigNumber(askAmountUpdate.toString());
+    },
+    [bondContract],
+  );
+
   const getGasPrices = useCallback(async () => {
     const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
     const result = await prices.json();
@@ -177,8 +205,20 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     setGasPrice(gasOptions[gasPriceChoice].gas);
   }, [gasPriceChoice]);
 
-  useEffect(() => {
-    getGasPrices();
+  useEffect(async () => {
+    await getGasPrices();
+    setShowAskAmount(askAmount);
+
+    let bidMaxValue;
+    if (bidDenom === 'strong') {
+      bidMaxValue = strongBalance;
+      if (bidAmount.plus(gasOptions[gasPriceChoice].gas) >= bidMaxValue) {
+        const newgas = bidAmount.plus(gasOptions[gasPriceChoice].gas).minus(bidMaxValue);
+        const newBidAmount = bidAmount.minus(newgas);
+        const askAmountUpdate1 = await getAskAmount(askAmount, newBidAmount, bidDenom);
+        setShowAskAmount(askAmountUpdate1);
+      }
+    }
   }, [getGasPrices]);
 
   useInterval(increaseCount, delay);
@@ -194,7 +234,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
 
         <Modal.ExchangeResult>
           <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>~{' '}
-          {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}
+          {BigNumber.isBigNumber(showAskAmount) ? format18(showAskAmount).toFixed(6) : ''}
           <sup>{bidDenom === 'strong' ? 'NOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
@@ -204,7 +244,9 @@ export default function ConfirmTransactionModal({ submitTrans }) {
             {bidDenom ? (
               <>
                 1 {bidDenom === 'strong' ? strong : weak} ={' '}
-                {BigNumber.isBigNumber(bidAmount) ? format18(askAmount.div(format18(bidAmount).toFixed(6))).toFixed(6) : 'Loading'}
+                {BigNumber.isBigNumber(bidAmount)
+                  ? format18(askAmount.div(format18(bidAmount).toFixed(6))).toFixed(6)
+                  : 'Loading'}
               </>
             ) : (
               <></>

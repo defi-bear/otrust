@@ -184,12 +184,22 @@ export default function ExchangeQuote({ strength }) {
     strUpdate.set('bidDenom', strength);
     let bidMaxValue = strength === 'strong' ? strongBalance : weakBalance;
 
+    const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
+    const result = await prices.json();
+    const gas = new BigNumber(result.data.rapid.toString());
+
     strUpdate.set('input', format18(bidMaxValue).toString());
 
-    let askAmountUpdate;
+    let bidMaxValue1 = bidMaxValue;
+    if (strength === 'strong') bidMaxValue1 = bidMaxValue.minus(gas);
+
+    let askAmountUpdate, askAmountUpdate1;
 
     try {
       askAmountUpdate = await getAskAmount(askAmount, bidMaxValue, strength);
+      if (strength === 'strong') {
+        askAmountUpdate1 = await getAskAmount(askAmount, bidMaxValue1, strength);
+      }
     } catch (err) {
       if (err) {
         handleModal(<RequestFailedModal error={err.error.message} />);
@@ -206,6 +216,8 @@ export default function ExchangeQuote({ strength }) {
       type: 'update',
       value: objUpdate,
     });
+
+    if (strength === 'strong') askAmountUpdate = askAmountUpdate1;
 
     strUpdate.set('output', format18(new BigNumber(askAmountUpdate.toString())).toFixed(8));
 
@@ -253,19 +265,39 @@ export default function ExchangeQuote({ strength }) {
 
           break;
         case floatRegExp.test(evt.target.value.toString()):
-          console.log('Input after test', evt.target.value);
-          const bidAmountUpdate = parse18(new BigNumber(parseFloat(evt.target.value).toString()));
+          const evttargetvalue = evt.target.value;
+          const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
+          const result = await prices.json();
+          const gas = new BigNumber(result.data.rapid.toString());
+          let bidMaxValue = strength === 'strong' ? strongBalance : weakBalance;
 
-          const inputUpdate = evt.target.value.toString();
+          console.log('Input after test', evttargetvalue);
+
+          const bidAmountUpdate = parse18(new BigNumber(parseFloat(evttargetvalue).toString()));
+
+          const inputUpdate = evttargetvalue.toString();
+          let newgas = gas;
+          let weak4gas = 0;
+          let flag = false;
+
+          let bidAmountUpdate1 = bidAmountUpdate;
+          if (strength === 'strong' && bidAmountUpdate.plus(gas) >= bidMaxValue) {
+            newgas = bidAmountUpdate.plus(gas).minus(bidMaxValue);
+            bidAmountUpdate1 = bidAmountUpdate.minus(newgas);
+            flag = true;
+          }
 
           if (bidDenom !== strength) {
             strUpdate = strUpdate.set('bidDenom', strength);
           }
 
-          var askAmountUpdate;
+          var askAmountUpdate, askAmountUpdate1;
 
           try {
             askAmountUpdate = await getAskAmount(askAmount, bidAmountUpdate, textStrength);
+            if (strength === 'strong') {
+              askAmountUpdate1 = await getAskAmount(askAmount, bidAmountUpdate1, textStrength);
+            }
           } catch (err) {
             if (err) {
               console.log(err.error.message);
@@ -286,6 +318,10 @@ export default function ExchangeQuote({ strength }) {
           });
 
           strUpdate = strUpdate.set('input', inputUpdate);
+
+          if (flag) {
+            if (strength === 'strong') askAmountUpdate = askAmountUpdate1;
+          }
 
           strUpdate = strUpdate.set('output', format18(new BigNumber(askAmountUpdate.toString())).toFixed(8));
 
