@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { responsive } from 'theme/constants';
-import { MediumIcon, TwitterIcon } from './SidebarIcons';
+import { TelegramIcon, MediumIcon, TwitterIcon } from './SidebarIcons';
 
 const SidebarFooterWrapper = styled.footer`
   display: flex;
@@ -100,6 +100,10 @@ export default function SidebarFooter() {
       <Link href="https://onomy.io/" target="_blank">
         About Onomy
       </Link>
+
+      <SecondaryIcon href="https://t.me/onomyprotocol" target="_blank">
+        <TelegramIcon />
+      </SecondaryIcon>
 
       <SecondaryIcon href="https://medium.com/onomy-protocol" target="_blank">
         <MediumIcon />
