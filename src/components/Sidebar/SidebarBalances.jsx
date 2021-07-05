@@ -212,7 +212,7 @@ function Hint({ children }) {
   );
 }
 
-export default function SidebarBalances({ strong, weak, strongBalance, weakBalance }) {
+export default function SidebarBalances({ strong, weak, strongBalance, weakBalance, allowance }) {
   return (
     <Balances>
       <Balance>
@@ -235,7 +235,7 @@ export default function SidebarBalances({ strong, weak, strongBalance, weakBalan
             {weakBalance}
             <small> = $16,208.04</small>
             <Approved>
-              <span>1,042 approved</span>
+              <span>{allowance} approved</span>
               {/* <CloseIcon onClick={() => {}} /> */}
             </Approved>
           </BalanceNumber>
