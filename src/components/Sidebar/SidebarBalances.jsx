@@ -1,11 +1,9 @@
-import { PrimaryButton } from "components/Modals/styles";
-import React from "react";
-import styled from "styled-components";
-import { darken, lighten } from "polished";
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-import { responsive } from "theme/constants";
-
-import { CloseIcon } from "./SidebarIcons";
+import { PrimaryButton } from 'components/Modals/styles';
+import { responsive } from 'theme/constants';
+// import { CloseIcon } from './SidebarIcons';
 
 const Balances = styled.div`
   display: flex;
@@ -14,7 +12,7 @@ const Balances = styled.div`
 
   padding: 40px;
 
-  border-bottom: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  border-bottom: 1px solid ${props => props.theme.colors.bgHighlightBorder};
 
   @media screen and (max-width: ${responsive.laptop}) {
     padding: 24px;
@@ -42,20 +40,20 @@ const Balances = styled.div`
     margin-bottom: 10px;
 
     font-weight: 400;
-    color: ${(props) => props.theme.colors.textSecondary};
+    color: ${props => props.theme.colors.textSecondary};
   }
 `;
 
 const BalanceNumber = styled.div`
-  font-family: "Bebas Neue", sans-serif;
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 28px;
-  font-weight: ${(props) => (props.strong ? 700 : 400)};
+  font-weight: ${props => (props.strong ? 700 : 400)};
 
   > small {
     margin-left: 5px;
 
-    font-family: "Poppins", sans-serif;
-    color: ${(props) => props.theme.colors.textSecondary};
+    font-family: 'Poppins', sans-serif;
+    color: ${props => props.theme.colors.textSecondary};
     font-size: 11px;
   }
 
@@ -71,9 +69,12 @@ const Balance = styled.div`
 `;
 
 const BalancePrice = styled.div``;
-const BalanceHint = styled.div``;
 
-const SecondaryIcon = styled.a`
+const BalanceHint = styled.div`
+  position: relative;
+`;
+
+const SecondaryIcon = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,14 +82,16 @@ const SecondaryIcon = styled.a`
   height: 40px;
   width: 40px;
 
-  background-color: ${(props) => props.theme.colors.bgHighlightBorder};
+  background-color: ${props => props.theme.colors.bgHighlightBorder};
   border-radius: 8px;
+  border: none;
 
   font-size: 20px;
   font-weight: 500;
-  color: ${(props) => props.theme.colors.iconsSecondary};
+  color: ${props => props.theme.colors.iconsSecondary};
 
   cursor: pointer;
+  user-select: none;
 
   @media screen and (max-width: ${responsive.laptop}) {
     width: 32px;
@@ -102,20 +105,20 @@ const SecondaryIcon = styled.a`
   }
 
   &:hover {
-    background-color: ${(props) =>
-      lighten(0.02, props.theme.colors.bgHighlightBorder)};
+    background-color: ${props => props.theme.colors.iconsNormal};
+    color: ${props => props.theme.colors.bgDarken};
   }
 
   &:active {
-    background-color: ${(props) =>
-      darken(0.02, props.theme.colors.bgHighlightBorder)};
+    background-color: ${props => props.theme.colors.bgHighlightBorder_darken};
   }
 `;
 
 const Approved = styled.div`
   display: inline-block;
 
-  padding: 4px 30px 4px 8px;
+  padding: 4px 8px;
+  /* padding: 4px 30px 4px 8px; */
   margin-top: 6px;
 
   position: relative;
@@ -123,8 +126,8 @@ const Approved = styled.div`
   background-color: #2a303f;
   border-radius: 6px;
 
-  color: ${(props) => props.theme.colors.highlightBlue};
-  font-size: 10px;
+  color: ${props => props.theme.colors.highlightBlue};
+  font-size: 12px;
   font-weight: 400;
   font-family: Poppins, sans-serif;
 
@@ -153,12 +156,63 @@ const WithdrawBtnWrapper = styled.div`
   }
 `;
 
-export default function SidebarBalances({
-  strong,
-  weak,
-  strongBalance,
-  weakBalance,
-}) {
+const TooltipWrapper = styled.div`
+  display: ${props => (props.active ? 'block' : 'none')};
+
+  width: 360px;
+  padding: 32px 40px;
+
+  position: absolute;
+  right: 72px;
+  top: -52px;
+
+  background-color: ${props => props.theme.colors.bgHighlightBorder};
+  border-radius: 8px;
+  box-shadow: 0 5px 50px 0 rgba(0, 0, 0, 0.36);
+
+  z-index: 1;
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    display: block;
+
+    position: absolute;
+    right: -20px;
+    top: 42px;
+
+    width: 0;
+    height: 0;
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+
+    border-left: 30px solid ${props => props.theme.colors.bgHighlightBorder};
+  }
+`;
+
+const TooltipCaption = styled.h5`
+  margin-bottom: 16px;
+
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const TooltipDesc = styled.p`
+  color: ${props => props.theme.colors.textSecondary};
+`;
+
+function Hint({ children }) {
+  const [active, setActive] = useState(false);
+
+  return (
+    <BalanceHint onPointerOver={() => setActive(true)} onPointerLeave={() => setActive(false)}>
+      <TooltipWrapper active={active}>{children}</TooltipWrapper>
+      <SecondaryIcon active={active}>i</SecondaryIcon>
+    </BalanceHint>
+  );
+}
+
+export default function SidebarBalances({ strong, weak, strongBalance, weakBalance, allowance }) {
   return (
     <Balances>
       <Balance>
@@ -169,9 +223,10 @@ export default function SidebarBalances({
             <small> = $16,208.04</small>
           </BalanceNumber>
         </BalancePrice>
-        <BalanceHint>
-          <SecondaryIcon>i</SecondaryIcon>
-        </BalanceHint>
+        <Hint>
+          <TooltipCaption>ETH Balance</TooltipCaption>
+          <TooltipDesc>This is your connected wallet Ether balance.</TooltipDesc>
+        </Hint>
       </Balance>
       <Balance>
         <BalancePrice>
@@ -180,18 +235,22 @@ export default function SidebarBalances({
             {weakBalance}
             <small> = $16,208.04</small>
             <Approved>
-              <span>1,042 approved</span>
-              <CloseIcon onClick={() => {}} />
+              <span>{allowance} approved</span>
+              {/* <CloseIcon onClick={() => {}} /> */}
             </Approved>
           </BalanceNumber>
         </BalancePrice>
-        <BalanceHint>
-          <SecondaryIcon>i</SecondaryIcon>
-        </BalanceHint>
+        <Hint>
+          <TooltipCaption>wNOM Balance</TooltipCaption>
+          <TooltipDesc>
+            This shows your total wNOM balance and the amount approved for selling. You must approve wNOM for selling
+            before it can be sold.
+          </TooltipDesc>
+        </Hint>
       </Balance>
 
       <WithdrawBtnWrapper>
-        <PrimaryButton style={{ width: "100%" }}>Withdraw wNOM</PrimaryButton>
+        <PrimaryButton style={{ width: '100%' }}>Withdraw wNOM</PrimaryButton>
       </WithdrawBtnWrapper>
     </Balances>
   );

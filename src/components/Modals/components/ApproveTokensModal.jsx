@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import useInterval from "@use-it/interval";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import useInterval from '@use-it/interval';
 
-import { Close } from "../Icons";
-import * as Modal from "../styles";
-import { responsive } from "theme/constants";
-import { useModal } from "context/modal/ModalContext";
-import { MaxBtn } from "components/Exchange/exchangeStyles";
+import { Close } from '../Icons';
+import * as Modal from '../styles';
+import { responsive } from 'theme/constants';
+import { useModal } from 'context/modal/ModalContext';
+import { MaxBtn } from 'components/Exchange/exchangeStyles';
 
 const Message = styled.div`
   margin: 32px 0 0;
 
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: ${props => props.theme.colors.textSecondary};
 
   @media screen and (max-width: ${responsive.smartphone}) {
     font-size: 14px;
@@ -30,7 +30,7 @@ const ApproveTokensWrapper = styled.div`
   padding: 12px;
   margin-top: 24px;
 
-  background-color: ${(props) => props.theme.colors.bgHighlightBorder};
+  background-color: ${props => props.theme.colors.bgHighlightBorder};
   border-radius: 8px;
 
   > div {
@@ -43,7 +43,7 @@ const ApproveTokensWrapper = styled.div`
   label {
     margin-bottom: 6px;
 
-    color: ${(props) => props.theme.colors.textThirdly};
+    color: ${props => props.theme.colors.textThirdly};
     font-size: 12px;
   }
 
@@ -53,7 +53,7 @@ const ApproveTokensWrapper = styled.div`
     background: none;
     border: none;
 
-    color: ${(props) => props.theme.colors.textPrimary};
+    color: ${props => props.theme.colors.textPrimary};
     font-size: 18px;
 
     &:focus {
@@ -80,7 +80,7 @@ export default function ApproveTokensModal({ onApprove }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="approve-tokens-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -88,9 +88,8 @@ export default function ApproveTokensModal({ onApprove }) {
         <Caption>Approve Tokens</Caption>
 
         <Message>
-          You want to sell <strong>1600 wNOM</strong>, but you approved for sale
-          only 1000 wNOM. Would you like to approve the rest{" "}
-          <strong>600 (or more) wNOM</strong> and complete selling?
+          You want to sell <strong>1600 wNOM</strong>, but you approved for sale only 1000 wNOM. Would you like to
+          approve the rest <strong>600 (or more) wNOM</strong> and complete selling?
         </Message>
 
         <ApproveTokensWrapper>
@@ -103,10 +102,10 @@ export default function ApproveTokensModal({ onApprove }) {
       </main>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>
+          <Modal.SecondaryButton onClick={() => handleModal()} data-testid="approve-tokens-modal-secondary-button">
             Cancel
           </Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={onApprove}>
+          <Modal.PrimaryButton onClick={onApprove} data-testid="approve-tokens-modal-primary-button">
             Approve ({count})
           </Modal.PrimaryButton>
         </Modal.FooterControls>

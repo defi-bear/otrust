@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+import LoadingSpinner from 'components/UI/LoadingSpinner';
+import { Metamask } from 'components/Modals/Icons';
 
-import LoadingSpinner from "components/UI/LoadingSpinner";
-import { Metamask } from "components/Modals/Icons";
-import * as Modal from "../styles";
+import * as Modal from '../styles';
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const TransactionDetailsRow = styled.div`
 
   span {
     font-weight: 400;
-    color: ${(props) => props.theme.colors.textThirdly};
+    color: ${props => props.theme.colors.textThirdly};
   }
 
   strong {
@@ -31,7 +31,7 @@ const WalletIcon = styled.div`
   align-items: center;
   justify-content: center;
 
-  background-color: ${(props) => props.theme.colors.bgDarken};
+  background-color: ${props => props.theme.colors.bgDarken};
 
   svg {
     width: 24px;
@@ -39,19 +39,19 @@ const WalletIcon = styled.div`
   }
 `;
 
-const FeeWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+// const FeeWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
 
-  margin-top: 16px;
+//   margin-top: 16px;
 
-  color: ${(props) => props.theme.colors.textThirdly};
+//   color: ${props => props.theme.colors.textThirdly};
 
-  strong {
-    color: ${(props) => props.theme.colors.textPrimary};
-  }
-`;
+//   strong {
+//     color: ${props => props.theme.colors.textPrimary};
+//   }
+// `;
 
 export default function PendingModal() {
   return (
@@ -60,9 +60,7 @@ export default function PendingModal() {
         <Modal.PendingCaption>Transaction pending...</Modal.PendingCaption>
 
         <Modal.ExchangeResult>
-          <Modal.ExchangeResultDescription>
-            You're selling
-          </Modal.ExchangeResultDescription>
+          <Modal.ExchangeResultDescription>You're selling</Modal.ExchangeResultDescription>
           1239 <sup>wNOM</sup>
         </Modal.ExchangeResult>
 
@@ -88,12 +86,12 @@ export default function PendingModal() {
           </WalletIcon>
         </TransactionDetailsRow>
 
-        <FeeWrapper>
+        {/* <FeeWrapper>
           <span>Transaction fee</span>
           <span>
             <strong>$5.4</strong> (0.00032 ETH)
           </span>
-        </FeeWrapper>
+        </FeeWrapper> */}
       </main>
       <footer>
         <Modal.LoadingWrapper>

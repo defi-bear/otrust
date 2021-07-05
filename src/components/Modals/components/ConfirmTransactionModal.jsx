@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
-import { lighten } from "polished";
-import useInterval from "@use-it/interval";
+import React, { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import useInterval from '@use-it/interval';
 // import LoadingBar from 'components/Modals/LoadingBar'
-import { BigNumber } from "bignumber.js";
-import { format18 } from "utils/math";
+import { BigNumber } from 'bignumber.js';
+import { Close, Metamask } from 'components/Modals/Icons';
+import { useWeb3React } from '@web3-react/core';
 
-import { useModal } from "context/modal/ModalContext";
-import { Close, Metamask } from "components/Modals/Icons";
-import * as Modal from "components/Modals/styles";
-import "components/Modals/loadingBar.css";
-import { useWeb3React } from "@web3-react/core";
-import { useExchange } from "context/exchange/ExchangeContext";
+import { format18 } from 'utils/math';
+import { useModal } from 'context/modal/ModalContext';
+import * as Modal from 'components/Modals/styles';
+import 'components/Modals/loadingBar.css';
+import { useExchange } from 'context/exchange/ExchangeContext';
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -24,7 +23,7 @@ const TransactionDetailsRow = styled.div`
 
   span {
     font-weight: 400;
-    color: ${(props) => props.theme.colors.textThirdly};
+    color: ${props => props.theme.colors.textThirdly};
   }
 
   strong {
@@ -35,17 +34,17 @@ const TransactionDetailsRow = styled.div`
 const OptionsWrapper = styled.section`
   padding: 32px 32px;
 
-  border-top: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  border-top: 1px solid ${props => props.theme.colors.bgHighlightBorder};
 `;
 
 const OptionCaption = styled.p`
   margin: 0 0 12px;
-  color: ${(props) => props.theme.colors.textThirdly};
+  color: ${props => props.theme.colors.textThirdly};
 `;
 
 const SlippageDesc = styled.p`
   margin: 16px 0 0;
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: ${props => props.theme.colors.textSecondary};
 `;
 
 const Options = styled.div`
@@ -64,7 +63,7 @@ const WalletIcon = styled.div`
   align-items: center;
   justify-content: center;
 
-  background-color: ${(props) => props.theme.colors.bgDarken};
+  background-color: ${props => props.theme.colors.bgDarken};
 
   svg {
     width: 24px;
@@ -75,62 +74,56 @@ const WalletIcon = styled.div`
 const OptionBtn = styled.button`
   padding: 12px 16px;
 
-  background-color: ${(props) =>
-    props.active ? props.theme.colors.bgHighlightBorder : "transparent"};
-  border: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  background-color: ${props => (props.active ? props.theme.colors.bgHighlightBorder : 'transparent')};
+  border: 1px solid ${props => props.theme.colors.bgHighlightBorder};
   border-radius: 22px;
 
   font-size: 14px;
   font-weight: 500;
-  color: ${(props) =>
-    props.active
-      ? props.theme.colors.textPrimary
-      : props.theme.colors.textSecondary};
+  color: ${props => (props.active ? props.theme.colors.textPrimary : props.theme.colors.textSecondary)};
 
   &:hover {
-    background-color: ${(props) =>
-      lighten(0.1, props.theme.colors.bgHighlightBorder)};
+    background-color: ${props => props.theme.colors.bgHighlightBorder_lighten};
   }
 
   &:active {
-    background-color: ${(props) =>
-      lighten(0.1, props.theme.colors.bgHighlightBorder)};
+    background-color: ${props => props.theme.colors.bgHighlightBorder_darken};
   }
 `;
 
-const FeeWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+// const FeeWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
 
-  margin-top: 16px;
+//   margin-top: 16px;
 
-  color: ${(props) => props.theme.colors.textThirdly};
+//   color: ${props => props.theme.colors.textThirdly};
 
-  strong {
-    color: ${(props) => props.theme.colors.textPrimary};
-  }
-`;
+//   strong {
+//     color: ${props => props.theme.colors.textPrimary};
+//   }
+// `;
 
 const limitOptions = [
   {
     id: 0,
-    text: "No limit",
+    text: 'No limit',
     value: new BigNumber(1000),
   },
   {
     id: 1,
-    text: "1%",
+    text: '1%',
     value: new BigNumber(100),
   },
   {
     id: 2,
-    text: "2.5%",
+    text: '2.5%',
     value: new BigNumber(250),
   },
   {
     id: 3,
-    text: "5%",
+    text: '5%',
     value: new BigNumber(500),
   },
 ];
@@ -138,15 +131,15 @@ const limitOptions = [
 const gasOptions = [
   {
     id: 0,
-    text: "0 (Standard)",
+    text: '0 (Standard)',
   },
   {
     id: 1,
-    text: "0 (Fast)",
+    text: '0 (Fast)',
   },
   {
     id: 2,
-    text: "0 (Instant)",
+    text: '0 (Instant)',
   },
 ];
 
@@ -172,15 +165,11 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   };
 
   const getGasPrices = useCallback(async () => {
-    const prices = await fetch(
-      "https://www.gasnow.org/api/v3/gas/price?utm_source=onomy"
-    );
+    const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
     const result = await prices.json();
-    gasOptions[0].text =
-      (result.data.standard / 1e9).toPrecision(4) + " (Standard)";
-    gasOptions[1].text = (result.data.fast / 1e9).toPrecision(4) + " (Fast)";
-    gasOptions[2].text =
-      (result.data.rapid / 1e9).toPrecision(4) + " (Instant)";
+    gasOptions[0].text = (result.data.standard / 1e9).toPrecision(4) + ' (Standard)';
+    gasOptions[1].text = (result.data.fast / 1e9).toPrecision(4) + ' (Fast)';
+    gasOptions[2].text = (result.data.rapid / 1e9).toPrecision(4) + ' (Instant)';
     gasOptions[0].gas = new BigNumber(result.data.standard.toString());
     gasOptions[1].gas = new BigNumber(result.data.fast.toString());
     gasOptions[2].gas = new BigNumber(result.data.rapid.toString());
@@ -195,7 +184,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="confirm-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -203,37 +192,27 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         <Modal.Caption>Confirm Transaction</Modal.Caption>
 
         <Modal.ExchangeResult>
-          <Modal.ExchangeResultDescription>
-            You're receiving
-          </Modal.ExchangeResultDescription>
-          ~{" "}
-          {BigNumber.isBigNumber(askAmount)
-            ? format18(askAmount).toFixed(6)
-            : ""}
-          <sup>{bidDenom === "strong" ? "NOM" : "ETH"}</sup>
+          <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>~{' '}
+          {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}
+          <sup>{bidDenom === 'strong' ? 'NOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
           <span>Current Exchange Rate</span>
           <strong>
-            {bidDenom ? (
+            {bidDenom && (
               <>
-                1 {bidDenom === "strong" ? strong : weak} ={" "}
-                {BigNumber.isBigNumber(bidAmount)
-                  ? format18(askAmount.div(bidAmount)).toFixed(6)
-                  : "Loading"}
+                1 {bidDenom === 'strong' ? strong : weak} ={' '}
+                {BigNumber.isBigNumber(bidAmount) ? format18(askAmount.div(bidAmount)).toFixed(6) : 'Loading'}
               </>
-            ) : (
-              <></>
-            )}{" "}
-            {bidDenom === "strong" ? weak : strong}
+            )}{' '}
+            {bidDenom === 'strong' ? weak : strong}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
           <span>You're Sending</span>
           <strong>
-            {format18(bidAmount).toFixed(6)}{" "}
-            {bidDenom === "strong" ? strong : weak}
+            {format18(bidAmount).toFixed(6)} {bidDenom === 'strong' ? strong : weak}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
@@ -243,12 +222,10 @@ export default function ConfirmTransactionModal({ submitTrans }) {
             <div>
               <strong>
                 {account === null
-                  ? "-"
+                  ? '-'
                   : account
-                  ? `${account.substring(0, 10)}...${account.substring(
-                      account.length - 4
-                    )}`
-                  : ""}
+                  ? `${account.substring(0, 10)}...${account.substring(account.length - 4)}`
+                  : ''}
               </strong>
             </div>
           </div>
@@ -258,20 +235,20 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           </WalletIcon>
         </TransactionDetailsRow>
 
-        <FeeWrapper>
+        {/* <FeeWrapper>
           <span>Transaction fee</span>
           <span>
             <strong>$5.4</strong> (0.00032 ETH)
           </span>
-        </FeeWrapper>
+        </FeeWrapper> */}
       </main>
       <OptionsWrapper>
         <OptionCaption>Gas Fee</OptionCaption>
         <Options>
-          {gasOptions.map((gasPriceOption) => (
+          {gasOptions.map(gasPriceOption => (
             <OptionBtn
               active={gasPrice === gasPriceOption.gas}
-              key={gasPriceOption.gas}
+              key={gasPriceOption.text}
               onClick={() => {
                 setGasPrice(gasPriceOption.gas);
                 setGasPriceChoice(gasPriceOption.id);
@@ -283,7 +260,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         </Options>
         <OptionCaption>Slippage Limit</OptionCaption>
         <Options>
-          {limitOptions.map((slippageOption) => (
+          {limitOptions.map(slippageOption => (
             <OptionBtn
               active={slippage === slippageOption.id}
               key={slippageOption.id}
@@ -294,17 +271,19 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           ))}
         </Options>
         <SlippageDesc>
-          Slippage is likely in times of high demand. Quote is based on most
-          recent block and does not reflect transactions ahead of you in the
-          mempool
+          Slippage is likely in times of high demand. Quote is based on most recent block and does not reflect
+          transactions ahead of you in the mempool
         </SlippageDesc>
       </OptionsWrapper>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>
+          <Modal.SecondaryButton onClick={() => handleModal()} data-testid="confirm-modal-secondary-button">
             Cancel
           </Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasPrice)}>
+          <Modal.PrimaryButton
+            onClick={() => submitTrans(slippage, gasPrice)}
+            data-testid="confirm-modal-primary-button"
+          >
             Confirm ({count})
           </Modal.PrimaryButton>
         </Modal.FooterControls>

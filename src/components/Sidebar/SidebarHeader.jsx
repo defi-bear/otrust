@@ -1,9 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import { darken, lighten } from "polished";
+import React from 'react';
+import styled from 'styled-components';
 
-import { responsive } from "theme/constants";
-import { CogIcon, LogoutIcon } from "./SidebarIcons";
+import { responsive } from 'theme/constants';
+import { CogIcon, LogoutIcon } from './SidebarIcons';
 
 const PrimaryIcon = styled.a`
   display: flex;
@@ -13,15 +12,15 @@ const PrimaryIcon = styled.a`
   height: 44px;
   width: 44px;
 
-  background-color: ${(props) => props.theme.colors.bgDarken};
-  border: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  background-color: ${props => props.theme.colors.bgDarken};
+  border: 1px solid ${props => props.theme.colors.bgHighlightBorder};
   border-radius: 8px;
 
   svg {
     width: 20px;
     height: 20px;
   }
-  color: ${(props) => props.theme.colors.iconsNormal};
+  color: ${props => props.theme.colors.iconsNormal};
 
   cursor: pointer;
 
@@ -55,11 +54,11 @@ const PrimaryIcon = styled.a`
   }
 
   &:hover {
-    background-color: ${(props) => lighten(0.02, props.theme.colors.bgNormal)};
+    background-color: ${props => props.theme.colors.bgNormal_lighten};
   }
 
   &:active {
-    background-color: ${(props) => darken(0.02, props.theme.colors.bgNormal)};
+    background-color: ${props => props.theme.colors.bgNormal_darken};
   }
 `;
 
@@ -74,7 +73,7 @@ const Header = styled.header`
   height: 240px;
   padding: 40px 48px;
 
-  background-color: ${(props) => props.theme.colors.bgDarken};
+  background-color: ${props => props.theme.colors.bgDarken};
   border-radius: 4px;
 
   @media screen and (max-width: ${responsive.laptop}) {
@@ -101,8 +100,8 @@ const Header = styled.header`
 
     height: 100px;
 
-    background-color: ${(props) => props.theme.colors.bgNormal};
-    border-bottom: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+    background-color: ${props => props.theme.colors.bgNormal};
+    border-bottom: 1px solid ${props => props.theme.colors.bgHighlightBorder};
     border-radius: 0;
   }
 
@@ -129,7 +128,7 @@ const Avatar = styled.img`
   width: 72px;
 
   border-radius: 12px;
-  border: 3px solid ${(props) => props.theme.colors.bgHighlightBorder};
+  border: 3px solid ${props => props.theme.colors.bgHighlightBorder};
 
   @media screen and (max-width: ${responsive.laptop}) {
     height: 56px;
@@ -173,7 +172,7 @@ const AccountNumber = styled.div`
   span {
     font-size: 16px;
     font-weight: 500;
-    color: ${(props) => props.theme.colors.textSecondary};
+    color: ${props => props.theme.colors.textSecondary};
 
     @media screen and (max-width: ${responsive.laptop}) {
       font-size: 14px;
@@ -181,26 +180,24 @@ const AccountNumber = styled.div`
   }
 `;
 
-export default function SidebarHeader({ account }) {
+export default function SidebarHeader({ account, onLogout }) {
   return (
     <Header>
       <PrimaryIcon>
         <CogIcon />
       </PrimaryIcon>
       <Avatar src="https://picsum.photos/72" alt="" />
-      <PrimaryIcon>
+      <PrimaryIcon onClick={onLogout}>
         <LogoutIcon />
       </PrimaryIcon>
       <AccountNumber>
         <p>My Account</p>
         <span>
           {account === null
-            ? "-"
+            ? '-'
             : account
-            ? `${account.substring(0, 6)}...${account.substring(
-                account.length - 4
-              )}`
-            : ""}
+            ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}`
+            : ''}
         </span>
       </AccountNumber>
     </Header>

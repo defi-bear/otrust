@@ -1,17 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import { useWeb3React } from "@web3-react/core";
-import BigNumber from "bignumber.js";
+import React from 'react';
+import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
+import BigNumber from 'bignumber.js';
 
-import { Panel } from "components/UI";
-import { useChain } from "context/chain/ChainContext";
-import { useExchange } from "context/exchange/ExchangeContext";
-import { responsive } from "theme/constants";
-import { format18 } from "utils/math";
-import SidebarHeader from "./SidebarHeader";
-import SidebarBalances from "./SidebarBalances";
-import SidebarFooter from "./SidebarFooter";
-import SidebarConnection from "./SidebarConnection";
+import { Panel } from 'components/UI';
+import { useChain } from 'context/chain/ChainContext';
+import { useExchange } from 'context/exchange/ExchangeContext';
+import { responsive } from 'theme/constants';
+import { format18 } from 'utils/math';
+import SidebarHeader from './SidebarHeader';
+import SidebarBalances from './SidebarBalances';
+import SidebarFooter from './SidebarFooter';
+import SidebarConnection from './SidebarConnection';
 
 const SidebarLayout = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ const SidebarLayout = styled.div`
 
   @media screen and (max-width: ${responsive.tablet}) {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr auto;
     grid-template-rows: 100px 100px;
     justify-content: space-between;
   }
@@ -37,34 +37,26 @@ const SidebarLayout = styled.div`
 `;
 
 export default function Sidebar() {
-  const { active, error, chainId, account } = useWeb3React();
-  const { blockNumber, strongBalance, weakBalance } = useChain();
+  const { active, error, chainId, account, deactivate } = useWeb3React();
+  const { blockNumber, strongBalance, weakBalance, NOMallowance } = useChain();
   const { strong, weak } = useExchange();
+
+  const handleLogout = () => {
+    deactivate();
+  };
 
   return (
     <Panel>
       <SidebarLayout>
-        <SidebarHeader account={account} />
+        <SidebarHeader account={account} onLogout={handleLogout} />
         <SidebarBalances
           strong={strong}
           weak={weak}
-          strongBalance={
-            BigNumber.isBigNumber(strongBalance)
-              ? `${format18(strongBalance).toFixed(6)}`
-              : "Loading"
-          }
-          weakBalance={
-            BigNumber.isBigNumber(weakBalance)
-              ? `${format18(weakBalance).toFixed(6)}`
-              : "Loading"
-          }
+          allowance={BigNumber.isBigNumber(NOMallowance) ? `${format18(NOMallowance)}` : 'Loading'}
+          strongBalance={BigNumber.isBigNumber(strongBalance) ? `${format18(strongBalance).toFixed(6)}` : 'Loading'}
+          weakBalance={BigNumber.isBigNumber(weakBalance) ? `${format18(weakBalance).toFixed(6)}` : 'Loading'}
         />
-        <SidebarConnection
-          active={active}
-          error={error}
-          chainId={chainId}
-          blockNumber={blockNumber}
-        />
+        <SidebarConnection active={active} error={error} chainId={chainId} blockNumber={blockNumber} />
         <SidebarFooter />
       </SidebarLayout>
     </Panel>

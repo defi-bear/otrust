@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { ConnectionStatus } from "../UI";
-import { responsive } from "theme/constants";
+import { ConnectionStatus } from '../UI';
+import { responsive } from 'theme/constants';
 
 const ConnectionWrapper = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ const ConnectionWrapper = styled.div`
     flex-direction: row;
     gap: 40px;
 
-    border-bottom: 1px solid ${(props) => props.theme.colors.bgHighlightBorder};
+    border-bottom: 1px solid ${props => props.theme.colors.bgHighlightBorder};
   }
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
@@ -41,7 +41,8 @@ const ConnectionRow = styled.div`
 
   > strong {
     font-weight: 400;
-    color: ${(props) => props.theme.colors.textSecondary};
+    color: ${props => props.theme.colors.textSecondary};
+    white-space: nowrap;
   }
 
   > span {
@@ -49,27 +50,20 @@ const ConnectionRow = styled.div`
   }
 `;
 
-export default function SidebarConnection({
-  active,
-  error,
-  chainId,
-  blockNumber,
-}) {
+export default function SidebarConnection({ active, error, chainId, blockNumber }) {
   return (
     <ConnectionWrapper>
       <ConnectionRow>
         <strong>Connection</strong>
-        <ConnectionStatus>
-          {active ? "Connected" : error ? "Error" : "Loading"}
-        </ConnectionStatus>
+        <ConnectionStatus>{active ? 'Connected' : error ? 'Error' : 'Loading'}</ConnectionStatus>
       </ConnectionRow>
       <ConnectionRow>
         <strong>Chain Id</strong>
-        <span>{chainId ?? ""}</span>
+        <span>{chainId ?? ''}</span>
       </ConnectionRow>
       <ConnectionRow>
         <strong>Block Number</strong>
-        <span>{blockNumber ? blockNumber.toFixed(0) : ""}</span>
+        <span>{blockNumber ? blockNumber.toFixed(0) : ''}</span>
       </ConnectionRow>
     </ConnectionWrapper>
   );

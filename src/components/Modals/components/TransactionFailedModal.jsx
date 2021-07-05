@@ -1,17 +1,17 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { Close, Fail } from "../Icons";
-import * as Modal from "../styles";
-import { responsive } from "theme/constants";
-import { useModal } from 'context/modal/ModalContext'
+import { Close, Fail } from '../Icons';
+import * as Modal from '../styles';
+import { responsive } from 'theme/constants';
+import { useModal } from 'context/modal/ModalContext';
 
 const FailIconWrapper = styled(Modal.ModalIconWrapper)`
-  background-color: ${(props) => props.theme.colors.highlightRed};
+  background-color: ${props => props.theme.colors.highlightRed};
   border-color: #412a33;
 
   svg * {
-    fill: ${(props) => props.theme.colors.textPrimary};
+    fill: ${props => props.theme.colors.textPrimary};
   }
 `;
 
@@ -23,10 +23,10 @@ const Message = styled.div`
   padding: 32px;
   margin: 32px 0 24px;
 
-  background-color: ${(props) => props.theme.colors.bgDarken};
+  background-color: ${props => props.theme.colors.bgDarken};
   border-radius: 8px;
 
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: ${props => props.theme.colors.textSecondary};
   text-align: center;
 
   @media screen and (max-width: ${responsive.laptop}) {
@@ -40,12 +40,11 @@ const Message = styled.div`
 `;
 
 export default function TransactionFailedModal({ error }) {
-  
-  const { handleModal } = useModal()
+  const { handleModal } = useModal();
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="failed-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -55,13 +54,13 @@ export default function TransactionFailedModal({ error }) {
         </FailIconWrapper>
         <Modal.Caption>Transaction Failed</Modal.Caption>
 
-        <Message>
-          {error.toString()}
-        </Message>
+        <Message>{error.toString()}</Message>
       </main>
       <footer>
         <FooterControls>
-          <Modal.PrimaryButton onClick={() => handleModal()}>Ok &#x1f625;</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => handleModal()} data-testid="failed-modal-primary-button">
+            Ok &#x1f625;
+          </Modal.PrimaryButton>
         </FooterControls>
       </footer>
     </Modal.Wrapper>

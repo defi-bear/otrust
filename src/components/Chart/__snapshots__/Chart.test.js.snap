@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Given the Chart component when the component is rendered should match the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-hKFxyN kldZVl"
+  >
+    <header
+      class="sc-eCApnc hMJctS"
+    >
+      <button
+        class="sc-jSFjdj huIQRZ"
+      >
+        Bonding Curve Chart
+      </button>
+      <button
+        class="sc-jSFjdj huIQRZ"
+      >
+        Line Chart
+      </button>
+      <button
+        class="sc-jSFjdj huIQRZ"
+      >
+        Candle View
+      </button>
+    </header>
+    <div
+      data-testid="bond-line-chart"
+      style="margin-top: 1rem; height: 400px;"
+    >
+      <svg
+        class="sc-gtsrHT jCXnHM"
+      >
+        <defs>
+          <clippath
+            id="bondingChart"
+          >
+            <rect
+              height="100%"
+              width="100%"
+              x="0"
+              y="0"
+            />
+          </clippath>
+        </defs>
+        <g
+          class="y-axis"
+          fill="none"
+          font-family="sans-serif"
+          font-size="10"
+          style="color: rgb(26, 24, 35);"
+          text-anchor="end"
+          transform="translate(60, 0)"
+        >
+          <path
+            class="domain"
+            d="M-6,-59.5H0.5V10.5H-6"
+            stroke="currentColor"
+          />
+        </g>
+        <g
+          class="x-axis1"
+          fill="none"
+          font-family="sans-serif"
+          font-size="10"
+          style="color: rgb(48, 46, 61);"
+          text-anchor="middle"
+          transform="translate(0, -60)"
+        >
+          <path
+            class="domain"
+            d="M60.5,10V0.5H-19.5V10"
+            stroke="currentColor"
+          />
+        </g>
+        <g
+          class="x-axis"
+          fill="none"
+          font-family="sans-serif"
+          font-size="10"
+          stroke-width="0.10rem"
+          style="color: rgb(48, 46, 61);"
+          text-anchor="middle"
+          transform="translate(0, -60)"
+        >
+          <path
+            class="domain"
+            d="M60.5,15V0.5H-19.5V15"
+            stroke="currentColor"
+          />
+        </g>
+        <g
+          class="content"
+          clip-path="url(#bondingChart)"
+        >
+          <path
+            class="baseLine"
+            d="MNaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaN"
+            fill="none"
+            stroke="#302E3D"
+            stroke-width="0.16rem"
+          />
+          <lineargradient
+            gradientUnits="userSpaceOnUse"
+            id="linear-gradient"
+            x1="0%"
+            x2="1%"
+            y1="81%"
+            y2="0%"
+          >
+            <stop
+              offset="0%"
+              stop-color="#1a1823"
+            />
+            <stop
+              offset="100%"
+              stop-color="#88D1FF"
+            />
+          </lineargradient>
+          <path
+            class="selectedArea"
+            d="MNaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNLNaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNZ"
+            fill="url(#linear-gradient"
+            stroke="#4e82a3"
+            stroke-width="0.03rem"
+          />
+          <path
+            class="selectedLine"
+            d="MNaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaNCNaN,NaN,NaN,NaN,NaN,NaN"
+            fill="none"
+            stroke="#88D1FF"
+            stroke-width="0.15rem"
+          />
+          <line
+            stroke="#1a1823"
+            stroke-width="0.12rem"
+            x1="60"
+            x2="-20"
+            y1="NaN"
+            y2="NaN"
+          />
+        </g>
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Given the SidebarBalances component when the component is rendered should match the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-kLojOw iGHpAL"
+  >
+    <div
+      class="sc-jJMGnK cwMWz"
+    >
+      <div
+        class="sc-hiKfDv"
+      >
+        <strong>
+          ETH Balance
+        </strong>
+        <div
+          class="sc-iklJeh bswktC"
+        >
+          100
+          <small>
+             = $16,208.04
+          </small>
+        </div>
+      </div>
+      <div
+        class="sc-gXfVKN eZpQiy"
+      >
+        <div
+          class="sc-carFqZ eLJpkr"
+        >
+          <h5
+            class="sc-iTVJFM bvRqxh"
+          >
+            ETH Balance
+          </h5>
+          <p
+            class="sc-iBzEeX eGrqWr"
+          >
+            This is your connected wallet Ether balance.
+          </p>
+        </div>
+        <button
+          class="sc-cBoqAE fmvmRl"
+        >
+          i
+        </button>
+      </div>
+    </div>
+    <div
+      class="sc-jJMGnK cwMWz"
+    >
+      <div
+        class="sc-hiKfDv"
+      >
+        <strong>
+          NOM Balance
+        </strong>
+        <div
+          class="sc-iklJeh kmvZaR"
+        >
+          50
+          <small>
+             = $16,208.04
+          </small>
+          <div
+            class="sc-ciSkZP bTFARK"
+          >
+            <span>
+              1,042 approved
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="sc-gXfVKN eZpQiy"
+      >
+        <div
+          class="sc-carFqZ eLJpkr"
+        >
+          <h5
+            class="sc-iTVJFM bvRqxh"
+          >
+            wNOM Balance
+          </h5>
+          <p
+            class="sc-iBzEeX eGrqWr"
+          >
+            This shows your total wNOM balance and the amount approved for selling. You must approve wNOM for selling before it can be sold.
+          </p>
+        </div>
+        <button
+          class="sc-cBoqAE fmvmRl"
+        >
+          i
+        </button>
+      </div>
+    </div>
+    <div
+      class="sc-jcwpoC jwrGsS"
+    >
+      <button
+        class="sc-hKFxyN fFAwxg"
+        style="width: 100%;"
+      >
+        Withdraw wNOM
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
