@@ -277,7 +277,6 @@ export default function ExchangeQuote({ strength }) {
 
           const inputUpdate = evttargetvalue.toString();
           let newgas = gas;
-          let weak4gas = 0;
           let flag = false;
 
           let bidAmountUpdate1 = bidAmountUpdate;
@@ -335,7 +334,18 @@ export default function ExchangeQuote({ strength }) {
           handleModal(<RequestFailedModal error="Please enter numbers only. Thank you!" />);
       }
     },
-    [askAmount, bidDenom, getAskAmount, handleModal, input, objDispatch, strDispatch, strength],
+    [
+      askAmount,
+      bidDenom,
+      getAskAmount,
+      handleModal,
+      input,
+      objDispatch,
+      strDispatch,
+      strength,
+      strongBalance,
+      weakBalance,
+    ],
   );
 
   return (

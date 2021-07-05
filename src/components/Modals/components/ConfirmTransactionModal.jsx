@@ -153,7 +153,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   const { handleModal } = useModal();
   const { account, library } = useWeb3React();
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
-  const { strongBalance, weakBalance } = useChain();
+  const { strongBalance } = useChain();
   const bondContract = BondingCont(library);
   const [showAskAmount, setShowAskAmount] = useState(askAmount);
 
@@ -203,10 +203,6 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     gasOptions[1].gas = new BigNumber(result.data.fast.toString());
     gasOptions[2].gas = new BigNumber(result.data.rapid.toString());
     setGasPrice(gasOptions[gasPriceChoice].gas);
-  }, [gasPriceChoice]);
-
-  useEffect(async () => {
-    await getGasPrices();
     setShowAskAmount(askAmount);
 
     let bidMaxValue;
@@ -219,6 +215,13 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         setShowAskAmount(askAmountUpdate1);
       }
     }
+  }, [gasPriceChoice, askAmount, bidAmount, bidDenom, getAskAmount, strongBalance]);
+
+  useEffect(() => {
+    async function getUpdated() {
+      await getGasPrices();
+    }
+    getUpdated();
   }, [getGasPrices]);
 
   useInterval(increaseCount, delay);
