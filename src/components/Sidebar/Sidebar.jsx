@@ -38,7 +38,7 @@ const SidebarLayout = styled.div`
 
 export default function Sidebar() {
   const { active, error, chainId, account, deactivate } = useWeb3React();
-  const { blockNumber, strongBalance, weakBalance } = useChain();
+  const { blockNumber, strongBalance, weakBalance, NOMallowance } = useChain();
   const { strong, weak } = useExchange();
 
   const handleLogout = () => {
@@ -52,6 +52,7 @@ export default function Sidebar() {
         <SidebarBalances
           strong={strong}
           weak={weak}
+          allowance={BigNumber.isBigNumber(NOMallowance) ? `${format18(NOMallowance)}` : 'Loading'}
           strongBalance={BigNumber.isBigNumber(strongBalance) ? `${format18(strongBalance).toFixed(6)}` : 'Loading'}
           weakBalance={BigNumber.isBigNumber(weakBalance) ? `${format18(weakBalance).toFixed(6)}` : 'Loading'}
         />
