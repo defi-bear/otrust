@@ -194,7 +194,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         <Modal.ExchangeResult>
           <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>~{' '}
           {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}
-          <sup>{bidDenom === 'strong' ? 'NOM' : 'ETH'}</sup>
+          <sup>{bidDenom === 'strong' ? 'wNOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
