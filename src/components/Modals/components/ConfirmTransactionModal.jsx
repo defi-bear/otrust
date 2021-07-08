@@ -12,7 +12,6 @@ import { useModal } from 'context/modal/ModalContext';
 import * as Modal from 'components/Modals/styles';
 import 'components/Modals/loadingBar.css';
 import { useExchange } from 'context/exchange/ExchangeContext';
-import { useChain } from 'context/chain/ChainContext';
 import { BondingCont } from 'context/chain/contracts';
 
 const TransactionDetailsRow = styled.div`
@@ -153,7 +152,6 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   const { handleModal } = useModal();
   const { account, library } = useWeb3React();
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
-  const { strongBalance } = useChain();
   const bondContract = BondingCont(library);
   const [showAskAmount, setShowAskAmount] = useState(askAmount);
 
@@ -169,30 +167,6 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     }
   };
 
-  const getAskAmount = useCallback(
-    async (askAmountState, bidAmountUpdate, textStrength) => {
-      var askAmountUpdate = askAmountState;
-
-      switch (textStrength) {
-        case 'strong':
-          console.log('Strong: ', bidAmountUpdate.toFixed(0));
-          askAmountUpdate = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
-          console.log('Pull Strong Ask Amount', askAmountUpdate);
-          break;
-
-        case 'weak':
-          askAmountUpdate = await bondContract.sellQuoteNOM(bidAmountUpdate.toFixed(0));
-          console.log('Pull Weak Ask Amount', askAmountUpdate);
-          break;
-
-        default:
-          console.error('Denom not set');
-      }
-      return new BigNumber(askAmountUpdate.toString());
-    },
-    [bondContract],
-  );
-
   const getGasPrices = useCallback(async () => {
     const prices = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=onomy');
     const result = await prices.json();
@@ -205,17 +179,19 @@ export default function ConfirmTransactionModal({ submitTrans }) {
     setGasPrice(gasOptions[gasPriceChoice].gas);
     setShowAskAmount(askAmount);
 
-    let bidMaxValue;
     if (bidDenom === 'strong') {
-      bidMaxValue = strongBalance;
-      if (bidAmount.plus(gasOptions[gasPriceChoice].gas) >= bidMaxValue) {
-        const newgas = bidAmount.plus(gasOptions[gasPriceChoice].gas).minus(bidMaxValue);
-        const newBidAmount = bidAmount.minus(newgas);
-        const askAmountUpdate1 = await getAskAmount(askAmount, newBidAmount, bidDenom);
-        setShowAskAmount(askAmountUpdate1);
-      }
+      const gasFeeRaw = await bondContract.estimateGas.buyNOM(askAmount.toFixed(0), slippage.toFixed(0), {
+        value: bidAmount.toFixed(0),
+      });
+
+      let gasFee = new BigNumber(gasFeeRaw.toString());
+
+      const bidAmountUpdate = bidAmount.minus(gasFee.times(gasPrice));
+      const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
+      const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString());
+      setShowAskAmount(askAmountUpdate);
     }
-  }, [gasPriceChoice, askAmount, bidAmount, bidDenom, getAskAmount, strongBalance]);
+  }, [gasPriceChoice, askAmount, bidAmount, bidDenom, bondContract, gasPrice, slippage]);
 
   useEffect(() => {
     async function getUpdated() {
