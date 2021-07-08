@@ -12,6 +12,8 @@ import { lineHeaderDefault, candleHeaderDefault } from 'components/Chart/default
 const ChartWrapper = styled.div`
   padding: 20px;
 
+  position: relative;
+
   background-color: ${props => props.theme.colors.bgDarken};
   border-radius: 4px;
 `;
@@ -45,6 +47,28 @@ const ChartTypeBtn = styled.button`
   }
 `;
 
+const XAxis = styled.div`
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+
+  color: ${props => props.theme.colors.textPrimary};
+  font-size: 11px;
+
+  transform: translateX(-50%);
+`;
+
+const YAxis = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 10px;
+
+  color: ${props => props.theme.colors.textPrimary};
+  font-size: 11px;
+
+  transform: translateY(-50%) rotate(-90deg);
+`;
+
 const TRANSACTIONS_QUERY = gql`
   query transactions {
     transactionRecords {
@@ -60,6 +84,12 @@ const TRANSACTIONS_QUERY = gql`
     }
   }
 `;
+
+const axisLabels = {
+  lineChart: { x: '', y: 'Price (ETH)' },
+  candleView: { x: '', y: 'Price (ETH)' },
+  bondingCurve: { x: 'NOM supply', y: 'Price (ETH)' },
+};
 
 export default function Chart() {
   // useQuery Apollo Client Hook to get data from TheGraph
@@ -100,6 +130,10 @@ export default function Chart() {
         <ChartTypeBtn onClick={() => setChartType('lineChart')}>Line Chart</ChartTypeBtn>
         <ChartTypeBtn onClick={() => setChartType('candleView')}>Candle View</ChartTypeBtn>
       </ChartHeader>
+
+      <YAxis>{axisLabels[chartType].y}</YAxis>
+      <XAxis>{axisLabels[chartType].x}</XAxis>
+
       {renderChart(chartType)}
     </ChartWrapper>
   );
