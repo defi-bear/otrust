@@ -86,9 +86,9 @@ const TRANSACTIONS_QUERY = gql`
 `;
 
 const axisLabels = {
-  lineChart: { x: 'line chart x', y: 'line chart y' },
-  candleView: { x: 'candle view x', y: 'candle view y' },
-  bondingCurve: { x: 'NOM', y: 'ETH' },
+  lineChart: { x: '', y: 'Price (ETH)' },
+  candleView: { x: '', y: 'Price (ETH)' },
+  bondingCurve: { x: 'NOM supply', y: 'Price (ETH)' },
 };
 
 export default function Chart() {
