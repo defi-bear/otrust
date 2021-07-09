@@ -32,12 +32,13 @@ export default function ExchangeQuote({ strength }) {
   const bondContract = BondingCont(library);
   const NOMcontract = NOMCont(library);
 
-  const { askAmount, bidAmount, bidDenom, input, output, strong, weak } = useExchange();
+  const { askAmount, bidAmount, approveAmount, bidDenom, input, output, approve, strong, weak } = useExchange();
   const { NOMallowance } = useChain();
 
   useEffect(() => {
     console.log('Input: ', input);
     console.log('Output: ', output);
+    console.log('Approve: ', approve);
   });
 
   const { objDispatch, strDispatch } = useUpdateExchange();
@@ -69,7 +70,24 @@ export default function ExchangeQuote({ strength }) {
   const onApprove = async () => {
     if (bidAmount <= weakBalance) {
       if (bidAmount > NOMallowance) {
-        handleModal(<ApproveTokensModal getAskAmount={getAskAmount} onConfirmApprove={onConfirmApprove} />);
+        const approvalAmount = bidAmount.minus(NOMallowance);
+        let objUpdate = new Map();
+        objUpdate = objUpdate.set('approveAmount', approvalAmount);
+
+        objDispatch({
+          type: 'update',
+          value: objUpdate,
+        });
+
+        let strUpdate = new Map();
+        strUpdate = strUpdate.set('approve', format18(approvalAmount).toString());
+
+        strDispatch({
+          type: 'update',
+          value: strUpdate,
+        });
+
+        handleModal(<ApproveTokensModal onConfirmApprove={onConfirmApprove} />);
       } else {
         handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
       }
@@ -78,95 +96,105 @@ export default function ExchangeQuote({ strength }) {
     }
   };
 
-  const onConfirmApprove = async () => {
+  const onConfirmApprove = () => {
     try {
-      strDispatch({
-        type: 'status',
-        value: 'APPROVE',
-      });
-
-      let tx = await NOMcontract.increaseAllowance(bondContract.address, parse18(bidAmount.minus(NOMallowance)));
-
-      tx.wait().then(() => {
-        handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
-      });
-
-      strDispatch({
-        type: 'status',
-        value: '',
-      });
+      console.log('Approve Amount Before confirming: ', approve);
+      handleModal(<ConfirmTransactionModal isApproving submitTrans={submitTrans} />);
     } catch (e) {
       handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
     }
   };
 
   const submitTrans = useCallback(
-    async (slippage, gasPrice) => {
-      handleModal(<PendingModal />);
+    async (isApproving, slippage, gasPrice) => {
+      handleModal(<PendingModal isApproving={isApproving} />);
 
-      if (!bidAmount || !askAmount) return;
-      try {
-        let tx;
-        let gasFee;
+      if (isApproving) {
+        if (!approveAmount) return;
+        try {
+          let tx;
 
-        switch (bidDenom) {
-          case 'strong':
-            // Preparing for many tokens / coins
-            switch (strong) {
-              case 'ETH':
-                const gasFeeRaw = await bondContract.estimateGas.buyNOM(askAmount.toFixed(0), slippage.toFixed(0), {
-                  value: bidAmount.toFixed(0),
-                });
+          console.log('Approve Amount: ', approveAmount.toString());
+          console.log('Approve Amount BG: ', approveAmount);
+          console.log('Approve Amount; string', approve);
+          console.log('Approve Amount: Bid', bidAmount.toString());
 
-                gasFee = new BigNumber(gasFeeRaw.toString());
+          tx = await NOMcontract.increaseAllowance(bondContract.address, approveAmount.toString(), {
+            gasPrice: gasPrice.toFixed(0),
+          });
 
-                const bidAmountUpdate = bidAmount.minus(gasFee.times(gasPrice));
-                const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
-                const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString());
-
-                tx = await bondContract.buyNOM(askAmountUpdate.toFixed(0), slippage.toFixed(0), {
-                  value: bidAmountUpdate.toFixed(0),
-                  gasPrice: gasPrice.toFixed(0),
-                  gasLimit: gasFee.toFixed(0),
-                });
-
-                tx.wait().then(() => {
-                  handleModal(<TransactionCompletedModal tx={tx} />);
-                });
-
-                break;
-              default: {
-              }
-            }
-            break;
-
-          case 'weak':
-            switch (weak) {
-              case 'wNOM':
-                tx = await bondContract.sellNOM(bidAmount.toFixed(0), askAmount.toFixed(0), slippage.toFixed(0), {
-                  gasPrice: gasPrice.toFixed(0),
-                });
-
-                tx.wait().then(() => {
-                  handleModal(<TransactionCompletedModal tx={tx} />);
-                });
-                break;
-              default: {
-              }
-            }
-            break;
-
-          default:
-            console.log();
+          tx.wait().then(() => {
+            handleModal(<TransactionCompletedModal tx={tx} />);
+          });
+        } catch (e) {
+          console.log(e);
+          handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
         }
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e.code, e.message.message);
-        // alert(e.message)
-        handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
+      } else {
+        if (!bidAmount || !askAmount) return;
+        try {
+          let tx;
+          let gasFee;
+
+          switch (bidDenom) {
+            case 'strong':
+              // Preparing for many tokens / coins
+              switch (strong) {
+                case 'ETH':
+                  const gasFeeRaw = await bondContract.estimateGas.buyNOM(askAmount.toFixed(0), slippage.toFixed(0), {
+                    value: bidAmount.toFixed(0),
+                  });
+
+                  gasFee = new BigNumber(gasFeeRaw.toString());
+
+                  const bidAmountUpdate = bidAmount.minus(gasFee.times(gasPrice));
+                  const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
+                  const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString());
+
+                  tx = await bondContract.buyNOM(askAmountUpdate.toFixed(0), slippage.toFixed(0), {
+                    value: bidAmountUpdate.toFixed(0),
+                    gasPrice: gasPrice.toFixed(0),
+                    gasLimit: gasFee.toFixed(0),
+                  });
+
+                  tx.wait().then(() => {
+                    handleModal(<TransactionCompletedModal tx={tx} />);
+                  });
+
+                  break;
+                default: {
+                }
+              }
+              break;
+
+            case 'weak':
+              switch (weak) {
+                case 'wNOM':
+                  tx = await bondContract.sellNOM(bidAmount.toFixed(0), askAmount.toFixed(0), slippage.toFixed(0), {
+                    gasPrice: gasPrice.toFixed(0),
+                  });
+
+                  tx.wait().then(() => {
+                    handleModal(<TransactionCompletedModal tx={tx} />);
+                  });
+                  break;
+                default: {
+                }
+              }
+              break;
+
+            default:
+              console.log();
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error(e.code, e.message.message);
+          // alert(e.message)
+          handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
+        }
       }
     },
-    [askAmount, bidAmount, bidDenom, bondContract, handleModal, strong, weak],
+    [askAmount, bidAmount, approveAmount, bidDenom, NOMcontract, bondContract, handleModal, strong, weak, approve],
   );
 
   const onBid = () => {
