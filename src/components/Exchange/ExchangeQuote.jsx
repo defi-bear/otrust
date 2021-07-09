@@ -192,7 +192,7 @@ export default function ExchangeQuote({ strength }) {
         }
       }
     },
-    [askAmount, bidAmount, approveAmount, bidDenom, NOMcontract, bondContract, handleModal, strong, weak, approve],
+    [askAmount, bidAmount, approveAmount, bidDenom, NOMcontract, bondContract, handleModal, strong, weak],
   );
 
   const onBid = () => {
