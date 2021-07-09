@@ -68,8 +68,8 @@ export default function ExchangeQuote({ strength }) {
   );
 
   const onApprove = async () => {
-    if (bidAmount <= weakBalance) {
-      if (bidAmount > NOMallowance) {
+    if (weakBalance.gte(bidAmount)) {
+      if (bidAmount.gt(NOMallowance)) {
         const approvalAmount = bidAmount.minus(NOMallowance);
         let objUpdate = new Map();
         objUpdate = objUpdate.set('approveAmount', approvalAmount);
@@ -112,14 +112,7 @@ export default function ExchangeQuote({ strength }) {
       if (isApproving) {
         if (!approveAmount) return;
         try {
-          let tx;
-
-          console.log('Approve Amount: ', approveAmount.toString());
-          console.log('Approve Amount BG: ', approveAmount);
-          console.log('Approve Amount; string', approve);
-          console.log('Approve Amount: Bid', bidAmount.toString());
-
-          tx = await NOMcontract.increaseAllowance(bondContract.address, approveAmount.toString(), {
+          let tx = await NOMcontract.increaseAllowance(bondContract.address, approveAmount.toString(), {
             gasPrice: gasPrice.toFixed(0),
           });
 
