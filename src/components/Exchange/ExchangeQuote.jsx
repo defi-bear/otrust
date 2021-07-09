@@ -8,7 +8,7 @@ import TransactionFailedModal from 'components/Modals/components/TransactionFail
 import { useWeb3React } from '@web3-react/core';
 
 import { useChain } from 'context/chain/ChainContext';
-import { BondingCont, NOMCont } from 'context/chain/contracts';
+import { BondingCont } from 'context/chain/contracts';
 import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext';
 import {
   ExchangeItem,
@@ -29,7 +29,7 @@ export default function ExchangeQuote({ strength }) {
   const { library } = useWeb3React();
 
   const bondContract = BondingCont(library);
-  const NOMcontract = NOMCont(library);
+  // const NOMcontract = NOMCont(library);
 
   const { askAmount, bidAmount, bidDenom, input, output, strong, weak } = useExchange();
 
@@ -67,29 +67,28 @@ export default function ExchangeQuote({ strength }) {
   const onApprove = async () => {
     if (bidAmount <= weakBalance) {
       handleModal(<PendingModal type="approving" />);
+      // try {
+      //   strDispatch({
+      //     type: 'status',
+      //     value: 'APPROVE',
+      //   });
 
-      try {
-        strDispatch({
-          type: 'status',
-          value: 'APPROVE',
-        });
+      //   let tx = await NOMcontract.increaseAllowance(bondContract.address, bidAmount.toFixed(0));
 
-        let tx = await NOMcontract.increaseAllowance(bondContract.address, bidAmount.toFixed(0));
+      //   tx.wait().then(() => {
+      //     handleModal(<TransactionCompletedModal tx={tx} />);
+      //   });
 
-        tx.wait().then(() => {
-          handleModal(<TransactionCompletedModal tx={tx} />);
-        });
-
-        strDispatch({
-          type: 'status',
-          value: '',
-        });
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        // console.error(e.code, e.message.message);
-        // alert(e.message)
-        handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
-      }
+      //   strDispatch({
+      //     type: 'status',
+      //     value: '',
+      //   });
+      // } catch (e) {
+      //   // eslint-disable-next-line no-console
+      //   // console.error(e.code, e.message.message);
+      //   // alert(e.message)
+      //   handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
+      // }
     } else {
       handleModal(<TransactionFailedModal error={`${weak} Balance too low`} />);
     }

@@ -149,6 +149,8 @@ export default function ConfirmTransactionModal({ submitTrans }) {
   const [slippage, setSlippage] = useState(0);
   const [gasPriceChoice, setGasPriceChoice] = useState(2);
   const [gasPrice, setGasPrice] = useState(0);
+  const [gasUsd, setGasUsd] = useState(0);
+  const [gasEth, setGasEth] = useState(0);
   const { handleModal } = useModal();
   const { account, library } = useWeb3React();
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
@@ -186,12 +188,19 @@ export default function ConfirmTransactionModal({ submitTrans }) {
 
       let gasFee = new BigNumber(gasFeeRaw.toString());
 
-      const bidAmountUpdate = bidAmount.minus(gasFee.times(gasPrice));
+      const bidAmountUpdate = bidAmount.minus(gasFee.times(gasOptions[gasPriceChoice].gas));
       const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
       const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString());
       setShowAskAmount(askAmountUpdate);
+
+      gasFee = gasFee.times(gasOptions[gasPriceChoice].gas);
+      gasFee = format18(gasFee);
+      const ethprices = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+      const ethresult = await ethprices.json();
+      setGasUsd(new BigNumber(ethresult.ethereum.usd).times(gasFee).toFixed(6));
+      setGasEth(gasFee.toFixed(6));
     }
-  }, [gasPriceChoice, askAmount, bidAmount, bidDenom, bondContract, gasPrice, slippage]);
+  }, [gasPriceChoice, askAmount, bidAmount, bidDenom, bondContract, slippage]);
 
   useEffect(() => {
     async function getUpdated() {
@@ -262,7 +271,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
         <FeeWrapper>
           <span>Transaction fee</span>
           <span>
-            <strong>$5.4</strong> (0.00032 ETH)
+            <strong>${gasUsd}</strong> ({gasEth} ETH)
           </span>
         </FeeWrapper>
       </main>
