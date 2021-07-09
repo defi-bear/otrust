@@ -68,7 +68,11 @@ export default function ExchangeQuote({ strength }) {
   );
 
   const onApprove = async () => {
+    console.log(bidAmount, weakBalance);
+    console.log(format18(bidAmount).toString(), format18(weakBalance).toString());
+    console.log('checking-----------------------------');
     if (weakBalance.gte(bidAmount)) {
+      console.log('checking ----- passed');
       if (bidAmount.gt(NOMallowance)) {
         const approvalAmount = bidAmount.minus(NOMallowance);
         let objUpdate = new Map();
@@ -92,6 +96,7 @@ export default function ExchangeQuote({ strength }) {
         handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
       }
     } else {
+      console.log('checking ----- field');
       handleModal(<TransactionFailedModal error={`${weak} Balance too low`} />);
     }
   };
