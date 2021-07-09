@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
 import PendingModal from 'components/Modals/components/PendingModal';
+import ApproveTokensModal from 'components/Modals/components/ApproveTokensModal';
 import RequestFailedModal from 'components/Modals/components/RequestFailedModal';
 import TransactionCompletedModal from 'components/Modals/components/TransactionCompletedModal';
 import TransactionFailedModal from 'components/Modals/components/TransactionFailedModal';
@@ -32,6 +33,7 @@ export default function ExchangeQuote({ strength }) {
   const NOMcontract = NOMCont(library);
 
   const { askAmount, bidAmount, bidDenom, input, output, strong, weak } = useExchange();
+  const { NOMallowance } = useChain();
 
   useEffect(() => {
     console.log('Input: ', input);
@@ -66,38 +68,42 @@ export default function ExchangeQuote({ strength }) {
 
   const onApprove = async () => {
     if (bidAmount <= weakBalance) {
-      handleModal(<PendingModal />);
-
-      try {
-        strDispatch({
-          type: 'status',
-          value: 'APPROVE',
-        });
-
-        let tx = await NOMcontract.increaseAllowance(bondContract.address, bidAmount.toFixed(0));
-
-        tx.wait().then(() => {
-          handleModal(<TransactionCompletedModal tx={tx} />);
-        });
-
-        strDispatch({
-          type: 'status',
-          value: '',
-        });
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        // console.error(e.code, e.message.message);
-        // alert(e.message)
-        handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
+      if (bidAmount > NOMallowance) {
+        handleModal(<ApproveTokensModal getAskAmount={getAskAmount} onConfirmApprove={onConfirmApprove} />);
+      } else {
+        handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
       }
     } else {
       handleModal(<TransactionFailedModal error={`${weak} Balance too low`} />);
     }
   };
 
+  const onConfirmApprove = async () => {
+    try {
+      strDispatch({
+        type: 'status',
+        value: 'APPROVE',
+      });
+
+      let tx = await NOMcontract.increaseAllowance(bondContract.address, parse18(bidAmount.minus(NOMallowance)));
+
+      tx.wait().then(() => {
+        handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
+      });
+
+      strDispatch({
+        type: 'status',
+        value: '',
+      });
+    } catch (e) {
+      handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
+    }
+  };
+
   const submitTrans = useCallback(
     async (slippage, gasPrice) => {
       handleModal(<PendingModal />);
+
       if (!bidAmount || !askAmount) return;
       try {
         let tx;
