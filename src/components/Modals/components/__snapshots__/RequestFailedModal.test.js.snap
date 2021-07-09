@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Given the RequestFailedModal component when the component is rendered should match the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-bdnxRM leVZfT"
+  >
+    <button
+      class="sc-dlnjwi cSfPnY"
+      data-testid="request-failed-close-icon"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g
+          opacity="0.5"
+        >
+          <g
+            transform="translate(-.453 .555)"
+          >
+            <path
+              class="cls-3"
+              d="M8.762.384a1.311 1.311 0 011.981 1.707l-.127.147-8.378 8.378A1.311 1.311 0 01.257 8.909l.127-.147z"
+              transform="translate(6.453 6.445)"
+            />
+            <path
+              class="cls-3"
+              d="M.384.384A1.311 1.311 0 012.09.257l.147.127 8.379 8.38a1.31 1.31 0 01-1.706 1.98l-.147-.127L.384 2.236a1.31 1.31 0 010-1.852z"
+              transform="translate(6.453 6.445)"
+            />
+          </g>
+        </g>
+      </svg>
+    </button>
+    <main>
+      <div
+        class="sc-kEqXSa sc-iklJeh djnybU gvBDhV"
+      >
+        <svg
+          viewBox="0 0 35.222 35.222"
+          width="35.222"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            transform="translate(1.826 2.834)"
+          >
+            <path
+              class="cls-2"
+              d="M14.337.628a2.146 2.146 0 013.242 2.794l-.208.241L3.663 17.372a2.146 2.146 0 01-3.242-2.794l.208-.241z"
+              transform="translate(6.785 6.778)"
+            />
+            <path
+              class="cls-2"
+              d="M.628.628A2.145 2.145 0 013.42.42l.24.208L17.372 14.34a2.144 2.144 0 01-2.792 3.24l-.24-.208L.628 3.66a2.144 2.144 0 010-3.032z"
+              transform="translate(6.785 6.778)"
+            />
+          </g>
+        </svg>
+      </div>
+      <h3
+        class="sc-pNWdM ipkocU"
+      >
+        Request Failed
+      </h3>
+      <div
+        class="sc-hiKfDv lbBVju"
+      >
+        Error message
+      </div>
+    </main>
+    <footer>
+      <div
+        class="sc-gtsrHT sc-jJMGnK hEKbJi jEjaAj"
+      >
+        <button
+          class="sc-hKFxyN fFAwxg"
+          data-testid="request-failed-primary-button"
+        >
+          Ok 😥
+        </button>
+      </div>
+    </footer>
+  </div>
+</DocumentFragment>
+`;

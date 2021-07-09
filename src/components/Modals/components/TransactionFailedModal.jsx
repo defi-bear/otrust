@@ -44,7 +44,7 @@ export default function TransactionFailedModal({ error }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="failed-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -58,7 +58,9 @@ export default function TransactionFailedModal({ error }) {
       </main>
       <footer>
         <FooterControls>
-          <Modal.PrimaryButton onClick={() => handleModal()}>Ok &#x1f625;</Modal.PrimaryButton>
+          <Modal.PrimaryButton onClick={() => handleModal()} data-testid="failed-modal-primary-button">
+            Ok &#x1f625;
+          </Modal.PrimaryButton>
         </FooterControls>
       </footer>
     </Modal.Wrapper>

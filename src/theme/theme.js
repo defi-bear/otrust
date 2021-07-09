@@ -1,3 +1,5 @@
+import { darken, lighten } from 'polished';
+
 export const light = {
   colors: {
     background: '#0e4265',
@@ -55,7 +57,7 @@ export const dark = {
     surface: '#fafafc',
     textBody: '#E9EAEC',
     textLight: '#333333',
-    textPrimary: '##4877C1',
+    textPrimary: '#4877C1',
     white: '#ffffff',
     bgDarken: '#1A1723', //from here below, color for new design
     bgNormal: '#1F1D29',
@@ -104,5 +106,16 @@ export const darkNew = {
     bgNormal: '#201d2a',
     bgDarken: '#1a1823',
     bgDarkest: '#06060f',
+
+    bgHighlightBorder_darken: darken(0.1, '#302E3D'),
+    bgHighlightBorder_lighten: lighten(0.1, '#302E3D'),
+    bgNormal_darken: darken(0.02, '#201d2a'),
+    bgNormal_lighten: lighten(0.02, '#201d2a'),
+    textPrimary_darken: darken(0.02, '#e1dfeb'),
+    textPrimary_lighten: lighten(0.02, '#e1dfeb'),
+    textSecondary_darken: darken(0.02, '#9895a6'),
+    textSecondary_lighten: lighten(0.02, '#9895a6'),
+    textThirdly_darken: darken(0.1, '#656273'),
+    textThirdly_lighten: lighten(0.1, '#656273'),
   },
 };

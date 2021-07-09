@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { lighten } from 'polished';
 import useInterval from '@use-it/interval';
 // import LoadingBar from 'components/Modals/LoadingBar'
 import { BigNumber } from 'bignumber.js';
@@ -85,27 +84,27 @@ const OptionBtn = styled.button`
   color: ${props => (props.active ? props.theme.colors.textPrimary : props.theme.colors.textSecondary)};
 
   &:hover {
-    background-color: ${props => lighten(0.1, props.theme.colors.bgHighlightBorder)};
+    background-color: ${props => props.theme.colors.bgHighlightBorder_lighten};
   }
 
   &:active {
-    background-color: ${props => lighten(0.1, props.theme.colors.bgHighlightBorder)};
+    background-color: ${props => props.theme.colors.bgHighlightBorder_darken};
   }
 `;
 
-const FeeWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+// const FeeWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
 
-  margin-top: 16px;
+//   margin-top: 16px;
 
-  color: ${props => props.theme.colors.textThirdly};
+//   color: ${props => props.theme.colors.textThirdly};
 
-  strong {
-    color: ${props => props.theme.colors.textPrimary};
-  }
-`;
+//   strong {
+//     color: ${props => props.theme.colors.textPrimary};
+//   }
+// `;
 
 const limitOptions = [
   {
@@ -213,7 +212,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
 
   return (
     <Modal.Wrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => handleModal()} data-testid="confirm-modal-close-icon">
         <Close />
       </Modal.CloseIcon>
 
@@ -222,22 +221,20 @@ export default function ConfirmTransactionModal({ submitTrans }) {
 
         <Modal.ExchangeResult>
           <Modal.ExchangeResultDescription>You're receiving</Modal.ExchangeResultDescription>~{' '}
-          {BigNumber.isBigNumber(showAskAmount) ? format18(showAskAmount).toFixed(6) : ''}
-          <sup>{bidDenom === 'strong' ? 'NOM' : 'ETH'}</sup>
+          {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}
+          <sup>{bidDenom === 'strong' ? 'wNOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
           <span>Current Exchange Rate</span>
           <strong>
-            {bidDenom ? (
+            {bidDenom && (
               <>
                 1 {bidDenom === 'strong' ? strong : weak} ={' '}
                 {BigNumber.isBigNumber(bidAmount)
                   ? format18(askAmount.div(format18(bidAmount).toFixed(6))).toFixed(6)
                   : 'Loading'}
               </>
-            ) : (
-              <></>
             )}{' '}
             {bidDenom === 'strong' ? weak : strong}
           </strong>
@@ -268,12 +265,12 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           </WalletIcon>
         </TransactionDetailsRow>
 
-        <FeeWrapper>
+        {/* <FeeWrapper>
           <span>Transaction fee</span>
           <span>
             <strong>${gasUsd}</strong> ({gasEth} ETH)
           </span>
-        </FeeWrapper>
+        </FeeWrapper> */}
       </main>
       <OptionsWrapper>
         <OptionCaption>Gas Fee</OptionCaption>
@@ -281,7 +278,7 @@ export default function ConfirmTransactionModal({ submitTrans }) {
           {gasOptions.map(gasPriceOption => (
             <OptionBtn
               active={gasPrice === gasPriceOption.gas}
-              key={gasPriceOption.gas}
+              key={gasPriceOption.text}
               onClick={() => {
                 setGasPrice(gasPriceOption.gas);
                 setGasPriceChoice(gasPriceOption.id);
@@ -310,8 +307,15 @@ export default function ConfirmTransactionModal({ submitTrans }) {
       </OptionsWrapper>
       <footer>
         <Modal.FooterControls>
-          <Modal.SecondaryButton onClick={() => handleModal()}>Cancel</Modal.SecondaryButton>
-          <Modal.PrimaryButton onClick={() => submitTrans(slippage, gasPrice)}>Confirm ({count})</Modal.PrimaryButton>
+          <Modal.SecondaryButton onClick={() => handleModal()} data-testid="confirm-modal-secondary-button">
+            Cancel
+          </Modal.SecondaryButton>
+          <Modal.PrimaryButton
+            onClick={() => submitTrans(slippage, gasPrice)}
+            data-testid="confirm-modal-primary-button"
+          >
+            Confirm ({count})
+          </Modal.PrimaryButton>
         </Modal.FooterControls>
       </footer>
     </Modal.Wrapper>
