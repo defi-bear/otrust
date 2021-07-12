@@ -32,7 +32,7 @@ export default function ExchangeQuote({ strength }) {
   const bondContract = BondingCont(library);
   const NOMcontract = NOMCont(library);
 
-  const { askAmount, bidAmount, approveAmount, bidDenom, input, output, approve, strong, weak } = useExchange();
+  const { askAmount, bidAmount, approveAmount, bidDenom, input, output, strong, weak } = useExchange();
   const { NOMallowance } = useChain();
   const { objDispatch, strDispatch } = useUpdateExchange();
 
