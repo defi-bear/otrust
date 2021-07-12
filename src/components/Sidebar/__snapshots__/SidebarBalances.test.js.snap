@@ -41,7 +41,7 @@ exports[`Given the SidebarBalances component when the component is rendered shou
           </p>
         </div>
         <button
-          class="sc-cBoqAE fmvmRl"
+          class="sc-cBoqAE coaicv"
         >
           i
         </button>
@@ -67,7 +67,7 @@ exports[`Given the SidebarBalances component when the component is rendered shou
             class="sc-ciSkZP bTFARK"
           >
             <span>
-              1,042 approved
+               approved
             </span>
           </div>
         </div>
@@ -90,7 +90,7 @@ exports[`Given the SidebarBalances component when the component is rendered shou
           </p>
         </div>
         <button
-          class="sc-cBoqAE fmvmRl"
+          class="sc-cBoqAE coaicv"
         >
           i
         </button>
