@@ -218,7 +218,7 @@ export default function ExchangeQuote({ strength }) {
   const onTextChange = useCallback(
     async (evt, textStrength) => {
       evt.preventDefault();
-      const floatRegExp = new RegExp(/(^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$)|(^\d\.$)/);
+      const floatRegExp = new RegExp(/(^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$)|(^\d+?\.$)|(^\+?(?!0\d+)$)/);
       console.log('Component Strength: ', strength);
       console.log('Text Strength: ', textStrength);
       console.log('Bid Denom: ', bidDenom);
