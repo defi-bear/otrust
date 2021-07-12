@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import useInterval from '@use-it/interval';
 import { BigNumber } from 'bignumber.js';
@@ -141,10 +141,6 @@ export default function ApproveTokensModal({ onConfirmApprove }) {
       value: strUpdate,
     });
   };
-
-  useEffect(() => {
-    console.log('Approve Amount; string updated', approve);
-  }, [approve]);
 
   return (
     <Modal.Wrapper>

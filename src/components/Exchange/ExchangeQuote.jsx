@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { BigNumber } from 'bignumber.js';
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
 import PendingModal from 'components/Modals/components/PendingModal';
@@ -34,13 +34,6 @@ export default function ExchangeQuote({ strength }) {
 
   const { askAmount, bidAmount, approveAmount, bidDenom, input, output, approve, strong, weak } = useExchange();
   const { NOMallowance } = useChain();
-
-  useEffect(() => {
-    console.log('Input: ', input);
-    console.log('Output: ', output);
-    console.log('Approve: ', approve);
-  });
-
   const { objDispatch, strDispatch } = useUpdateExchange();
 
   const getAskAmount = useCallback(
@@ -68,11 +61,7 @@ export default function ExchangeQuote({ strength }) {
   );
 
   const onApprove = async () => {
-    console.log(bidAmount, weakBalance);
-    console.log(format18(bidAmount).toString(), format18(weakBalance).toString());
-    console.log('checking-----------------------------');
     if (weakBalance.gte(bidAmount)) {
-      console.log('checking ----- passed');
       if (bidAmount.gt(NOMallowance)) {
         const approvalAmount = bidAmount.minus(NOMallowance);
         let objUpdate = new Map();
@@ -96,14 +85,12 @@ export default function ExchangeQuote({ strength }) {
         handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
       }
     } else {
-      console.log('checking ----- field');
       handleModal(<TransactionFailedModal error={`${weak} Balance too low`} />);
     }
   };
 
   const onConfirmApprove = () => {
     try {
-      console.log('Approve Amount Before confirming: ', approve);
       handleModal(<ConfirmTransactionModal isApproving submitTrans={submitTrans} />);
     } catch (e) {
       handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
