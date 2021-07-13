@@ -70,7 +70,7 @@ export default function PendingModal({ isApproving }) {
           <Modal.ExchangeResultDescription>
             You're {isApproving ? 'approving' : bidDenom === 'strong' ? 'buying' : 'selling'}
           </Modal.ExchangeResultDescription>
-          {isApproving ? approve : input} <sup>wNOM</sup>
+          {isApproving ? approve : input} <sup>{bidDenom === 'strong' ? strong : weak}</sup>
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
@@ -79,16 +79,18 @@ export default function PendingModal({ isApproving }) {
             {bidDenom && (
               <>
                 1 {bidDenom === 'strong' ? strong : weak} ={' '}
-                {BigNumber.isBigNumber(bidAmount) ? format18(askAmount.div(bidAmount)).toFixed(6) : 'Loading'}
+                {BigNumber.isBigNumber(bidAmount) ? askAmount.div(bidAmount).toFixed(6) : 'Loading'}
               </>
             )}{' '}
             {bidDenom === 'strong' ? weak : strong}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
-          <span>{isApproving ? "You're approving" : "You're receiving"}</span>
+          <span>{isApproving ? "You're approving" : "You're sending"}</span>
           <strong>
-            {isApproving ? approve : format18(bidAmount).toFixed(6)} {bidDenom === 'strong' ? strong : weak}
+            {isApproving
+              ? `${approve} ${weak}`
+              : `${format18(bidAmount).toFixed(6)} ${bidDenom === 'strong' ? strong : weak}`}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>

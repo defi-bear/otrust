@@ -205,14 +205,14 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
             {bidDenom && (
               <>
                 1 {bidDenom === 'strong' ? strong : weak} ={' '}
-                {BigNumber.isBigNumber(bidAmount) ? format18(askAmount.div(bidAmount)).toFixed(6) : 'Loading'}
+                {BigNumber.isBigNumber(bidAmount) ? askAmount.div(bidAmount).toFixed(6) : 'Loading'}
               </>
             )}{' '}
             {bidDenom === 'strong' ? weak : strong}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
-          <span>{isApproving ? "You're approving" : "You're receiving"}</span>
+          <span>{isApproving ? "You're approving" : "You're sending"}</span>
           <strong>
             {isApproving ? approve : format18(bidAmount).toFixed(6)} {bidDenom === 'strong' ? strong : weak}
           </strong>
