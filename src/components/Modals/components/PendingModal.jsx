@@ -59,7 +59,7 @@ const WalletIcon = styled.div`
 
 export default function PendingModal({ isApproving }) {
   const { account } = useWeb3React();
-  const { input, approve, bidDenom, strong, weak, bidAmount, askAmount } = useExchange();
+  const { approve, bidDenom, strong, weak, bidAmount, askAmount } = useExchange();
 
   return (
     <Modal.Wrapper>
