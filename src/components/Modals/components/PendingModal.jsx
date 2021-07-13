@@ -70,7 +70,16 @@ export default function PendingModal({ isApproving }) {
           <Modal.ExchangeResultDescription>
             {isApproving ? "You're approving" : "You're receiving"}
           </Modal.ExchangeResultDescription>
-          ~ {isApproving ? approve : format18(askAmount).toFixed(6)} <sup>{bidDenom === 'strong' ? weak : strong}</sup>
+          ~{' '}
+          {isApproving ? (
+            <>
+              {approve} <sup>{weak}</sup>
+            </>
+          ) : (
+            <>
+              {format18(askAmount).toFixed(6)} <sup>{bidDenom === 'strong' ? weak : strong}</sup>
+            </>
+          )}
         </Modal.ExchangeResult>
 
         <TransactionDetailsRow>
