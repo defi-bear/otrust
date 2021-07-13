@@ -15,12 +15,12 @@ export const ExplorerButton = styled(Modal.SecondaryButton)`
 
 const networks = { 1: '', 4: 'rinkeby.' };
 
-export default function TransactionCompletedModal({ tx }) {
+export default function TransactionCompletedModal({ isApproving, tx }) {
   const [detailsActive, setDetailsActive] = useState(false);
 
   const { objDispatch, strDispatch } = useUpdateExchange();
 
-  const { bidDenom, askAmount, bidAmount, status, strong, weak } = useExchange();
+  const { bidDenom, askAmount, bidAmount, approve, status, strong, weak } = useExchange();
 
   const { handleModal } = useModal();
 
@@ -39,6 +39,8 @@ export default function TransactionCompletedModal({ tx }) {
 
     objUpdate = objUpdate.set('bidAmount', new BigNumber(0));
 
+    objUpdate = objUpdate.set('approveAmount', new BigNumber(0));
+
     objDispatch({
       type: 'update',
       value: objUpdate,
@@ -49,6 +51,8 @@ export default function TransactionCompletedModal({ tx }) {
     strUpdate = strUpdate.set('input', '');
 
     strUpdate = strUpdate.set('output', '');
+
+    strUpdate = strUpdate.set('approve', '');
 
     strDispatch({
       type: 'update',
@@ -72,18 +76,31 @@ export default function TransactionCompletedModal({ tx }) {
         {status !== 'APPROVE' ? (
           <>
             <Modal.ExchangeResult data-testid="completed-modal-exchange-result">
-              + {format18(askAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? weak : strong}</sup>
-              <Modal.Spent>
-                - {format18(bidAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? strong : weak}</sup>
-              </Modal.Spent>
+              {isApproving ? (
+                <>
+                  {approve} {weak} approved.
+                </>
+              ) : (
+                <>
+                  + {format18(askAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? weak : strong}</sup>
+                  <Modal.Spent>
+                    - {format18(bidAmount).toFixed(8)} <sup>{bidDenom === 'strong' ? strong : weak}</sup>
+                  </Modal.Spent>
+                </>
+              )}
             </Modal.ExchangeResult>
 
             <Modal.ExchangeRateWrapper data-testid="completed-modal-exchange-rate">
               <span>Exchange Rate</span>
 
               <strong>
-                1 {bidDenom === 'strong' ? weak : strong} = {askAmount.div(bidAmount).toFixed(8)}{' '}
-                {bidDenom === 'strong' ? strong : weak}
+                {bidDenom && (
+                  <>
+                    1 {bidDenom === 'strong' ? strong : weak} ={' '}
+                    {BigNumber.isBigNumber(bidAmount) ? askAmount.div(bidAmount).toFixed(6) : 'Loading'}
+                  </>
+                )}{' '}
+                {bidDenom === 'strong' ? weak : strong}
               </strong>
             </Modal.ExchangeRateWrapper>
           </>

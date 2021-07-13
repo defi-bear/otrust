@@ -63,23 +63,6 @@ export default function ExchangeQuote({ strength }) {
   const onApprove = async () => {
     if (weakBalance.gte(bidAmount)) {
       if (bidAmount.gt(NOMallowance)) {
-        const approvalAmount = bidAmount.minus(NOMallowance);
-        let objUpdate = new Map();
-        objUpdate = objUpdate.set('approveAmount', approvalAmount);
-
-        objDispatch({
-          type: 'update',
-          value: objUpdate,
-        });
-
-        let strUpdate = new Map();
-        strUpdate = strUpdate.set('approve', format18(approvalAmount).toString());
-
-        strDispatch({
-          type: 'update',
-          value: strUpdate,
-        });
-
         handleModal(<ApproveTokensModal onConfirmApprove={onConfirmApprove} />);
       } else {
         handleModal(<ConfirmTransactionModal submitTrans={submitTrans} />);
@@ -109,7 +92,7 @@ export default function ExchangeQuote({ strength }) {
           });
 
           tx.wait().then(() => {
-            handleModal(<TransactionCompletedModal tx={tx} />);
+            handleModal(<TransactionCompletedModal isApproving tx={tx} />);
           });
         } catch (e) {
           console.log(e);
@@ -254,6 +237,8 @@ export default function ExchangeQuote({ strength }) {
 
             objUpdate = objUpdate.set('bidAmount', new BigNumber(0));
 
+            objUpdate = objUpdate.set('approveAmount', new BigNumber(0));
+
             objDispatch({
               type: 'update',
               value: objUpdate,
@@ -265,6 +250,8 @@ export default function ExchangeQuote({ strength }) {
           strUpdate = strUpdate.set('input', evt.target.value.toString());
 
           strUpdate = strUpdate.set('output', '');
+
+          strUpdate = strUpdate.set('approve', '');
 
           strDispatch({
             type: 'update',
@@ -301,6 +288,14 @@ export default function ExchangeQuote({ strength }) {
 
           objUpdate = objUpdate.set('bidAmount', bidAmountUpdate);
 
+          if (bidAmountUpdate.gt(NOMallowance)) {
+            const approvalAmount = bidAmountUpdate.minus(NOMallowance);
+
+            objUpdate = objUpdate.set('approveAmount', approvalAmount);
+
+            strUpdate = strUpdate.set('approve', format18(approvalAmount).toString());
+          }
+
           objDispatch({
             type: 'update',
             value: objUpdate,
@@ -320,7 +315,7 @@ export default function ExchangeQuote({ strength }) {
           handleModal(<RequestFailedModal error="Please enter numbers only. Thank you!" />);
       }
     },
-    [askAmount, bidDenom, getAskAmount, handleModal, input, objDispatch, strDispatch, strength],
+    [askAmount, bidDenom, NOMallowance, getAskAmount, handleModal, input, objDispatch, strDispatch, strength],
   );
 
   return (
