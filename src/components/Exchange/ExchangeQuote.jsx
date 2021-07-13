@@ -189,6 +189,7 @@ export default function ExchangeQuote({ strength }) {
     let askAmountUpdate;
 
     try {
+      console.log('calling here:', askAmount, bidMaxValue, strength);
       askAmountUpdate = await getAskAmount(askAmount, bidMaxValue, strength);
     } catch (err) {
       if (err) {
@@ -265,6 +266,7 @@ export default function ExchangeQuote({ strength }) {
           var askAmountUpdate;
 
           try {
+            console.log('calling here:', askAmount, bidAmountUpdate, textStrength);
             askAmountUpdate = await getAskAmount(askAmount, bidAmountUpdate, textStrength);
           } catch (err) {
             if (err) {

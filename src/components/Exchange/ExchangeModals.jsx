@@ -172,7 +172,7 @@ export default function ExchangeModals() {
             </ModalBtn>
           </ModalHeader>
 
-          <ModalInfo>
+          <ModalInfo data-testid="buy-nom-modal-info">
             <HeaderInfoItem>
               <strong>Eth Balance</strong>
               <HeaderInfoItemValue>
@@ -199,7 +199,7 @@ export default function ExchangeModals() {
             </HeaderInfoItem>
           </ModalInfo>
 
-          <FormWrapper>
+          <FormWrapper data-testid="buy-nom-modal-results">
             <strong>Buy NOM</strong>
             <Sending>
               <strong>I'm sending</strong>
@@ -239,7 +239,7 @@ export default function ExchangeModals() {
             </ModalBtn>
           </ModalHeader>
 
-          <ModalInfo>
+          <ModalInfo data-testid="sell-nom-modal-info">
             <HeaderInfoItem>
               <strong>Eth Balance</strong>
               <HeaderInfoItemValue>
@@ -266,7 +266,7 @@ export default function ExchangeModals() {
             </HeaderInfoItem>
           </ModalInfo>
 
-          <FormWrapper>
+          <FormWrapper data-testid="sell-nom-modal-results">
             <strong>Sell NOM</strong>
             <Sending>
               <strong>I'm sending</strong>

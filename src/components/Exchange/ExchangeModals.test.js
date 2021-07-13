@@ -18,16 +18,26 @@ describe('Given an ExchangeModals component', () => {
   });
 
   describe('and user clicks on ExchangeButton', () => {
-    it('should open ', () => {
-      const { queryByTestId, container } = render(ModalContextWrapper(ThemeWrapper(ExchangeModals), testModalContext));
+    it('should open Buy NOM Modal', () => {
+      const { queryByTestId } = render(ModalContextWrapper(ThemeWrapper(ExchangeModals), testModalContext));
       fireEvent.click(queryByTestId('exchanges-modals-buy-button'));
+
+      expect(queryByTestId('buy-nom-modal-info')).toBeInTheDocument();
+      expect(queryByTestId('buy-nom-modal-results')).toBeInTheDocument();
+      expect(queryByTestId('sell-nom-modal-info')).not.toBeInTheDocument();
+      expect(queryByTestId('sell-nom-modal-results')).not.toBeInTheDocument();
     });
   });
 
   describe('and user clicks on SellButton', () => {
-    it('should call onApprove from the props', () => {
+    it('should open Sell NOM Modal', () => {
       const { queryByTestId } = render(ModalContextWrapper(ThemeWrapper(ExchangeModals), testModalContext));
       fireEvent.click(queryByTestId('exchanges-modals-sell-button'));
+
+      expect(queryByTestId('sell-nom-modal-info')).toBeInTheDocument();
+      expect(queryByTestId('sell-nom-modal-results')).toBeInTheDocument();
+      expect(queryByTestId('buy-nom-modal-info')).not.toBeInTheDocument();
+      expect(queryByTestId('buy-nom-modal-results')).not.toBeInTheDocument();
     });
   });
 });
