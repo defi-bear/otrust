@@ -148,13 +148,13 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
   const [slippage, setSlippage] = useState(0);
   const [gasPriceChoice, setGasPriceChoice] = useState(2);
   const [gasPrice, setGasPrice] = useState(0);
-  const [gasUsd, setGasUsd] = useState(0);
-  const [gasEth, setGasEth] = useState(0);
+//   const [gasUsd, setGasUsd] = useState(0);
+//   const [gasEth, setGasEth] = useState(0);
   const { handleModal } = useModal();
   const { account, library } = useWeb3React();
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
-  const bondContract = BondingCont(library);
-  const [showAskAmount, setShowAskAmount] = useState(askAmount);
+//   const bondContract = BondingCont(library);
+//   const [showAskAmount, setShowAskAmount] = useState(askAmount);
 
   const [count, setCount] = useState(60);
   const [delay, setDelay] = useState(1000);
@@ -178,28 +178,28 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
     gasOptions[1].gas = new BigNumber(result.data.fast.toString());
     gasOptions[2].gas = new BigNumber(result.data.rapid.toString());
     setGasPrice(gasOptions[gasPriceChoice].gas);
-    setShowAskAmount(askAmount);
+//     setShowAskAmount(askAmount);
 
-    if (bidDenom === 'strong') {
-      const gasFeeRaw = await bondContract.estimateGas.buyNOM(askAmount.toFixed(0), slippage.toFixed(0), {
-        value: bidAmount.toFixed(0),
-      });
+//     if (bidDenom === 'strong') {
+//       const gasFeeRaw = await bondContract.estimateGas.buyNOM(askAmount.toFixed(0), slippage.toFixed(0), {
+//         value: bidAmount.toFixed(0),
+//       });
 
-      let gasFee = new BigNumber(gasFeeRaw.toString());
+//       let gasFee = new BigNumber(gasFeeRaw.toString());
 
-      const bidAmountUpdate = bidAmount.minus(gasFee.times(gasOptions[gasPriceChoice].gas));
-      const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
-      const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString());
-      setShowAskAmount(askAmountUpdate);
+//       const bidAmountUpdate = bidAmount.minus(gasFee.times(gasOptions[gasPriceChoice].gas));
+//       const askAmountUpdateRaw = await bondContract.buyQuoteETH(bidAmountUpdate.toFixed(0));
+//       const askAmountUpdate = new BigNumber(askAmountUpdateRaw.toString());
+//       setShowAskAmount(askAmountUpdate);
 
-      gasFee = gasFee.times(gasOptions[gasPriceChoice].gas);
-      gasFee = format18(gasFee);
-      const ethprices = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-      const ethresult = await ethprices.json();
-      setGasUsd(new BigNumber(ethresult.ethereum.usd).times(gasFee).toFixed(6));
-      setGasEth(gasFee.toFixed(6));
-    }
-  }, [gasPriceChoice, askAmount, bidAmount, bidDenom, bondContract, slippage]);
+//       gasFee = gasFee.times(gasOptions[gasPriceChoice].gas);
+//       gasFee = format18(gasFee);
+//       const ethprices = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+//       const ethresult = await ethprices.json();
+//       setGasUsd(new BigNumber(ethresult.ethereum.usd).times(gasFee).toFixed(6));
+//       setGasEth(gasFee.toFixed(6));
+//     }
+  }, [gasPriceChoice]);
 
   useEffect(() => {
     async function getUpdated() {
