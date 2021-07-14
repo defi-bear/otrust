@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { BigNumber } from 'bignumber.js';
 import ConfirmTransactionModal from 'components/Modals/components/ConfirmTransactionModal';
 import PendingModal from 'components/Modals/components/PendingModal';
-import ApproveTokensModal from 'components/Modals/components/ApproveTokensModal';
 import RequestFailedModal from 'components/Modals/components/RequestFailedModal';
 import TransactionCompletedModal from 'components/Modals/components/TransactionCompletedModal';
 import TransactionFailedModal from 'components/Modals/components/TransactionFailedModal';
@@ -90,13 +89,13 @@ export default function ExchangeQuote({ strength }) {
     }
   };
 
-  const onConfirmApprove = () => {
-    try {
-      handleModal(<ConfirmTransactionModal isApproving submitTrans={submitTrans} />);
-    } catch (e) {
-      handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
-    }
-  };
+//   const onConfirmApprove = () => {
+//     try {
+//       handleModal(<ConfirmTransactionModal isApproving submitTrans={submitTrans} />);
+//     } catch (e) {
+//       handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
+//     }
+//   };
 
   const submitTrans = useCallback(
     async (isApproving, slippage, gasPrice) => {
