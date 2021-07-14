@@ -3,7 +3,7 @@
 exports[`Given the Chart component when the component is rendered should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-hKFxyN kldZVl"
+    class="sc-hKFxyN dkoQqR"
   >
     <header
       class="sc-eCApnc hMJctS"
@@ -24,6 +24,16 @@ exports[`Given the Chart component when the component is rendered should match t
         Candle View
       </button>
     </header>
+    <div
+      class="sc-iCoGMd jEVcNg"
+    >
+      Price (ETH)
+    </div>
+    <div
+      class="sc-gKAaRy fJRMCu"
+    >
+      NOM supply
+    </div>
     <div
       data-testid="bond-line-chart"
       style="margin-top: 1rem; height: 400px;"

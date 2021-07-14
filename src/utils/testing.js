@@ -38,6 +38,25 @@ export const ThemeWrapper = (Component, props, children) => {
   );
 };
 
+export const ChainContextWrapper = (children, contextProps) => {
+  return (
+    <ChainContext.Provider
+      value={{
+        blockNumber: new BigNumber(0),
+        currentETHPrice: new BigNumber(0),
+        currentNOMPrice: new BigNumber(0),
+        NOMallowance: new BigNumber(0),
+        strongBalance: new BigNumber(0),
+        supplyNOM: new BigNumber(0),
+        weakBalance: new BigNumber(0),
+        ...contextProps,
+      }}
+    >
+      {children}
+    </ChainContext.Provider>
+  );
+};
+
 export const ExchangeContextWrapper = (children, contextProps) => {
   return (
     <ExchangeContext.Provider
