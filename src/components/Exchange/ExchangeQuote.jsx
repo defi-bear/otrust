@@ -9,7 +9,7 @@ import TransactionFailedModal from 'components/Modals/components/TransactionFail
 import { useWeb3React } from '@web3-react/core';
 
 import { useChain } from 'context/chain/ChainContext';
-import { BondingCont } from 'context/chain/contracts';
+import { BondingCont, NOMCont } from 'context/chain/contracts';
 import { useExchange, useUpdateExchange } from 'context/exchange/ExchangeContext';
 import {
   ExchangeItem,
