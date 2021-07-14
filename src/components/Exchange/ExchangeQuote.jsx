@@ -30,7 +30,7 @@ export default function ExchangeQuote({ strength }) {
   const { library } = useWeb3React();
 
   const bondContract = BondingCont(library);
-  // const NOMcontract = NOMCont(library);
+  const NOMcontract = NOMCont(library);
 
   const { askAmount, bidAmount, approveAmount, bidDenom, input, output, strong, weak } = useExchange();
   const { NOMallowance } = useChain();
