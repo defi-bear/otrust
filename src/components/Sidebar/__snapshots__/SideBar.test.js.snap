@@ -95,7 +95,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
               </p>
             </div>
             <button
-              class="sc-cOifOu kgQqAc"
+              class="sc-cOifOu fISLVI"
             >
               i
             </button>
@@ -121,7 +121,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
                 class="sc-Arkif fiNZij"
               >
                 <span>
-                  1,042 approved
+                  Loading approved
                 </span>
               </div>
             </div>
@@ -144,7 +144,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
               </p>
             </div>
             <button
-              class="sc-cOifOu kgQqAc"
+              class="sc-cOifOu fISLVI"
             >
               i
             </button>
@@ -360,7 +360,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
               </p>
             </div>
             <button
-              class="sc-cOifOu kgQqAc"
+              class="sc-cOifOu fISLVI"
             >
               i
             </button>
@@ -386,7 +386,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
                 class="sc-Arkif fiNZij"
               >
                 <span>
-                  1,042 approved
+                  Loading approved
                 </span>
               </div>
             </div>
@@ -409,7 +409,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
               </p>
             </div>
             <button
-              class="sc-cOifOu kgQqAc"
+              class="sc-cOifOu fISLVI"
             >
               i
             </button>

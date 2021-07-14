@@ -42,6 +42,7 @@ export default function Sidebar() {
   const { strong, weak } = useExchange();
 
   const handleLogout = () => {
+    window.localStorage.removeItem('connectorId');
     deactivate();
   };
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
+import { BigNumber } from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import LoadingSpinner from 'components/UI/LoadingSpinner';
 import { Metamask } from 'components/Modals/Icons';

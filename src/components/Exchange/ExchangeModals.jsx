@@ -142,11 +142,20 @@ export default function ExchangeModals() {
 
   return (
     <ModalTrigger>
-      <ExchangeButton onClick={() => setBuyModalOpen(true)}>Buy NOM</ExchangeButton>
+      <ExchangeButton data-testid="exchanges-modals-buy-button" onClick={() => setBuyModalOpen(true)}>
+        Buy NOM
+      </ExchangeButton>
 
-      <SellBtn onClick={() => setSellModalOpen(true)}>Sell NOM</SellBtn>
+      <SellBtn data-testid="exchanges-modals-sell-button" onClick={() => setSellModalOpen(true)}>
+        Sell NOM
+      </SellBtn>
 
-      <Modal isOpen={buyModalOpen} style={modalOverride} onRequestClose={() => setBuyModalOpen(false)}>
+      <Modal
+        ariaHideApp={false}
+        isOpen={buyModalOpen}
+        style={modalOverride}
+        onRequestClose={() => setBuyModalOpen(false)}
+      >
         <ExchangeModalWrapper>
           <ModalHeader>
             <ModalBtn onClick={() => setBuyModalOpen(false)}>
@@ -163,7 +172,7 @@ export default function ExchangeModals() {
             </ModalBtn>
           </ModalHeader>
 
-          <ModalInfo>
+          <ModalInfo data-testid="buy-nom-modal-info">
             <HeaderInfoItem>
               <strong>Eth Balance</strong>
               <HeaderInfoItemValue>
@@ -190,7 +199,7 @@ export default function ExchangeModals() {
             </HeaderInfoItem>
           </ModalInfo>
 
-          <FormWrapper>
+          <FormWrapper data-testid="buy-nom-modal-results">
             <strong>Buy NOM</strong>
             <Sending>
               <strong>I'm sending</strong>
@@ -208,7 +217,12 @@ export default function ExchangeModals() {
         </ExchangeModalWrapper>
       </Modal>
 
-      <Modal isOpen={sellModalOpen} style={modalOverride} onRequestClose={() => setSellModalOpen(false)}>
+      <Modal
+        ariaHideApp={false}
+        isOpen={sellModalOpen}
+        style={modalOverride}
+        onRequestClose={() => setSellModalOpen(false)}
+      >
         <ExchangeModalWrapper>
           <ModalHeader>
             <ModalBtn onClick={() => setSellModalOpen(false)}>
@@ -225,7 +239,7 @@ export default function ExchangeModals() {
             </ModalBtn>
           </ModalHeader>
 
-          <ModalInfo>
+          <ModalInfo data-testid="sell-nom-modal-info">
             <HeaderInfoItem>
               <strong>Eth Balance</strong>
               <HeaderInfoItemValue>
@@ -252,7 +266,7 @@ export default function ExchangeModals() {
             </HeaderInfoItem>
           </ModalInfo>
 
-          <FormWrapper>
+          <FormWrapper data-testid="sell-nom-modal-results">
             <strong>Sell NOM</strong>
             <Sending>
               <strong>I'm sending</strong>

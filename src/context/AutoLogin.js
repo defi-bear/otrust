@@ -6,26 +6,19 @@ import { useEagerConnect } from '../hooks/useEagerConnect';
 import { useInactiveListener } from '../hooks/useInactiveListener';
 
 export function AutoLogin({ children }) {
-  const {
-    activate,
-    active,
-    // account,
-    connector,
-  } = useWeb3React();
+  const { activate, active, connector } = useWeb3React();
 
   const connectWallet = con => {
     try {
       activate(con, undefined, true).catch(error => {
         if (error instanceof UnsupportedChainIdError) {
-          console.log(error);
-          activate(connector); // a little janky...can't use setError because the connector isn't set
+          activate(con);
         } else {
           // setPendingError(true)
         }
       });
     } catch (error) {
       alert('Failed to connect.');
-      console.log(error);
     }
   };
 
@@ -33,7 +26,6 @@ export function AutoLogin({ children }) {
   const [activatingConnector, setActivatingConnector] = React.useState();
 
   useEffect(() => {
-    console.log('activating connector: ', activatingConnector);
     if (activatingConnector && activatingConnector === connector) {
       setActivatingConnector(undefined);
     }
