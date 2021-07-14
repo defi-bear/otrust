@@ -49,19 +49,19 @@ const WalletIcon = styled.div`
   }
 `;
 
-// const FeeWrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
+const FeeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-//   margin-top: 16px;
+  margin-top: 16px;
 
-//   color: ${props => props.theme.colors.textThirdly};
+  color: ${props => props.theme.colors.textThirdly};
 
-//   strong {
-//     color: ${props => props.theme.colors.textPrimary};
-//   }
-// `;
+  strong {
+    color: ${props => props.theme.colors.textPrimary};
+  }
+`;
 
 const OptionsWrapper = styled.section`
   padding: 32px 32px;
