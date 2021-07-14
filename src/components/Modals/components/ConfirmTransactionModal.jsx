@@ -223,7 +223,8 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
           <Modal.ExchangeResultDescription>
             {isApproving ? "You're approving" : "You're receiving"}
           </Modal.ExchangeResultDescription>
-          ~ {isApproving ? approve : BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}{' '}
+//           ~ {isApproving ? approve : BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}{' '}
+            ~ {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}{' '}
           <sup>{isApproving ? 'wNOM' : bidDenom === 'strong' ? 'wNOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
@@ -244,7 +245,8 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
         <TransactionDetailsRow>
           <span>{isApproving ? "You're approving" : "You're sending"}</span>
           <strong>
-            {isApproving ? approve : format18(bidAmount).toFixed(6)} {bidDenom === 'strong' ? strong : weak}
+//             {isApproving ? approve : format18(bidAmount).toFixed(6)} {bidDenom === 'strong' ? strong : weak}
+            {format18(bidAmount).toFixed(6)} {bidDenom === 'strong' ? strong : weak}
           </strong>
         </TransactionDetailsRow>
         <TransactionDetailsRow>
