@@ -11,7 +11,6 @@ import { useModal } from 'context/modal/ModalContext';
 import * as Modal from 'components/Modals/styles';
 import 'components/Modals/loadingBar.css';
 import { useExchange } from 'context/exchange/ExchangeContext';
-import { BondingCont } from 'context/chain/contracts';
 
 const TransactionDetailsRow = styled.div`
   display: flex;
@@ -149,7 +148,7 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
   const [gasPriceChoice, setGasPriceChoice] = useState(2);
   const [gasPrice, setGasPrice] = useState(0);
   const { handleModal } = useModal();
-  const { account, library } = useWeb3React();
+  const { account } = useWeb3React();
   const { askAmount, bidAmount, bidDenom, strong, weak } = useExchange();
 
   const [count, setCount] = useState(60);
