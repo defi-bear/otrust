@@ -89,14 +89,6 @@ export default function ExchangeQuote({ strength }) {
     }
   };
 
-//   const onConfirmApprove = () => {
-//     try {
-//       handleModal(<ConfirmTransactionModal isApproving submitTrans={submitTrans} />);
-//     } catch (e) {
-//       handleModal(<TransactionFailedModal error={e.code + '\n' + e.message.slice(0, 80) + '...'} />);
-//     }
-//   };
-
   const submitTrans = useCallback(
     async (isApproving, slippage, gasPrice) => {
       handleModal(<PendingModal isApproving={isApproving} />);
