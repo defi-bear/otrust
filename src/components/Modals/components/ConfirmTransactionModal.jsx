@@ -223,7 +223,7 @@ export default function ConfirmTransactionModal({ isApproving, submitTrans }) {
           <Modal.ExchangeResultDescription>
             {isApproving ? "You're approving" : "You're receiving"}
           </Modal.ExchangeResultDescription>
-            ~ {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}{' '}
+          ~ {BigNumber.isBigNumber(askAmount) ? format18(askAmount).toFixed(6) : ''}{' '}
           <sup>{isApproving ? 'wNOM' : bidDenom === 'strong' ? 'wNOM' : 'ETH'}</sup>
         </Modal.ExchangeResult>
 
