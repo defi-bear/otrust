@@ -83,6 +83,11 @@ export const Sending = styled.div`
   }
 `;
 
+export const BridgeSending = styled(Sending)`
+  background: transparent;
+  border: 1px solid ${props => (props.error ? props.theme.colors.highlightRed : props.theme.colors.bgHighlightBorder)};
+`;
+
 export const Receiving = styled.div`
   display: flex;
   align-items: center;
@@ -164,6 +169,11 @@ export const ReceivingValue = styled.span`
   @media screen and (max-width: ${responsive.tabletSmall}) {
     font-size: 12px;
   }
+`;
+
+export const BridgeInput = styled(ExchangeInput)`
+  width: 100%;
+  text-align: left;
 `;
 
 export const ExchangeButton = styled.button`

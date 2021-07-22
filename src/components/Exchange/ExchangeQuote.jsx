@@ -264,7 +264,6 @@ export default function ExchangeQuote({ strength }) {
 
           break;
         case floatRegExp.test(evt.target.value.toString()):
-          console.log('Input after test', evt.target.value);
           const bidAmountUpdate = parse18(new BigNumber(parseFloat(evt.target.value).toString()));
 
           const inputUpdate = evt.target.value.toString();

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import BridgeSwapMain from 'components/Modals/components/BridgeSwapMain';
 import { PrimaryButton } from 'components/Modals/styles';
 import { withTrimmedWrapper } from 'components/UI';
 import { responsive } from 'theme/constants';
+import { useModal } from 'context/modal/ModalContext';
 // import { CloseIcon } from './SidebarIcons';
 
 const Balances = styled.div`
@@ -220,6 +222,7 @@ function Hint({ children }) {
 }
 
 export default function SidebarBalances({ strong, weak, strongBalance, weakBalance, allowance }) {
+  const { handleModal } = useModal();
   return (
     <Balances>
       <Balance>
@@ -255,7 +258,9 @@ export default function SidebarBalances({ strong, weak, strongBalance, weakBalan
       </Balance>
 
       <WithdrawBtnWrapper>
-        <PrimaryButton style={{ width: '100%' }}>Withdraw wNOM</PrimaryButton>
+        <PrimaryButton style={{ width: '100%' }} onClick={() => handleModal(<BridgeSwapMain />)}>
+          Withdraw wNOM
+        </PrimaryButton>
       </WithdrawBtnWrapper>
     </Balances>
   );
