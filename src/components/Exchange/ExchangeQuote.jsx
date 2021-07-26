@@ -23,10 +23,7 @@ import {
 } from './exchangeStyles';
 import { useModal } from 'context/modal/ModalContext';
 import NOMButton from 'components/Exchange/NOMButton';
-import { withTrimmedWrapper } from 'components/UI';
 import { format18, parse18 } from 'utils/math';
-
-const TrimmedExchangeInput = withTrimmedWrapper(ExchangeInput);
 
 export default function ExchangeQuote({ strength }) {
   const { strongBalance, weakBalance } = useChain();
@@ -333,7 +330,7 @@ export default function ExchangeQuote({ strength }) {
       <strong>{isBuying ? 'Buy ' + weak : 'Sell ' + weak}</strong>
       <Sending>
         <strong>{isBuying ? "I'm buying" : "I'm selling"}</strong>
-        <TrimmedExchangeInput
+        <ExchangeInput
           type="text"
           data-testid="exchange-strong-balance-input"
           onChange={evt => onTextChange(evt, strength)}
