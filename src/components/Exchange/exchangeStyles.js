@@ -88,6 +88,13 @@ export const SendingBox = styled.div`
     display: flex;
     align-items: center;
     gap: 16px;
+
+    ${props =>
+      props.input &&
+      `
+      width: 100%;
+      padding-right: 16px;
+    `}
   }
 `;
 
@@ -142,7 +149,7 @@ export const MaxBtn = styled.button`
 `;
 
 export const ExchangeInput = styled.input`
-  width: ${props => (props.value ? '200px' : '120px')};
+  width: ${props => (props.value ? '100%' : '120px')};
 
   background: none;
   border: none;
