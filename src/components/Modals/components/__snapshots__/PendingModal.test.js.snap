@@ -19,46 +19,47 @@ exports[`Given the PendingModal component when the component is rendered should 
         >
           You're selling
         </div>
-        1239 
+        0.000000 
         <sup>
-          wNOM
+          ETH
         </sup>
       </div>
       <div
-        class="sc-kLojOw hmifYK"
+        class="sc-cBoqAE bCziML"
       >
         <span>
           Current Exchange Rate
         </span>
         <strong>
-          1 wNOM = 0.07102 ETH
+          1 ETH = 0 NOM
         </strong>
       </div>
       <div
-        class="sc-kLojOw hmifYK"
+        class="sc-cBoqAE bCziML"
       >
         <span>
           You're Sending
         </span>
         <strong>
-          ~0.15 ETH
+          0.000000 
+          <sup>
+            NOM
+          </sup>
         </strong>
       </div>
       <div
-        class="sc-kLojOw hmifYK"
+        class="sc-cBoqAE bCziML"
       >
         <div>
           <span>
             Wallet
           </span>
           <div>
-            <strong>
-              0x293s92dsd3h4gh9bvn61...931
-            </strong>
+            <strong />
           </div>
         </div>
         <div
-          class="sc-iklJeh ipnPeu"
+          class="sc-ciSkZP cgtoMT"
         >
           <svg
             viewBox="0 0 255 236.4"

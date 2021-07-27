@@ -3,34 +3,34 @@
 exports[`Given the Chart component when the component is rendered should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-hKFxyN dkoQqR"
+    class="sc-eCApnc ZrkSl"
   >
     <header
-      class="sc-eCApnc hMJctS"
+      class="sc-jSFjdj eaONyz"
     >
       <button
-        class="sc-jSFjdj huIQRZ"
+        class="sc-gKAaRy iUSEvp"
       >
         Bonding Curve Chart
       </button>
       <button
-        class="sc-jSFjdj huIQRZ"
+        class="sc-gKAaRy iUSEvp"
       >
         Line Chart
       </button>
       <button
-        class="sc-jSFjdj huIQRZ"
+        class="sc-gKAaRy iUSEvp"
       >
         Candle View
       </button>
     </header>
     <div
-      class="sc-iCoGMd jEVcNg"
+      class="sc-fujyAs kYLXpp"
     >
       Price (ETH)
     </div>
     <div
-      class="sc-gKAaRy fJRMCu"
+      class="sc-iCoGMd inuUW"
     >
       NOM supply
     </div>
@@ -60,7 +60,7 @@ exports[`Given the Chart component when the component is rendered should match t
           font-size="10"
           style="color: rgb(26, 24, 35);"
           text-anchor="end"
-          transform="translate(60, 0)"
+          transform="translate(90, 0)"
         >
           <path
             class="domain"
@@ -79,7 +79,7 @@ exports[`Given the Chart component when the component is rendered should match t
         >
           <path
             class="domain"
-            d="M60.5,10V0.5H-19.5V10"
+            d="M90.5,10V0.5H-19.5V10"
             stroke="currentColor"
           />
         </g>
@@ -95,7 +95,7 @@ exports[`Given the Chart component when the component is rendered should match t
         >
           <path
             class="domain"
-            d="M60.5,15V0.5H-19.5V15"
+            d="M90.5,15V0.5H-19.5V15"
             stroke="currentColor"
           />
         </g>
@@ -144,7 +144,7 @@ exports[`Given the Chart component when the component is rendered should match t
           <line
             stroke="#1a1823"
             stroke-width="0.12rem"
-            x1="60"
+            x1="90"
             x2="-20"
             y1="NaN"
             y2="NaN"

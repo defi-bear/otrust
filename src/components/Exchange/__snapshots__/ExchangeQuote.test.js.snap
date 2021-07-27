@@ -3,47 +3,54 @@
 exports[`Given an ExchangeQuote component when the component is rendered should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-khIgEk hOVrQw"
+    class="sc-jffHpj emiGjb"
   >
     <strong>
-      Bid NOM
+      Sell NOM
     </strong>
     <div
-      class="sc-hTRkXV buJMih"
+      class="sc-eJocfa Mqkgq"
     >
       <strong>
-        I'm bidding
+        I'm selling
       </strong>
-      <input
-        class="sc-laZMeE fEFLDL"
-        data-testid="exchange-strong-balance-input"
-        placeholder="0.00"
-        type="text"
-        value=""
-      />
+      <div
+        class="sc-bTDOke cddonb"
+      >
+        <div
+          class="sc-eKYRIR ibOJZB"
+        />
+        <input
+          class="sc-eirqVv fTWVPi"
+          data-testid="exchange-strong-balance-input"
+          placeholder="0.00"
+          type="text"
+          value=""
+        />
+      </div>
       NOM
       <button
-        class="sc-gSYDnn jPcBbV"
+        class="sc-hhIiOg gPZLac"
         data-testid="max-value-button"
       >
         Max
       </button>
     </div>
     <div
-      class="sc-jgPyTC bvwgWF"
+      class="sc-oeezt cuEecL"
     >
       <strong>
-        I'm asking
+        You will receive
       </strong>
       <span
-        class="sc-iNiQyp irsaWO"
+        class="sc-lbVvki hTUTOI"
         data-testid="exchange-weak-balance"
       >
          ETH
       </span>
     </div>
     <button
-      class="sc-jffHpj sc-eJocfa fXjZsS colzYt"
+      class="sc-gGLxEB sc-ckTSus iMrmpd giMBmg"
     >
        Input Value 
     </button>

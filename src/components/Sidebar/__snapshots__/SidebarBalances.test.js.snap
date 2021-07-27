@@ -3,19 +3,19 @@
 exports[`Given the SidebarBalances component when the component is rendered should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-kLojOw iGHpAL"
+    class="sc-iTVJFM fkQotX"
   >
     <div
-      class="sc-jJMGnK cwMWz"
+      class="sc-efHYUO cEyMzQ"
     >
       <div
-        class="sc-hiKfDv"
+        class="sc-cTJkRt"
       >
         <strong>
           ETH Balance
         </strong>
         <div
-          class="sc-iklJeh bswktC"
+          class="sc-iBzEeX iHRMjK"
         >
           100
           <small>
@@ -24,80 +24,87 @@ exports[`Given the SidebarBalances component when the component is rendered shou
         </div>
       </div>
       <div
-        class="sc-gXfVKN eZpQiy"
+        class="sc-jNnpgg WALnu"
       >
         <div
-          class="sc-carFqZ eLJpkr"
+          class="sc-Arkif eJyhyt"
         >
           <h5
-            class="sc-iTVJFM bvRqxh"
+            class="sc-khIgEk kbtHpE"
           >
             ETH Balance
           </h5>
           <p
-            class="sc-iBzEeX eGrqWr"
+            class="sc-hTRkXV eTMIgB"
           >
             This is your connected wallet Ether balance.
           </p>
         </div>
         <button
-          class="sc-cBoqAE coaicv"
+          class="sc-dPaNzc dOQtbG"
         >
           i
         </button>
       </div>
     </div>
     <div
-      class="sc-jJMGnK cwMWz"
+      class="sc-efHYUO cEyMzQ"
     >
       <div
-        class="sc-hiKfDv"
+        class="sc-cTJkRt"
       >
         <strong>
           NOM Balance
         </strong>
         <div
-          class="sc-iklJeh kmvZaR"
+          class="sc-iBzEeX gmvRsd"
         >
           50
           <small>
              = $16,208.04
           </small>
           <div
-            class="sc-ciSkZP bTFARK"
+            class="sc-carFqZ kfqhGh"
           >
-            <span>
-               approved
-            </span>
+            <div
+              class="sc-jcwpoC dBdgXh"
+            />
+            <div
+              class="sc-bBjRSN duUgtb"
+            >
+              <span>
+                 approved
+              </span>
+            </div>
           </div>
         </div>
       </div>
       <div
-        class="sc-gXfVKN eZpQiy"
+        class="sc-jNnpgg WALnu"
       >
         <div
-          class="sc-carFqZ eLJpkr"
+          class="sc-Arkif eJyhyt"
         >
           <h5
-            class="sc-iTVJFM bvRqxh"
+            class="sc-khIgEk kbtHpE"
           >
             wNOM Balance
           </h5>
           <p
-            class="sc-iBzEeX eGrqWr"
+            class="sc-hTRkXV eTMIgB"
           >
             This shows your total wNOM balance and the amount approved for selling. You must approve wNOM for selling before it can be sold.
           </p>
         </div>
         <button
-          class="sc-cBoqAE coaicv"
+          class="sc-dPaNzc dOQtbG"
         >
           i
         </button>
       </div>
     </div>
     <div
-      class="sc-jcwpoC jwrGsS"
+      class="sc-cOifOu cCTdZJ"
     >
       <button
         class="sc-hKFxyN fFAwxg"
