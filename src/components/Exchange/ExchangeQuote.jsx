@@ -20,13 +20,11 @@ import {
   MaxBtn,
   ReceivingValue,
   ExchangeButton,
+  SendingBox,
 } from './exchangeStyles';
 import { useModal } from 'context/modal/ModalContext';
 import NOMButton from 'components/Exchange/NOMButton';
-import { withTrimmedWrapper } from 'components/UI';
 import { format18, parse18 } from 'utils/math';
-
-const TrimmedExchangeInput = withTrimmedWrapper(ExchangeInput);
 
 export default function ExchangeQuote({ strength }) {
   const { strongBalance, weakBalance } = useChain();
@@ -332,18 +330,22 @@ export default function ExchangeQuote({ strength }) {
     <ExchangeItem>
       <strong>{isBuying ? 'Buy ' + weak : 'Sell ' + weak}</strong>
       <Sending>
-        <strong>{isBuying ? "I'm buying" : "I'm selling"}</strong>
-        <TrimmedExchangeInput
-          type="text"
-          data-testid="exchange-strong-balance-input"
-          onChange={evt => onTextChange(evt, strength)}
-          value={bidDenom === strength ? input : ''}
-          placeholder="0.00"
-        />
-        {strength === 'strong' ? strong : weak}
-        <MaxBtn data-testid="max-value-button" onClick={() => onMax()}>
-          Max
-        </MaxBtn>
+        <SendingBox input>
+          {(bidDenom !== strength || !input) && <strong>{isBuying ? "I'm buying" : "I'm selling"}</strong>}
+          <ExchangeInput
+            type="text"
+            data-testid="exchange-strong-balance-input"
+            onChange={evt => onTextChange(evt, strength)}
+            value={bidDenom === strength ? input : ''}
+            placeholder="0.00"
+          />
+        </SendingBox>
+        <SendingBox>
+          {strength === 'strong' ? strong : weak}
+          <MaxBtn data-testid="max-value-button" onClick={() => onMax()}>
+            Max
+          </MaxBtn>
+        </SendingBox>
       </Sending>
       <Receiving>
         <strong>You will receive</strong>
