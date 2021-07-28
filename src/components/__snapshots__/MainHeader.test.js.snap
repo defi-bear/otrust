@@ -7,18 +7,18 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are not o
       class="sc-bdnxRM iNmwGW"
     >
       <header
-        class="sc-iCoGMd jReHeF"
+        class="sc-pNWdM kGfYDW"
       >
         <div
-          class="sc-fujyAs ipUnbt"
+          class="sc-jrsJWt lhcGWh"
         >
           <img
             alt="Onomy"
-            class="sc-pNWdM deYXhl"
+            class="sc-kEqXSa hLUCxM"
             src="logo.svg"
           />
           <div
-            class="sc-jrsJWt jghoxO"
+            class="sc-iqAclL qVfWC"
           >
             <strong>
               Onomy
@@ -29,25 +29,25 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are not o
           </div>
         </div>
         <div
-          class="sc-kEqXSa jsxILd"
+          class="sc-crzoAE bKzEsk"
         >
           <div
-            class="sc-crzoAE fyXMGr"
+            class="sc-bqGGPW lkvOZP"
           >
             <div
-              class="sc-iqAclL gZIDje"
+              class="sc-dIsUp gCyior"
             >
               <strong>
                 NOM / USDT
               </strong>
               <div
-                class="sc-bqGGPW hYhdEA"
+                class="sc-hBMUJo LJbir"
               >
                 <strong>
                   $10.12
                 </strong>
                 <span
-                  class="sc-ksluID kvKAf"
+                  class="sc-fnVZcZ bnypWm"
                   type="increase"
                 >
                   24.2%
@@ -55,13 +55,13 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are not o
               </div>
             </div>
             <div
-              class="sc-iqAclL gZIDje"
+              class="sc-dIsUp gCyior"
             >
               <strong>
                 NOM / ETH
               </strong>
               <div
-                class="sc-bqGGPW hYhdEA"
+                class="sc-hBMUJo LJbir"
               >
                 <strong>
                   <span>
@@ -72,16 +72,16 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are not o
             </div>
           </div>
           <div
-            class="sc-dIsUp ixoOJO"
+            class="sc-ksluID hDosJx"
           >
             <div
-              class="sc-iqAclL gZIDje"
+              class="sc-dIsUp gCyior"
             >
               <strong>
                 NOM Issued
               </strong>
               <div
-                class="sc-bqGGPW hYhdEA"
+                class="sc-hBMUJo LJbir"
               >
                 <strong>
                   <span>
@@ -89,7 +89,7 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are not o
                   </span>
                 </strong>
                 <span
-                  class="sc-ksluID gwEcki"
+                  class="sc-fnVZcZ gsKhaX"
                 >
                   / 1E8
                 </span>
@@ -110,18 +110,18 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are of Bi
       class="sc-bdnxRM iNmwGW"
     >
       <header
-        class="sc-iCoGMd jReHeF"
+        class="sc-pNWdM kGfYDW"
       >
         <div
-          class="sc-fujyAs ipUnbt"
+          class="sc-jrsJWt lhcGWh"
         >
           <img
             alt="Onomy"
-            class="sc-pNWdM deYXhl"
+            class="sc-kEqXSa hLUCxM"
             src="logo.svg"
           />
           <div
-            class="sc-jrsJWt jghoxO"
+            class="sc-iqAclL qVfWC"
           >
             <strong>
               Onomy
@@ -132,25 +132,25 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are of Bi
           </div>
         </div>
         <div
-          class="sc-kEqXSa jsxILd"
+          class="sc-crzoAE bKzEsk"
         >
           <div
-            class="sc-crzoAE fyXMGr"
+            class="sc-bqGGPW lkvOZP"
           >
             <div
-              class="sc-iqAclL gZIDje"
+              class="sc-dIsUp gCyior"
             >
               <strong>
                 NOM / USDT
               </strong>
               <div
-                class="sc-bqGGPW hYhdEA"
+                class="sc-hBMUJo LJbir"
               >
                 <strong>
                   $10.12
                 </strong>
                 <span
-                  class="sc-ksluID kvKAf"
+                  class="sc-fnVZcZ bnypWm"
                   type="increase"
                 >
                   24.2%
@@ -158,13 +158,13 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are of Bi
               </div>
             </div>
             <div
-              class="sc-iqAclL gZIDje"
+              class="sc-dIsUp gCyior"
             >
               <strong>
                 NOM / ETH
               </strong>
               <div
-                class="sc-bqGGPW hYhdEA"
+                class="sc-hBMUJo LJbir"
               >
                 <strong>
                   <span>
@@ -175,16 +175,16 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are of Bi
             </div>
           </div>
           <div
-            class="sc-dIsUp ixoOJO"
+            class="sc-ksluID hDosJx"
           >
             <div
-              class="sc-iqAclL gZIDje"
+              class="sc-dIsUp gCyior"
             >
               <strong>
                 NOM Issued
               </strong>
               <div
-                class="sc-bqGGPW hYhdEA"
+                class="sc-hBMUJo LJbir"
               >
                 <strong>
                   <span>
@@ -192,7 +192,7 @@ exports[`Given the MainHeader component and supplyNOM, currentETHPrice are of Bi
                   </span>
                 </strong>
                 <span
-                  class="sc-ksluID gwEcki"
+                  class="sc-fnVZcZ gsKhaX"
                 >
                   / 1E8
                 </span>

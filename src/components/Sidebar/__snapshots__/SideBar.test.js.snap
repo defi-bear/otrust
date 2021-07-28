@@ -6,35 +6,19 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
     class="sc-gtsrHT bOaZEi"
   >
     <div
-      class="sc-eirqVv calDSr"
+      class="sc-gGLxEB bxbINb"
     >
       <header
-        class="sc-fujyAs gEMvSK"
+        class="sc-jrsJWt chdEue"
       >
-        <a
-          class="sc-iCoGMd ftOiio"
-        >
-          <svg
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0h20v20H0z"
-              fill="none"
-            />
-            <path
-              d="M10.519 17.348H9.484a1.538 1.538 0 01-1.582-1.526 1.417 1.417 0 00-1.4-1.355 1.176 1.176 0 00-.669.172 1.61 1.61 0 01-.804.221 1.58 1.58 0 01-1.354-.774l-.525-.894a1.492 1.492 0 01-.021-1.524 1.569 1.569 0 01.608-.588 1.23 1.23 0 00.48-.476 1.327 1.327 0 00.141-1.016 1.367 1.367 0 00-.629-.845 1.522 1.522 0 01-.567-2.107l.509-.876a1.58 1.58 0 012.145-.565 1.41 1.41 0 00.668.167 1.458 1.458 0 001.245-.684 1.145 1.145 0 00.176-.655 1.331 1.331 0 01.21-.789 1.64 1.64 0 011.346-.774h1.068a1.6 1.6 0 011.359.774 1.326 1.326 0 01.205.789 1.15 1.15 0 00.175.655 1.462 1.462 0 001.245.68 1.433 1.433 0 00.673-.167 1.571 1.571 0 012.138.565l.509.878a1.509 1.509 0 01-.563 2.107 1.362 1.362 0 00-.635.847 1.318 1.318 0 00.148 1.014 1.169 1.169 0 00.472.476 1.717 1.717 0 01.616.588 1.512 1.512 0 01-.015 1.526l-.533.894a1.562 1.562 0 01-2.153.551 1.207 1.207 0 00-.669-.172 1.414 1.414 0 00-1.408 1.355 1.534 1.534 0 01-1.574 1.528zm-.51-9.543a2.136 2.136 0 00-2.161 2.107A2.057 2.057 0 008.48 11.4a2.181 2.181 0 001.528.611 2.1 2.1 0 001.521-3.591 2.142 2.142 0 00-1.52-.615z"
-              fill="#8d89a3"
-            />
-          </svg>
-        </a>
+        <span />
         <img
           alt=""
-          class="sc-pNWdM jcyRRj"
+          class="sc-kEqXSa isTHhe"
           src="https://picsum.photos/72"
         />
         <a
-          class="sc-iCoGMd ftOiio"
+          class="sc-pNWdM dCSlbb"
         >
           <svg
             viewBox="0 0 20 20"
@@ -48,7 +32,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
           </svg>
         </a>
         <div
-          class="sc-jrsJWt SXxEx"
+          class="sc-iqAclL gIbAvJ"
         >
           <p>
             My Account
@@ -57,19 +41,19 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
         </div>
       </header>
       <div
-        class="sc-efHYUO hEBjDc"
+        class="sc-jNnpgg kjLuzq"
       >
         <div
-          class="sc-jNnpgg cJYNoe"
+          class="sc-bBjRSN dQbhcB"
         >
           <div
-            class="sc-dPaNzc"
+            class="sc-cOifOu"
           >
             <strong>
               ETH Balance
             </strong>
             <div
-              class="sc-cTJkRt gsHzGO"
+              class="sc-dPaNzc ijainM"
             >
               Loading
               <small>
@@ -78,83 +62,92 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
             </div>
           </div>
           <div
-            class="sc-bBjRSN bIbZvd"
+            class="sc-Arkif jojbRz"
           >
             <div
-              class="sc-hTRkXV TOuV"
+              class="sc-gSYDnn ggatJr"
             >
               <h5
-                class="sc-jgPyTC boKnUc"
+                class="sc-laZMeE EUcyJ"
               >
                 ETH Balance
               </h5>
               <p
-                class="sc-gSYDnn feZqtS"
+                class="sc-iNiQyp hmdFLd"
               >
                 This is your connected wallet Ether balance.
               </p>
             </div>
             <button
-              class="sc-cOifOu fISLVI"
+              class="sc-khIgEk kNdqRO"
             >
               i
             </button>
           </div>
         </div>
         <div
-          class="sc-jNnpgg cJYNoe"
+          class="sc-bBjRSN dQbhcB"
         >
           <div
-            class="sc-dPaNzc"
+            class="sc-cOifOu"
           >
             <strong>
               wNOM Balance
             </strong>
             <div
-              class="sc-cTJkRt fJbEIt"
+              class="sc-dPaNzc hNygBn"
             >
               Loading
               <small>
                  = $16,208.04
               </small>
               <div
-                class="sc-Arkif fiNZij"
+                class="sc-fujyAs fSykkk"
               >
-                <span>
-                  Loading approved
-                </span>
+                <div
+                  class="sc-iCoGMd hVrKlH"
+                >
+                  Loading
+                </div>
+                <div
+                  class="sc-hTRkXV cqjNuL"
+                >
+                  <span>
+                    Loading approved
+                  </span>
+                </div>
               </div>
             </div>
           </div>
           <div
-            class="sc-bBjRSN bIbZvd"
+            class="sc-Arkif jojbRz"
           >
             <div
-              class="sc-hTRkXV TOuV"
+              class="sc-gSYDnn ggatJr"
             >
               <h5
-                class="sc-jgPyTC boKnUc"
+                class="sc-laZMeE EUcyJ"
               >
                 wNOM Balance
               </h5>
               <p
-                class="sc-gSYDnn feZqtS"
+                class="sc-iNiQyp hmdFLd"
               >
                 This shows your total wNOM balance and the amount approved for selling. You must approve wNOM for selling before it can be sold.
               </p>
             </div>
             <button
-              class="sc-cOifOu fISLVI"
+              class="sc-khIgEk kNdqRO"
             >
               i
             </button>
           </div>
         </div>
         <div
-          class="sc-khIgEk cENgFj"
+          class="sc-jgPyTC bxxRHb"
         >
           <button
-            class="sc-dIsUp dNxSVo"
+            class="sc-ksluID jQjqAL"
             style="width: 100%;"
           >
             Withdraw wNOM
@@ -162,10 +155,10 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
         </div>
       </div>
       <div
-        class="sc-oeezt fVsHGf"
+        class="sc-eirqVv hUZbtV"
       >
         <div
-          class="sc-hhIiOg gVWyjz"
+          class="sc-lbVvki kGYLsX"
         >
           <strong>
             Connection
@@ -177,7 +170,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
           </div>
         </div>
         <div
-          class="sc-hhIiOg gVWyjz"
+          class="sc-lbVvki kGYLsX"
         >
           <strong>
             Chain Id
@@ -185,7 +178,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
           <span />
         </div>
         <div
-          class="sc-hhIiOg gVWyjz"
+          class="sc-lbVvki kGYLsX"
         >
           <strong>
             Block Number
@@ -196,20 +189,20 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
         </div>
       </div>
       <footer
-        class="sc-laZMeE cJQHTj"
+        class="sc-jffHpj bernAh"
       >
         <a
-          class="sc-iNiQyp jspOOv"
+          class="sc-eJocfa cjHyfJ"
           href="https://onomy.io/"
           target="_blank"
         >
           About Onomy
         </a>
         <div
-          class="sc-eJocfa ffbwIX"
+          class="sc-hhIiOg llmQSf"
         >
           <a
-            class="sc-jffHpj QMDTc"
+            class="sc-oeezt hTHyJt"
             href="https://t.me/onomyprotocol"
             target="_blank"
           >
@@ -224,7 +217,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
             </svg>
           </a>
           <a
-            class="sc-jffHpj QMDTc"
+            class="sc-oeezt hTHyJt"
             href="https://medium.com/onomy-protocol"
             target="_blank"
           >
@@ -243,7 +236,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are NOT of B
             </svg>
           </a>
           <a
-            class="sc-jffHpj QMDTc"
+            class="sc-oeezt hTHyJt"
             href="https://twitter.com/onomyprotocol"
             target="_blank"
           >
@@ -271,35 +264,19 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
     class="sc-gtsrHT bOaZEi"
   >
     <div
-      class="sc-eirqVv calDSr"
+      class="sc-gGLxEB bxbINb"
     >
       <header
-        class="sc-fujyAs gEMvSK"
+        class="sc-jrsJWt chdEue"
       >
-        <a
-          class="sc-iCoGMd ftOiio"
-        >
-          <svg
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0h20v20H0z"
-              fill="none"
-            />
-            <path
-              d="M10.519 17.348H9.484a1.538 1.538 0 01-1.582-1.526 1.417 1.417 0 00-1.4-1.355 1.176 1.176 0 00-.669.172 1.61 1.61 0 01-.804.221 1.58 1.58 0 01-1.354-.774l-.525-.894a1.492 1.492 0 01-.021-1.524 1.569 1.569 0 01.608-.588 1.23 1.23 0 00.48-.476 1.327 1.327 0 00.141-1.016 1.367 1.367 0 00-.629-.845 1.522 1.522 0 01-.567-2.107l.509-.876a1.58 1.58 0 012.145-.565 1.41 1.41 0 00.668.167 1.458 1.458 0 001.245-.684 1.145 1.145 0 00.176-.655 1.331 1.331 0 01.21-.789 1.64 1.64 0 011.346-.774h1.068a1.6 1.6 0 011.359.774 1.326 1.326 0 01.205.789 1.15 1.15 0 00.175.655 1.462 1.462 0 001.245.68 1.433 1.433 0 00.673-.167 1.571 1.571 0 012.138.565l.509.878a1.509 1.509 0 01-.563 2.107 1.362 1.362 0 00-.635.847 1.318 1.318 0 00.148 1.014 1.169 1.169 0 00.472.476 1.717 1.717 0 01.616.588 1.512 1.512 0 01-.015 1.526l-.533.894a1.562 1.562 0 01-2.153.551 1.207 1.207 0 00-.669-.172 1.414 1.414 0 00-1.408 1.355 1.534 1.534 0 01-1.574 1.528zm-.51-9.543a2.136 2.136 0 00-2.161 2.107A2.057 2.057 0 008.48 11.4a2.181 2.181 0 001.528.611 2.1 2.1 0 001.521-3.591 2.142 2.142 0 00-1.52-.615z"
-              fill="#8d89a3"
-            />
-          </svg>
-        </a>
+        <span />
         <img
           alt=""
-          class="sc-pNWdM jcyRRj"
+          class="sc-kEqXSa isTHhe"
           src="https://picsum.photos/72"
         />
         <a
-          class="sc-iCoGMd ftOiio"
+          class="sc-pNWdM dCSlbb"
         >
           <svg
             viewBox="0 0 20 20"
@@ -313,7 +290,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
           </svg>
         </a>
         <div
-          class="sc-jrsJWt SXxEx"
+          class="sc-iqAclL gIbAvJ"
         >
           <p>
             My Account
@@ -322,19 +299,19 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
         </div>
       </header>
       <div
-        class="sc-efHYUO hEBjDc"
+        class="sc-jNnpgg kjLuzq"
       >
         <div
-          class="sc-jNnpgg cJYNoe"
+          class="sc-bBjRSN dQbhcB"
         >
           <div
-            class="sc-dPaNzc"
+            class="sc-cOifOu"
           >
             <strong>
               ETH Balance
             </strong>
             <div
-              class="sc-cTJkRt gsHzGO"
+              class="sc-dPaNzc ijainM"
             >
               0.000000
               <small>
@@ -343,83 +320,92 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
             </div>
           </div>
           <div
-            class="sc-bBjRSN bIbZvd"
+            class="sc-Arkif jojbRz"
           >
             <div
-              class="sc-hTRkXV TOuV"
+              class="sc-gSYDnn ggatJr"
             >
               <h5
-                class="sc-jgPyTC boKnUc"
+                class="sc-laZMeE EUcyJ"
               >
                 ETH Balance
               </h5>
               <p
-                class="sc-gSYDnn feZqtS"
+                class="sc-iNiQyp hmdFLd"
               >
                 This is your connected wallet Ether balance.
               </p>
             </div>
             <button
-              class="sc-cOifOu fISLVI"
+              class="sc-khIgEk kNdqRO"
             >
               i
             </button>
           </div>
         </div>
         <div
-          class="sc-jNnpgg cJYNoe"
+          class="sc-bBjRSN dQbhcB"
         >
           <div
-            class="sc-dPaNzc"
+            class="sc-cOifOu"
           >
             <strong>
               wNOM Balance
             </strong>
             <div
-              class="sc-cTJkRt fJbEIt"
+              class="sc-dPaNzc hNygBn"
             >
               0.000000
               <small>
                  = $16,208.04
               </small>
               <div
-                class="sc-Arkif fiNZij"
+                class="sc-fujyAs fSykkk"
               >
-                <span>
-                  Loading approved
-                </span>
+                <div
+                  class="sc-iCoGMd hVrKlH"
+                >
+                  Loading
+                </div>
+                <div
+                  class="sc-hTRkXV cqjNuL"
+                >
+                  <span>
+                    Loading approved
+                  </span>
+                </div>
               </div>
             </div>
           </div>
           <div
-            class="sc-bBjRSN bIbZvd"
+            class="sc-Arkif jojbRz"
           >
             <div
-              class="sc-hTRkXV TOuV"
+              class="sc-gSYDnn ggatJr"
             >
               <h5
-                class="sc-jgPyTC boKnUc"
+                class="sc-laZMeE EUcyJ"
               >
                 wNOM Balance
               </h5>
               <p
-                class="sc-gSYDnn feZqtS"
+                class="sc-iNiQyp hmdFLd"
               >
                 This shows your total wNOM balance and the amount approved for selling. You must approve wNOM for selling before it can be sold.
               </p>
             </div>
             <button
-              class="sc-cOifOu fISLVI"
+              class="sc-khIgEk kNdqRO"
             >
               i
             </button>
           </div>
         </div>
         <div
-          class="sc-khIgEk cENgFj"
+          class="sc-jgPyTC bxxRHb"
         >
           <button
-            class="sc-dIsUp dNxSVo"
+            class="sc-ksluID jQjqAL"
             style="width: 100%;"
           >
             Withdraw wNOM
@@ -427,10 +413,10 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
         </div>
       </div>
       <div
-        class="sc-oeezt fVsHGf"
+        class="sc-eirqVv hUZbtV"
       >
         <div
-          class="sc-hhIiOg gVWyjz"
+          class="sc-lbVvki kGYLsX"
         >
           <strong>
             Connection
@@ -442,7 +428,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
           </div>
         </div>
         <div
-          class="sc-hhIiOg gVWyjz"
+          class="sc-lbVvki kGYLsX"
         >
           <strong>
             Chain Id
@@ -450,7 +436,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
           <span />
         </div>
         <div
-          class="sc-hhIiOg gVWyjz"
+          class="sc-lbVvki kGYLsX"
         >
           <strong>
             Block Number
@@ -461,20 +447,20 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
         </div>
       </div>
       <footer
-        class="sc-laZMeE cJQHTj"
+        class="sc-jffHpj bernAh"
       >
         <a
-          class="sc-iNiQyp jspOOv"
+          class="sc-eJocfa cjHyfJ"
           href="https://onomy.io/"
           target="_blank"
         >
           About Onomy
         </a>
         <div
-          class="sc-eJocfa ffbwIX"
+          class="sc-hhIiOg llmQSf"
         >
           <a
-            class="sc-jffHpj QMDTc"
+            class="sc-oeezt hTHyJt"
             href="https://t.me/onomyprotocol"
             target="_blank"
           >
@@ -489,7 +475,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
             </svg>
           </a>
           <a
-            class="sc-jffHpj QMDTc"
+            class="sc-oeezt hTHyJt"
             href="https://medium.com/onomy-protocol"
             target="_blank"
           >
@@ -508,7 +494,7 @@ exports[`Given the Sidebar component and strongBalance, weakBalance are of BigNu
             </svg>
           </a>
           <a
-            class="sc-jffHpj QMDTc"
+            class="sc-oeezt hTHyJt"
             href="https://twitter.com/onomyprotocol"
             target="_blank"
           >

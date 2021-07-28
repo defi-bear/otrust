@@ -28,7 +28,7 @@ exports[`Given the LineChart component when the component is rendered should mat
         font-size="10"
         style="color: rgb(26, 23, 35);"
         text-anchor="end"
-        transform="translate(60, 0)"
+        transform="translate(90, 0)"
       >
         <path
           class="domain"
@@ -47,7 +47,7 @@ exports[`Given the LineChart component when the component is rendered should mat
       >
         <path
           class="domain"
-          d="M60.5,10V0.5H-19.5V10"
+          d="M90.5,10V0.5H-19.5V10"
           stroke="currentColor"
         />
       </g>
@@ -63,7 +63,7 @@ exports[`Given the LineChart component when the component is rendered should mat
       >
         <path
           class="domain"
-          d="M60.5,15V0.5H-19.5V15"
+          d="M90.5,15V0.5H-19.5V15"
           stroke="currentColor"
         />
       </g>
@@ -112,7 +112,7 @@ exports[`Given the LineChart component when the component is rendered should mat
         <line
           stroke="#1A1723"
           stroke-width="0.12rem"
-          x1="60"
+          x1="90"
           x2="-20"
           y1="NaN"
           y2="NaN"
@@ -151,7 +151,7 @@ exports[`Given the LineChart component when the component is rendered should mat
         font-size="10"
         style="color: rgb(26, 23, 35);"
         text-anchor="end"
-        transform="translate(60, 0)"
+        transform="translate(90, 0)"
       >
         <path
           class="domain"
@@ -170,7 +170,7 @@ exports[`Given the LineChart component when the component is rendered should mat
       >
         <path
           class="domain"
-          d="M60.5,10V0.5H-19.5V10"
+          d="M90.5,10V0.5H-19.5V10"
           stroke="currentColor"
         />
       </g>
@@ -186,7 +186,7 @@ exports[`Given the LineChart component when the component is rendered should mat
       >
         <path
           class="domain"
-          d="M60.5,15V0.5H-19.5V15"
+          d="M90.5,15V0.5H-19.5V15"
           stroke="currentColor"
         />
       </g>
@@ -235,7 +235,7 @@ exports[`Given the LineChart component when the component is rendered should mat
         <line
           stroke="#1A1723"
           stroke-width="0.12rem"
-          x1="60"
+          x1="90"
           x2="-20"
           y1="NaN"
           y2="NaN"
@@ -274,7 +274,7 @@ exports[`Given the LineChart component when the component is rendered should mat
         font-size="10"
         style="color: rgb(26, 23, 35);"
         text-anchor="end"
-        transform="translate(60, 0)"
+        transform="translate(90, 0)"
       >
         <path
           class="domain"
@@ -293,7 +293,7 @@ exports[`Given the LineChart component when the component is rendered should mat
       >
         <path
           class="domain"
-          d="M60.5,10V0.5H-19.5V10"
+          d="M90.5,10V0.5H-19.5V10"
           stroke="currentColor"
         />
       </g>
@@ -309,7 +309,7 @@ exports[`Given the LineChart component when the component is rendered should mat
       >
         <path
           class="domain"
-          d="M60.5,15V0.5H-19.5V15"
+          d="M90.5,15V0.5H-19.5V15"
           stroke="currentColor"
         />
       </g>
@@ -358,7 +358,7 @@ exports[`Given the LineChart component when the component is rendered should mat
         <line
           stroke="#1A1723"
           stroke-width="0.12rem"
-          x1="60"
+          x1="90"
           x2="-20"
           y1="NaN"
           y2="NaN"

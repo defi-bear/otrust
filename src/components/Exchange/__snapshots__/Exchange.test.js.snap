@@ -9,21 +9,28 @@ exports[`Given an Exchange component when the component is rendered should match
       class="sc-gtsrHT cFutaZ"
     >
       <strong>
-        Bid ETH
+        Buy NOM
       </strong>
       <div
         class="sc-dlnjwi ciFpMw"
       >
         <strong>
-          I'm bidding
+          I'm buying
         </strong>
-        <input
-          class="sc-jSFjdj lkKexS"
-          data-testid="exchange-strong-balance-input"
-          placeholder="0.00"
-          type="text"
-          value=""
-        />
+        <div
+          class="sc-bTDOke cddonb"
+        >
+          <div
+            class="sc-eKYRIR ibOJZB"
+          />
+          <input
+            class="sc-jSFjdj lkKexS"
+            data-testid="exchange-strong-balance-input"
+            placeholder="0.00"
+            type="text"
+            value=""
+          />
+        </div>
         ETH
         <button
           class="sc-eCApnc liwdcO"
@@ -36,7 +43,7 @@ exports[`Given an Exchange component when the component is rendered should match
         class="sc-hKFxyN jWQojY"
       >
         <strong>
-          I'm asking
+          You will receive
         </strong>
         <span
           class="sc-gKAaRy dHKXDL"
@@ -55,21 +62,28 @@ exports[`Given an Exchange component when the component is rendered should match
       class="sc-gtsrHT cFutaZ"
     >
       <strong>
-        Bid NOM
+        Sell NOM
       </strong>
       <div
         class="sc-dlnjwi ciFpMw"
       >
         <strong>
-          I'm bidding
+          I'm selling
         </strong>
-        <input
-          class="sc-jSFjdj lkKexS"
-          data-testid="exchange-strong-balance-input"
-          placeholder="0.00"
-          type="text"
-          value=""
-        />
+        <div
+          class="sc-bTDOke cddonb"
+        >
+          <div
+            class="sc-eKYRIR ibOJZB"
+          />
+          <input
+            class="sc-jSFjdj lkKexS"
+            data-testid="exchange-strong-balance-input"
+            placeholder="0.00"
+            type="text"
+            value=""
+          />
+        </div>
         NOM
         <button
           class="sc-eCApnc liwdcO"
@@ -82,7 +96,7 @@ exports[`Given an Exchange component when the component is rendered should match
         class="sc-hKFxyN jWQojY"
       >
         <strong>
-          I'm asking
+          You will receive
         </strong>
         <span
           class="sc-gKAaRy dHKXDL"

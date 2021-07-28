@@ -47,7 +47,7 @@ exports[`Given the ConfirmTransactionModal component and bidDenom is weak should
         >
           You're receiving
         </div>
-        ~ 0.000000
+        ~  
         <sup>
           ETH
         </sup>
@@ -66,7 +66,7 @@ exports[`Given the ConfirmTransactionModal component and bidDenom is weak should
         class="sc-iklJeh kJcUXB"
       >
         <span>
-          You're Sending
+          You're sending
         </span>
         <strong>
           0.000000 NOM
@@ -308,7 +308,7 @@ exports[`Given the ConfirmTransactionModal component when the component is rende
         >
           You're receiving
         </div>
-        ~ 0.000000
+        ~  
         <sup>
           wNOM
         </sup>
@@ -327,7 +327,7 @@ exports[`Given the ConfirmTransactionModal component when the component is rende
         class="sc-iklJeh kJcUXB"
       >
         <span>
-          You're Sending
+          You're sending
         </span>
         <strong>
           0.000000 ETH
