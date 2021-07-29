@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 
-import { useModal } from 'context/modal/ModalContext';
 import { Close } from '../Icons';
 import * as Modal from '../styles';
 import { responsive } from 'theme/constants';
@@ -34,6 +33,8 @@ const FormWrapper = styled.form`
 `;
 
 export default function BridgeSwapModal({ ...props }) {
+  const { account } = useWeb3React();
+
   const {
     onomyWalletValue,
     onomyWalletError,
@@ -45,14 +46,12 @@ export default function BridgeSwapModal({ ...props }) {
     handleAmountInputChange,
     maxBtnHandler,
     submitTrans,
+    closeModalHandler,
   } = props;
-
-  const { handleModal } = useModal();
-  const { account } = useWeb3React();
 
   return (
     <Modal.BridgeModalWrapper>
-      <Modal.CloseIcon onClick={() => handleModal()}>
+      <Modal.CloseIcon onClick={() => closeModalHandler()}>
         <Close />
       </Modal.CloseIcon>
 
@@ -84,6 +83,7 @@ export default function BridgeSwapModal({ ...props }) {
               <Modal.CosmosInputSection error={onomyWalletError}>
                 <BridgeInput
                   type="text"
+                  placeholder="Your Onomy Wallet Address"
                   value={
                     onomyWalletValue.length > 24
                       ? `${onomyWalletValue.substring(0, 10)}...${onomyWalletValue.substring(
@@ -103,9 +103,7 @@ export default function BridgeSwapModal({ ...props }) {
                 <strong>I want to swap to NOM</strong>
                 <ExchangeInput type="text" value={amountInputValue} onChange={handleAmountInputChange} />
                 wNOM
-                <MaxBtn onClick={maxBtnHandler} isDisabled={true}>
-                  Max
-                </MaxBtn>
+                <MaxBtn onClick={maxBtnHandler}>Max</MaxBtn>
               </BridgeSending>
             </InputWrapper>
             {(onomyWalletError || amountError) && (

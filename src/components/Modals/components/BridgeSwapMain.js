@@ -11,7 +11,7 @@ import { format18, parse18 } from 'utils/math';
 import { contAddrs } from '../../../context/chain/contracts';
 import { ERROR_MESSAGES } from '../../../constants/ErrorMessages';
 
-export default function BridgeSwapMain() {
+export default function BridgeSwapMain({ closeModalHandler }) {
   const [onomyWalletValue, setOnomyWalletValue] = useState('');
   const [onomyWalletError, setOnomyWalletError] = useState('');
   const [amountInputValue, setAmountInputValue] = useState('');
@@ -19,13 +19,13 @@ export default function BridgeSwapMain() {
   const [formattedWeakBalance, setFormattedWeakBalance] = useState(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isMaxButtonClicked, setIsMaxButtonClicked] = useState(false);
-  const [isMediaMinTablet, setIsMediaMinTablet] = useState(true);
+  const [isMediaMinTablet, setIsMediaMinTablet] = useState(undefined);
 
   const { library } = useWeb3React();
   const { weakBalance } = useChain();
 
   const GravityContract = GravityCont(library);
-  const NOMcontract = NOMCont(library);
+  const NOMContract = NOMCont(library);
 
   const mediaQuery = window.matchMedia('(min-width: 768px)');
 
@@ -98,8 +98,18 @@ export default function BridgeSwapMain() {
         setIsButtonDisabled(false);
         return;
       }
+
+      // try {
+      //   let allowanceGravity = await NOMContract.allowance(account, contAddrs.Gravity);
+      //   console.log('allowanceGravity', allowanceGravity.toString());
+      // } catch (error) {
+      //   console.log(error);
+      //   setIsButtonDisabled(false);
+      //   return;
+      // }
+
       try {
-        tx = await NOMcontract.approve(contAddrs.Gravity, amountInputValueUpdated);
+        tx = await NOMContract.approve(contAddrs.Gravity, amountInputValueUpdated);
         tx.wait().then(() => {
           console.log(tx);
         });
@@ -108,6 +118,7 @@ export default function BridgeSwapMain() {
         setIsButtonDisabled(false);
         return;
       }
+
       try {
         tx = await GravityContract.sendToCosmos(contAddrs.NOMERC20, cosmosAddressBytes32, amountInputValueUpdated, {
           gasLimit: 100000,
@@ -124,7 +135,7 @@ export default function BridgeSwapMain() {
         return;
       }
     },
-    [onomyWalletValue, amountInputValue, GravityContract, NOMcontract, isMaxButtonClicked, weakBalance],
+    [onomyWalletValue, amountInputValue, GravityContract, NOMContract, isMaxButtonClicked, weakBalance],
   );
 
   const Props = {
@@ -146,12 +157,13 @@ export default function BridgeSwapMain() {
     handleAmountInputChange,
     maxBtnHandler,
     submitTrans,
+    closeModalHandler,
   };
 
   return (
     <>
-      {isMediaMinTablet && <BridgeSwapModal {...Props} />}
-      {!isMediaMinTablet && <BridgeSwapMobile />}
+      {isMediaMinTablet === true && <BridgeSwapModal {...Props} />}
+      {isMediaMinTablet === false && <BridgeSwapMobile {...Props} />}
     </>
   );
 }

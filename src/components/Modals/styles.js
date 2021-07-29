@@ -625,6 +625,10 @@ export const CosmosInputSection = styled.div`
   border-radius: 8px;
   padding: 16px 29px 16px 20px;
   opacity: 1;
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+      margin-top: 16px;
+    }
 `;
 
 export const Desc = styled.p`
