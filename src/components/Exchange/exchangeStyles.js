@@ -83,7 +83,6 @@ export const Sending = styled.div`
   }
 `;
 
-
 export const BridgeSending = styled(Sending)`
   background: transparent;
   border: 1px solid ${props => (props.error ? props.theme.colors.highlightRed : props.theme.colors.bgHighlightBorder)};
