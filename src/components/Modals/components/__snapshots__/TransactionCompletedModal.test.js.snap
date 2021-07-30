@@ -77,7 +77,7 @@ exports[`Given the TransactionCompletedModal component when the component is ren
           Exchange Rate
         </span>
         <strong>
-          1 NOM = NaN ETH
+          1 ETH = NaN NOM
         </strong>
       </div>
     </main>
@@ -189,7 +189,7 @@ exports[`Given the TransactionCompletedModal component when the component is ren
           Exchange Rate
         </span>
         <strong>
-          1 NOM = NaN ETH
+          1 ETH = NaN NOM
         </strong>
       </div>
     </main>

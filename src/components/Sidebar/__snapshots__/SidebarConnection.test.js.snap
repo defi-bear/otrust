@@ -3,10 +3,10 @@
 exports[`Given the SidebarConnection component when the component is rendered and active is false, error is true should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iCoGMd dWpZnl"
+    class="sc-pNWdM ckaNGe"
   >
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Connection
@@ -18,7 +18,7 @@ exports[`Given the SidebarConnection component when the component is rendered an
       </div>
     </div>
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Chain Id
@@ -28,7 +28,7 @@ exports[`Given the SidebarConnection component when the component is rendered an
       </span>
     </div>
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Block Number
@@ -44,10 +44,10 @@ exports[`Given the SidebarConnection component when the component is rendered an
 exports[`Given the SidebarConnection component when the component is rendered and active property is true should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iCoGMd dWpZnl"
+    class="sc-pNWdM ckaNGe"
   >
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Connection
@@ -59,7 +59,7 @@ exports[`Given the SidebarConnection component when the component is rendered an
       </div>
     </div>
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Chain Id
@@ -69,7 +69,7 @@ exports[`Given the SidebarConnection component when the component is rendered an
       </span>
     </div>
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Block Number
@@ -85,10 +85,10 @@ exports[`Given the SidebarConnection component when the component is rendered an
 exports[`Given the SidebarConnection component when the component is rendered has inactive state and has no errors should match the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iCoGMd dWpZnl"
+    class="sc-pNWdM ckaNGe"
   >
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Connection
@@ -100,7 +100,7 @@ exports[`Given the SidebarConnection component when the component is rendered ha
       </div>
     </div>
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Chain Id
@@ -108,7 +108,7 @@ exports[`Given the SidebarConnection component when the component is rendered ha
       <span />
     </div>
     <div
-      class="sc-fujyAs chjQuE"
+      class="sc-jrsJWt fEoKU"
     >
       <strong>
         Block Number

@@ -53,7 +53,7 @@ export const ExchangeItem = styled.div`
 export const Sending = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
 
   width: 100%;
   height: 70px;
@@ -80,6 +80,26 @@ export const Sending = styled.div`
     @media screen and (max-width: ${responsive.tabletSmall}) {
       font-size: 12px;
     }
+  }
+`;
+
+export const BridgeSending = styled(Sending)`
+  background: transparent;
+  border: 1px solid ${props => (props.error ? props.theme.colors.highlightRed : props.theme.colors.bgHighlightBorder)};
+`;
+
+export const SendingBox = styled.div`
+  &&&& {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    ${props =>
+      props.input &&
+      `
+      width: 100%;
+      padding-right: 16px;
+    `}
   }
 `;
 
@@ -134,7 +154,7 @@ export const MaxBtn = styled.button`
 `;
 
 export const ExchangeInput = styled.input`
-  width: 120px;
+  width: ${props => (props.value ? '100%' : '120px')};
 
   background: none;
   border: none;
@@ -164,6 +184,11 @@ export const ReceivingValue = styled.span`
   @media screen and (max-width: ${responsive.tabletSmall}) {
     font-size: 12px;
   }
+`;
+
+export const BridgeInput = styled(ExchangeInput)`
+  width: 100%;
+  text-align: left;
 `;
 
 export const ExchangeButton = styled.button`
