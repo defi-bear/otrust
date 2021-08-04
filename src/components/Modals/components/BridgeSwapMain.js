@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumber } from 'bignumber.js';
 import cosmos from 'cosmos-lib';
+import { ethers } from 'ethers';
 
 import BridgeSwapMobile from './BridgeSwapMobile';
 import BridgeSwapModal from './BridgeSwapModal';
@@ -20,8 +21,13 @@ export default function BridgeSwapMain({ closeModalHandler }) {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isMaxButtonClicked, setIsMaxButtonClicked] = useState(false);
   const [isMediaMinTablet, setIsMediaMinTablet] = useState(undefined);
+  const [allowanceAmountGravity, setAllowanceAmountGravity] = useState(0);
+  const [showBridgeExchangeModal, setShowBridgeExchangeModal] = useState(true);
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showTransactionCompleted, setShowTransactionCompleted] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
-  const { library } = useWeb3React();
+  const { account, library } = useWeb3React();
   const { weakBalance } = useChain();
 
   const GravityContract = GravityCont(library);
@@ -49,6 +55,26 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     setFormattedWeakBalance(format18(weakBalance));
   }, [weakBalance]);
 
+  const updateAllowanceAmount = useCallback(async () => {
+    const allowanceGravity = await NOMContract.allowance(account, contAddrs.Gravity);
+    setAllowanceAmountGravity(allowanceGravity);
+    return allowanceGravity;
+  }, [NOMContract, account]);
+
+  useEffect(() => {
+    if (NOMContract && account && !allowanceAmountGravity) {
+      updateAllowanceAmount();
+    }
+  }, [NOMContract, account, allowanceAmountGravity, updateAllowanceAmount]);
+
+  useEffect(() => {
+    mediaQuery.addListener(handleTabletChange);
+    mediaQuery.matches ? setIsMediaMinTablet(true) : setIsMediaMinTablet(false);
+    return () => {
+      mediaQuery.removeListener(handleTabletChange);
+    };
+  }, [handleTabletChange, mediaQuery]);
+
   const handleWalletInputChange = event => {
     setOnomyWalletValue(event.target.value);
     setIsMaxButtonClicked(false);
@@ -73,6 +99,13 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     }
   };
 
+  const onCancelHandler = () => {
+    setShowApproveModal(false);
+    setShowBridgeExchangeModal(true);
+    setIsButtonDisabled(false);
+    updateAllowanceAmount();
+  };
+
   const submitTrans = useCallback(
     async event => {
       event.preventDefault();
@@ -83,12 +116,11 @@ export default function BridgeSwapMain({ closeModalHandler }) {
         return;
       }
 
-      let tx;
-
       const amountInputValueUpdated = isMaxButtonClicked
         ? weakBalance.toString(10)
         : parse18(new BigNumber(amountInputValue)).toNumber().toString();
       setIsButtonDisabled(true);
+
       try {
         var bytes = cosmos.address.getBytes(onomyWalletValue);
         const ZEROS = Buffer.alloc(12);
@@ -99,43 +131,32 @@ export default function BridgeSwapMain({ closeModalHandler }) {
         return;
       }
 
-      // try {
-      //   let allowanceGravity = await NOMContract.allowance(account, contAddrs.Gravity);
-      //   console.log('allowanceGravity', allowanceGravity.toString());
-      // } catch (error) {
-      //   console.log(error);
-      //   setIsButtonDisabled(false);
-      //   return;
-      // }
+      let tx;
+      if (allowanceAmountGravity.gte(ethers.BigNumber.from(amountInputValueUpdated))) {
+        try {
+          setShowLoader(true);
+          tx = await GravityContract.sendToCosmos(contAddrs.NOMERC20, cosmosAddressBytes32, amountInputValueUpdated, {
+            gasLimit: 100000,
+          });
 
-      try {
-        tx = await NOMContract.approve(contAddrs.Gravity, amountInputValueUpdated);
-        tx.wait().then(() => {
-          console.log(tx);
-        });
-      } catch (error) {
-        console.log(error);
-        setIsButtonDisabled(false);
-        return;
-      }
-
-      try {
-        tx = await GravityContract.sendToCosmos(contAddrs.NOMERC20, cosmosAddressBytes32, amountInputValueUpdated, {
-          gasLimit: 100000,
-        });
-
-        tx.wait().then(() => {
-          console.log(tx);
+          tx.wait().then(() => {
+            setIsButtonDisabled(false);
+            setShowBridgeExchangeModal(false);
+            setShowTransactionCompleted(true);
+            setShowLoader(false);
+            return;
+          });
+        } catch (error) {
+          setShowLoader(false);
           setIsButtonDisabled(false);
-          setAmountInputValue('');
-        });
-      } catch (error) {
-        console.log(error);
-        setIsButtonDisabled(false);
-        return;
+          return;
+        }
+      } else {
+        setShowBridgeExchangeModal(false);
+        setShowApproveModal(true);
       }
     },
-    [onomyWalletValue, amountInputValue, GravityContract, NOMContract, isMaxButtonClicked, weakBalance],
+    [onomyWalletValue, amountInputValue, GravityContract, isMaxButtonClicked, weakBalance, allowanceAmountGravity],
   );
 
   const Props = {
@@ -158,6 +179,13 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     maxBtnHandler,
     submitTrans,
     closeModalHandler,
+    showBridgeExchangeModal,
+    showApproveModal,
+    showTransactionCompleted,
+    onCancelHandler,
+    allowanceAmountGravity,
+    weakBalance,
+    showLoader,
   };
 
   return (

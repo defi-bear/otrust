@@ -327,7 +327,7 @@ export default function ExchangeQuote({ strength }) {
             type: 'update',
             value: objUpdate,
           });
-          
+
           strDispatch({
             type: 'update',
             value: strUpdate,

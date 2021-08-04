@@ -50,6 +50,35 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const BridgeSectionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background-color: ${props => props.theme.colors.bgNormal};
+
+   main {
+    padding: 0;
+  };
+
+  footer {
+    display: flex;
+    padding: 0;
+    margin-top: auto;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+  }
+`;
+
+export const BridgeSuccessWrapper = styled(BridgeSectionWrapper)`
+
+  footer {
+    margin: auto;
+  }
+`;
+
 export const FooterControls = styled.div`
   display: flex;
   align-items: center;
@@ -60,6 +89,11 @@ export const FooterControls = styled.div`
   @media screen and (max-width: ${responsive.laptop}) {
     padding-bottom: 24px;
   }
+`;
+
+export const BridgeFooterControl = styled(FooterControls)`
+  width: 100%;
+  justify-content: center;
 `;
 
 export const CloseIcon = styled.button`
@@ -174,6 +208,8 @@ export const ExchangeRateWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  padding-bottom: 16px;
 
   span {
     font-weight: 400;
@@ -617,6 +653,10 @@ export const ErrorSection = styled.div`
   text-align: center;
   line-height: 52px;
   margin-bottom: 24px;
+
+  @media screen and (max-width: ${responsive.tabletSmall}) {
+    margin-bottom: 8px;
+  }
 `;
 
 export const CosmosInputSection = styled.div`

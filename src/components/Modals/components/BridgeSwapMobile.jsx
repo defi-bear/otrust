@@ -3,9 +3,12 @@ import ReactModal from 'react-modal';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import LoadingSpinner from 'components/UI/LoadingSpinner';
 
 import { responsive } from 'theme/constants';
-import { ExchangeInput, MaxBtn, BridgeInput, BridgeSending } from '../../Exchange/exchangeStyles';
+import ApproveTokensBridgeModal from './ApproveTokensBridgeModal';
+import BridgeTransactionComplete from './BridgeTransactionComplete';
+import { BridgeMaxBtn, BridgeAddressInput, BridgeSending, BridgeAmountInput } from '../../Exchange/exchangeStyles';
 import { ConnectionStatus } from '../../UI/ConnectionStatus';
 import * as Modal from '../styles';
 import oneWayBridgeImg from '../assets/one-way-bridge.svg';
@@ -46,7 +49,7 @@ const FormWrapper = styled.div`
   flex-direction: column;
   gap: 12px;
 
-  padding: 26px 20px;
+  padding: 20px;
 `;
 
 const HeaderInfoItem = styled.div`
@@ -138,9 +141,6 @@ const modalOverride = {
 };
 
 export default function BridgeSwapMobile({ ...props }) {
-  const [swapModal, setSwapModal] = useState(true);
-  const [infoModal, setInfoModal] = useState(false);
-
   const {
     onomyWalletValue,
     onomyWalletError,
@@ -148,21 +148,52 @@ export default function BridgeSwapMobile({ ...props }) {
     amountError,
     formattedWeakBalance,
     isButtonDisabled,
+    isMaxButtonClicked,
     handleWalletInputChange,
     handleAmountInputChange,
     maxBtnHandler,
     submitTrans,
     closeModalHandler,
+    showBridgeExchangeModal,
+    showApproveModal,
+    showTransactionCompleted,
+    onCancelHandler,
+    allowanceAmountGravity,
+    weakBalance,
+    showLoader,
   } = props;
+
+  const [infoModal, setInfoModal] = useState(false);
 
   return (
     <BridgeSwapModalWrapper>
+      <ReactModal isOpen={showApproveModal} style={modalOverride} data-testid="bridge-mobile-approve-modal">
+        <BridgeSwapModal>
+          <ModalInfo>
+            <ApproveTokensBridgeModal
+              {...props}
+              onCancelHandler={onCancelHandler}
+              amountInputValue={amountInputValue}
+              allowanceAmountGravity={allowanceAmountGravity}
+              formattedWeakBalance={formattedWeakBalance}
+              weakBalance={weakBalance}
+              isMaxAmount={isMaxButtonClicked}
+            />
+          </ModalInfo>
+        </BridgeSwapModal>
+      </ReactModal>
+      <ReactModal isOpen={showTransactionCompleted} style={modalOverride} data-testid="bridge-mobile-success-modal">
+        <BridgeSwapModal>
+          <ModalInfo>
+            <BridgeTransactionComplete {...props} />
+          </ModalInfo>
+        </BridgeSwapModal>
+      </ReactModal>
       <ReactModal isOpen={infoModal} style={modalOverride} data-testid="bridge-mobile-info-modal">
         <BridgeSwapModal>
           <ModalHeader>
             <ModalBtn
               onClick={() => {
-                setSwapModal(true);
                 setInfoModal(false);
               }}
               data-testid="bridge-mobile-info-modal-button"
@@ -220,7 +251,7 @@ export default function BridgeSwapMobile({ ...props }) {
         </BridgeSwapModal>
       </ReactModal>
       <ReactModal
-        isOpen={swapModal}
+        isOpen={showBridgeExchangeModal && !infoModal}
         style={modalOverride}
         data-testid="bridge-mobile-swap-modal"
         onRequestClose={() => closeModalHandler()}
@@ -247,7 +278,7 @@ export default function BridgeSwapMobile({ ...props }) {
               </HeaderInfoItemValue>
             </HeaderInfoItem>
             <Modal.CosmosInputSection error={onomyWalletError}>
-              <BridgeInput
+              <BridgeAddressInput
                 type="text"
                 placeholder="Your Onomy Wallet Address"
                 value={
@@ -263,11 +294,16 @@ export default function BridgeSwapMobile({ ...props }) {
           </ModalInfo>
 
           <FormWrapper>
+            {showLoader && (
+              <Modal.LoadingWrapper>
+                <LoadingSpinner />
+              </Modal.LoadingWrapper>
+            )}
             <BridgeSending error={amountError}>
               <strong>Swap to NOM</strong>
-              <ExchangeInput type="text" value={amountInputValue} onChange={handleAmountInputChange} />
+              <BridgeAmountInput type="text" value={amountInputValue} onChange={handleAmountInputChange} />
               wNOM
-              <MaxBtn onClick={maxBtnHandler}>Max</MaxBtn>
+              <BridgeMaxBtn onClick={maxBtnHandler}>Max</BridgeMaxBtn>
             </BridgeSending>
             {(onomyWalletError || amountError) && (
               <Modal.ErrorSection>{onomyWalletError || amountError}</Modal.ErrorSection>
@@ -280,7 +316,6 @@ export default function BridgeSwapMobile({ ...props }) {
               style={{ width: '100%' }}
               onClick={() => {
                 setInfoModal(true);
-                setSwapModal(false);
               }}
               data-testid="bridge-mobile-secondary-button"
             >
