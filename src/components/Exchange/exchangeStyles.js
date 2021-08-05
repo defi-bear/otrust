@@ -193,6 +193,7 @@ export const ReceivingValue = styled.span`
 export const BridgeAddressInput = styled(ExchangeInput)`
   width: 100%;
   text-align: left;
+  font-size: 14px;
 `;
 
 export const BridgeAmountInput = styled(ExchangeInput)`

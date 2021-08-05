@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { BigNumber } from 'bignumber.js';
 import cosmos from 'cosmos-lib';
@@ -30,8 +30,8 @@ export default function BridgeSwapMain({ closeModalHandler }) {
   const { account, library } = useWeb3React();
   const { weakBalance } = useChain();
 
-  const GravityContract = GravityCont(library);
-  const NOMContract = NOMCont(library);
+  const GravityContract = useMemo(() => GravityCont(library), [library]);
+  const NOMContract = useMemo(() => NOMCont(library), [library]);
 
   const mediaQuery = window.matchMedia('(min-width: 768px)');
 
@@ -85,7 +85,13 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     const floatRegExp = new RegExp(/(^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$)|(^\d+?\.$)|(^\+?(?!0\d+)$|(^$)|(^\.$))/);
     if (floatRegExp.test(value)) {
       setAmountInputValue(value);
-      value > formattedWeakBalance.toNumber() ? setAmountError(ERROR_MESSAGES.insufficientFunds) : setAmountError('');
+      if (value > formattedWeakBalance.toNumber()) {
+        setAmountError(ERROR_MESSAGES.insufficientFunds);
+        setIsButtonDisabled(true);
+      } else {
+        setAmountError('');
+        setIsButtonDisabled(false);
+      }
     }
     setIsMaxButtonClicked(false);
   };

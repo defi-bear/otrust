@@ -281,13 +281,7 @@ export default function BridgeSwapMobile({ ...props }) {
               <BridgeAddressInput
                 type="text"
                 placeholder="Your Onomy Wallet Address"
-                value={
-                  onomyWalletValue.length > 24
-                    ? `${onomyWalletValue.substring(0, 10)}...${onomyWalletValue.substring(
-                        onomyWalletValue.length - 11,
-                      )}`
-                    : onomyWalletValue
-                }
+                value={onomyWalletValue}
                 onChange={handleWalletInputChange}
               />
             </Modal.CosmosInputSection>
@@ -305,8 +299,8 @@ export default function BridgeSwapMobile({ ...props }) {
               wNOM
               <BridgeMaxBtn onClick={maxBtnHandler}>Max</BridgeMaxBtn>
             </BridgeSending>
-            {(onomyWalletError || amountError) && (
-              <Modal.ErrorSection>{onomyWalletError || amountError}</Modal.ErrorSection>
+            {(amountError || onomyWalletError) && (
+              <Modal.ErrorSection>{amountError || onomyWalletError}</Modal.ErrorSection>
             )}
 
             <Modal.FullWidthButton onClick={submitTrans} disabled={isButtonDisabled}>
