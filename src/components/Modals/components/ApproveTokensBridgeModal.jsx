@@ -12,6 +12,7 @@ import * as Modal from '../styles';
 import { contAddrs } from '../../../context/chain/contracts';
 import { responsive } from 'theme/constants';
 import { MaxBtn } from 'components/Exchange/exchangeStyles';
+import { NOTIFICATION_MESSAGES } from '../../../constants/NotificationMessages';
 import { bignumberToJsNumber } from 'utils/math';
 import { parse18 } from 'utils/math';
 
@@ -99,6 +100,8 @@ export default function ApproveTokensBridgeModal({
   const [approveAmountInputValue, setApproveAmountInputValue] = useState('');
   const [isMaxButtonClicked, setIsMaxButtonClicked] = useState(isMaxAmount);
   const [showLoader, setShowLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const { library } = useWeb3React();
   const NOMContract = NOMCont(library);
@@ -151,6 +154,8 @@ export default function ApproveTokensBridgeModal({
       let tx;
 
       try {
+        setErrorMessage('');
+        setSuccessMessage('');
         setIsBtnDisabled(true);
         setDelay(null);
         setShowLoader(true);
@@ -159,22 +164,27 @@ export default function ApproveTokensBridgeModal({
         } else {
           tx = await NOMContract.increaseAllowance(
             contAddrs.Gravity,
-            parse18(new BigNumber(approveAmountInputValue)).toNumber().toString(),
+            parse18(new BigNumber(approveAmountInputValue)).toString(10),
           );
         }
 
         tx.wait().then(() => {
+          setSuccessMessage(NOTIFICATION_MESSAGES.success.approvedBridgeTokens(approveAmountInputValue));
           setShowLoader(false);
-          onCancelHandler();
+          setIsBtnDisabled(false);
         });
       } catch (error) {
+        if (error.code === 4001) {
+          setErrorMessage(NOTIFICATION_MESSAGES.error.rejectedTransaction);
+        } else {
+          setErrorMessage(error.message);
+        }
         setIsBtnDisabled(false);
         setShowLoader(false);
-        onCancelHandler();
         return;
       }
     },
-    [NOMContract, approveAmountInputValue, isMaxButtonClicked, weakBalance, onCancelHandler],
+    [NOMContract, approveAmountInputValue, isMaxButtonClicked, weakBalance],
   );
 
   return (
@@ -205,10 +215,12 @@ export default function ApproveTokensBridgeModal({
           <MaxBtn onClick={maxBtnHandler}>MAX</MaxBtn>
         </ApproveTokensWrapper>
       </main>
+      {errorMessage && <Modal.ErrorSection>{errorMessage}</Modal.ErrorSection>}
+      {successMessage && <Modal.SuccessSection>{successMessage}</Modal.SuccessSection>}
       {showLoader && (
-        <Modal.LoadingWrapper>
+        <Modal.ApprovedModalLoadingWrapper>
           <LoadingSpinner />
-        </Modal.LoadingWrapper>
+        </Modal.ApprovedModalLoadingWrapper>
       )}
       <footer>
         <Modal.SecondaryButton

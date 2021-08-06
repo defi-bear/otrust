@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
+import { useWeb3React } from '@web3-react/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from 'components/UI/LoadingSpinner';
@@ -8,6 +9,7 @@ import LoadingSpinner from 'components/UI/LoadingSpinner';
 import { responsive } from 'theme/constants';
 import ApproveTokensBridgeModal from './ApproveTokensBridgeModal';
 import BridgeTransactionComplete from './BridgeTransactionComplete';
+import { getFirstMessage } from '../../../utils/helpers';
 import { BridgeMaxBtn, BridgeAddressInput, BridgeSending, BridgeAmountInput } from '../../Exchange/exchangeStyles';
 import { ConnectionStatus } from '../../UI/ConnectionStatus';
 import * as Modal from '../styles';
@@ -141,13 +143,13 @@ const modalOverride = {
 };
 
 export default function BridgeSwapMobile({ ...props }) {
+  const { active } = useWeb3React();
+
   const {
     onomyWalletValue,
-    onomyWalletError,
     amountInputValue,
-    amountError,
     formattedWeakBalance,
-    isButtonDisabled,
+    isDisabled,
     isMaxButtonClicked,
     handleWalletInputChange,
     handleAmountInputChange,
@@ -161,6 +163,7 @@ export default function BridgeSwapMobile({ ...props }) {
     allowanceAmountGravity,
     weakBalance,
     showLoader,
+    errors,
   } = props;
 
   const [infoModal, setInfoModal] = useState(false);
@@ -274,10 +277,10 @@ export default function BridgeSwapMobile({ ...props }) {
             <HeaderInfoItem align={'flex-end'}>
               <strong>Bridge</strong>
               <HeaderInfoItemValue>
-                <ConnectionStatus>Connected</ConnectionStatus>
+                <ConnectionStatus active={active}>{active ? 'Connected' : 'Disconnected'}</ConnectionStatus>
               </HeaderInfoItemValue>
             </HeaderInfoItem>
-            <Modal.CosmosInputSection error={onomyWalletError}>
+            <Modal.CosmosInputSection error={errors.onomyWalletError}>
               <BridgeAddressInput
                 type="text"
                 placeholder="Your Onomy Wallet Address"
@@ -293,17 +296,15 @@ export default function BridgeSwapMobile({ ...props }) {
                 <LoadingSpinner />
               </Modal.LoadingWrapper>
             )}
-            <BridgeSending error={amountError}>
+            <BridgeSending error={errors.amountError}>
               <strong>Swap to NOM</strong>
               <BridgeAmountInput type="text" value={amountInputValue} onChange={handleAmountInputChange} />
               wNOM
               <BridgeMaxBtn onClick={maxBtnHandler}>Max</BridgeMaxBtn>
             </BridgeSending>
-            {(amountError || onomyWalletError) && (
-              <Modal.ErrorSection>{amountError || onomyWalletError}</Modal.ErrorSection>
-            )}
+            {getFirstMessage(errors) && <Modal.ErrorSection>{getFirstMessage(errors)}</Modal.ErrorSection>}
 
-            <Modal.FullWidthButton onClick={submitTrans} disabled={isButtonDisabled}>
+            <Modal.FullWidthButton onClick={submitTrans} disabled={isDisabled}>
               Swap wNOM for NOM
             </Modal.FullWidthButton>
             <Modal.SecondaryButton

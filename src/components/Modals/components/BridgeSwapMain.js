@@ -10,15 +10,16 @@ import { useChain } from 'context/chain/ChainContext';
 import { GravityCont, NOMCont } from 'context/chain/contracts';
 import { format18, parse18 } from 'utils/math';
 import { contAddrs } from '../../../context/chain/contracts';
-import { ERROR_MESSAGES } from '../../../constants/ErrorMessages';
+import { NOTIFICATION_MESSAGES } from '../../../constants/NotificationMessages';
+
+const initialErrorsState = { amountError: '', onomyWalletError: '', transactionError: '' };
 
 export default function BridgeSwapMain({ closeModalHandler }) {
   const [onomyWalletValue, setOnomyWalletValue] = useState('');
-  const [onomyWalletError, setOnomyWalletError] = useState('');
   const [amountInputValue, setAmountInputValue] = useState('');
-  const [amountError, setAmountError] = useState('');
+  const [errors, setErrors] = useState(initialErrorsState);
   const [formattedWeakBalance, setFormattedWeakBalance] = useState(0);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [isMaxButtonClicked, setIsMaxButtonClicked] = useState(false);
   const [isMediaMinTablet, setIsMediaMinTablet] = useState(undefined);
   const [allowanceAmountGravity, setAllowanceAmountGravity] = useState(0);
@@ -86,11 +87,15 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     if (floatRegExp.test(value)) {
       setAmountInputValue(value);
       if (value > formattedWeakBalance.toNumber()) {
-        setAmountError(ERROR_MESSAGES.insufficientFunds);
-        setIsButtonDisabled(true);
+        setErrors(prevState => {
+          return { ...prevState, amountError: NOTIFICATION_MESSAGES.error.insufficientFunds };
+        });
+        setIsDisabled(true);
       } else {
-        setAmountError('');
-        setIsButtonDisabled(false);
+        setErrors(prevState => {
+          return { ...prevState, amountError: '' };
+        });
+        setIsDisabled(false);
       }
     }
     setIsMaxButtonClicked(false);
@@ -100,7 +105,7 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     event.preventDefault();
     if (weakBalance.toNumber()) {
       setAmountInputValue(formattedWeakBalance.toNumber());
-      setIsButtonDisabled(false);
+      setIsDisabled(false);
       setIsMaxButtonClicked(true);
     }
   };
@@ -108,32 +113,35 @@ export default function BridgeSwapMain({ closeModalHandler }) {
   const onCancelHandler = () => {
     setShowApproveModal(false);
     setShowBridgeExchangeModal(true);
-    setIsButtonDisabled(false);
+    setIsDisabled(false);
     updateAllowanceAmount();
   };
 
   const submitTrans = useCallback(
     async event => {
       event.preventDefault();
-      setAmountError('');
-      setOnomyWalletError('');
+      setErrors(initialErrorsState);
       if (amountInputValue === '.' || amountInputValue === '') {
-        setAmountError(ERROR_MESSAGES.incorrectAmountFormat);
+        setErrors(prevState => {
+          return { ...prevState, amountError: NOTIFICATION_MESSAGES.error.incorrectOnomyAddressFormat };
+        });
         return;
       }
 
       const amountInputValueUpdated = isMaxButtonClicked
         ? weakBalance.toString(10)
-        : parse18(new BigNumber(amountInputValue)).toNumber().toString();
-      setIsButtonDisabled(true);
+        : parse18(new BigNumber(amountInputValue)).toString(10);
+      setIsDisabled(true);
 
       try {
         var bytes = cosmos.address.getBytes(onomyWalletValue);
         const ZEROS = Buffer.alloc(12);
         var cosmosAddressBytes32 = Buffer.concat([ZEROS, bytes]);
       } catch (error) {
-        setOnomyWalletError(ERROR_MESSAGES.incorrectOnomyAddressFormat);
-        setIsButtonDisabled(false);
+        setErrors(prevState => {
+          return { ...prevState, onomyWalletError: NOTIFICATION_MESSAGES.error.incorrectOnomyAddressFormat };
+        });
+        setIsDisabled(false);
         return;
       }
 
@@ -146,15 +154,25 @@ export default function BridgeSwapMain({ closeModalHandler }) {
           });
 
           tx.wait().then(() => {
-            setIsButtonDisabled(false);
+            setIsDisabled(false);
             setShowBridgeExchangeModal(false);
             setShowTransactionCompleted(true);
             setShowLoader(false);
             return;
           });
         } catch (error) {
+          if (error.code === 4001) {
+            setErrors(prevState => {
+              return { ...prevState, transactionError: NOTIFICATION_MESSAGES.error.rejectedTransaction };
+            });
+          } else {
+            setErrors(prevState => {
+              return { ...prevState, transactionError: error.message };
+            });
+          }
+
           setShowLoader(false);
-          setIsButtonDisabled(false);
+          setIsDisabled(false);
           return;
         }
       } else {
@@ -168,18 +186,14 @@ export default function BridgeSwapMain({ closeModalHandler }) {
   const Props = {
     onomyWalletValue,
     setOnomyWalletValue,
-    onomyWalletError,
-    setOnomyWalletError,
     amountInputValue,
     setAmountInputValue,
-    amountError,
-    setAmountError,
     isMaxButtonClicked,
     setIsMaxButtonClicked,
     formattedWeakBalance,
     setFormattedWeakBalance,
-    isButtonDisabled,
-    setIsButtonDisabled,
+    isDisabled,
+    setIsDisabled,
     handleWalletInputChange,
     handleAmountInputChange,
     maxBtnHandler,
@@ -192,6 +206,7 @@ export default function BridgeSwapMain({ closeModalHandler }) {
     allowanceAmountGravity,
     weakBalance,
     showLoader,
+    errors,
   };
 
   return (

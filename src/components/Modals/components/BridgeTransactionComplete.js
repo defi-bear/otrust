@@ -29,12 +29,7 @@ export default function BridgeTransactionComplete({ closeModalHandler, amountInp
         <Modal.ExchangeRateWrapper data-testid="completed-modal-exchange-rate">
           <span>Exchange Rate</span>
 
-          <strong>1 NOM = wNOM</strong>
-        </Modal.ExchangeRateWrapper>
-        <Modal.ExchangeRateWrapper data-testid="completed-modal-exchange-rate">
-          <span>Transaction Fee</span>
-
-          <strong>No</strong>
+          <strong>1 NOM = 1 wNOM</strong>
         </Modal.ExchangeRateWrapper>
       </main>
       <footer>

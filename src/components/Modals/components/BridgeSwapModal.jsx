@@ -6,6 +6,7 @@ import LoadingSpinner from 'components/UI/LoadingSpinner';
 
 import ApproveTokensBridgeModal from './ApproveTokensBridgeModal';
 import BridgeTransactionComplete from './BridgeTransactionComplete';
+import { getFirstMessage } from '../../../utils/helpers';
 import { Close } from '../Icons';
 import * as Modal from '../styles';
 import { responsive } from 'theme/constants';
@@ -37,15 +38,13 @@ const FormWrapper = styled.form`
 `;
 
 export default function BridgeSwapModal({ ...props }) {
-  const { account } = useWeb3React();
+  const { active, account } = useWeb3React();
 
   const {
     onomyWalletValue,
-    onomyWalletError,
     amountInputValue,
-    amountError,
     formattedWeakBalance,
-    isButtonDisabled,
+    isDisabled,
     isMaxButtonClicked,
     handleWalletInputChange,
     handleAmountInputChange,
@@ -59,11 +58,12 @@ export default function BridgeSwapModal({ ...props }) {
     allowanceAmountGravity,
     weakBalance,
     showLoader,
+    errors,
   } = props;
 
   return (
     <>
-      <Dimmer />
+      <Dimmer onClick={() => closeModalHandler()} />
       <Modal.BridgeModalWrapper>
         <Modal.CloseIcon onClick={() => closeModalHandler()}>
           <Close />
@@ -90,14 +90,15 @@ export default function BridgeSwapModal({ ...props }) {
                     <span>{`${formattedWeakBalance.toFixed(6)}`}</span>
                   </Modal.Balance>
                 </Modal.ConnectionItem>
-
-                <Modal.ConnectionStatus>Bridge Connected</Modal.ConnectionStatus>
+                <Modal.ConnectionStatus active={active}>
+                  {active ? 'Bridge Connected' : 'Bridge Disconnected'}
+                </Modal.ConnectionStatus>
 
                 <Modal.ConnectionItem>
                   <Modal.ConnectionItemIcon>
                     <img src={walletImg} alt="" />
                   </Modal.ConnectionItemIcon>
-                  <Modal.CosmosInputSection error={onomyWalletError}>
+                  <Modal.CosmosInputSection error={errors.onomyWalletError}>
                     <BridgeAddressInput
                       type="text"
                       placeholder="Your Onomy Wallet Address"
@@ -114,17 +115,15 @@ export default function BridgeSwapModal({ ...props }) {
                   </Modal.LoadingWrapper>
                 )}
                 <InputWrapper>
-                  <BridgeSending error={amountError}>
+                  <BridgeSending error={errors.amountError}>
                     <strong>I want to swap to NOM</strong>
                     <BridgeAmountInput type="text" value={amountInputValue} onChange={handleAmountInputChange} />
                     wNOM
                     <BridgeMaxBtn onClick={maxBtnHandler}>Max</BridgeMaxBtn>
                   </BridgeSending>
                 </InputWrapper>
-                {(amountError || onomyWalletError) && (
-                  <Modal.ErrorSection>{amountError || onomyWalletError}</Modal.ErrorSection>
-                )}
-                <Modal.FullWidthButton onClick={submitTrans} disabled={isButtonDisabled}>
+                {getFirstMessage(errors) && <Modal.ErrorSection>{getFirstMessage(errors)}</Modal.ErrorSection>}
+                <Modal.FullWidthButton onClick={submitTrans} disabled={isDisabled}>
                   Swap wNOM for NOM
                 </Modal.FullWidthButton>
               </FormWrapper>

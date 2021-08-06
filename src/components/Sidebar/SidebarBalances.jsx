@@ -203,7 +203,7 @@ const TooltipDesc = styled.p`
   color: ${props => props.theme.colors.textSecondary};
 `;
 
-const TrimmedApproved = withTrimmedWrapper(({ value }) => (
+export const TrimmedApproved = withTrimmedWrapper(({ value }) => (
   <Approved>
     <span>{value} approved</span>
   </Approved>
