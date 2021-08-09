@@ -29,11 +29,15 @@ const Balances = styled.div`
     border: none;
   }
 
-  @media screen and (max-width: ${responsive.tabletSmall}) {
+  @media screen and (min-width: ${responsive.smartphoneLarge}, max-width: ${responsive.tabletSmall}) {
     gap: 40px;
   }
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+
     padding: 20px;
   }
 
@@ -155,6 +159,11 @@ const WithdrawBtnWrapper = styled.div`
 
   @media screen and (max-width: ${responsive.tablet}) {
     margin: 0 0 0 auto;
+  }
+
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    padding-top: 10px;
+    margin: 0 0 0 0;
   }
 `;
 
