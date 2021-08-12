@@ -125,7 +125,7 @@ export default function BridgeSwapModal({ ...props }) {
                 )}
                 <InputWrapper>
                   <BridgeSending error={values.errors.amountError}>
-                    <strong>I want to swap to NOM</strong>
+                    <strong>Swap to NOM</strong>
                     <BridgeAmountInput type="text" value={values.amountValue} onChange={handlers.amountChangeHandler} />
                     wNOM
                     <BridgeMaxBtn onClick={handlers.maxBtnClickHandler} disabled={flags.isTransactionPending}>
