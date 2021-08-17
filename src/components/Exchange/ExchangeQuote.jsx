@@ -21,12 +21,13 @@ import {
   ReceivingValue,
   ExchangeButton,
   SendingBox,
+  ExchangeSubWrapper,
 } from './exchangeStyles';
 import { useModal } from 'context/modal/ModalContext';
 import NOMButton from 'components/Exchange/NOMButton';
 import { format18, parse18 } from 'utils/math';
 
-export default function ExchangeQuote({ strength }) {
+export default function ExchangeQuote({ strength, mobile = false }) {
   const { strongBalance, weakBalance } = useChain();
   const { handleModal } = useModal();
   const { library } = useWeb3React();
@@ -338,9 +339,17 @@ export default function ExchangeQuote({ strength }) {
     [askAmount, bidDenom, NOMallowance, getAskAmount, handleModal, input, objDispatch, strDispatch, strength],
   );
 
+  function setStyle() {
+    let style = {};
+    if (mobile) style = { display: 'flex' };
+    return style;
+  }
+
   return (
-    <ExchangeItem>
-      <strong>{isBuying ? 'Buy ' + weak : 'Sell ' + weak}</strong>
+    <ExchangeItem style={setStyle()}>
+      <ExchangeSubWrapper>
+        <strong>{isBuying ? 'Buy ' + weak : 'Sell ' + weak}</strong>
+      </ExchangeSubWrapper>
       <Sending>
         <SendingBox input>
           {(bidDenom !== strength || !input) && <strong>{isBuying ? "I'm buying" : "I'm selling"}</strong>}

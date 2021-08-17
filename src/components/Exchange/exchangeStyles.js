@@ -12,10 +12,17 @@ export const ExchangeWrapper = styled.div`
   font-size: 14px;
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
-    grid-template-columns: 1fr;
     background-color: ${props => props.theme.colors.bgDarken};
 
     padding: 24px 20px;
+
+    display: flex;
+  }
+`;
+
+export const ExchangeSubWrapper = styled.div`
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    display: none;
   }
 `;
 
@@ -33,6 +40,8 @@ export const ExchangeItem = styled.div`
 
   @media screen and (max-width: ${responsive.smartphoneLarge}) {
     display: none;
+    width: 100%;
+    padding: 0 0px;
   }
 
   > strong {
@@ -174,6 +183,12 @@ export const ExchangeInput = styled.input`
     font-size: 12px;
   }
 
+  @media screen and (max-width: ${responsive.smartphoneLarge}) {
+    width: 100%;
+
+    font-size: 12px;
+  }
+
   &:focus {
     outline: none;
   }
@@ -222,6 +237,36 @@ export const ExchangeButton = styled.button`
 
 export const SellBtn = styled(ExchangeButton)`
   background: linear-gradient(90deg, #c75a5a, #7e1c1c);
+`;
+
+export const BuyButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 50px;
+  width: 50%;
+
+  background: linear-gradient(90deg, #5ac790, #1c7e4c);
+  border: none;
+  border-radius: 6px;
+
+  margin-right: 20px;
+
+  color: ${props => props.theme.colors.textPrimary};
+  text-shadow: 0 6px 3px rgba(0, 0, 0, 0.03);
+  font-weight: 600;
+
+  cursor: pointer;
+
+  @media screen and (min-width: ${responsive.smartphoneLarge}) {
+    display: none;
+  }
+`;
+
+export const SellButton = styled(BuyButton)`
+  background: linear-gradient(90deg, #c75a5a, #7e1c1c);
+  margin-right: 0px;
 `;
 
 export const ModalTrigger = styled.div`
