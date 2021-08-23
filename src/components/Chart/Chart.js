@@ -102,7 +102,7 @@ export default function Chart() {
   };
 
   return (
-    <ChartWrapper>
+    <ChartWrapper id="tour-chart">
       <ChartHeader>
         <span>
           <ChartTypeBtn onClick={() => setChartType('bondingCurve')} active={chartType === 'bondingCurve'}>

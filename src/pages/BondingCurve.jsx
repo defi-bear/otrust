@@ -5,6 +5,10 @@ import { Steps } from 'intro.js-react';
 
 import { Container } from 'components/UI';
 import { responsive } from 'theme/constants';
+import welcome from 'assets/onboarding/welcome.svg';
+import panel from 'assets/onboarding/panel.svg';
+import prices from 'assets/onboarding/prices.svg';
+import bondingCurve from 'assets/onboarding/bonding-curve.svg';
 
 const BondingCurveLayout = styled.div`
   display: grid;
@@ -33,56 +37,73 @@ const BondingCurveLayout = styled.div`
   }
 `;
 
-const StyledSteps = styled(Steps)`
-  background-color: tomato !important;
-
-  & > .introjs-helperLayer {
-    box-shadow: rgb(33 33 33 / 80%) 0px 0px 1px 2px, rgba(15, 15, 25, 0.9) 0px 0px 0px 5000px,
-      inset rgba(255, 221, 160, 1) 0 0 0 3px, rgb(255, 221, 161) 0px 0px 50px 10px !important;
-
-    border-radius: 8px;
-  }
-`;
-
 export default function BondingCurve() {
   return (
     <Container>
       <BondingCurveLayout>
-        <StyledSteps
+        <Steps
           enabled={true}
-          options={{ showBullets: false }}
+          options={{ showBullets: false, tooltipClass: 'onomyOnboarding', disableInteraction: 'true' }}
           steps={[
             {
-              title: 'Welcome to Onomy Bonding Curve',
-              intro: `<p>
-                        Delightful unreserved impossible few estimating men favourable see entreaties. She propriety immediate was improving. He or entrance humoured likewise moderate. Much nor game son say feel. Fat make met can must form into gate. Me we offending prevailed discovery.
-                      </p>
+              intro: `
+                <div class="img-wrapper"><img src=${welcome} alt=""/></div>
+                <div class="content">
+                  <h4>Welcome to Onomy Bonding Curve</h4>
+                  <p>
+                    Delightful unreserved impossible few estimating men favourable see entreaties. She propriety immediate was improving. He or entrance humoured likewise moderate. Much nor game son say feel. Fat make met can must form into gate. Me we offending prevailed discovery.
+                  </p>
 
-                      <p>
-                        Of friendship on inhabiting diminution discovered as. Did friendly eat breeding building few nor.
-                      </p>`,
+                  <p>
+                    Of friendship on inhabiting diminution discovered as. Did friendly eat breeding building few nor.
+                  </p>
+                </div>`,
             },
             {
-              title: 'Account Panel',
-              intro:
-                '<p>Here you can view your ETH and wNOM balances. You also can <strong>Withdraw wNOM</strong> to your Onomy wallet (and create one) from here.</p>',
+              intro: `
+                <div class="img-wrapper"><img src=${panel} alt=""/></div>
+                <div class="content">
+                  <h4>Account Panel</h4>
+                  <p>Here you can view your ETH and wNOM balances. You also can <strong>Withdraw wNOM</strong> to your Onomy wallet (and create one) from here.</p>
+                </div>`,
               element: '#tour-sidebar',
             },
             {
-              title: 'Prices / Stats',
-              intro: 'The current price of NOM and the amount of NOM that has been issued can be viewed here.',
+              intro: `
+                <div class="img-wrapper"><img src=${prices} alt=""/></div>
+                <div class="content">
+                  <h4>Prices / Stats</h4>
+                  <p>The current price of NOM and the amount of NOM that has been issued can be viewed here.</p>
+                </div>`,
               element: '#tour-prices',
             },
             {
-              title: 'Buying wNOM',
-              intro:
-                'Enter the amount of ETH you would like to use to purchase NOM here. A 1% fee will be applied per trade.',
+              intro: `
+                <div class="content">
+                  <h4>Buying wNOM</h4>
+                  <p>Enter the amount of ETH you would like to use to purchase NOM here. A 1% fee will be applied per trade.</p>
+                </div>
+              `,
               element: '#tour-buy',
             },
             {
-              title: 'Selling wNOM',
-              intro: `Enter the amount of NOM you would like to sell here. A 1% fee will be applied per trade.`,
+              intro: `
+                <div class="content">
+                  <h4>Selling wNOM</h4>
+                  Enter the amount of NOM you would like to sell here. A 1% fee will be applied per trade.
+                </div>`,
               element: '#tour-sell',
+            },
+            {
+              intro: `
+                <div class="img-wrapper"><img src=${bondingCurve} alt=""/></div>
+                <div class="content">
+                  <h4>Bonding Curve Chart</h4>
+                  <p>Delightful unreserved impossible few estimating men favourable see entreaties. She propriety immediate was improving. He or entrance humoured likewise moderate. Much nor game son say feel. Fat make met can must form into gate. Me we offending prevailed discovery.</p> 
+
+                  <p>Of friendship on inhabiting diminution discovered as. Did friendly eat breeding building few nor.</p>
+                </div>`,
+              element: '#tour-chart',
             },
           ]}
           initialStep={0}
