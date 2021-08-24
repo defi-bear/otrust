@@ -14,9 +14,7 @@ import SidebarFooter from './SidebarFooter';
 import SidebarConnection from './SidebarConnection';
 
 const PanelLayout = styled(Panel)`
-  &&&& {
-    height: 100%;
-  }
+  height: 100%;
 `;
 
 const SidebarLayout = styled.div`
