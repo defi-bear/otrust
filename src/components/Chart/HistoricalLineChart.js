@@ -36,6 +36,7 @@ const WNOM_HISTORICAL_DATA_QUERY = gql`
     wnomhistoricalFrames(first: 1000, skip: 0, where: { type: $filter }, orderBy: startTime, orderDirection: asc) {
       startTime
       startPrice
+      endPrice
     }
   }
 `;
@@ -69,9 +70,28 @@ const LineChart = React.memo(props => {
   //temporary check to stop errors when svg/wrapper/data isn't loaded yet
   if (svgRef.current !== undefined && wrapperRef.current !== undefined && bondData !== undefined) {
     //define data, change timestamp to date format and build y_var
-    let data = bondData.wnomhistoricalFrames.filter(
-      m => m.startTime > HISTORICAL_CHART_TYMESTAMPS[historicalChartType],
-    );
+    let data = bondData.wnomhistoricalFrames;
+    const secondsTimeStampNow = Math.floor(new Date().getTime() / 1000).toString();
+    let lastElement = data.slice(-1)[0];
+    if (data.length) {
+      data = data.concat([
+        {
+          startPrice: lastElement.endPrice,
+          startTime: secondsTimeStampNow,
+        },
+      ]);
+    }
+
+    data = data.filter(m => m.startTime > HISTORICAL_CHART_TYMESTAMPS[historicalChartType]);
+
+    if (data.length === 1) {
+      data = [
+        {
+          startPrice: lastElement.startPrice,
+          startTime: HISTORICAL_CHART_TYMESTAMPS[historicalChartType],
+        },
+      ].concat(data);
+    }
 
     data = data.map(m => ({
       ...m,
@@ -95,7 +115,7 @@ const LineChart = React.memo(props => {
       MONTH: '%d, %m',
       QUARTAL: '%d, %m',
       YEAR: '%b-%y',
-      ALL_TIME: '%Y',
+      ALL_TIME: '%m-%Y',
     };
     const x_ticks = tick_count[time_period];
     const x_format = time_formats[time_period];
@@ -119,7 +139,8 @@ const LineChart = React.memo(props => {
 
     const yScale = scaleLinear()
       .domain(extent(data, yValue))
-      .range([height - margin.top - margin.bottom, 10]);
+      .range([height - margin.top - margin.bottom, 10])
+      .nice();
 
     const lineGenerator = line()
       .x(d => xScale(d[x_var]))
