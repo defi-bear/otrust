@@ -190,7 +190,7 @@ export const ExchangeInput = styled.input`
   }
 
   @media screen and (max-width: ${responsive.tabletSmall}) {
-    width: 100px;
+    width: 150px;
 
     font-size: 12px;
   }
