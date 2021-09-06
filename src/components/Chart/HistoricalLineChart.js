@@ -25,7 +25,10 @@ import { HISTORICAL_CHART_TYPE_FILTER, HISTORICAL_CHART_TYMESTAMPS } from '../..
 
 const StyledSVG = styled.svg`
   display: block;
+
   width: 100%;
+  height: 100%;
+
   overflow: visible;
 `;
 
